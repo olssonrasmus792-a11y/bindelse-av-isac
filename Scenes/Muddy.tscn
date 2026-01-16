@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://dxogqxysy2jhw"]
+
+[ext_resource type="Script" uid="uid://6aieiikcb248" path="res://Scripts/muddy.gd" id="1_10ykd"]
+[ext_resource type="Texture2D" uid="uid://cqodias6yulyn" path="res://Textures/muddy.png" id="2_rtjbt"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4a5km"]
+radius = 1021.50134
+
+[sub_resource type="Gradient" id="Gradient_kry3j"]
+offsets = PackedFloat32Array(0, 0.69777775)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_10ykd"]
+gradient = SubResource("Gradient_kry3j")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="CharacterBody2D" type="CharacterBody2D" groups=["enemies"]]
+script = ExtResource("1_10ykd")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("2_rtjbt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.03, 0.03)
+shape = SubResource("CircleShape2D_4a5km")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+visible = false
+position = Vector2(0, -1.5258789e-05)
+color = Color(0.90588236, 0.8784314, 0.37254903, 1)
+energy = 0.5
+range_z_min = -200
+range_z_max = 200
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_10ykd")
+texture_scale = 0.5

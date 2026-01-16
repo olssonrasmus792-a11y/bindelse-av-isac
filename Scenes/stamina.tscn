@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://djcw1bcv2kl0n"]
+
+[ext_resource type="Texture2D" uid="uid://b5hstghnbkq8u" path="res://Textures/Bulb hp full.png" id="1_0bmw4"]
+
+[node name="Stamina" type="Control"]
+custom_minimum_size = Vector2(30, 32)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 35.0
+offset_bottom = 40.0
+
+[node name="Sprite2D" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -3.000001
+offset_right = 197.0
+offset_bottom = 200.0
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("1_0bmw4")

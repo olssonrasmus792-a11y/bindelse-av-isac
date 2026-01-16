@@ -1,0 +1,76 @@
+[gd_scene load_steps=8 format=3 uid="uid://bcyvgbkfd8iqg"]
+
+[ext_resource type="PackedScene" uid="uid://dxipiie22wvb4" path="res://Scenes/room.tscn" id="1_bo1nx"]
+[ext_resource type="PackedScene" uid="uid://cyhswvdif7wx7" path="res://Scenes/player.tscn" id="1_jjgbg"]
+[ext_resource type="Script" uid="uid://cvtkd2vv01e3w" path="res://Scripts/player.gd" id="3_8gbba"]
+[ext_resource type="PackedScene" uid="uid://dxogqxysy2jhw" path="res://Scenes/Muddy.tscn" id="4_jjvhh"]
+[ext_resource type="Script" uid="uid://dw3q0g7b1hds4" path="res://Scripts/enemies.gd" id="4_kry3j"]
+
+[sub_resource type="Gradient" id="Gradient_kry3j"]
+offsets = PackedFloat32Array(0, 0.69777775)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_21xkr"]
+gradient = SubResource("Gradient_kry3j")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="Main" type="Node2D"]
+
+[node name="Map" type="Node2D" parent="."]
+
+[node name="Room" parent="Map" instance=ExtResource("1_bo1nx")]
+
+[node name="Room2" parent="Map" instance=ExtResource("1_bo1nx")]
+position = Vector2(0, -1000)
+
+[node name="Player" parent="." instance=ExtResource("1_jjgbg")]
+position = Vector2(488, 512)
+script = ExtResource("3_8gbba")
+
+[node name="PointLight2D" type="PointLight2D" parent="Player"]
+position = Vector2(0, -1.5258789e-05)
+color = Color(0.90588236, 0.8784314, 0.37254903, 1)
+range_z_min = -200
+range_z_max = 200
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_21xkr")
+texture_scale = 1.5
+
+[node name="Camera2D" type="Camera2D" parent="." groups=["camera"]]
+position = Vector2(488, 512)
+
+[node name="Enemies" type="Node2D" parent="."]
+visible = false
+script = ExtResource("4_kry3j")
+
+[node name="CharacterBody2D4" parent="Enemies" instance=ExtResource("4_jjvhh")]
+position = Vector2(263, 605)
+
+[node name="CharacterBody2D5" parent="Enemies" instance=ExtResource("4_jjvhh")]
+position = Vector2(705, 260)
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Button" type="Button" parent="UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 26.275002
+anchor_top = 19.45
+anchor_right = 34.5
+anchor_bottom = 24.1
+theme_override_font_sizes/font_size = 36
+text = "Spawn Enemy"
+
+[node name="Light" type="Node2D" parent="."]
+
+[node name="Ambient Light" type="CanvasModulate" parent="Light"]
+color = Color(0.28974146, 0.28974146, 0.28974146, 1)
+
+[connection signal="pressed" from="UI/Button" to="Enemies" method="_on_button_pressed"]

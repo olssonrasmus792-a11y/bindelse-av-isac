@@ -1,0 +1,106 @@
+[gd_scene load_steps=6 format=3 uid="uid://bcyvgbkfd8iqg"]
+
+[ext_resource type="PackedScene" uid="uid://bv2axkxq2b6bw" path="res://Scenes/room_generator.tscn" id="1_21xkr"]
+[ext_resource type="PackedScene" uid="uid://cyhswvdif7wx7" path="res://Scenes/player.tscn" id="1_jjgbg"]
+[ext_resource type="Script" uid="uid://cvtkd2vv01e3w" path="res://Scripts/player.gd" id="3_8gbba"]
+[ext_resource type="Script" uid="uid://dw3q0g7b1hds4" path="res://Scripts/enemies.gd" id="4_kry3j"]
+[ext_resource type="Script" uid="uid://bsqd01gkox1pg" path="res://Scenes/ui.gd" id="5_kry3j"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Ambient Light" type="CanvasModulate" parent="."]
+color = Color(0.03238219, 0.03238219, 0.03238219, 1)
+
+[node name="Map" type="Node2D" parent="."]
+
+[node name="RoomGenerator" parent="." instance=ExtResource("1_21xkr")]
+
+[node name="Player" parent="." instance=ExtResource("1_jjgbg")]
+position = Vector2(576, 320)
+script = ExtResource("3_8gbba")
+
+[node name="RollTimer" type="Timer" parent="Player"]
+wait_time = 0.4
+one_shot = true
+
+[node name="AttackTimer" type="Timer" parent="Player"]
+wait_time = 0.1
+one_shot = true
+
+[node name="AttackCooldown" type="Timer" parent="Player"]
+wait_time = 0.5
+one_shot = true
+
+[node name="StaminaRecharge" type="Timer" parent="Player"]
+one_shot = true
+
+[node name="Enemies" type="Node2D" parent="."]
+script = ExtResource("4_kry3j")
+
+[node name="UI" type="CanvasLayer" parent="."]
+script = ExtResource("5_kry3j")
+
+[node name="Buttons" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RemoveEnemies" type="Button" parent="UI/Buttons"]
+layout_mode = 0
+offset_left = 936.0
+offset_top = 528.0
+offset_right = 1146.0
+offset_bottom = 578.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+text = "Kill Enemies"
+
+[node name="SpawnEnemy" type="Button" parent="UI/Buttons"]
+layout_mode = 0
+offset_left = 936.0
+offset_top = 592.0
+offset_right = 1146.0
+offset_bottom = 642.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+text = "Spawn Enemy"
+
+[node name="health_panel" type="PanelContainer" parent="UI"]
+offset_left = 16.0
+offset_top = 8.0
+offset_right = 16.0
+offset_bottom = 8.0
+
+[node name="health_bar" type="HBoxContainer" parent="UI/health_panel"]
+layout_mode = 2
+
+[node name="stamina_panel" type="PanelContainer" parent="UI"]
+offset_left = 24.0
+offset_top = 64.0
+offset_right = 24.0
+offset_bottom = 64.0
+
+[node name="stamina_bar" type="HBoxContainer" parent="UI/stamina_panel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI"]
+offset_left = 448.0
+offset_right = 704.0
+offset_bottom = 56.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
+text = "Kills: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="body_entered" from="Player/AttackArea" to="Player" method="_on_attack_area_body_entered"]
+[connection signal="timeout" from="Player/AttackTimer" to="Player" method="_on_attack_timer_timeout"]
+[connection signal="timeout" from="Player/AttackCooldown" to="Player" method="_on_attack_cooldown_timeout"]
+[connection signal="timeout" from="Player/StaminaRecharge" to="Player" method="_on_stamina_recharge_timeout"]
+[connection signal="pressed" from="UI/Buttons/RemoveEnemies" to="Enemies" method="_on_remove_enemies_pressed"]
+[connection signal="pressed" from="UI/Buttons/SpawnEnemy" to="Enemies" method="_on_spawn_enemy_pressed"]
+
+[editable path="Player"]

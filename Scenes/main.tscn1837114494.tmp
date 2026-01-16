@@ -1,0 +1,102 @@
+[gd_scene load_steps=6 format=3 uid="uid://bcyvgbkfd8iqg"]
+
+[ext_resource type="PackedScene" uid="uid://bv2axkxq2b6bw" path="res://Scenes/room_generator.tscn" id="1_21xkr"]
+[ext_resource type="PackedScene" uid="uid://cyhswvdif7wx7" path="res://Scenes/player.tscn" id="1_jjgbg"]
+[ext_resource type="Script" uid="uid://cvtkd2vv01e3w" path="res://Scripts/player.gd" id="3_8gbba"]
+[ext_resource type="Script" uid="uid://dw3q0g7b1hds4" path="res://Scripts/enemies.gd" id="4_kry3j"]
+
+[sub_resource type="GDScript" id="GDScript_jjvhh"]
+script/source = "extends CanvasLayer
+@onready var health_bar: HBoxContainer = $HP
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	update_health_ui()
+
+func update_health_ui():
+	# Clear old icons
+	for child in health_bar.get_children():
+		child.queue_free()
+
+	# Add current health icons
+	for i in range(health):
+		var icon = health_icon_scene.instantiate()
+		health_bar.add_child(icon)
+"
+
+[node name="Main" type="Node2D"]
+
+[node name="Ambient Light" type="CanvasModulate" parent="."]
+color = Color(0.03238219, 0.03238219, 0.03238219, 1)
+
+[node name="Map" type="Node2D" parent="."]
+
+[node name="RoomGenerator" parent="." instance=ExtResource("1_21xkr")]
+
+[node name="Player" parent="." instance=ExtResource("1_jjgbg")]
+position = Vector2(576, 320)
+script = ExtResource("3_8gbba")
+
+[node name="RollTimer" type="Timer" parent="Player"]
+wait_time = 0.4
+one_shot = true
+
+[node name="AttackTimer" type="Timer" parent="Player"]
+wait_time = 0.1
+one_shot = true
+
+[node name="AttackCooldown" type="Timer" parent="Player"]
+wait_time = 0.5
+one_shot = true
+
+[node name="Enemies" type="Node2D" parent="."]
+script = ExtResource("4_kry3j")
+
+[node name="UI" type="CanvasLayer" parent="."]
+script = SubResource("GDScript_jjvhh")
+
+[node name="Buttons" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RemoveEnemies" type="Button" parent="UI/Buttons"]
+layout_mode = 0
+offset_left = 936.0
+offset_top = 528.0
+offset_right = 1146.0
+offset_bottom = 578.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+text = "Kill Enemies"
+
+[node name="SpawnEnemy" type="Button" parent="UI/Buttons"]
+layout_mode = 0
+offset_left = 936.0
+offset_top = 592.0
+offset_right = 1146.0
+offset_bottom = 642.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+text = "Spawn Enemy"
+
+[node name="HP" type="HBoxContainer" parent="UI"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 304.0
+offset_bottom = 72.0
+
+[node name="Stamina" type="HBoxContainer" parent="UI"]
+offset_left = 8.0
+offset_top = 80.0
+offset_right = 232.0
+offset_bottom = 112.0
+
+[connection signal="timeout" from="Player/AttackTimer" to="Player" method="_on_attack_timer_timeout"]
+[connection signal="timeout" from="Player/AttackCooldown" to="Player" method="_on_attack_cooldown_timeout"]
+[connection signal="pressed" from="UI/Buttons/RemoveEnemies" to="Enemies" method="_on_remove_enemies_pressed"]
+[connection signal="pressed" from="UI/Buttons/SpawnEnemy" to="Enemies" method="_on_spawn_enemy_pressed"]

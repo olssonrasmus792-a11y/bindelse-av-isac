@@ -1,0 +1,163 @@
+[gd_scene load_steps=20 format=4 uid="uid://dxipiie22wvb4"]
+
+[ext_resource type="Texture2D" uid="uid://cn0m8rp6vv4pn" path="res://Textures/Brown brick tile.png" id="1_ci6au"]
+[ext_resource type="Script" uid="uid://bnbcfmjx5x3xm" path="res://Scripts/room.gd" id="1_fr46g"]
+[ext_resource type="Texture2D" uid="uid://cet2td4yrlbk6" path="res://Textures/ground.png" id="2_gkney"]
+[ext_resource type="Texture2D" uid="uid://c0h608ntusxe0" path="res://Textures/Brick tile.png" id="4_nfrpb"]
+[ext_resource type="Texture2D" uid="uid://dj8pjyons6gs4" path="res://Textures/door path.png" id="6_4gp0m"]
+[ext_resource type="Texture2D" uid="uid://dfwunsnp0eo67" path="res://Textures/ground_stone.png" id="6_nfrpb"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4gp0m"]
+texture = ExtResource("2_gkney")
+texture_region_size = Vector2i(200, 200)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ci6au"]
+texture = ExtResource("1_ci6au")
+texture_region_size = Vector2i(200, 200)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_phao3"]
+texture = ExtResource("4_nfrpb")
+texture_region_size = Vector2i(200, 200)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ojh4s"]
+texture = ExtResource("6_nfrpb")
+texture_region_size = Vector2i(200, 200)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ilpkg"]
+texture = ExtResource("6_4gp0m")
+texture_region_size = Vector2i(200, 200)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_26yhd"]
+tile_size = Vector2i(200, 200)
+physics_layer_0/collision_layer = 1
+sources/1 = SubResource("TileSetAtlasSource_ci6au")
+sources/0 = SubResource("TileSetAtlasSource_4gp0m")
+sources/2 = SubResource("TileSetAtlasSource_phao3")
+sources/4 = SubResource("TileSetAtlasSource_ojh4s")
+sources/5 = SubResource("TileSetAtlasSource_ilpkg")
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_nfrpb"]
+polygon = PackedVector2Array(400, 0, 400, 200, 600, 200, 600, 0)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nfrpb"]
+size = Vector2(200, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4gp0m"]
+size = Vector2(200, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_phao3"]
+size = Vector2(200, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ojh4s"]
+size = Vector2(200, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mbine"]
+size = Vector2(1688, 888)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_fr46g"]
+polygon = PackedVector2Array(0, 0, 400, 0, 400, 200, -200, 200, -200, 400, -400, 400, -400, 0)
+
+[node name="Room" type="Node2D"]
+script = ExtResource("1_fr46g")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAACAAAAAAAAAAAAAAAFAAEAAAAAAAAAAAAEAAEAAAAAAAAAAAADAAEAAAAAAAAAAAACAAEAAAAAAAAAAAABAAEABAAAAAAAAFAAAAEAAAAAAAAAAAD//wEAAAAAAAAAAAD//wIAAAAAAAAAAAAAAAIABAAAAAAAAAABAAIAAAAAAAAAAAACAAIAAAAAAAAAAAADAAIAAAAAAAAAAAAEAAIABAAAAAAAAAAFAAIAAAAAAAAAAAAGAAIAAAAAAAAAAAAFAAMAAAAAAAAAAAAEAAMAAAAAAAAAAAADAAMAAAAAAAAAAAACAAMAAAAAAAAAAAABAAMAAAAAAAAAAAAAAAMAAAAAAAAAAAD//wMAAAAAAAAAAAACAAQAAAAAAAAAAAD+/wIAAAAAAAAAAAABAAAAAQAAAAAAADAAAAAAAQAAAAAAADD//wAAAQAAAAAAADADAAAAAQAAAAAAADAEAAAAAQAAAAAAADAFAAAAAQAAAAAAADD//wQAAQAAAAAAAAAAAAQAAQAAAAAAAAABAAQAAQAAAAAAAAADAAQAAQAAAAAAAAAEAAQAAQAAAAAAAAAFAAQAAQAAAAAAAAD+/wMAAQAAAAAAAGD+/wEAAQAAAAAAAGAGAAMAAQAAAAAAAFAGAAEAAQAAAAAAAFAGAAAAAQAAAAAAADD+/wAAAQAAAAAAADD+/wQAAQAAAAAAAAAGAAQAAQAAAAAAAAA=")
+tile_set = SubResource("TileSet_26yhd")
+
+[node name="Doors" type="Node2D" parent="."]
+
+[node name="Door_Up" type="StaticBody2D" parent="Doors"]
+
+[node name="Sprite2D" type="Sprite2D" parent="Doors/Door_Up"]
+position = Vector2(500, 100)
+texture = ExtResource("1_ci6au")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Doors/Door_Up"]
+occluder = SubResource("OccluderPolygon2D_nfrpb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_Up"]
+position = Vector2(500, 100)
+shape = SubResource("RectangleShape2D_nfrpb")
+
+[node name="Door_Left" type="StaticBody2D" parent="Doors"]
+
+[node name="Sprite2D" type="Sprite2D" parent="Doors/Door_Left"]
+position = Vector2(-300, 500)
+texture = ExtResource("1_ci6au")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Doors/Door_Left"]
+position = Vector2(-800, 400)
+occluder = SubResource("OccluderPolygon2D_nfrpb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_Left"]
+position = Vector2(-300, 500)
+shape = SubResource("RectangleShape2D_4gp0m")
+
+[node name="Door_Down" type="StaticBody2D" parent="Doors"]
+
+[node name="Sprite2D" type="Sprite2D" parent="Doors/Door_Down"]
+position = Vector2(500, 900)
+texture = ExtResource("1_ci6au")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Doors/Door_Down"]
+position = Vector2(0, 800)
+occluder = SubResource("OccluderPolygon2D_nfrpb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_Down"]
+position = Vector2(500, 900)
+shape = SubResource("RectangleShape2D_phao3")
+
+[node name="Door_Right" type="StaticBody2D" parent="Doors"]
+
+[node name="Sprite2D" type="Sprite2D" parent="Doors/Door_Right"]
+position = Vector2(1300, 500)
+texture = ExtResource("1_ci6au")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Doors/Door_Right"]
+position = Vector2(800, 400)
+occluder = SubResource("OccluderPolygon2D_nfrpb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/Door_Right"]
+position = Vector2(1300, 500)
+shape = SubResource("RectangleShape2D_ojh4s")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(500, 492)
+shape = SubResource("RectangleShape2D_mbine")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(495, 501)
+zoom = Vector2(0.65, 0.65)
+position_smoothing_enabled = true
+
+[node name="Light" type="Node2D" parent="."]
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Light"]
+occluder = SubResource("OccluderPolygon2D_fr46g")
+
+[node name="LightOccluder2D2" type="LightOccluder2D" parent="Light"]
+position = Vector2(1000, 0)
+scale = Vector2(-1, 1)
+occluder = SubResource("OccluderPolygon2D_fr46g")
+
+[node name="LightOccluder2D4" type="LightOccluder2D" parent="Light"]
+position = Vector2(0, 1000)
+rotation = 3.1415927
+scale = Vector2(-1, 1)
+occluder = SubResource("OccluderPolygon2D_fr46g")
+
+[node name="LightOccluder2D3" type="LightOccluder2D" parent="Light"]
+position = Vector2(1000, 1000)
+rotation = 3.1415927
+occluder = SubResource("OccluderPolygon2D_fr46g")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
