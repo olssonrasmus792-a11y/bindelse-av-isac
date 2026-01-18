@@ -2,6 +2,28 @@
 
 [ext_resource type="Texture2D" uid="uid://dqkxms1huepa7" path="res://Textures/Bulb Run sprite sheet.png" id="1_v0iea"]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_344ge"]
+radius = 35.0
+height = 108.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_v0iea"]
+radius = 30.0
+
+[sub_resource type="Gradient" id="Gradient_kry3j"]
+offsets = PackedFloat32Array(0.16444445, 0.7111111)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_v0iea"]
+gradient = SubResource("Gradient_kry3j")
+width = 250
+height = 250
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.9626168, 0.07165109)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cvnsp"]
+radius = 202.0
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_vgqql"]
 atlas = ExtResource("1_v0iea")
 region = Rect2(0, 0, 200, 141)
@@ -159,42 +181,13 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_344ge"]
-radius = 35.0
-height = 108.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_v0iea"]
-radius = 30.0
-
-[sub_resource type="Gradient" id="Gradient_kry3j"]
-offsets = PackedFloat32Array(0.16444445, 0.7111111)
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_v0iea"]
-gradient = SubResource("Gradient_kry3j")
-width = 250
-height = 250
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.9626168, 0.07165109)
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_cvnsp"]
-radius = 202.0
-
 [node name="Player" type="CharacterBody2D"]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_6bp64")
-animation = &"Run3"
-frame_progress = 0.9704973
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(-5, 8)
 shape = SubResource("CapsuleShape2D_344ge")
 
 [node name="RollCollision" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(-2, 33)
 shape = SubResource("CircleShape2D_v0iea")
 
@@ -219,3 +212,8 @@ texture_scale = 2.0
 
 [node name="AttackCollision" type="CollisionShape2D" parent="AttackArea"]
 shape = SubResource("CircleShape2D_cvnsp")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_6bp64")
+animation = &"Run3"
+frame_progress = 0.9704973

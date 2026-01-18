@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@export var speed := 550
+@export var speed := 400
 @onready var sprite_2d: Sprite2D = $Sprite2D
 
 var direction := Vector2(1, 1).normalized()

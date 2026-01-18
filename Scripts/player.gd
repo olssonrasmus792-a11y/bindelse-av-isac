@@ -25,13 +25,16 @@ enum ColorState { YELLOW, RED, GREEN }
 @export var stamina_regen = 1
 @export var color_state: ColorState
 
+@export var acceleration := 50.0
+@export var friction := 60.0
+
 @export var health_icon_scene = preload("res://Scenes/heart.tscn")
 @export var stamina_icon_scene = preload("res://Scenes/stamina.tscn")
 var health_icon_size = 50
 var stamina_icon_size = 20
 
 var rolling = false
-var roll_speed_mult = 1.6
+var roll_speed_mult = 1.5
 var roll_direction : Vector2
 var attacking = false
 var recharging = false
@@ -89,13 +92,22 @@ func _input(event: InputEvent) -> void:
 
 
 func handle_movement():
+	var target_velocity: Vector2
+
 	if rolling:
-		velocity = roll_direction * speed * roll_speed_mult
+		#velocity = roll_direction * speed * roll_speed_mult
+		target_velocity = roll_direction * speed * roll_speed_mult + (velocity / 5)
 	else:
-		velocity = input_direction * speed
-	
-	if roll_timer.is_stopped():
-		rolling = false
+		target_velocity = input_direction * speed
+
+	if input_direction != Vector2.ZERO or rolling:
+		velocity = velocity.move_toward(target_velocity, acceleration)
+	else:
+		velocity = velocity.move_toward(Vector2.ZERO, friction)
+
+
+func _on_roll_timer_timeout() -> void:
+	rolling = false
 
 
 func handle_attacking():
@@ -128,7 +140,7 @@ func _on_stamina_recharge_timeout() -> void:
 
 
 func next_color():
-	color_state = (color_state + 1) % ColorState.size()
+	color_state = ((color_state + 1) % ColorState.size()) as ColorState
 
 
 func apply_color():
@@ -185,7 +197,6 @@ func handle_animations():
 	
 	if rolling:
 		$AnimatedSprite2D.flip_h = input_direction[0] > 0
-		velocity = roll_direction * speed * roll_speed_mult
 		$AnimatedSprite2D.animation = "Roll"
 		collision_shape_2d.disabled = true
 		roll_collision.disabled = false
