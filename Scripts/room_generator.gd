@@ -3,6 +3,7 @@ extends Node2D
 @export var room_scene = preload("res://Scenes/room.tscn")
 @export var player_scene = preload("res://Scenes/player.tscn")
 @export var room_size := Vector2i(11, 7) # tiles
+@onready var camera_2d: Camera2D = $"../Camera2D"
 @export var tile_size := 200.0
 @export var dungeon_width := 6.0
 @export var dungeon_height := 6.0
@@ -114,3 +115,10 @@ func place_room(grid_pos: Vector2):
 	)
 	
 	placed_rooms[grid_pos] = room
+	
+	room.target_position = room.get_node("Camera2D").global_position
+	room.swap_cam.connect(_on_room_swap_cam)
+
+func _on_room_swap_cam(pos):
+	camera_2d.global_position = pos
+	print("camera pos = ", str(pos))

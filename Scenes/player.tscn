@@ -15,14 +15,14 @@ colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_v0iea"]
 gradient = SubResource("Gradient_kry3j")
-width = 250
-height = 250
+width = 400
+height = 400
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.9626168, 0.07165109)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cvnsp"]
-radius = 202.0
+radius = 318.49646
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vgqql"]
 atlas = ExtResource("1_v0iea")
@@ -182,6 +182,7 @@ animations = [{
 }]
 
 [node name="Player" type="CharacterBody2D"]
+motion_mode = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-5, 8)
