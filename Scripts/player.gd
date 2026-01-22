@@ -15,6 +15,7 @@ extends CharacterBody2D
 @onready var stamina_panel: PanelContainer = $"../UI/stamina_panel"
 @onready var attack_area: Area2D = $AttackArea
 @onready var bat_sprite: AnimatedSprite2D = $AttackArea/BatSprite
+@onready var color_timer: Timer = $ColorTimer
 
 enum ColorState { YELLOW, RED, GREEN }
 
@@ -42,6 +43,7 @@ var recharging = false
 var input_direction
 var target_energy: float
 var lerp_speed = 0.3
+var switching_color = false
 
 
 func _ready() -> void:
@@ -57,6 +59,7 @@ func _physics_process(_delta):
 	handle_animations()
 	handle_movement()
 	handle_attacking()
+	handle_color()
 	
 	if stamina < max_stamina and stamina_recharge.is_stopped():
 		stamina_recharge.start(stamina_regen)
@@ -87,9 +90,11 @@ func _input(event: InputEvent) -> void:
 		stamina -= 1
 		update_stamina_ui()
 	
-	if event.is_action_pressed("swap_color") and !attacking:
+	if event.is_action_pressed("swap_color") and !attacking and !switching_color:
 		next_color()
 		apply_color()
+		switching_color = true
+		color_timer.start(0.2)
 
 
 func handle_movement():
@@ -113,13 +118,19 @@ func _on_roll_timer_timeout() -> void:
 
 func handle_attacking():
 	if attacking:
+		attack_area.monitoring = true
+	else:
+		attack_area.monitoring = false
+
+
+func handle_color():
+	if switching_color:
 		target_energy = 1.5 + health * 0.15
 		lerp_speed = 0.5
-		attack_area.monitoring = true
 	else:
 		target_energy = 0.4 + health * 0.15
 		lerp_speed = 0.2
-		attack_area.monitoring = false
+
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemies"):
@@ -139,6 +150,10 @@ func _on_attack_cooldown_timeout() -> void:
 func _on_stamina_recharge_timeout() -> void:
 	stamina += 1
 	update_stamina_ui()
+
+
+func _on_color_timer_timeout() -> void:
+	switching_color = false
 
 
 func next_color():

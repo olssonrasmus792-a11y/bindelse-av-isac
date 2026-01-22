@@ -6,16 +6,16 @@
 [ext_resource type="Script" uid="uid://cvtkd2vv01e3w" path="res://Scripts/player.gd" id="3_8gbba"]
 [ext_resource type="Script" uid="uid://dw3q0g7b1hds4" path="res://Scripts/enemies.gd" id="4_kry3j"]
 [ext_resource type="Script" uid="uid://bsqd01gkox1pg" path="res://Scripts/ui.gd" id="5_kry3j"]
-[ext_resource type="Shader" uid="uid://b7d71qjbrtrcj" path="res://Scenes/main.gdshader" id="7_6bp64"]
+[ext_resource type="Shader" uid="uid://b7d71qjbrtrcj" path="res://Shaders/main.gdshader" id="7_6bp64"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6bp64"]
 shader = ExtResource("7_6bp64")
 shader_parameter/resolution = Vector2(320, 180)
-shader_parameter/scan_line_amount = 0.5
+shader_parameter/scan_line_amount = 0.400000019
 shader_parameter/warp_amount = 0.30000001425
-shader_parameter/vignette_amount = 0.5
+shader_parameter/vignette_amount = 0.250000011875
 shader_parameter/vignette_intensity = 0.3
-shader_parameter/grille_amount = 0.05
+shader_parameter/grille_amount = 0.10000000475
 shader_parameter/brightness_boost = 1.2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ynf5e"]
@@ -95,6 +95,9 @@ one_shot = true
 [node name="StaminaRecharge" type="Timer" parent="Player" groups=["timers"]]
 one_shot = true
 
+[node name="ColorTimer" type="Timer" parent="Player"]
+one_shot = true
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(576, 320)
 zoom = Vector2(0.575, 0.575)
@@ -127,24 +130,24 @@ metadata/_edit_use_anchors_ = true
 
 [node name="RemoveEnemies" type="Button" parent="UI/Buttons"]
 layout_mode = 0
-offset_left = 912.0
-offset_top = 496.0
+offset_left = 1008.0
+offset_top = 544.0
 offset_right = 1144.0
-offset_bottom = 560.0
+offset_bottom = 584.0
 focus_mode = 0
 theme = SubResource("Theme_hptm8")
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 18
 text = "Kill Enemies"
 
 [node name="SpawnEnemy" type="Button" parent="UI/Buttons"]
 layout_mode = 0
-offset_left = 912.0
-offset_top = 568.0
+offset_left = 1008.0
+offset_top = 592.0
 offset_right = 1146.0
 offset_bottom = 636.0
 focus_mode = 0
 theme = SubResource("Theme_344ge")
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 18
 text = "Spawn Enemy"
 
 [node name="health_panel" type="PanelContainer" parent="UI"]
@@ -180,6 +183,7 @@ vertical_alignment = 1
 [connection signal="timeout" from="Player/AttackTimer" to="Player" method="_on_attack_timer_timeout"]
 [connection signal="timeout" from="Player/AttackCooldown" to="Player" method="_on_attack_cooldown_timeout"]
 [connection signal="timeout" from="Player/StaminaRecharge" to="Player" method="_on_stamina_recharge_timeout"]
+[connection signal="timeout" from="Player/ColorTimer" to="Player" method="_on_color_timer_timeout"]
 [connection signal="pressed" from="UI/Buttons/RemoveEnemies" to="Enemies" method="_on_remove_enemies_pressed"]
 [connection signal="pressed" from="UI/Buttons/SpawnEnemy" to="Enemies" method="_on_spawn_enemy_pressed"]
 

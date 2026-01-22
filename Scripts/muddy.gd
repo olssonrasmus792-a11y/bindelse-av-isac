@@ -54,7 +54,6 @@ func take_damage(damage):
 	sprite_2d.modulate = Color.RED
 	if health <= 0:
 		emit_signal("enemy_died")  
-		print("signal emitted")
 		queue_free()
 
 func apply_knockback(from_position: Vector2):
@@ -70,4 +69,5 @@ func explode(enemy):
 	get_parent().add_child(explosion)
 	explosion.emitting = true
 	
+	emit_signal("enemy_died")
 	enemy.queue_free()

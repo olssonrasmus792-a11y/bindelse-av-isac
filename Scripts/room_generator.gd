@@ -2,6 +2,7 @@ extends Node2D
 
 @export var room_scene = preload("res://Scenes/room.tscn")
 @export var player_scene = preload("res://Scenes/player.tscn")
+@export var chest_scene = preload("res://Scenes/Chest.tscn")
 @export var room_size := Vector2i(11, 7) # tiles
 @onready var camera_2d: Camera2D = $"../Camera2D"
 @export var tile_size := 200.0
@@ -116,8 +117,17 @@ func place_room(grid_pos: Vector2):
 	
 	placed_rooms[grid_pos] = room
 	
+	if randf() < 0.1:
+		spawnChest(room)
+	
 	room.target_position = room.get_node("Camera2D").global_position
 	room.swap_cam.connect(_on_room_swap_cam)
 
 func _on_room_swap_cam(pos):
 	camera_2d.global_position = pos
+
+func spawnChest(room):
+	var chest = chest_scene.instantiate()
+	room.add_child(chest)
+	chest.global_position = Vector2(room.position.x + room_width/2 - tile_size*3, room.position.y + room_height/2 - tile_size)
+	print("Chest spawned")

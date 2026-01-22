@@ -266,6 +266,7 @@ texture_scale = 2.0
 [node name="AttackArea" type="Area2D" parent="."]
 
 [node name="BatSprite" type="AnimatedSprite2D" parent="AttackArea"]
+z_index = 2
 position = Vector2(-81, 10)
 rotation = -1.8000108
 sprite_frames = SubResource("SpriteFrames_0gysh")
@@ -280,4 +281,4 @@ shape = SubResource("CapsuleShape2D_2ijsl")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_6bp64")
 animation = &"Run3"
-frame_progress = 0.9704973
+frame_progress = 0.16075999
