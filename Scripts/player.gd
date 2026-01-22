@@ -1,10 +1,10 @@
 extends CharacterBody2D
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
-@onready var point_light_2d: PointLight2D = $PointLight2D
+@onready var point_light_2d: PointLight2D = $Node2D/PointLight2D
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 @onready var roll_collision: CollisionShape2D = $RollCollision
-@onready var roll_light: PointLight2D = $RollLight
+@onready var roll_light: PointLight2D = $Node2D/RollLight
 @onready var attack_timer: Timer = $AttackTimer
 @onready var roll_timer: Timer = $RollTimer
 @onready var stamina_recharge: Timer = $StaminaRecharge
@@ -14,6 +14,7 @@ extends CharacterBody2D
 @onready var health_panel: PanelContainer = $"../UI/health_panel"
 @onready var stamina_panel: PanelContainer = $"../UI/stamina_panel"
 @onready var attack_area: Area2D = $AttackArea
+@onready var bat_sprite: AnimatedSprite2D = $AttackArea/BatSprite
 
 enum ColorState { YELLOW, RED, GREEN }
 
@@ -80,7 +81,7 @@ func _input(event: InputEvent) -> void:
 		stamina -= 1
 		update_stamina_ui()
 	
-	if event.is_action_pressed("attack") and !attacking and !recharging and stamina > 0:
+	if event.is_action_pressed("attack") and !attacking and !recharging and stamina > 0 and !rolling:
 		attacking = true
 		attack_timer.start(0.2)
 		stamina -= 1
@@ -123,6 +124,7 @@ func handle_attacking():
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemies"):
 		body.take_damage(1)
+		body.apply_knockback(global_position)
 
 func _on_attack_timer_timeout() -> void:
 	attack_cooldown.start(0.5)
@@ -191,6 +193,7 @@ func handle_animations():
 	roll_collision.disabled = true
 	roll_light.visible = false
 	point_light_2d.visible = true
+	bat_sprite.visible = true
 	
 	point_light_2d.energy = lerp(point_light_2d.energy, target_energy, lerp_speed)
 	roll_light.energy = lerp(roll_light.energy, target_energy, lerp_speed)
@@ -198,12 +201,27 @@ func handle_animations():
 	if rolling:
 		$AnimatedSprite2D.flip_h = input_direction[0] > 0
 		$AnimatedSprite2D.animation = "Roll"
+		
 		collision_shape_2d.disabled = true
 		roll_collision.disabled = false
+		
 		roll_light.visible = true
 		point_light_2d.visible = false
+		
+		bat_sprite.visible = false
 	elif input_direction:
-		$AnimatedSprite2D.flip_h = input_direction[0] < 0
 		animated_sprite_2d.play("Run" + str(health))
 	else:
 		animated_sprite_2d.play("Idle" + str(health))
+	
+	
+	if input_direction.x:
+		$AnimatedSprite2D.flip_h = input_direction[0] < 0
+		if  input_direction[0] < 0:
+			attack_area.scale.x = 1
+		else:
+			attack_area.scale.x = -1
+	
+	
+	if attacking:
+		bat_sprite.play("Attack")

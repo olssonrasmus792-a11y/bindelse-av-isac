@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bcyvgbkfd8iqg"]
+[gd_scene load_steps=15 format=3 uid="uid://bcyvgbkfd8iqg"]
 
 [ext_resource type="Script" uid="uid://cy82dwcy7mapg" path="res://Scripts/main.gd" id="1_6bp64"]
 [ext_resource type="PackedScene" uid="uid://bv2axkxq2b6bw" path="res://Scenes/room_generator.tscn" id="1_21xkr"]
@@ -17,6 +17,54 @@ shader_parameter/vignette_amount = 0.5
 shader_parameter/vignette_intensity = 0.3
 shader_parameter/grille_amount = 0.05
 shader_parameter/brightness_boost = 1.2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ynf5e"]
+bg_color = Color(0.9511823, 0.23625669, 0, 1)
+border_width_bottom = 10
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hptm8"]
+bg_color = Color(0.9511823, 0.23625669, 0, 1)
+border_width_top = 10
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="Theme" id="Theme_hptm8"]
+Button/styles/hover = SubResource("StyleBoxFlat_ynf5e")
+Button/styles/normal = SubResource("StyleBoxFlat_ynf5e")
+Button/styles/pressed = SubResource("StyleBoxFlat_hptm8")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6bp64"]
+bg_color = Color(0.35982844, 0.48508883, 1, 1)
+border_width_bottom = 10
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_344ge"]
+bg_color = Color(0.36078432, 0.4862745, 1, 1)
+border_width_top = 10
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="Theme" id="Theme_344ge"]
+Button/styles/hover = SubResource("StyleBoxFlat_6bp64")
+Button/styles/normal = SubResource("StyleBoxFlat_6bp64")
+Button/styles/pressed = SubResource("StyleBoxFlat_344ge")
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_6bp64")
@@ -79,21 +127,23 @@ metadata/_edit_use_anchors_ = true
 
 [node name="RemoveEnemies" type="Button" parent="UI/Buttons"]
 layout_mode = 0
-offset_left = 936.0
-offset_top = 528.0
-offset_right = 1146.0
-offset_bottom = 578.0
+offset_left = 912.0
+offset_top = 496.0
+offset_right = 1144.0
+offset_bottom = 560.0
 focus_mode = 0
+theme = SubResource("Theme_hptm8")
 theme_override_font_sizes/font_size = 30
 text = "Kill Enemies"
 
 [node name="SpawnEnemy" type="Button" parent="UI/Buttons"]
 layout_mode = 0
-offset_left = 936.0
-offset_top = 592.0
+offset_left = 912.0
+offset_top = 568.0
 offset_right = 1146.0
-offset_bottom = 642.0
+offset_bottom = 636.0
 focus_mode = 0
+theme = SubResource("Theme_344ge")
 theme_override_font_sizes/font_size = 30
 text = "Spawn Enemy"
 

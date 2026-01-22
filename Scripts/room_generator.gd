@@ -121,4 +121,3 @@ func place_room(grid_pos: Vector2):
 
 func _on_room_swap_cam(pos):
 	camera_2d.global_position = pos
-	print("camera pos = ", str(pos))

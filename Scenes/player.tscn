@@ -1,5 +1,6 @@
-[gd_scene load_steps=25 format=3 uid="uid://cyhswvdif7wx7"]
+[gd_scene load_steps=33 format=3 uid="uid://cyhswvdif7wx7"]
 
+[ext_resource type="Texture2D" uid="uid://bo61tqjm0cruy" path="res://Textures/Bat.png" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://dqkxms1huepa7" path="res://Textures/Bulb Run sprite sheet.png" id="1_v0iea"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_344ge"]
@@ -21,8 +22,59 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.9626168, 0.07165109)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_cvnsp"]
-radius = 318.49646
+[sub_resource type="AtlasTexture" id="AtlasTexture_igrcy"]
+atlas = ExtResource("1_cvnsp")
+region = Rect2(0, 200, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fs7ks"]
+atlas = ExtResource("1_cvnsp")
+region = Rect2(200, 200, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l6n3p"]
+atlas = ExtResource("1_cvnsp")
+region = Rect2(400, 200, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_olqyp"]
+atlas = ExtResource("1_cvnsp")
+region = Rect2(800, 200, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wpjfl"]
+atlas = ExtResource("1_cvnsp")
+region = Rect2(1000, 200, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bi64h"]
+atlas = ExtResource("1_cvnsp")
+region = Rect2(1200, 200, 200, 200)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0gysh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_igrcy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fs7ks")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l6n3p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_olqyp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wpjfl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bi64h")
+}],
+"loop": false,
+"name": &"Attack",
+"speed": 15.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2ijsl"]
+radius = 52.0
+height = 146.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vgqql"]
 atlas = ExtResource("1_v0iea")
@@ -192,7 +244,9 @@ shape = SubResource("CapsuleShape2D_344ge")
 position = Vector2(-2, 33)
 shape = SubResource("CircleShape2D_v0iea")
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="PointLight2D" type="PointLight2D" parent="Node2D"]
 color = Color(0.91, 0.8205167, 0.37310004, 1)
 range_z_min = -200
 range_z_max = 200
@@ -200,7 +254,7 @@ shadow_enabled = true
 texture = SubResource("GradientTexture2D_v0iea")
 texture_scale = 2.0
 
-[node name="RollLight" type="PointLight2D" parent="."]
+[node name="RollLight" type="PointLight2D" parent="Node2D"]
 position = Vector2(-1, 35)
 color = Color(0.91, 0.8205167, 0.37310004, 1)
 range_z_min = -200
@@ -211,8 +265,17 @@ texture_scale = 2.0
 
 [node name="AttackArea" type="Area2D" parent="."]
 
+[node name="BatSprite" type="AnimatedSprite2D" parent="AttackArea"]
+position = Vector2(-81, 10)
+rotation = -1.8000108
+sprite_frames = SubResource("SpriteFrames_0gysh")
+animation = &"Attack"
+frame = 5
+frame_progress = 1.0
+
 [node name="AttackCollision" type="CollisionShape2D" parent="AttackArea"]
-shape = SubResource("CircleShape2D_cvnsp")
+position = Vector2(-92, -8)
+shape = SubResource("CapsuleShape2D_2ijsl")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_6bp64")
