@@ -14,12 +14,12 @@ var room_height = 7 * tile_size
 var placed_rooms := {}
 
 var room_spawn_rate = 0.6
+var chest_spawn_chance = 1.0
 
 var start_pos : Vector2
 
 func _ready():
 	generate_dungeon()
-	print("Generating dungeon")
 
 func generate_dungeon():
 	start_pos = Vector2(dungeon_width / 2, dungeon_height / 2)
@@ -117,7 +117,7 @@ func place_room(grid_pos: Vector2):
 	
 	placed_rooms[grid_pos] = room
 	
-	if randf() < 0.1:
+	if randf() < chest_spawn_chance:
 		spawnChest(room)
 	
 	room.target_position = room.get_node("Camera2D").global_position
@@ -130,4 +130,3 @@ func spawnChest(room):
 	var chest = chest_scene.instantiate()
 	room.add_child(chest)
 	chest.global_position = Vector2(room.position.x + room_width/2 - tile_size*3, room.position.y + room_height/2 - tile_size)
-	print("Chest spawned")

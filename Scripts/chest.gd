@@ -1,5 +1,6 @@
 extends Node2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var gpu_particles_2d: GPUParticles2D = $GPUParticles2D
 
 var player_is_close = false
 var chest_opened = false
@@ -28,3 +29,4 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 func open_chest():
 	animated_sprite_2d.play("Open")
 	chest_opened = true
+	gpu_particles_2d.emitting = true

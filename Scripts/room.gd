@@ -3,24 +3,65 @@ extends Node2D
 
 @onready var camera: Camera2D = $Camera2D
 @onready var color_rect: ColorRect = $ColorRect
+
+@onready var door_up: StaticBody2D = $Doors/Door_Up
+@onready var door_left: StaticBody2D = $Doors/Door_Left
+@onready var door_down: StaticBody2D = $Doors/Door_Down
+@onready var door_right: StaticBody2D = $Doors/Door_Right
+
+@export var room_size := Vector2i(11, 7) # tiles
+@export var tile_size := 200.0
+@export var dungeon_width := 6.0
+@export var dungeon_height := 6.0
+var room_width  = 11 * tile_size
+var room_height = 7 * tile_size
+var start_pos : Vector2
+var start_room_pos : Vector2
+
 var room_entered = false
+var room_closed = false
 var zoomed_out = false
 var camera_normal_zoom
 var camera_map_zoom
 var target_position: Vector2
 
+var has_door_up
+var has_door_left
+var has_door_down
+var has_door_right
+
 signal swap_cam(pos)
 
 func _ready() -> void:
+	start_pos = Vector2(dungeon_width / 2, dungeon_height / 2)
+	start_room_pos = Vector2(
+		start_pos.x * room_size.x * tile_size - (room_width * dungeon_width / 2),
+		start_pos.y * room_size.y * tile_size - (room_height * dungeon_height / 2)
+		)
+	
 	room_entered = false
+	room_closed = false
 	color_rect.visible = true
 	camera_normal_zoom = camera.zoom.x
 	camera_map_zoom = camera.zoom.x / 3
+	
+	if door_up.get_node("Sprite2D").visible == true:
+		has_door_up = true
+	
+	if door_left.get_node("Sprite2D").visible == true:
+		has_door_left = true
+	
+	if door_down.get_node("Sprite2D").visible == true:
+		has_door_down = true
+	
+	if door_right.get_node("Sprite2D").visible == true:
+		has_door_right = true
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
 		switch_camera()
 		light_up_room()
+		room_entered = true
 
 func switch_camera():
 	#camera.make_current()
@@ -37,3 +78,30 @@ func _input(event: InputEvent) -> void:
 		else:
 			camera.zoom = Vector2(camera_map_zoom, camera_map_zoom)
 			zoomed_out = true
+
+
+func _on_enemy_spawn_area_body_entered(body: Node2D) -> void:
+	if body.name == "Player" and room.position != start_room_pos and !room_closed:
+		spawn_enemies()
+		close_room()
+
+func spawn_enemies():
+	print("Spawning Enemies")
+
+
+#Fixa hitboxes + light
+func close_room():
+	print("Closing Room")
+	room_closed = true
+	
+	if has_door_up:
+		door_up.get_node("Sprite2D").visible = true
+	
+	if has_door_left:
+		door_left.get_node("Sprite2D").visible = true
+	
+	if has_door_down:
+		door_down.get_node("Sprite2D").visible = true
+	
+	if has_door_right:
+		door_right.get_node("Sprite2D").visible = true

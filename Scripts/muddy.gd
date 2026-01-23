@@ -10,7 +10,7 @@ var direction := Vector2(1, 1).normalized()
 var health = 2
 
 @export var knockback_strength = 2500
-@export var knockback_duration = 10
+@export var knockback_duration = 1
 
 var knockback_velocity := Vector2.ZERO
 var knockback_timer := 0.0
