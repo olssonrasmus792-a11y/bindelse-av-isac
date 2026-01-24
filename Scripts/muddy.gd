@@ -19,14 +19,16 @@ signal enemy_died
 
 func _ready() -> void:
 	direction = Vector2(randf_range(-1, 1), randf_range(-1, 1))
+	point_light_2d.visible = false
 
 func _physics_process(delta):
 	if knockback_timer > 0.0:
 		velocity = knockback_velocity
 		knockback_timer -= delta
-		point_light_2d.visible = false
+		point_light_2d.visible = true
 	else:
 		velocity = direction * speed
+		point_light_2d.visible = false
 	
 	move_and_slide()
 	
@@ -37,6 +39,7 @@ func _physics_process(delta):
 		
 		if knockback_timer > 0.0 and !collider.is_in_group("enemies"):
 			knockback_velocity = knockback_velocity.bounce(normal)
+			direction = knockback_velocity.normalized()
 		else:
 			direction = direction.bounce(normal)
 

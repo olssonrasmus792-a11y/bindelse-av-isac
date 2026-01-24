@@ -91,7 +91,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"Open",
-"speed": 40.0
+"speed": 60.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fqgxf"]
@@ -156,7 +156,7 @@ emitting = false
 amount = 100
 lifetime = 3.0
 one_shot = true
-speed_scale = 4.5
+speed_scale = 5.5
 explosiveness = 1.0
 randomness = 1.0
 trail_enabled = true

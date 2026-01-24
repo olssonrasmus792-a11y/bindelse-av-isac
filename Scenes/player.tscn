@@ -16,8 +16,8 @@ colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_v0iea"]
 gradient = SubResource("Gradient_kry3j")
-width = 400
-height = 400
+width = 600
+height = 600
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.9626168, 0.07165109)
@@ -245,7 +245,6 @@ position = Vector2(-2, 33)
 shape = SubResource("CircleShape2D_v0iea")
 
 [node name="Node2D" type="Node2D" parent="."]
-visible = false
 
 [node name="PointLight2D" type="PointLight2D" parent="Node2D"]
 color = Color(0.91, 0.8205167, 0.37310004, 1)

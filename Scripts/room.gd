@@ -20,10 +20,11 @@ var start_room_pos : Vector2
 
 var room_entered = false
 var room_closed = false
+var room_cleared = false
 var zoomed_out = false
 var camera_normal_zoom
 var camera_map_zoom
-var target_position: Vector2
+var target_position: Vector2 = Vector2(0, 0)
 
 var has_door_up
 var has_door_left
@@ -31,6 +32,7 @@ var has_door_down
 var has_door_right
 
 signal swap_cam(pos)
+signal spawn_enemies_signal(Vector2)
 
 func _ready() -> void:
 	start_pos = Vector2(dungeon_width / 2, dungeon_height / 2)
@@ -44,18 +46,16 @@ func _ready() -> void:
 	color_rect.visible = true
 	camera_normal_zoom = camera.zoom.x
 	camera_map_zoom = camera.zoom.x / 3
-	
-	if door_up.get_node("Sprite2D").visible == true:
-		has_door_up = true
-	
-	if door_left.get_node("Sprite2D").visible == true:
-		has_door_left = true
-	
-	if door_down.get_node("Sprite2D").visible == true:
-		has_door_down = true
-	
-	if door_right.get_node("Sprite2D").visible == true:
-		has_door_right = true
+
+func doors_finalized():
+	check_doors()
+
+func check_doors():
+	has_door_up    = door_up.get_node("Sprite2D").visible
+	has_door_left  = door_left.get_node("Sprite2D").visible
+	has_door_down  = door_down.get_node("Sprite2D").visible
+	has_door_right = door_right.get_node("Sprite2D").visible
+
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
@@ -64,7 +64,6 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		room_entered = true
 
 func switch_camera():
-	#camera.make_current()
 	emit_signal("swap_cam", target_position)
 
 func light_up_room():
@@ -82,26 +81,53 @@ func _input(event: InputEvent) -> void:
 
 func _on_enemy_spawn_area_body_entered(body: Node2D) -> void:
 	if body.name == "Player" and room.position != start_room_pos and !room_closed:
+		check_doors()
 		spawn_enemies()
 		close_room()
 
 func spawn_enemies():
-	print("Spawning Enemies")
+	emit_signal("spawn_enemies_signal", room.position)
+	print("Spawn enemies signal emitted")
 
 
-#Fixa hitboxes + light
 func close_room():
-	print("Closing Room")
 	room_closed = true
 	
+	if !has_door_up:
+		close_door(door_up)
+	
+	if !has_door_left:
+		close_door(door_left)
+	
+	if !has_door_down:
+		close_door(door_down)
+	
+	if !has_door_right:
+		close_door(door_right)
+
+func open_room():
+	room_closed = false
+	room_cleared = true
+	
 	if has_door_up:
-		door_up.get_node("Sprite2D").visible = true
+		open_door(door_up)
 	
 	if has_door_left:
-		door_left.get_node("Sprite2D").visible = true
+		open_door(door_left)
 	
 	if has_door_down:
-		door_down.get_node("Sprite2D").visible = true
+		open_door(door_down)
 	
 	if has_door_right:
-		door_right.get_node("Sprite2D").visible = true
+		open_door(door_right)
+
+
+func close_door(door):
+	door.get_node("Sprite2D").visible = true
+	door.get_node("CollisionShape2D").set_deferred("disabled", false)
+	door.get_node("LightOccluder2D").visible = true
+
+func open_door(door):
+	door.get_node("Sprite2D").visible = false
+	door.get_node("CollisionShape2D").set_deferred("disabled", true)
+	door.get_node("LightOccluder2D").visible = false

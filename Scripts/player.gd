@@ -102,7 +102,7 @@ func handle_movement():
 
 	if rolling:
 		#velocity = roll_direction * speed * roll_speed_mult
-		target_velocity = roll_direction * speed * roll_speed_mult + (velocity / 5)
+		velocity = roll_direction * speed * roll_speed_mult + (velocity / 5)
 	else:
 		target_velocity = input_direction * speed
 
