@@ -1,16 +1,19 @@
 extends CharacterBody2D
 
 @export var explosion_scene = preload("res://Scenes/MuddyExplosion.tscn")
+@export var trail_scene = preload("res://Scenes/snail_trail.tscn")
 
 @export var speed := 300
-@onready var sprite_2d: Sprite2D = $Sprite2D
-@onready var point_light_2d: PointLight2D = $PointLight2D
+@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 
 var direction := Vector2(1, 1).normalized()
 var health = 2
 
-@export var knockback_strength = 2500
-@export var knockback_duration = 2
+@export var knockback_strength = 1000
+@export var knockback_duration = 0.2
+
+@export var drop_distance = 20.0
+var last_drop_pos: Vector2
 
 var knockback_velocity := Vector2.ZERO
 var knockback_timer := 0.0
@@ -19,19 +22,14 @@ signal enemy_died
 
 func _ready() -> void:
 	direction = Vector2(randf_range(-1, 1), randf_range(-1, 1))
-	point_light_2d.visible = false
+	last_drop_pos = global_position
 
 func _physics_process(delta):
 	if knockback_timer > 0.0:
 		velocity = knockback_velocity
 		knockback_timer -= delta
-		point_light_2d.visible = true
-		if knockback_timer <= 0:
-			var tween := create_tween()
-			tween.tween_property(sprite_2d, "modulate", Color(1, 1, 1), 0.5)
 	else:
 		velocity = direction * speed
-		point_light_2d.visible = false
 	
 	move_and_slide()
 	
@@ -45,18 +43,17 @@ func _physics_process(delta):
 			direction = knockback_velocity.normalized()
 		else:
 			direction = direction.bounce(normal)
-
-		if collider.is_in_group("enemies") and knockback_timer > 0.0:
-			explode(collider)
 	
-	sprite_2d.flip_h = direction[0] < 0
-	if direction[0] < 0:
-		sprite_2d.rotation_degrees -= 10
-	else:
-		sprite_2d.rotation_degrees += 10
+	if global_position.distance_to(last_drop_pos) >= drop_distance:
+		spawn_trail()
+		last_drop_pos = global_position
+	
+	
+	animated_sprite_2d.flip_h = direction[0] > 0
 
 func take_damage(damage):
 	health -= damage
+	flash_red()
 	if health <= 0:
 		emit_signal("enemy_died")  
 		queue_free()
@@ -66,14 +63,18 @@ func apply_knockback(from_position: Vector2):
 	knockback_velocity = knockback_direction * knockback_strength
 	knockback_timer = knockback_duration
 	direction = knockback_velocity.normalized()
-	sprite_2d.modulate = Color(1, 0, 0)
 
-func explode(enemy):
-	var explosion = explosion_scene.instantiate()
-	
-	explosion.global_position = global_position
-	get_parent().add_child(explosion)
-	explosion.emitting = true
-	
-	emit_signal("enemy_died")
-	enemy.queue_free()
+func spawn_trail():
+	var trail = trail_scene.instantiate()
+	trail.global_position = global_position
+	get_parent().add_child(trail)
+
+func flash_red():
+	animated_sprite_2d.modulate = Color(1, 0, 0)  # red
+	var tween := create_tween()
+	tween.tween_property(
+		animated_sprite_2d,
+		"modulate",
+		Color(1, 1, 1),
+		0.5
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)

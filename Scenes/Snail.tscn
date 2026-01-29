@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://liad3wcg5iqj"]
+[gd_scene load_steps=9 format=3 uid="uid://liad3wcg5iqj"]
 
+[ext_resource type="Script" uid="uid://b225733yfsgfr" path="res://Scripts/snail.gd" id="1_5346s"]
 [ext_resource type="Texture2D" uid="uid://c7cidaon7x34n" path="res://Textures/Snail Run.png" id="1_i7c5s"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bbiew"]
@@ -38,9 +39,22 @@ animations = [{
 "speed": 6.0
 }]
 
-[node name="Snail" type="CharacterBody2D"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tny20"]
+radius = 28.062298
+height = 114.15525
+
+[node name="Snail" type="CharacterBody2D" groups=["enemies"]]
+z_index = 1
+script = ExtResource("1_5346s")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_k0y6n")
-frame_progress = 0.45261768
+autoplay = "default"
+frame = 2
+frame_progress = 0.9158772
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(16, -2)
+rotation = -1.5248692
+shape = SubResource("CapsuleShape2D_tny20")

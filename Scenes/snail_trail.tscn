@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://ccbqk2g8fp5bt"]
+
+[ext_resource type="Script" uid="uid://cg4ah1q23lf7q" path="res://Scenes/snail_trail.gd" id="1_62hch"]
+[ext_resource type="Texture2D" uid="uid://ca82twfvheobr" path="res://Textures/icon.svg" id="2_hq65t"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h373p"]
+size = Vector2(38, 40)
+
+[node name="SnailTrail" type="Node2D"]
+script = ExtResource("1_62hch")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0.9999962, -0.9999962)
+scale = Vector2(0.3125, 0.3125)
+texture = ExtResource("2_hq65t")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_h373p")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

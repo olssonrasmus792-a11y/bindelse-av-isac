@@ -21,6 +21,7 @@ var start_room_pos : Vector2
 var room_entered = false
 var room_closed = false
 var room_cleared = false
+var player_is_in_room = false
 var zoomed_out = false
 var camera_normal_zoom
 var camera_map_zoom
@@ -62,6 +63,11 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		switch_camera()
 		light_up_room()
 		room_entered = true
+		player_is_in_room = true
+
+func _on_area_2d_body_exited(body: Node2D) -> void:
+	if body.name == "Player":
+		player_is_in_room = false
 
 func switch_camera():
 	emit_signal("swap_cam", target_position)
@@ -77,10 +83,13 @@ func _input(event: InputEvent) -> void:
 		else:
 			camera.zoom = Vector2(camera_map_zoom, camera_map_zoom)
 			zoomed_out = true
+	
+	if event.is_action_pressed("open") and player_is_in_room:
+		open_room()
 
 
 func _on_enemy_spawn_area_body_entered(body: Node2D) -> void:
-	if body.name == "Player" and room.position != start_room_pos and !room_closed:
+	if body.name == "Player" and room.position != start_room_pos and !room_closed and !room_cleared:
 		check_doors()
 		spawn_enemies()
 		close_room()
@@ -106,19 +115,19 @@ func close_room():
 		close_door(door_right)
 
 func open_room():
-	room_closed = false
 	room_cleared = true
+	room_closed = false
 	
-	if has_door_up:
+	if !has_door_up:
 		open_door(door_up)
 	
-	if has_door_left:
+	if !has_door_left:
 		open_door(door_left)
 	
-	if has_door_down:
+	if !has_door_down:
 		open_door(door_down)
 	
-	if has_door_right:
+	if !has_door_right:
 		open_door(door_right)
 
 

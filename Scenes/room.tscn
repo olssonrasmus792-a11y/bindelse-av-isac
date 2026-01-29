@@ -192,4 +192,5 @@ position = Vector2(500, 508)
 shape = SubResource("RectangleShape2D_ilpkg")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
 [connection signal="body_entered" from="EnemySpawnArea" to="." method="_on_enemy_spawn_area_body_entered"]

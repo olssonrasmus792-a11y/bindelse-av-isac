@@ -20,12 +20,14 @@ extends CharacterBody2D
 enum ColorState { YELLOW, RED, GREEN }
 
 @export var speed = 500
-@export var max_health = 3
+@export var max_health = 6
 @export var health = max_health
 @export var max_stamina = 5
 @export var stamina = max_stamina
 @export var stamina_regen = 1
 @export var color_state: ColorState
+@export var invulnerability_duration = 0.4
+var invulnerability_timer = 0.0
 
 @export var acceleration := 50.0
 @export var friction := 60.0
@@ -49,11 +51,11 @@ var switching_color = false
 func _ready() -> void:
 	point_light_2d.color = Color.LIGHT_YELLOW
 	roll_light.color = Color.LIGHT_YELLOW
-	update_health_ui()
+	update_health()
 	update_stamina_ui()
 
 
-func _physics_process(_delta):
+func _physics_process(delta):
 	get_input()
 	move_and_slide()
 	handle_animations()
@@ -63,6 +65,11 @@ func _physics_process(_delta):
 	
 	if stamina < max_stamina and stamina_recharge.is_stopped():
 		stamina_recharge.start(stamina_regen)
+	
+	if invulnerability_timer > 0:
+		var alpha = remap(invulnerability_timer, 0, invulnerability_duration, 1, 0.5)
+		invulnerability_timer -= delta
+		modulate.a = alpha
 
 
 func get_input():
@@ -70,13 +77,6 @@ func get_input():
 
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("take_damage"):
-		health -= 1
-		if health <= 0:
-			health = 3
-		point_light_2d.energy = 0.4 + health * 0.15
-		update_health_ui()
-	
 	if event.is_action_pressed("roll") and input_direction and !rolling and stamina > 0:
 		roll_direction = Input.get_vector("left", "right", "up", "down")
 		roll_timer.start(0.3)
@@ -173,8 +173,12 @@ func apply_color():
 			roll_light.color = Color.LIGHT_YELLOW
 
 
-func update_health_ui():
-	# Clear old icons
+func update_health():
+	if health < 1:
+		health = max_health
+		point_light_2d.energy = 0.4 + health * 0.15
+		print("you died")
+	
 	for child in health_bar.get_children():
 		child.queue_free()
 	
@@ -204,6 +208,7 @@ func update_stamina_ui():
 
 
 func handle_animations():
+	var health_state : int = remap(health, 1, max_health, 1, 3)
 	collision_shape_2d.disabled = false
 	roll_collision.disabled = true
 	roll_light.visible = false
@@ -225,9 +230,9 @@ func handle_animations():
 		
 		bat_sprite.visible = false
 	elif input_direction:
-		animated_sprite_2d.play("Run" + str(health))
+		animated_sprite_2d.play("Run" + str(health_state))
 	else:
-		animated_sprite_2d.play("Idle" + str(health))
+		animated_sprite_2d.play("Idle" + str(health_state))
 	
 	
 	if input_direction.x:
@@ -240,3 +245,20 @@ func handle_animations():
 	
 	if attacking:
 		bat_sprite.play("Attack")
+
+func take_damage(damage):
+	if invulnerability_timer <= 0:
+		health -= damage
+		invulnerability_timer = invulnerability_duration
+		flash_red()
+		update_health()
+
+func flash_red():
+	animated_sprite_2d.modulate = Color(1, 0, 0)  # red
+	var tween := create_tween()
+	tween.tween_property(
+		animated_sprite_2d,
+		"modulate",
+		Color(1, 1, 1),
+		invulnerability_duration
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
