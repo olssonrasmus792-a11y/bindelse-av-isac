@@ -86,9 +86,14 @@ tile_set = SubResource("TileSet_26yhd")
 [node name="Door_Up" type="StaticBody2D" parent="Doors"]
 position = Vector2(0, -200)
 
-[node name="Sprite2D" type="Sprite2D" parent="Doors/Door_Up"]
+[node name="Door" type="Sprite2D" parent="Doors/Door_Up"]
 position = Vector2(500, 100)
+rotation = 3.1415927
 texture = ExtResource("5_4gp0m")
+
+[node name="Wall" type="Sprite2D" parent="Doors/Door_Up"]
+position = Vector2(500, 99.99999)
+texture = ExtResource("1_ci6au")
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="Doors/Door_Up"]
 occluder = SubResource("OccluderPolygon2D_nfrpb")
@@ -100,7 +105,13 @@ shape = SubResource("RectangleShape2D_nfrpb")
 [node name="Door_Left" type="StaticBody2D" parent="Doors"]
 position = Vector2(-200, 0)
 
-[node name="Sprite2D" type="Sprite2D" parent="Doors/Door_Left"]
+[node name="Door" type="Sprite2D" parent="Doors/Door_Left"]
+position = Vector2(-300, 500)
+rotation = 1.5707964
+scale = Vector2(1.0000001, 1.0000001)
+texture = ExtResource("5_4gp0m")
+
+[node name="Wall" type="Sprite2D" parent="Doors/Door_Left"]
 position = Vector2(-300, 500)
 texture = ExtResource("1_ci6au")
 
@@ -115,7 +126,12 @@ shape = SubResource("RectangleShape2D_4gp0m")
 [node name="Door_Down" type="StaticBody2D" parent="Doors"]
 position = Vector2(0, 200)
 
-[node name="Sprite2D" type="Sprite2D" parent="Doors/Door_Down"]
+[node name="Door" type="Sprite2D" parent="Doors/Door_Down"]
+position = Vector2(499.99994, 900)
+scale = Vector2(0.99999976, 0.9999999)
+texture = ExtResource("5_4gp0m")
+
+[node name="Wall" type="Sprite2D" parent="Doors/Door_Down"]
 position = Vector2(500, 900)
 texture = ExtResource("1_ci6au")
 
@@ -130,7 +146,13 @@ shape = SubResource("RectangleShape2D_phao3")
 [node name="Door_Right" type="StaticBody2D" parent="Doors"]
 position = Vector2(200, 0)
 
-[node name="Sprite2D" type="Sprite2D" parent="Doors/Door_Right"]
+[node name="Door" type="Sprite2D" parent="Doors/Door_Right"]
+position = Vector2(1300, 500)
+rotation = -1.5707964
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("5_4gp0m")
+
+[node name="Wall" type="Sprite2D" parent="Doors/Door_Right"]
 position = Vector2(1300, 500)
 texture = ExtResource("1_ci6au")
 
@@ -190,6 +212,20 @@ color = Color(0, 0, 0, 1)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemySpawnArea"]
 position = Vector2(500, 508)
 shape = SubResource("RectangleShape2D_ilpkg")
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="Marker2D" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(1016, 216)
+
+[node name="Marker2D2" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(-88, 208)
+
+[node name="Marker2D3" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(8, 760)
+
+[node name="Marker2D4" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(1080, 776)
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

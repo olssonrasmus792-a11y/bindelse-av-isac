@@ -1,5 +1,6 @@
 extends Node2D
 
+@onready var enemies: Node2D = $"../Enemies"
 @export var room_scene = preload("res://Scenes/room.tscn")
 @export var player_scene = preload("res://Scenes/player.tscn")
 @export var chest_scene = preload("res://Scenes/Chest.tscn")
@@ -14,7 +15,7 @@ var room_height = 7 * tile_size
 var placed_rooms := {}
 
 var room_spawn_rate = 0.6
-var chest_spawn_chance = 1.0
+var chest_spawn_chance = 0.4
 
 var start_pos : Vector2
 
@@ -79,36 +80,16 @@ func place_room(grid_pos: Vector2):
 	add_child(room)
 	
 	if placed_rooms.has(room_left):
-		room.get_node("Doors/Door_Left/Sprite2D").visible = false
-		room.get_node("Doors/Door_Left/CollisionShape2D").set_deferred("disabled", true)
-		room.get_node("Doors/Door_Left/LightOccluder2D").visible = false
-		placed_rooms[room_left].get_node("Doors/Door_Right/Sprite2D").visible = false
-		placed_rooms[room_left].get_node("Doors/Door_Right/CollisionShape2D").set_deferred("disabled", true)
-		placed_rooms[room_left].get_node("Doors/Door_Right/LightOccluder2D").visible = false
+		change_door_state(room, room_left, "Left", "Right", false)
 	
 	if placed_rooms.has(room_right):
-		room.get_node("Doors/Door_Right/Sprite2D").visible = false
-		room.get_node("Doors/Door_Right/CollisionShape2D").set_deferred("disabled", true)
-		room.get_node("Doors/Door_Right/LightOccluder2D").visible = false
-		placed_rooms[room_right].get_node("Doors/Door_Left/Sprite2D").visible = false
-		placed_rooms[room_right].get_node("Doors/Door_Left/CollisionShape2D").set_deferred("disabled", true)
-		placed_rooms[room_right].get_node("Doors/Door_Left/LightOccluder2D").visible = false
+		change_door_state(room, room_right, "Right", "Left", false)
 	
 	if placed_rooms.has(room_down):
-		room.get_node("Doors/Door_Down/Sprite2D").visible = false
-		room.get_node("Doors/Door_Down/CollisionShape2D").set_deferred("disabled", true)
-		room.get_node("Doors/Door_Down/LightOccluder2D").visible = false
-		placed_rooms[room_down].get_node("Doors/Door_Up/Sprite2D").visible = false
-		placed_rooms[room_down].get_node("Doors/Door_Up/CollisionShape2D").set_deferred("disabled", true)
-		placed_rooms[room_down].get_node("Doors/Door_Up/LightOccluder2D").visible = false
+		change_door_state(room, room_down, "Down", "Up", false)
 
 	if placed_rooms.has(room_up):
-		room.get_node("Doors/Door_Up/Sprite2D").visible = false
-		room.get_node("Doors/Door_Up/CollisionShape2D").set_deferred("disabled", true)
-		room.get_node("Doors/Door_Up/LightOccluder2D").visible = false
-		placed_rooms[room_up].get_node("Doors/Door_Down/Sprite2D").visible = false
-		placed_rooms[room_up].get_node("Doors/Door_Down/CollisionShape2D").set_deferred("disabled", true)
-		placed_rooms[room_up].get_node("Doors/Door_Down/LightOccluder2D").visible = false
+		change_door_state(room, room_up, "Up", "Down", false)
 	
 	room.position = Vector2(
 		grid_pos.x * room_size.x * tile_size - (room_width * dungeon_width / 2),
@@ -131,3 +112,14 @@ func spawnChest(room):
 	var chest = chest_scene.instantiate()
 	room.add_child(chest)
 	chest.global_position = Vector2(room.position.x + room_width/2 - tile_size*3, room.position.y + room_height/2 - tile_size)
+
+func change_door_state(room, room2, dir, dir2, state):
+	room.get_node("Doors/Door_" + str(dir) + "/Wall").visible = state
+	room.get_node("Doors/Door_" + str(dir) + "/Door").visible = state
+	room.get_node("Doors/Door_" + str(dir) + "/CollisionShape2D").set_deferred("disabled", !state)
+	room.get_node("Doors/Door_" + str(dir) + "/LightOccluder2D").visible = state
+	placed_rooms[room2].get_node("Doors/Door_" + str(dir2) + "/Wall").visible = state
+	placed_rooms[room2].get_node("Doors/Door_" + str(dir2) + "/Door").visible = state
+	placed_rooms[room2].get_node("Doors/Door_" + str(dir2) + "/CollisionShape2D").set_deferred("disabled", !state)
+	placed_rooms[room2].get_node("Doors/Door_" + str(dir2) + "/LightOccluder2D").visible = state
+	return

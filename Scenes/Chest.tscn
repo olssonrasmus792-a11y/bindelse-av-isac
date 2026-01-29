@@ -136,7 +136,6 @@ z_index = 1
 sprite_frames = SubResource("SpriteFrames_v1rbb")
 animation = &"Open"
 frame = 9
-frame_progress = 1.0
 
 [node name="CollisionClosed" type="CollisionShape2D" parent="."]
 visible = false
@@ -162,6 +161,16 @@ randomness = 1.0
 trail_enabled = true
 trail_lifetime = 0.2
 process_material = SubResource("ParticleProcessMaterial_l4t8t")
+
+[node name="NoKeys" type="Label" parent="."]
+z_index = 2
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = -30.0
+theme_override_font_sizes/font_size = 24
+text = "No Keys!"
+horizontal_alignment = 1
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

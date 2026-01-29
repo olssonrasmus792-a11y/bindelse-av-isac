@@ -208,7 +208,7 @@ func update_stamina_ui():
 
 
 func handle_animations():
-	var health_state : int = remap(health, 1, max_health, 1, 3)
+	var health_state : int = round(remap(health, 1, max_health, 1, 3))
 	collision_shape_2d.disabled = false
 	roll_collision.disabled = true
 	roll_light.visible = false

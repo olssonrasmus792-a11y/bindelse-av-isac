@@ -1,5 +1,7 @@
 extends CanvasLayer
 @onready var label: Label = $Label
+@onready var keys: Label = $Keys
+@onready var gold: Label = $Gold
 var kills = 0
 
 # Called when the node enters the scene tree for the first time.
@@ -9,7 +11,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	pass
+	keys.text = "Keys: " + str(GameState.keys)
+	gold.text = "Gold: " + str(GameState.gold)
 
 func _on_enemy_died():
 	kills += 1

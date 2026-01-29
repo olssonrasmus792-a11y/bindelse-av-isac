@@ -106,7 +106,7 @@ zoom = Vector2(0.575, 0.575)
 position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 
-[node name="Enemies" type="Node2D" parent="."]
+[node name="Enemies" type="Node2D" parent="." groups=["enemy_container"]]
 script = ExtResource("4_kry3j")
 
 [node name="UI" type="CanvasLayer" parent="."]
@@ -179,6 +179,39 @@ theme_override_font_sizes/font_size = 32
 text = "Kills: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Keys" type="Label" parent="UI"]
+anchors_preset = -1
+anchor_left = 0.81200004
+anchor_top = 0.34600002
+anchor_right = 0.98300004
+anchor_bottom = 0.404
+offset_left = -927.4241
+offset_top = 383.792
+offset_right = -1012.416
+offset_bottom = 380.20798
+grow_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 24
+text = "Keys: 0"
+horizontal_alignment = 1
+
+[node name="Gold" type="Label" parent="UI"]
+anchors_preset = -1
+anchor_left = 0.81200004
+anchor_top = 0.34600002
+anchor_right = 0.98300004
+anchor_bottom = 0.404
+offset_left = -927.4241
+offset_top = 351.792
+offset_right = -1012.416
+offset_bottom = 348.20798
+grow_horizontal = 0
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.97982806, 0.8728079, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "Gold: 0"
+horizontal_alignment = 1
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="UI"]
 offset_left = 936.0

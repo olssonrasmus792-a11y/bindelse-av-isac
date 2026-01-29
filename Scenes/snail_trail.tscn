@@ -1,25 +1,32 @@
-[gd_scene load_steps=4 format=3 uid="uid://ccbqk2g8fp5bt"]
+[gd_scene load_steps=5 format=3 uid="uid://ccbqk2g8fp5bt"]
 
-[ext_resource type="Script" uid="uid://cg4ah1q23lf7q" path="res://Scenes/snail_trail.gd" id="1_62hch"]
-[ext_resource type="Texture2D" uid="uid://ca82twfvheobr" path="res://Textures/icon.svg" id="2_hq65t"]
+[ext_resource type="Script" uid="uid://cg4ah1q23lf7q" path="res://Scripts/snail_trail.gd" id="1_62hch"]
+
+[sub_resource type="Gradient" id="Gradient_ijlu3"]
+offsets = PackedFloat32Array(0, 0.50617284, 1)
+colors = PackedColorArray(0.44939846, 0.6096873, 0.2589245, 1, 0.7058824, 0.9137255, 0.47058824, 1, 0.48650962, 0.66421235, 0.26839143, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_62hch"]
+gradient = SubResource("Gradient_ijlu3")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h373p"]
-size = Vector2(38, 40)
+size = Vector2(38, 20)
 
 [node name="SnailTrail" type="Node2D"]
 script = ExtResource("1_62hch")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0.9999962, -0.9999962)
-scale = Vector2(0.3125, 0.3125)
-texture = ExtResource("2_hq65t")
+position = Vector2(2, 3)
+scale = Vector2(0.10937501, 14)
+texture = SubResource("GradientTexture1D_62hch")
 
 [node name="Timer" type="Timer" parent="."]
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(0, -1)
+visible = false
+position = Vector2(0, 7)
 shape = SubResource("RectangleShape2D_h373p")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

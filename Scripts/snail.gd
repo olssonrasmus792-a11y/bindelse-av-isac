@@ -3,7 +3,7 @@ extends CharacterBody2D
 @export var explosion_scene = preload("res://Scenes/MuddyExplosion.tscn")
 @export var trail_scene = preload("res://Scenes/snail_trail.tscn")
 
-@export var speed := 300
+@export var speed := 150
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 
 var direction := Vector2(1, 1).normalized()
@@ -21,7 +21,7 @@ var knockback_timer := 0.0
 signal enemy_died
 
 func _ready() -> void:
-	direction = Vector2(randf_range(-1, 1), randf_range(-1, 1))
+	direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
 	last_drop_pos = global_position
 
 func _physics_process(delta):
@@ -56,6 +56,7 @@ func take_damage(damage):
 	flash_red()
 	if health <= 0:
 		emit_signal("enemy_died")  
+		explode(self)  
 		queue_free()
 
 func apply_knockback(from_position: Vector2):
@@ -78,3 +79,13 @@ func flash_red():
 		Color(1, 1, 1),
 		0.5
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func explode(enemy):
+	var explosion = explosion_scene.instantiate()
+	
+	explosion.global_position = global_position
+	get_parent().add_child(explosion)
+	explosion.emitting = true
+	
+	emit_signal("enemy_died")
+	enemy.queue_free()

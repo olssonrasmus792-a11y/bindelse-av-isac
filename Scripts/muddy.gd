@@ -58,7 +58,8 @@ func _physics_process(delta):
 func take_damage(damage):
 	health -= damage
 	if health <= 0:
-		emit_signal("enemy_died")  
+		emit_signal("enemy_died")
+		explode(self)  
 		queue_free()
 
 func apply_knockback(from_position: Vector2):
