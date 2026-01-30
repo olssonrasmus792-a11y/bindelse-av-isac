@@ -1,10 +1,8 @@
 extends Node2D
 @onready var room: Node2D = $"."
 
-@export var enemy_scenes = [
-	preload("res://Scenes/Muddy.tscn"),
-	preload("res://Scenes/Snail.tscn")
-]
+@export var muddy_scene := preload("res://Scenes/Muddy.tscn")
+@export var snail_scene := preload("res://Scenes/Snail.tscn")
 @export var key_scene := preload("res://Scenes/Key.tscn")
 
 @onready var camera: Camera2D = $Camera2D
@@ -157,8 +155,7 @@ func get_enemy_container() -> Node:
 func spawn_enemies():
 	var enemies = get_enemy_container()
 	for x in range(enemies_per_room):
-		var enemy_scene = enemy_scenes.pick_random()
-		var enemy = enemy_scene.instantiate()
+		var enemy = muddy_scene.instantiate()
 		enemy.global_position.x = global_position.x + room_width/2 - tile_size * 3 + randf_range(-room_width/4, room_width/4)
 		enemy.global_position.y = global_position.y + room_height/2 - tile_size + randf_range(-room_height/4, room_height/4)
 		enemies.add_child(enemy)
@@ -169,8 +166,6 @@ func spawn_enemies():
 func _on_enemy_died(enemy):
 	var last_position = enemy.global_position
 	alive_enemies.erase(enemy)
-	
-	GameState.kills += 1
 	
 	if alive_enemies.is_empty():
 		on_room_cleared()

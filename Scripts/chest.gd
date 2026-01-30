@@ -7,9 +7,8 @@ var player_is_close = false
 var chest_opened = false
 var gold_amount
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	gold_amount = randi_range(1, 5)
+	gold_amount = randi_range(2, 5)
 	label.modulate.a = 0
 	animated_sprite_2d.play("Closed")
 

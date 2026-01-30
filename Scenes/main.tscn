@@ -71,8 +71,7 @@ Button/styles/pressed = SubResource("StyleBoxFlat_344ge")
 script = ExtResource("1_6bp64")
 
 [node name="Ambient Light" type="CanvasModulate" parent="."]
-visible = false
-color = Color(0.09239706, 0.09239707, 0.09239703, 1)
+color = Color(0.1428582, 0.14285824, 0.1428582, 1)
 
 [node name="Map" type="Node2D" parent="."]
 
@@ -102,7 +101,7 @@ one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(576, 320)
-zoom = Vector2(0.575, 0.575)
+zoom = Vector2(0.55, 0.55)
 position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 

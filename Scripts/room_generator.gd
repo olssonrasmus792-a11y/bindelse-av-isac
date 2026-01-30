@@ -1,7 +1,11 @@
 extends Node2D
 
 @onready var enemies: Node2D = $"../Enemies"
-@export var room_scene = preload("res://Scenes/room.tscn")
+@export var room_scenes = [
+	preload("res://Scenes/room.tscn"),
+	preload("res://Scenes/room2.tscn"),
+	preload("res://Scenes/room3.tscn")
+]
 @export var player_scene = preload("res://Scenes/player.tscn")
 @export var chest_scene = preload("res://Scenes/Chest.tscn")
 @export var room_size := Vector2i(11, 7) # tiles
@@ -76,6 +80,7 @@ func place_room(grid_pos: Vector2):
 		if !(placed_rooms.has(room_left) or placed_rooms.has(room_right) or placed_rooms.has(room_up) or placed_rooms.has(room_down)):
 			return
 	
+	var room_scene = room_scenes.pick_random()
 	var room = room_scene.instantiate()
 	add_child(room)
 	

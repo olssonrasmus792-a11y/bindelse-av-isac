@@ -13,7 +13,4 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	keys.text = "Keys: " + str(GameState.keys)
 	gold.text = "Gold: " + str(GameState.gold)
-
-func _on_enemy_died():
-	kills += 1
-	label.text = "Kills: " + str(kills)
+	label.text = "Kills: " + str(GameState.kills)

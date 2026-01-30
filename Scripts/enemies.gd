@@ -19,8 +19,6 @@ func spawn_enemy(pos: Vector2):
 	snail.global_position = pos
 	get_parent().add_child(muddy)
 	get_parent().add_child(snail)
-	muddy.connect("enemy_died", Callable(ui, "_on_enemy_died"))
-	snail.connect("enemy_died", Callable(ui, "_on_enemy_died"))
 
 func _on_spawn_enemy_pressed() -> void:
 	for x in range(3):

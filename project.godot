@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="förbindnign issac"
-run/main_scene="uid://bcyvgbkfd8iqg"
+run/main_scene="uid://da4a7evkn23na"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://Textures/icon.svg"
 

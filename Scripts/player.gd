@@ -19,7 +19,8 @@ extends CharacterBody2D
 
 enum ColorState { YELLOW, RED, GREEN }
 
-@export var speed = 500
+@export var max_speed = 500
+@export var speed = max_speed
 @export var max_health = 6
 @export var health = max_health
 @export var max_stamina = 5
@@ -28,6 +29,9 @@ enum ColorState { YELLOW, RED, GREEN }
 @export var color_state: ColorState
 @export var invulnerability_duration = 0.4
 var invulnerability_timer = 0.0
+var slow_timer = 0.0
+var slow_duration = 0.5
+var slow_amount = 0.2
 
 @export var acceleration := 50.0
 @export var friction := 60.0
@@ -62,6 +66,7 @@ func _physics_process(delta):
 	handle_movement()
 	handle_attacking()
 	handle_color()
+	handle_slows(delta)
 	
 	if stamina < max_stamina and stamina_recharge.is_stopped():
 		stamina_recharge.start(stamina_regen)
@@ -242,7 +247,6 @@ func handle_animations():
 		else:
 			attack_area.scale.x = -1
 	
-	
 	if attacking:
 		bat_sprite.play("Attack")
 
@@ -252,6 +256,20 @@ func take_damage(damage):
 		invulnerability_timer = invulnerability_duration
 		flash_red()
 		update_health()
+
+func slow_down():
+	slow_timer = slow_duration
+
+func handle_slows(delta):
+	if slow_timer > 0:
+		speed = max_speed * slow_amount
+		slow_timer -= delta
+		animated_sprite_2d.modulate = Color.LIGHT_GREEN
+		
+		if slow_timer <= 0:
+			speed = max_speed
+			var tween := create_tween()
+			tween.tween_property(animated_sprite_2d, "modulate", Color(1, 1, 1), 0.5)
 
 func flash_red():
 	animated_sprite_2d.modulate = Color(1, 0, 0)  # red
