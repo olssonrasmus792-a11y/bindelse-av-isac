@@ -1,164 +1,48 @@
-[gd_scene load_steps=21 format=3 uid="uid://da4a7evkn23na"]
+[gd_scene load_steps=9 format=3 uid="uid://da4a7evkn23na"]
 
 [ext_resource type="Script" uid="uid://b4df5oej6ftoa" path="res://Scripts/main_menu.gd" id="1_28flt"]
-[ext_resource type="Texture2D" uid="uid://dqkxms1huepa7" path="res://Textures/Bulb Run sprite sheet.png" id="2_48xlc"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="2_48xlc"]
+[ext_resource type="Shader" uid="uid://ccnwywmpuht17" path="res://Shaders/main_menu.gdshader" id="3_1ehe0"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vgqql"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(0, 0, 200, 141)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_48xlc"]
+bg_color = Color(0.246402, 0.33374986, 0.9999452, 1)
+border_width_bottom = 10
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_6t5aa"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(0, 282, 200, 141)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ehe0"]
+bg_color = Color(0.35982844, 0.48508883, 1, 1)
+border_width_bottom = 10
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_cvnsp"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(0, 564, 200, 141)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ce3w2"]
+bg_color = Color(0.36078432, 0.4862745, 1, 1)
+border_width_top = 10
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_v0iea"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(200, 846, 200, 141)
+[sub_resource type="Theme" id="Theme_n45e2"]
+Button/styles/hover = SubResource("StyleBoxFlat_48xlc")
+Button/styles/normal = SubResource("StyleBoxFlat_1ehe0")
+Button/styles/pressed = SubResource("StyleBoxFlat_ce3w2")
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_7dp3o"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(400, 846, 200, 141)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_h4iuc"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(600, 846, 200, 141)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fd4e3"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(800, 846, 200, 141)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qqcod"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(1000, 846, 200, 141)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gymyn"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(0, 141, 200, 141)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_pu2lt"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(200, 141, 200, 141)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ukyrk"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(400, 141, 200, 141)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8erm5"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(0, 423, 200, 141)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_f1ek2"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(200, 423, 200, 141)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tx1dd"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(400, 423, 200, 141)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fkybt"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(0, 705, 200, 141)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_x3wgy"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(200, 705, 200, 141)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3smsa"]
-atlas = ExtResource("2_48xlc")
-region = Rect2(400, 705, 200, 141)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_1ehe0"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vgqql")
-}],
-"loop": true,
-"name": &"Idle1",
-"speed": 10.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_6t5aa")
-}],
-"loop": true,
-"name": &"Idle2",
-"speed": 10.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cvnsp")
-}],
-"loop": true,
-"name": &"Idle3",
-"speed": 10.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_v0iea")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7dp3o")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_h4iuc")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fd4e3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qqcod")
-}],
-"loop": true,
-"name": &"Roll",
-"speed": 15.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gymyn")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_pu2lt")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ukyrk")
-}],
-"loop": true,
-"name": &"Run1",
-"speed": 60.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_8erm5")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_f1ek2")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tx1dd")
-}],
-"loop": true,
-"name": &"Run2",
-"speed": 10.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fkybt")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_x3wgy")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3smsa")
-}],
-"loop": true,
-"name": &"Run3",
-"speed": 45.0
-}]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ce3w2"]
+shader = ExtResource("3_1ehe0")
+shader_parameter/height = 2.0
+shader_parameter/frequency = 10.0
+shader_parameter/speed = 6.0
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -176,62 +60,71 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.24840015, 0.24840018, 0.24840015, 1)
+color = Color(0.37840578, 0.30783707, 0.45783758, 1)
 
 [node name="StartButton" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.34031945
-anchor_top = 0.39492592
-anchor_right = 0.6613194
-anchor_bottom = 0.49492595
+anchor_left = 0.27781945
+anchor_top = 0.37023458
+anchor_right = 0.7224792
+anchor_bottom = 0.5182346
 offset_left = -0.04800415
 offset_top = 0.08799744
-offset_right = 0.15997314
-offset_bottom = 0.28796387
+offset_right = -0.29608154
+offset_bottom = 0.18399048
 grow_horizontal = 2
 grow_vertical = 2
+focus_mode = 0
+theme = SubResource("Theme_n45e2")
+theme_override_fonts/font = ExtResource("2_48xlc")
 theme_override_font_sizes/font_size = 26
-text = "its time to play the game"
+text = "play the game"
 metadata/_edit_use_anchors_ = true
 
 [node name="OptionsButton" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.34031945
-anchor_top = 0.59245676
-anchor_right = 0.6613194
-anchor_bottom = 0.69245684
+anchor_left = 0.27781945
+anchor_top = 0.5677654
+anchor_right = 0.72208333
+anchor_bottom = 0.715605
 offset_left = -0.04800415
 offset_top = 0.08799744
 offset_right = 0.15997314
 offset_bottom = 0.28796387
 grow_horizontal = 2
 grow_vertical = 2
+focus_mode = 0
+theme = SubResource("Theme_n45e2")
+theme_override_fonts/font = ExtResource("2_48xlc")
 theme_override_font_sizes/font_size = 26
-text = "Settings
-"
+text = "Settings"
 metadata/_edit_use_anchors_ = true
 
 [node name="QuitButton" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.34031945
-anchor_top = 0.7899876
-anchor_right = 0.6613194
-anchor_bottom = 0.8899877
+anchor_left = 0.27781942
+anchor_top = 0.7652963
+anchor_right = 0.72208333
+anchor_bottom = 0.9131359
 offset_left = -0.04800415
 offset_top = 0.08799744
 offset_right = 0.15997314
 offset_bottom = 0.28796387
 grow_horizontal = 2
 grow_vertical = 2
+focus_mode = 0
+theme = SubResource("Theme_n45e2")
+theme_override_fonts/font = ExtResource("2_48xlc")
 theme_override_font_sizes/font_size = 26
-text = "its time to quit the game
+text = "quit the game
 "
 metadata/_edit_use_anchors_ = true
 
 [node name="Label" type="Label" parent="."]
+material = SubResource("ShaderMaterial_ce3w2")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.11111111
@@ -240,142 +133,18 @@ anchor_right = 0.8888889
 anchor_bottom = 0.2958024
 offset_bottom = 0.3199997
 grow_horizontal = 2
+theme_override_colors/font_color = Color(0.8323229, 0.7058277, 0.009962295, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 10
+theme_override_constants/shadow_outline_size = 10
+theme_override_fonts/font = ExtResource("2_48xlc")
 theme_override_font_sizes/font_size = 60
-text = "bulby adventure hell yeah frfr"
+text = "bulby adventure hell yeah"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(168, 504)
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Roll"
-autoplay = "Roll"
-frame_progress = 0.39982846
-
-[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="."]
-position = Vector2(168, 344)
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Run3"
-autoplay = "Run3"
-frame_progress = 0.30131
-
-[node name="AnimatedSprite2D4" type="AnimatedSprite2D" parent="."]
-position = Vector2(1036, 542.5)
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Run3"
-autoplay = "Run3"
-frame_progress = 0.47128922
-
-[node name="AnimatedSprite2D5" type="AnimatedSprite2D" parent="."]
-position = Vector2(1036, 382.5)
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Run3"
-autoplay = "Run3"
-frame_progress = 0.7425482
-
-[node name="AnimatedSprite2D6" type="AnimatedSprite2D" parent="."]
-position = Vector2(876, 454.5)
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Run3"
-autoplay = "Run3"
-frame_progress = 0.47128922
-
-[node name="AnimatedSprite2D7" type="AnimatedSprite2D" parent="."]
-position = Vector2(876, 294.5)
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Run3"
-autoplay = "Run3"
-frame_progress = 0.7425482
-
-[node name="AnimatedSprite2D8" type="AnimatedSprite2D" parent="."]
-position = Vector2(288.77533, 427.17435)
-rotation = -2.6882772
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Run3"
-autoplay = "Run3"
-frame_progress = 0.47128922
-
-[node name="AnimatedSprite2D9" type="AnimatedSprite2D" parent="."]
-position = Vector2(288.77533, 267.17435)
-rotation = -2.6882772
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Run3"
-autoplay = "Run3"
-frame_progress = 0.7425482
-
-[node name="AnimatedSprite2D10" type="AnimatedSprite2D" parent="."]
-position = Vector2(952.7754, 259.17432)
-rotation = -4.1625094
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Run3"
-autoplay = "Run3"
-frame_progress = 0.47128922
-
-[node name="AnimatedSprite2D11" type="AnimatedSprite2D" parent="."]
-position = Vector2(952.7754, 99.17433)
-rotation = -4.1625094
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Run3"
-autoplay = "Run3"
-frame_progress = 0.7425482
-
-[node name="AnimatedSprite2D12" type="AnimatedSprite2D" parent="."]
-position = Vector2(80.365845, 226.10094)
-rotation = -4.557414
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Run3"
-autoplay = "Run3"
-frame_progress = 0.47128922
-
-[node name="AnimatedSprite2D13" type="AnimatedSprite2D" parent="."]
-position = Vector2(80.365845, 66.10095)
-rotation = -4.557414
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Run3"
-autoplay = "Run3"
-frame_progress = 0.7425482
-
-[node name="AnimatedSprite2D3" type="AnimatedSprite2D" parent="."]
-position = Vector2(608, 55.25)
-scale = Vector2(6.3199997, 0.78368795)
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Run3"
-autoplay = "Run3"
-frame_progress = 0.30131
-
-[node name="AnimatedSprite2D14" type="AnimatedSprite2D" parent="."]
-position = Vector2(168, 344)
-rotation = -2.920742
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Run3"
-autoplay = "Run3"
-frame_progress = 0.7235083
-
-[node name="AnimatedSprite2D15" type="AnimatedSprite2D" parent="."]
-position = Vector2(876, 294.5)
-rotation = -2.920742
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Run3"
-autoplay = "Run3"
-frame_progress = 0.7425482
-
-[node name="AnimatedSprite2D16" type="AnimatedSprite2D" parent="."]
-position = Vector2(288.77533, 427.17435)
-rotation = -5.6090193
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Run3"
-autoplay = "Run3"
-frame_progress = 0.47128922
-
-[node name="AnimatedSprite2D17" type="AnimatedSprite2D" parent="."]
-position = Vector2(520, 232.00003)
-rotation = -2.920742
-scale = Vector2(6.3199997, 0.78368795)
-sprite_frames = SubResource("SpriteFrames_1ehe0")
-animation = &"Run1"
-autoplay = "Run3"
-frame_progress = 0.17648
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="OptionsButton" to="." method="_on_options_button_pressed"]

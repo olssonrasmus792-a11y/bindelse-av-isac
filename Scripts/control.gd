@@ -1,0 +1,19 @@
+extends Control
+
+@onready var bar: ProgressBar = $ProgressBar
+
+var scene_path := "res://Scenes/main.tscn"
+
+func _ready():
+	ResourceLoader.load_threaded_request(scene_path)
+
+func _process(_delta):
+	var progress := []
+	var status = ResourceLoader.load_threaded_get_status(scene_path, progress)
+
+	if progress.size() > 0:
+		bar.value = progress[0] * 100
+
+	if status == ResourceLoader.THREAD_LOAD_LOADED:
+		var packed_scene = ResourceLoader.load_threaded_get(scene_path)
+		get_tree().change_scene_to_packed(packed_scene)

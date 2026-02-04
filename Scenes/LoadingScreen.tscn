@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=3 uid="uid://b05x5a6i3nd20"]
+
+[ext_resource type="Script" uid="uid://cxe35o132aucm" path="res://Scripts/control.gd" id="1_kddo8"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kddo8")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.16100001
+anchor_top = 0.231
+anchor_right = 0.84900004
+anchor_bottom = 0.76900005
+offset_left = 0.5279846
+offset_top = 0.31199646
+offset_right = -0.048034668
+offset_bottom = -0.31204224
+grow_horizontal = 2
+grow_vertical = 2
+text = "loading type shi frfr ong broski..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.351
+anchor_top = 0.537
+anchor_right = 0.64900005
+anchor_bottom = 0.63900006
+offset_left = -0.35202026
+offset_top = 0.023986816
+offset_right = 15.351929
+offset_bottom = -0.072052
