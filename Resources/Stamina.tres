@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3 uid="uid://dn8amhhhip5h8"]
+
+[ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="1_rfl6a"]
+
+[resource]
+script = ExtResource("1_rfl6a")
+card_name = "Stamina"
+description = "ssdsdfsdfsdf"
+metadata/_custom_type_script = "uid://c01qet416k22c"

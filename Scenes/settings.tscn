@@ -39,10 +39,10 @@ metadata/_edit_use_anchors_ = true
 
 [node name="CheckButton" type="CheckButton" parent="."]
 layout_mode = 0
-offset_left = 112.0
-offset_top = 312.0
-offset_right = 304.0
-offset_bottom = 344.0
+offset_left = 448.0
+offset_top = 584.0
+offset_right = 640.0
+offset_bottom = 616.0
 theme_override_font_sizes/font_size = 16
 text = "Dark mode or sum"
 
