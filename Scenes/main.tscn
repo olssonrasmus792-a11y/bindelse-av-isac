@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bcyvgbkfd8iqg"]
+[gd_scene load_steps=17 format=3 uid="uid://bcyvgbkfd8iqg"]
 
 [ext_resource type="Script" uid="uid://cy82dwcy7mapg" path="res://Scripts/main.gd" id="1_6bp64"]
 [ext_resource type="PackedScene" uid="uid://bv2axkxq2b6bw" path="res://Scenes/room_generator.tscn" id="1_21xkr"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://bsqd01gkox1pg" path="res://Scripts/ui.gd" id="5_kry3j"]
 [ext_resource type="Shader" uid="uid://diclt8wpgiav4" path="res://Shaders/main.gdshader" id="7_6bp64"]
 [ext_resource type="Script" uid="uid://cmwas7j5lm6sj" path="res://Scripts/sub_viewport.gd" id="8_344ge"]
+[ext_resource type="Texture2D" uid="uid://hptj7iwfcn87" path="res://Textures/Key.png" id="8_ynf5e"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6bp64"]
 shader = ExtResource("7_6bp64")
@@ -169,6 +170,70 @@ offset_bottom = 64.0
 [node name="stamina_bar" type="HBoxContainer" parent="UI/stamina_panel"]
 layout_mode = 2
 
+[node name="KeyPanel" type="Panel" parent="UI"]
+offset_left = 8.0
+offset_top = 600.0
+offset_right = 144.0
+offset_bottom = 640.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/KeyPanel"]
+layout_mode = 0
+offset_right = 144.0
+offset_bottom = 40.0
+alignment = 1
+
+[node name="Keys" type="Label" parent="UI/KeyPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 5
+theme_override_font_sizes/font_size = 24
+text = "Keys: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="UI/KeyPanel/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("8_ynf5e")
+expand_mode = 2
+flip_h = true
+flip_v = true
+
+[node name="GoldPanel" type="Panel" parent="UI"]
+offset_left = 8.0
+offset_top = 552.0
+offset_right = 144.0
+offset_bottom = 592.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/GoldPanel"]
+layout_mode = 0
+offset_right = 144.0
+offset_bottom = 40.0
+alignment = 1
+
+[node name="Gold" type="Label" parent="UI/GoldPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.97982806, 0.8728079, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 5
+theme_override_font_sizes/font_size = 24
+text = "Gold: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="UI/GoldPanel/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("8_ynf5e")
+expand_mode = 2
+flip_h = true
+flip_v = true
+
 [node name="Label" type="Label" parent="UI"]
 offset_left = 448.0
 offset_right = 704.0
@@ -178,39 +243,6 @@ theme_override_font_sizes/font_size = 32
 text = "Kills: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Keys" type="Label" parent="UI"]
-anchors_preset = -1
-anchor_left = 0.81200004
-anchor_top = 0.34600002
-anchor_right = 0.98300004
-anchor_bottom = 0.404
-offset_left = -927.4241
-offset_top = 383.792
-offset_right = -1012.416
-offset_bottom = 380.20798
-grow_horizontal = 0
-size_flags_vertical = 0
-theme_override_font_sizes/font_size = 24
-text = "Keys: 0"
-horizontal_alignment = 1
-
-[node name="Gold" type="Label" parent="UI"]
-anchors_preset = -1
-anchor_left = 0.81200004
-anchor_top = 0.34600002
-anchor_right = 0.98300004
-anchor_bottom = 0.404
-offset_left = -927.4241
-offset_top = 351.792
-offset_right = -1012.416
-offset_bottom = 348.20798
-grow_horizontal = 0
-size_flags_vertical = 0
-theme_override_colors/font_color = Color(0.97982806, 0.8728079, 0, 1)
-theme_override_font_sizes/font_size = 24
-text = "Gold: 0"
-horizontal_alignment = 1
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="UI"]
 offset_left = 936.0

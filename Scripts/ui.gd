@@ -1,7 +1,7 @@
 extends CanvasLayer
 @onready var label: Label = $Label
-@onready var keys: Label = $Keys
-@onready var gold: Label = $Gold
+@onready var keys: Label = $KeyPanel/HBoxContainer/Keys
+@onready var gold: Label = $GoldPanel/HBoxContainer/Gold
 var kills = 0
 
 # Called when the node enters the scene tree for the first time.
