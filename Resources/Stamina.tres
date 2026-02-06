@@ -1,9 +1,12 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3 uid="uid://dn8amhhhip5h8"]
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://dn8amhhhip5h8"]
 
+[ext_resource type="Texture2D" uid="uid://b5hstghnbkq8u" path="res://Textures/Bulb hp full.png" id="1_l0rtg"]
 [ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="1_rfl6a"]
 
 [resource]
 script = ExtResource("1_rfl6a")
+icon = ExtResource("1_l0rtg")
 card_name = "Stamina"
-description = "ssdsdfsdfsdf"
+description = "Increase your maximum stamina by 1"
+rarity = "Common"
 metadata/_custom_type_script = "uid://c01qet416k22c"

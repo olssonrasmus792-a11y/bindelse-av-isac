@@ -1,9 +1,12 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3 uid="uid://c1f6i68mv8wnc"]
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://c1f6i68mv8wnc"]
 
+[ext_resource type="Texture2D" uid="uid://dgebsljj7cksq" path="res://Textures/Bat_icon.png" id="1_7mtkq"]
 [ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="1_yrc72"]
 
 [resource]
 script = ExtResource("1_yrc72")
+icon = ExtResource("1_7mtkq")
 card_name = "Damage"
-description = "bluyhlgyjgfhsdrgdrgdfgsdfdfdf"
+description = "Increase your melee damage"
+rarity = "Common"
 metadata/_custom_type_script = "uid://c01qet416k22c"

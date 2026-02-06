@@ -1,9 +1,12 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3 uid="uid://d01s1nvexklur"]
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://d01s1nvexklur"]
 
 [ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="1_5ksdi"]
+[ext_resource type="Texture2D" uid="uid://8br0jwustric" path="res://Textures/heart.png" id="1_vtkyv"]
 
 [resource]
 script = ExtResource("1_5ksdi")
+icon = ExtResource("1_vtkyv")
 card_name = "Health"
-description = "skbidid"
+description = "Increase your maximum health by 1"
+rarity = "Common"
 metadata/_custom_type_script = "uid://c01qet416k22c"

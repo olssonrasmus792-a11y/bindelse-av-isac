@@ -4,6 +4,11 @@ extends Control
 @export var card_scene = preload("res://Scenes/card_scene.tscn")
 @onready var cards_container: HBoxContainer = $HBoxContainer
 
+@export var uncommon_chance = 0.5
+@export var rare_chance = 0.3
+@export var epic_chance = 0.15
+@export var legendary_chance = 0.05
+
 var all_cards = [
 	preload("res://Resources/Damage.tres"),
 	preload("res://Resources/Speed.tres"),
@@ -28,6 +33,7 @@ func spawn_random_cards(count: int):
 		var card_instance = card_scene.instantiate()
 		card_instance.card_data = card_data  # Assign unique data
 		card_instance.upgrade_chosen.connect(_on_upgrade_chosen)
+		card_instance.card_data.rarity = choose_rarity()
 		cards_container.add_child(card_instance)
 	
 	visible = true
@@ -36,6 +42,17 @@ func clear_cards():
 	for child in cards_container.get_children():
 		child.queue_free()
 
+func choose_rarity():
+	var roll := randf()
+	
+	if roll < legendary_chance:
+		return "Legendary"
+	elif roll < epic_chance:
+		return "Epic"
+	elif roll < rare_chance:
+		return "Rare"
+	else:
+		return "Uncommon"
 
 func _on_upgrade_chosen(card_data: CardData):
 	print("player chose: ", card_data.card_name)

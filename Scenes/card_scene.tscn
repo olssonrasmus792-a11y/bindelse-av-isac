@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://jirg8w1p0uyb"]
+[gd_scene load_steps=16 format=3 uid="uid://jirg8w1p0uyb"]
 
 [ext_resource type="Script" uid="uid://cmosnc2vxvti4" path="res://Scripts/card_scene.gd" id="1_hn4tc"]
 [ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="2_1eyib"]
@@ -9,15 +9,12 @@ border_width_left = 10
 border_width_top = 10
 border_width_right = 10
 border_width_bottom = 10
-border_color = Color(0.0885599, 0.08855995, 0.088559814, 1)
+border_color = Color(1, 1, 1, 1)
 border_blend = true
 corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
-shadow_color = Color(0, 0, 0, 1)
-shadow_size = 5
-shadow_offset = Vector2(2, 5)
 
 [sub_resource type="Theme" id="Theme_1eyib"]
 Panel/styles/panel = SubResource("StyleBoxFlat_hn4tc")
@@ -54,6 +51,22 @@ corner_radius_bottom_left = 10
 [sub_resource type="Theme" id="Theme_so5b3"]
 Label/styles/normal = SubResource("StyleBoxFlat_0sxir")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c4v6c"]
+bg_color = Color(0.34158427, 0.3415843, 0.34158412, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.5958281, 0.5958282, 0.5958279, 1)
+border_blend = true
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="Theme" id="Theme_0sxir"]
+Label/styles/normal = SubResource("StyleBoxFlat_c4v6c")
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ms70h"]
 bg_color = Color(0.44033587, 0.4403357, 0.4403355, 1)
 border_width_bottom = 10
@@ -88,6 +101,8 @@ Button/styles/hover = SubResource("StyleBoxFlat_ms70h")
 Button/styles/normal = SubResource("StyleBoxFlat_1mmgb")
 Button/styles/pressed = SubResource("StyleBoxFlat_8uc1c")
 
+[sub_resource type="ImageTexture" id="ImageTexture_1eyib"]
+
 [node name="CardScene" type="Control"]
 custom_minimum_size = Vector2(288, 0)
 layout_mode = 3
@@ -113,13 +128,13 @@ metadata/_edit_use_anchors_ = true
 [node name="Label" type="Label" parent="Panel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.11111111
-anchor_top = 0.14285715
-anchor_right = 0.8888889
-anchor_bottom = 0.2857143
+anchor_left = 0.3888889
+anchor_top = 0.05357143
+anchor_right = 0.9444444
+anchor_bottom = 0.14285715
 theme = SubResource("Theme_c4v6c")
 theme_override_fonts/font = ExtResource("2_1eyib")
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 24
 text = "bluh"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -128,26 +143,81 @@ metadata/_edit_use_anchors_ = true
 [node name="Label2" type="Label" parent="Panel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.22222222
-anchor_top = 0.32142857
-anchor_right = 0.7777778
-anchor_bottom = 0.39285713
+anchor_left = 0.33333334
+anchor_top = 0.91071427
+anchor_right = 0.6666667
+anchor_bottom = 0.95535713
 theme = SubResource("Theme_so5b3")
 theme_override_fonts/font = ExtResource("2_1eyib")
+theme_override_font_sizes/font_size = 10
 text = "level 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="Button" type="Button" parent="Panel"]
-layout_mode = 0
-anchor_left = 0.055555556
-anchor_top = 0.75
+[node name="Label3" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.083333336
+anchor_top = 0.23214285
+anchor_right = 0.9166667
+anchor_bottom = 0.66071427
+theme_override_fonts/font = ExtResource("2_1eyib")
+theme_override_font_sizes/font_size = 14
+text = "skibidi description"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+metadata/_edit_use_anchors_ = true
+
+[node name="Label4" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3888889
+anchor_top = 0.16071428
 anchor_right = 0.9444444
-anchor_bottom = 0.96428573
+anchor_bottom = 0.22098215
+offset_bottom = -1.0
+theme = SubResource("Theme_0sxir")
+theme_override_fonts/font = ExtResource("2_1eyib")
+theme_override_font_sizes/font_size = 14
+text = "Common"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Button" type="Button" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.11111111
+anchor_top = 0.76785713
+anchor_right = 0.9027778
+anchor_bottom = 0.89285713
 focus_mode = 0
 theme = SubResource("Theme_55aab")
 theme_override_fonts/font = ExtResource("2_1eyib")
+theme_override_font_sizes/font_size = 15
 text = "upgrade that shi bro
 "
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.055555556
+anchor_top = 0.035714287
+anchor_right = 0.3611111
+anchor_bottom = 0.23214285
+metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect" type="TextureRect" parent="Panel/Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.09090909
+anchor_top = 0.09090909
+anchor_right = 0.90909094
+anchor_bottom = 0.90909094
+texture = SubResource("ImageTexture_1eyib")
+expand_mode = 2
+stretch_mode = 5
 metadata/_edit_use_anchors_ = true

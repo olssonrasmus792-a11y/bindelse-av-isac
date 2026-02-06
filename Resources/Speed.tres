@@ -1,9 +1,12 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3 uid="uid://buj5vqyf307df"]
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://buj5vqyf307df"]
 
+[ext_resource type="Texture2D" uid="uid://bl75ynxq1cirf" path="res://Textures/Bulb_Run_Icon.png" id="1_gt7r1"]
 [ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="1_vr2k2"]
 
 [resource]
 script = ExtResource("1_vr2k2")
+icon = ExtResource("1_gt7r1")
 card_name = "Speed"
-description = "BNADGHASLKFHASJKg"
+description = "Increase your movement speed by 20%"
+rarity = "Common"
 metadata/_custom_type_script = "uid://c01qet416k22c"

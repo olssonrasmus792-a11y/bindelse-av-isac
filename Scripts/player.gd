@@ -19,7 +19,7 @@ extends CharacterBody2D
 
 enum ColorState { YELLOW, RED, GREEN }
 
-@export var damage = 1
+var damage = 1
 @export var max_speed = 500
 @export var speed = max_speed
 @export var max_health = 6
@@ -251,9 +251,9 @@ func handle_animations():
 	if attacking:
 		bat_sprite.play("Attack")
 
-func take_damage(damage):
+func take_damage(dmg):
 	if invulnerability_timer <= 0:
-		health -= damage
+		health -= dmg
 		invulnerability_timer = invulnerability_duration
 		flash_red()
 		update_health()
