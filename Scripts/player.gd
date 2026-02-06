@@ -19,6 +19,7 @@ extends CharacterBody2D
 
 enum ColorState { YELLOW, RED, GREEN }
 
+@export var damage = 1
 @export var max_speed = 500
 @export var speed = max_speed
 @export var max_health = 6
@@ -139,7 +140,7 @@ func handle_color():
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemies"):
-		body.take_damage(1)
+		body.take_damage(damage)
 		body.apply_knockback(global_position)
 
 func _on_attack_timer_timeout() -> void:

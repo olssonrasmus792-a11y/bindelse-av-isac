@@ -19,7 +19,7 @@ var room_height = 7 * tile_size
 var placed_rooms := {}
 
 var room_spawn_rate = 0.6
-var chest_spawn_chance = 0.4
+var chest_spawn_chance = 1
 
 var start_pos : Vector2
 

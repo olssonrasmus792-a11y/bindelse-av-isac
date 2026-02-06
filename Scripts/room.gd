@@ -24,7 +24,7 @@ var room_height = 7 * tile_size
 var start_pos : Vector2
 var start_room_pos : Vector2
 
-var key_spawn_rate = 0.6
+var key_spawn_rate = 1
 
 var room_entered = false
 var room_closed = false

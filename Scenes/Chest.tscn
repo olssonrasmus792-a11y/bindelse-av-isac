@@ -163,6 +163,7 @@ trail_lifetime = 0.2
 process_material = SubResource("ParticleProcessMaterial_l4t8t")
 
 [node name="NoKeys" type="Label" parent="."]
+visible = false
 z_index = 2
 offset_left = -64.0
 offset_top = -64.0

@@ -236,6 +236,7 @@ zoom = Vector2(0.575, 0.575)
 position_smoothing_enabled = true
 
 [node name="Light" type="Node2D" parent="."]
+visible = false
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="Light"]
 position = Vector2(-200, -200)

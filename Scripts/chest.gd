@@ -44,6 +44,9 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 
 
 func open_chest():
+	var upgrade_scene = get_tree().get_first_node_in_group("upgrade_screen")
+	upgrade_scene.spawn_random_cards(3)
+	
 	animated_sprite_2d.play("Open")
 	chest_opened = true
 	gpu_particles_2d.emitting = true

@@ -28,6 +28,8 @@ window/stretch/mode="canvas_items"
 
 enemies=""
 enemy_container=""
+upgrade_screen=""
+player=""
 
 [input]
 

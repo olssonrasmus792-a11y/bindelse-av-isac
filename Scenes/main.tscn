@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bcyvgbkfd8iqg"]
+[gd_scene load_steps=19 format=3 uid="uid://bcyvgbkfd8iqg"]
 
 [ext_resource type="Script" uid="uid://cy82dwcy7mapg" path="res://Scripts/main.gd" id="1_6bp64"]
 [ext_resource type="PackedScene" uid="uid://bv2axkxq2b6bw" path="res://Scenes/room_generator.tscn" id="1_21xkr"]
@@ -9,6 +9,7 @@
 [ext_resource type="Shader" uid="uid://diclt8wpgiav4" path="res://Shaders/main.gdshader" id="7_6bp64"]
 [ext_resource type="Script" uid="uid://cmwas7j5lm6sj" path="res://Scripts/sub_viewport.gd" id="8_344ge"]
 [ext_resource type="Texture2D" uid="uid://hptj7iwfcn87" path="res://Textures/Key.png" id="8_ynf5e"]
+[ext_resource type="Texture2D" uid="uid://bi3cf83ewrg3n" path="res://Textures/coin.png" id="9_d1ilt"]
 [ext_resource type="Script" uid="uid://cn14tvvyu8vmi" path="res://Scripts/upgrade_manager.gd" id="10_hptm8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6bp64"]
@@ -230,10 +231,8 @@ vertical_alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="UI/GoldPanel/HBoxContainer"]
 layout_mode = 2
-texture = ExtResource("8_ynf5e")
+texture = ExtResource("9_d1ilt")
 expand_mode = 2
-flip_h = true
-flip_v = true
 
 [node name="Label" type="Label" parent="UI"]
 offset_left = 448.0
@@ -267,7 +266,8 @@ closed = true
 width = 5.0
 default_color = Color(0.24, 0.142, 0.072000004, 1)
 
-[node name="UpgradeManager" type="Control" parent="UI"]
+[node name="UpgradeManager" type="Control" parent="UI" groups=["upgrade_screen"]]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

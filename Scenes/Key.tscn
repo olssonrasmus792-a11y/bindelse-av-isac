@@ -24,6 +24,7 @@ texture = ExtResource("2_i3td7")
 [node name="PickUpArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PickUpArea"]
+visible = false
 position = Vector2(-4, 0)
 shape = SubResource("CircleShape2D_jc2lb")
 
