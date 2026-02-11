@@ -13,26 +13,31 @@ signal upgrade_chosen(card_data: CardData)
 @onready var icon: TextureRect = $Panel/Panel/TextureRect
 @onready var panel: Panel = $Panel
 
+var rarity_color
+
 func _ready():
+	
+	var style := panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
+
+	match card_data.rarity:
+		"Uncommon":
+			rarity_color = Color.MEDIUM_SEA_GREEN
+		"Rare":
+			rarity_color = Color.ROYAL_BLUE
+		"Epic":
+			rarity_color = Color.REBECCA_PURPLE
+		"Legendary":
+			rarity_color = Color.GOLD
+	
 	if card_data:
 		name_label.text = card_data.card_name
 		desc_label.text = card_data.description
 		rarity_label.text = card_data.rarity
 		icon.texture = card_data.icon
 		level_label.text = "Level: " + str(card_data.current_level)
+		style.border_color = rarity_color
+		rarity_label.add_theme_color_override("font_color", rarity_color)
 	
-	var style := panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
-
-	match card_data.rarity:
-		"Uncommon":
-			style.bg_color = Color.DIM_GRAY
-		"Rare":
-			style.bg_color = Color.ROYAL_BLUE
-		"Epic":
-			style.bg_color = Color.REBECCA_PURPLE
-		"Legendary":
-			style.bg_color = Color.GOLD
-
 	panel.add_theme_stylebox_override("panel", style)
 	
 	upgrade_button.pressed.connect(_on_upgrade_pressed)
