@@ -3,18 +3,18 @@ extends Node2D
 @onready var enemies: Node2D = $"../Enemies"
 @export var room_scenes = [
 	preload("res://Scenes/room.tscn"),
-	preload("res://Scenes/room2.tscn"),
+	#preload("res://Scenes/room2.tscn"),
 	#preload("res://Scenes/room3.tscn")
 ]
 @export var player_scene = preload("res://Scenes/player.tscn")
 @export var chest_scene = preload("res://Scenes/Chest.tscn")
-@export var room_size := Vector2i(11, 7) # tiles
-@onready var camera_2d: Camera2D = $"../Camera2D"
+@export var room_size := Vector2i(GameState.room_tiles_x, GameState.room_tiles_y) # tiles
+@onready var camera_2d: Camera2D = $"../Player/Camera2D"
 @export var tile_size := 200.0
 @export var dungeon_width := 6.0
 @export var dungeon_height := 6.0
-var room_width  = 11 * tile_size
-var room_height = 7 * tile_size
+var room_width  = GameState.room_tiles_x * tile_size
+var room_height = GameState.room_tiles_y * tile_size
 
 var placed_rooms := {}
 
@@ -97,8 +97,8 @@ func place_room(grid_pos: Vector2):
 		change_door_state(room, room_up, "Up", "Down", false)
 	
 	room.position = Vector2(
-		grid_pos.x * room_size.x * tile_size - (room_width * dungeon_width / 2),
-		grid_pos.y * room_size.y * tile_size - (room_height * dungeon_height / 2)
+		grid_pos.x * room_width - (room_width * dungeon_width / 2),
+		grid_pos.y * room_height - (room_height * dungeon_height / 2)
 	)
 	
 	placed_rooms[grid_pos] = room
@@ -111,7 +111,14 @@ func place_room(grid_pos: Vector2):
 	room.swap_cam.connect(_on_room_swap_cam)
 
 func _on_room_swap_cam(pos):
-	camera_2d.global_position = pos
+	#camera_2d.global_position = pos
+	camera_2d.limit_left = pos.x - room_width/2 + tile_size * 3.25
+	camera_2d.limit_right = pos.x + room_width/2 + tile_size * 2.75
+	camera_2d.limit_bottom = pos.y + room_height/2 + tile_size * 1.75
+	camera_2d.limit_top = pos.y - room_height/2 + tile_size * 2.25
+	print("Room size px:", room_width, " + ", room_height)
+	print("Cam limits x:", camera_2d.limit_left, " + ", camera_2d.limit_right)
+	print("Cam limits y:", camera_2d.limit_bottom, " + ", camera_2d.limit_top)
 
 func spawnChest(room):
 	var chest = chest_scene.instantiate()

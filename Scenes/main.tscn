@@ -16,7 +16,7 @@
 shader = ExtResource("7_6bp64")
 shader_parameter/resolution = Vector2(320, 180)
 shader_parameter/scan_line_amount = 0.400000019
-shader_parameter/warp_amount = 0.30000001425
+shader_parameter/warp_amount = 0.10000000475
 shader_parameter/vignette_amount = 0.250000011875
 shader_parameter/vignette_intensity = 0.3
 shader_parameter/grille_amount = 0.10000000475
@@ -102,9 +102,8 @@ one_shot = true
 [node name="ColorTimer" type="Timer" parent="Player"]
 one_shot = true
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(576, 320)
-zoom = Vector2(0.55, 0.55)
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(0.5, 0.5)
 position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 

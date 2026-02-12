@@ -1,7 +1,7 @@
 extends SubViewport
 
-@onready var camera_2d: Camera2D = $"../../../Camera2D"
 @onready var minimap: Camera2D = $Minimap
+@onready var camera_2d: Camera2D = $"../../../Player/Camera2D"
 @onready var sub_viewport_container: SubViewportContainer = $".."
 
 # Called when the node enters the scene tree for the first time.
@@ -12,7 +12,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	minimap.position = camera_2d.position
+	minimap.position = camera_2d.global_position
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("map"):

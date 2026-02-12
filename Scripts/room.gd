@@ -15,12 +15,12 @@ extends Node2D
 @onready var door_down: StaticBody2D = $Doors/Door_Down
 @onready var door_right: StaticBody2D = $Doors/Door_Right
 
-@export var room_size := Vector2i(11, 7)
+@export var room_size := Vector2i(GameState.room_tiles_x, GameState.room_tiles_y)
 @export var tile_size := 200.0
 @export var dungeon_width := 6.0
 @export var dungeon_height := 6.0
-var room_width  = 11 * tile_size
-var room_height = 7 * tile_size
+var room_width  = GameState.room_tiles_x * tile_size
+var room_height = GameState.room_tiles_y * tile_size
 var start_pos : Vector2
 var start_room_pos : Vector2
 
