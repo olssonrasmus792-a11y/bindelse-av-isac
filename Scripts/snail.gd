@@ -9,12 +9,13 @@ extends CharacterBody2D
 var direction := Vector2(1, 1).normalized()
 var health = 2
 
-@export var knockback_strength = 1000
-@export var knockback_duration = 0.2
+@export var knockback_strength = 2000
+@export var knockback_duration = 0.7
 
 @export var drop_distance = 20.0
 var last_drop_pos: Vector2
 
+var current_knockback := Vector2.ZERO
 var knockback_velocity := Vector2.ZERO
 var knockback_timer := 0.0
 
@@ -26,8 +27,14 @@ func _ready() -> void:
 
 func _physics_process(delta):
 	if knockback_timer > 0.0:
-		velocity = knockback_velocity
+		# Smoothly interpolate knockback velocity to zero
+		current_knockback = current_knockback.lerp(Vector2.ZERO, 5 * delta)
+		velocity = current_knockback
 		knockback_timer -= delta
+		
+		if knockback_timer <= 0:
+			var tween := create_tween()
+			tween.tween_property(animated_sprite_2d, "modulate", Color(1, 1, 1), 0.5)
 	else:
 		velocity = direction * speed
 	
@@ -61,9 +68,9 @@ func take_damage(damage):
 
 func apply_knockback(from_position: Vector2):
 	var knockback_direction = (global_position - from_position).normalized()
-	knockback_velocity = knockback_direction * knockback_strength
+	current_knockback = knockback_direction * knockback_strength
 	knockback_timer = knockback_duration
-	direction = knockback_velocity.normalized()
+	direction = knockback_direction
 
 func spawn_trail():
 	var trail = trail_scene.instantiate()
@@ -77,7 +84,7 @@ func flash_red():
 		animated_sprite_2d,
 		"modulate",
 		Color(1, 1, 1),
-		0.5
+		0.25
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func explode(enemy):

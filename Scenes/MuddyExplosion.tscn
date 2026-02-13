@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://m2y2qalxyltp" path="res://Scripts/muddy_explosion.gd" id="1_nap8b"]
 
 [sub_resource type="Gradient" id="Gradient_10ykd"]
-offsets = PackedFloat32Array(0, 0.6855346, 1)
-colors = PackedColorArray(1, 0, 0, 1, 0.922252, 0.5889187, 0.5889187, 1, 0.883378, 0.88337797, 0.88337797, 1)
+offsets = PackedFloat32Array(0, 0.9811321)
+colors = PackedColorArray(0.6544539, 3.1525642e-06, 7.2196127e-07, 1, 0.32, 0.1536, 0.15914667, 0.39215687)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_rtjbt"]
 gradient = SubResource("Gradient_10ykd")
@@ -29,7 +29,6 @@ damping_max = 100.00001
 scale_min = 11.53
 scale_max = 22.05
 scale_over_velocity_max = 276.71
-color = Color(0.81896895, 0.6564063, 0.46419352, 1)
 color_ramp = SubResource("GradientTexture1D_rtjbt")
 turbulence_enabled = true
 turbulence_noise_scale = 0.0

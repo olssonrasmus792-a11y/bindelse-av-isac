@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cp18sirwr2vy7"
-path="res://.godot/imported/Shade idle.png-742bf1be67e99e46e0813997dd2a44d4.ctex"
+uid="uid://c0h608ntusxe0"
+path="res://.godot/imported/Brick tile.png-fa731d6a466b44e6a8d301f2fa0c0039.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Shade idle.png"
-dest_files=["res://.godot/imported/Shade idle.png-742bf1be67e99e46e0813997dd2a44d4.ctex"]
+source_file="res://Textures/Tiles/Brick tile.png"
+dest_files=["res://.godot/imported/Brick tile.png-fa731d6a466b44e6a8d301f2fa0c0039.ctex"]
 
 [params]
 

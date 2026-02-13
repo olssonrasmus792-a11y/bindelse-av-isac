@@ -28,7 +28,7 @@ var damage = 1
 @export var stamina = max_stamina
 @export var stamina_regen = 1
 @export var color_state: ColorState
-@export var invulnerability_duration = 0.4
+@export var invulnerability_duration = 0.3
 var invulnerability_timer = 0.0
 var slow_timer = 0.0
 var slow_duration = 0.5
@@ -101,6 +101,11 @@ func _input(event: InputEvent) -> void:
 		apply_color()
 		switching_color = true
 		color_timer.start(0.2)
+	
+	if event.is_action_pressed("level_up"):
+		var upgrade_scene = get_tree().get_first_node_in_group("upgrade_screen")
+		get_tree().paused = true
+		upgrade_scene.spawn_random_cards(3)
 
 
 func handle_movement():
@@ -253,10 +258,18 @@ func handle_animations():
 
 func take_damage(dmg):
 	if invulnerability_timer <= 0:
+		hit_stop(0.05, 0.5)
 		health -= dmg
 		invulnerability_timer = invulnerability_duration
+		for effect_node in get_tree().get_nodes_in_group("damageEffect"):
+			effect_node.flash_vignette()
 		flash_red()
 		update_health()
+
+func hit_stop(time_scale, duration: float):
+	Engine.time_scale = time_scale
+	await(get_tree().create_timer(duration * time_scale).timeout)
+	Engine.time_scale = 1.0
 
 func slow_down():
 	slow_timer = slow_duration

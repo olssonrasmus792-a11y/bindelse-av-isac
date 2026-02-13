@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cs10vgt0yxf27"
-path="res://.godot/imported/drop hole.png-f8ce4eab82b7d9c980a3e5b908f2319b.ctex"
+uid="uid://d1elmicjlqh4j"
+path="res://.godot/imported/wall.png-3631489261a5201212d262846b5f0f6c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/drop hole.png"
-dest_files=["res://.godot/imported/drop hole.png-f8ce4eab82b7d9c980a3e5b908f2319b.ctex"]
+source_file="res://Textures/Tiles/wall.png"
+dest_files=["res://.godot/imported/wall.png-3631489261a5201212d262846b5f0f6c.ctex"]
 
 [params]
 

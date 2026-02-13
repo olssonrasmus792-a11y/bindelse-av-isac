@@ -11,8 +11,8 @@ height = 108.0
 radius = 30.0
 
 [sub_resource type="Gradient" id="Gradient_kry3j"]
-offsets = PackedFloat32Array(0.16444445, 0.7111111)
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+offsets = PackedFloat32Array(0.28444445, 0.7111111)
+colors = PackedColorArray(1, 1, 1, 0.5921569, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_v0iea"]
 gradient = SubResource("Gradient_kry3j")

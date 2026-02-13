@@ -25,6 +25,11 @@ func _process(delta: float) -> void:
 	
 	if player_is_close and can_pick_up:
 		GameState.keys += 1
+		var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
+		var ft = floating_text_scene.instantiate()
+		ft.text = "+1 Key"
+		ft.global_position = global_position
+		get_tree().current_scene.add_child(ft)  # Or a dedicated UI node
 		queue_free()
 	
 	time += delta

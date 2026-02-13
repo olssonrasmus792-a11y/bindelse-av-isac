@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cn0m8rp6vv4pn"
-path="res://.godot/imported/Brown brick tile.png-19b222b43bb64b392f490edaf0a3060f.ctex"
+uid="uid://cet2td4yrlbk6"
+path="res://.godot/imported/ground.png-36fd2776974f42f85c8d0ecdee311508.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Brown brick tile.png"
-dest_files=["res://.godot/imported/Brown brick tile.png-19b222b43bb64b392f490edaf0a3060f.ctex"]
+source_file="res://Textures/Tiles/ground.png"
+dest_files=["res://.godot/imported/ground.png-36fd2776974f42f85c8d0ecdee311508.ctex"]
 
 [params]
 

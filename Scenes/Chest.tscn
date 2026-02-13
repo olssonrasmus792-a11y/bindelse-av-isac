@@ -1,8 +1,9 @@
-[gd_scene load_steps=22 format=3 uid="uid://c2p365w32k1w5"]
+[gd_scene load_steps=23 format=3 uid="uid://c2p365w32k1w5"]
 
 [ext_resource type="Texture2D" uid="uid://ekwtd2j7ltcu" path="res://Textures/Chest sheet.png" id="1_ghm5h"]
 [ext_resource type="Script" uid="uid://1ke4wdiujwc8" path="res://Scripts/chest.gd" id="1_mr3w3"]
 [ext_resource type="Shader" uid="uid://d066glvj82psy" path="res://Shaders/Chest.gdshader" id="3_fqgxf"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="4_2bf1p"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_v1rbb"]
 atlas = ExtResource("1_ghm5h")
@@ -168,6 +169,7 @@ offset_left = -64.0
 offset_top = -64.0
 offset_right = 64.0
 offset_bottom = -30.0
+theme_override_fonts/font = ExtResource("4_2bf1p")
 theme_override_font_sizes/font_size = 24
 text = "No Keys!"
 horizontal_alignment = 1

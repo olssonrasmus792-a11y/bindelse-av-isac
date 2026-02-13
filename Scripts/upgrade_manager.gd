@@ -17,26 +17,37 @@ var all_cards = [
 ]
 
 func _ready():
-	#spawn_random_cards(3)
-	pass
+	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 
 func spawn_random_cards(count: int):
 	clear_cards()
 	# Make a copy of the list so we don't remove originals
 	var available_cards = all_cards.duplicate()
+	
+	available_cards = available_cards.filter(func(card):
+		return card.current_level < card.max_level
+		)
+	
 	available_cards.shuffle()  # Randomize order
-
+	
 	# Take first 'count' cards
 	var selected_cards = available_cards.slice(0, count)
-
+	
 	for card_data in selected_cards:
 		var card_instance = card_scene.instantiate()
 		card_instance.card_data = card_data  # Assign unique data
+		if card_instance.card_data.current_level >= card_instance.card_data.max_level:
+			return
 		card_instance.upgrade_chosen.connect(_on_upgrade_chosen)
-		card_instance.card_data.rarity = choose_rarity()
+		#card_instance.card_data.rarity = choose_rarity()
 		cards_container.add_child(card_instance)
 	
 	visible = true
+	
+	if available_cards.is_empty():
+		print("No upgrades available")
+		close_upgrade_screen()
+		return
 
 func clear_cards():
 	for child in cards_container.get_children():
@@ -75,6 +86,8 @@ func apply_upgrade(card_data: CardData):
 			player.max_stamina += 1
 			player.update_stamina_ui()
 
+
 func close_upgrade_screen():
 	clear_cards()
 	visible = false
+	get_tree().paused = false

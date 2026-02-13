@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c85pchu0l8c6r"
-path="res://.godot/imported/ground hole.png-b0272e6a7d24c06f637c14c2f2e013cf.ctex"
+uid="uid://dfwunsnp0eo67"
+path="res://.godot/imported/ground_stone.png-2b2b43f75a41ee7c37254e78e8d3c598.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/ground hole.png"
-dest_files=["res://.godot/imported/ground hole.png-b0272e6a7d24c06f637c14c2f2e013cf.ctex"]
+source_file="res://Textures/Tiles/ground_stone.png"
+dest_files=["res://.godot/imported/ground_stone.png-2b2b43f75a41ee7c37254e78e8d3c598.ctex"]
 
 [params]
 

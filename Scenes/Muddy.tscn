@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dxogqxysy2jhw"]
 
 [ext_resource type="Script" uid="uid://6aieiikcb248" path="res://Scripts/muddy.gd" id="1_10ykd"]
-[ext_resource type="Texture2D" uid="uid://cqodias6yulyn" path="res://Textures/muddy.png" id="2_rtjbt"]
+[ext_resource type="Texture2D" uid="uid://cqodias6yulyn" path="res://Textures/Enemies/muddy.png" id="2_rtjbt"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4a5km"]
 radius = 1021.50134

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c0h608ntusxe0"
-path="res://.godot/imported/Brick tile.png-80f1e9880ff0f30236c7ca4dd030a44a.ctex"
+uid="uid://gcgs8ruhlerx"
+path="res://.godot/imported/Drop edge.png-007620444d4fe1c9817c2065ea4aaa64.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Brick tile.png"
-dest_files=["res://.godot/imported/Brick tile.png-80f1e9880ff0f30236c7ca4dd030a44a.ctex"]
+source_file="res://Textures/Tiles/Drop edge.png"
+dest_files=["res://.godot/imported/Drop edge.png-007620444d4fe1c9817c2065ea4aaa64.ctex"]
 
 [params]
 

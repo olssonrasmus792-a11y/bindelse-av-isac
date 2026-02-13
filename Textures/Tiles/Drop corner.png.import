@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://i8m1aosksca8"
-path="res://.godot/imported/Rocky jump.png-fcb4837c738f557bfdfa3ea63f35f5e1.ctex"
+uid="uid://h8djb4sx8vhl"
+path="res://.godot/imported/Drop corner.png-f9a2581ccaad4f507223f873c29f9b1c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Rocky jump.png"
-dest_files=["res://.godot/imported/Rocky jump.png-fcb4837c738f557bfdfa3ea63f35f5e1.ctex"]
+source_file="res://Textures/Tiles/Drop corner.png"
+dest_files=["res://.godot/imported/Drop corner.png-f9a2581ccaad4f507223f873c29f9b1c.ctex"]
 
 [params]
 

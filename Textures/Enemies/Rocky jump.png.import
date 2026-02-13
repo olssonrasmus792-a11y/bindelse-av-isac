@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://kvfkbjlwokbq"
-path="res://.godot/imported/black.jpg-069d96897ea62de1242d623320f20256.ctex"
+uid="uid://i8m1aosksca8"
+path="res://.godot/imported/Rocky jump.png-6c4f35333041a9a43993f001ce61a123.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/black.jpg"
-dest_files=["res://.godot/imported/black.jpg-069d96897ea62de1242d623320f20256.ctex"]
+source_file="res://Textures/Enemies/Rocky jump.png"
+dest_files=["res://.godot/imported/Rocky jump.png-6c4f35333041a9a43993f001ce61a123.ctex"]
 
 [params]
 

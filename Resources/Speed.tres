@@ -8,5 +8,5 @@ script = ExtResource("1_vr2k2")
 icon = ExtResource("1_gt7r1")
 card_name = "Speed"
 description = "Increase your movement speed by 20%"
-rarity = "Common"
+rarity = "Rare"
 metadata/_custom_type_script = "uid://c01qet416k22c"

@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://liad3wcg5iqj"]
 
 [ext_resource type="Script" uid="uid://b225733yfsgfr" path="res://Scripts/snail.gd" id="1_5346s"]
-[ext_resource type="Texture2D" uid="uid://c7cidaon7x34n" path="res://Textures/Snail Run.png" id="1_i7c5s"]
+[ext_resource type="Texture2D" uid="uid://c7cidaon7x34n" path="res://Textures/Enemies/Snail Run.png" id="1_i7c5s"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bbiew"]
 atlas = ExtResource("1_i7c5s")
@@ -48,11 +48,12 @@ z_index = 1
 script = ExtResource("1_5346s")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(15.999999, -1.9999999)
 scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_k0y6n")
+offset = Vector2(-79.99999, 9.999999)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(16, -2)
-rotation = -1.5248692
+rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_tny20")

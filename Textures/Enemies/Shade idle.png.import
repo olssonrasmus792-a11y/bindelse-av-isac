@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cet2td4yrlbk6"
-path="res://.godot/imported/ground.png-546042182a1ebc03c547e8cf81782487.ctex"
+uid="uid://cp18sirwr2vy7"
+path="res://.godot/imported/Shade idle.png-c8e25b115910276fc3ae848b0382fe59.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/ground.png"
-dest_files=["res://.godot/imported/ground.png-546042182a1ebc03c547e8cf81782487.ctex"]
+source_file="res://Textures/Enemies/Shade idle.png"
+dest_files=["res://.godot/imported/Shade idle.png-c8e25b115910276fc3ae848b0382fe59.ctex"]
 
 [params]
 

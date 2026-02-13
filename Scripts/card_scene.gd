@@ -14,7 +14,11 @@ signal upgrade_chosen(card_data: CardData)
 @onready var panel: Panel = $Panel
 @onready var inner_panel: Panel = $Panel/Panel
 
+@export var appear_duration: float = 0
+@export var start_scale: Vector2 = Vector2(0.8, 0.8)
+
 var rarity_color
+var target_y
 
 func _ready():
 	
@@ -31,6 +35,8 @@ func _ready():
 		"Legendary":
 			rarity_color = Color.GOLD
 	
+	print("Rarity Color: ", card_data.rarity)
+	
 	if card_data:
 		name_label.text = card_data.card_name
 		desc_label.text = card_data.description
@@ -46,6 +52,23 @@ func _ready():
 	
 	upgrade_button.pressed.connect(_on_upgrade_pressed)
 	update_button_state()
+	
+	# Start small and transparent
+	scale = start_scale
+	modulate.a = 0.0
+	
+	target_y = position.y
+	position.y += 2000
+	
+	appear()
+
+func appear():
+	var tween = create_tween()
+	
+	# Scale up with a slight bounce
+	tween.tween_property(self, "scale", Vector2(1, 1), appear_duration).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	
+	tween.tween_property(self, "modulate:a", 1.0, appear_duration)
 
 
 func _on_upgrade_pressed():

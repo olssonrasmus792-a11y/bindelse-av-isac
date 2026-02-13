@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cqodias6yulyn"
-path="res://.godot/imported/muddy.png-78d6e4d28293f571b9009c03e69c86cb.ctex"
+uid="uid://c85pchu0l8c6r"
+path="res://.godot/imported/ground hole.png-da489645a66e83dbc7f2911dd52bd823.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/muddy.png"
-dest_files=["res://.godot/imported/muddy.png-78d6e4d28293f571b9009c03e69c86cb.ctex"]
+source_file="res://Textures/Tiles/ground hole.png"
+dest_files=["res://.godot/imported/ground hole.png-da489645a66e83dbc7f2911dd52bd823.ctex"]
 
 [params]
 

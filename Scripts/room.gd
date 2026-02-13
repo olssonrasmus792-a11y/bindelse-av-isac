@@ -3,7 +3,8 @@ extends Node2D
 
 @export var enemy_scenes = [
 	preload("res://Scenes/Muddy.tscn"),
-	preload("res://Scenes/Snail.tscn")
+	preload("res://Scenes/Snail.tscn"),
+	preload("res://Scenes/stoney.tscn")
 ]
 @export var key_scene := preload("res://Scenes/Key.tscn")
 
@@ -14,6 +15,8 @@ extends Node2D
 @onready var door_left: StaticBody2D = $Doors/Door_Left
 @onready var door_down: StaticBody2D = $Doors/Door_Down
 @onready var door_right: StaticBody2D = $Doors/Door_Right
+
+@onready var clear_light: PointLight2D = $Lamps/PointLight2D2
 
 @export var room_size := Vector2i(GameState.room_tiles_x, GameState.room_tiles_y)
 @export var tile_size := 200.0
@@ -41,7 +44,7 @@ var has_door_down
 var has_door_right
 
 var alive_enemies: Array = []
-var enemies_per_room = 5
+var enemies_per_room = 10
 
 signal swap_cam(pos)
 
@@ -54,6 +57,7 @@ func _ready() -> void:
 	
 	room_entered = false
 	room_closed = false
+	clear_light.visible = false
 	color_rect.visible = true
 	camera_normal_zoom = camera.zoom.x
 	camera_map_zoom = camera.zoom.x / 3
@@ -122,6 +126,7 @@ func close_room():
 func open_room():
 	room_cleared = true
 	room_closed = false
+	clear_light.visible = true
 	
 	if !has_door_up:
 		open_door(door_up)

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://gcgs8ruhlerx"
-path="res://.godot/imported/Drop edge.png-3242e891130cc467dbe48d76530ff91c.ctex"
+uid="uid://cs10vgt0yxf27"
+path="res://.godot/imported/drop hole.png-aa37df2837127a961c8461fab0ef0c7f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Drop edge.png"
-dest_files=["res://.godot/imported/Drop edge.png-3242e891130cc467dbe48d76530ff91c.ctex"]
+source_file="res://Textures/Tiles/drop hole.png"
+dest_files=["res://.godot/imported/drop hole.png-aa37df2837127a961c8461fab0ef0c7f.ctex"]
 
 [params]
 

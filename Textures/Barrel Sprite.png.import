@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dfwunsnp0eo67"
-path="res://.godot/imported/ground_stone.png-afd78ec424c53f3c41e8864b93c0d353.ctex"
+uid="uid://j68vieexutuq"
+path="res://.godot/imported/Barrel Sprite.png-c8a76b192c98cf700072e92d1946485d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/ground_stone.png"
-dest_files=["res://.godot/imported/ground_stone.png-afd78ec424c53f3c41e8864b93c0d353.ctex"]
+source_file="res://Textures/Barrel Sprite.png"
+dest_files=["res://.godot/imported/Barrel Sprite.png-c8a76b192c98cf700072e92d1946485d.ctex"]
 
 [params]
 

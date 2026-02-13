@@ -39,6 +39,9 @@ func _physics_process(delta):
 	if collision:
 		var normal = collision.get_normal()
 		var collider = collision.get_collider()
+		if knockback_timer > 0.0:
+			for cam in get_tree().get_nodes_in_group("camera"):
+				cam.shake(1.5)
 		
 		if knockback_timer > 0.0 and !collider.is_in_group("enemies"):
 			knockback_velocity = knockback_velocity.bounce(normal)
@@ -48,6 +51,9 @@ func _physics_process(delta):
 
 		if collider.is_in_group("enemies") and knockback_timer > 0.0:
 			explode(collider)
+		
+		if collider.is_in_group("player") and knockback_timer > 0.0:
+			collider.take_damage(1)
 	
 	sprite_2d.flip_h = direction[0] < 0
 	if direction[0] < 0:

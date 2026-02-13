@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://tc0vm2g1hohq"]
+
+[ext_resource type="Shader" uid="uid://ccnwywmpuht17" path="res://Shaders/main_menu.gdshader" id="1_0tts5"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="1_fpf3r"]
+[ext_resource type="Script" uid="uid://bixgacvojfhc1" path="res://Scripts/label.gd" id="2_f7o28"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7scqb"]
+shader = ExtResource("1_0tts5")
+shader_parameter/height = 0.58
+shader_parameter/frequency = 20.0
+shader_parameter/speed = 5.0
+
+[node name="Label" type="Label"]
+material = SubResource("ShaderMaterial_7scqb")
+anchors_preset = -1
+anchor_right = 0.2638889
+anchor_bottom = 0.06635802
+offset_right = -190.0
+offset_bottom = -20.0
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("1_fpf3r")
+theme_override_font_sizes/font_size = 32
+text = "+bluhbluhbluh"
+script = ExtResource("2_f7o28")
+metadata/_edit_use_anchors_ = true

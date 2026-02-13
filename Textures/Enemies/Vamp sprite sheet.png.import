@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bw5phyyrsjamv"
-path="res://.godot/imported/Vamp sprite sheet.png-df1122acafb42fa4674c100ff43c8349.ctex"
+path="res://.godot/imported/Vamp sprite sheet.png-824483aa1dc04fc192b7a6bf4829af35.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Vamp sprite sheet.png"
-dest_files=["res://.godot/imported/Vamp sprite sheet.png-df1122acafb42fa4674c100ff43c8349.ctex"]
+source_file="res://Textures/Enemies/Vamp sprite sheet.png"
+dest_files=["res://.godot/imported/Vamp sprite sheet.png-824483aa1dc04fc192b7a6bf4829af35.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://h8djb4sx8vhl"
-path="res://.godot/imported/Drop corner.png-5b7f6888610b566239a2906d268153ec.ctex"
+uid="uid://nbsolrltr2nk"
+path="res://.godot/imported/Wall 3.png-dfd3e4dd4c86e53a2103a4848cecd94f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Drop corner.png"
-dest_files=["res://.godot/imported/Drop corner.png-5b7f6888610b566239a2906d268153ec.ctex"]
+source_file="res://Textures/Tiles/Wall 3.png"
+dest_files=["res://.godot/imported/Wall 3.png-dfd3e4dd4c86e53a2103a4848cecd94f.ctex"]
 
 [params]
 
