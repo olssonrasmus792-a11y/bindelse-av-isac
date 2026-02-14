@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=4 uid="uid://xg3cqujscmo2"]
+[gd_scene load_steps=36 format=4 uid="uid://xg3cqujscmo2"]
 
 [ext_resource type="Script" uid="uid://bnbcfmjx5x3xm" path="res://Scripts/room.gd" id="1_r7u0s"]
 [ext_resource type="Texture2D" uid="uid://cet2td4yrlbk6" path="res://Textures/Tiles/ground.png" id="2_1teyb"]
@@ -123,6 +123,11 @@ height = 1000
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_1teyb"]
+vertices = PackedVector2Array(2582, 18, 2582, 1222, 2557.6406, 1222, 1200, 912, 1168, 840, 2472.9766, 1264.3281, 2406.2266, 1372.7891, 1168, 992, 178.53906, 18, 1088, 808, 186.0625, 160.96875, 1016, 840, 161.21094, 260.3828, 2397.9688, 1472, 768, 1464, 776, 1384, 1096, 1016, -398, 1798, -398, 394.78906, -303.82813, 402.03906, 632, 1584, 2397.9766, 1647.75, 2405.4922, 1798, 496, 1600, 1016, 992, 744, 1328, 984, 912, 696, 1272, 44.140625, 385.65625, 111.36719, 326.84375, 2405.9531, 1567.9375, 712, 1536, -231.88281, 394.03906, -135.96094, 402.03906, -47.09375, 393.96094, -184, 1408, -168, 1344, 600, 1224, 480, 1224, 376, 1224, 200, 1224, 64, 1224, -32, 1232, -104, 1272, 272, 1600, 80, 1592, -40, 1584, -120, 1544, -168, 1472)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4), PackedInt32Array(3, 2, 5), PackedInt32Array(3, 5, 6, 7), PackedInt32Array(8, 0, 4, 9, 10), PackedInt32Array(10, 9, 11, 12), PackedInt32Array(7, 6, 13, 14, 15, 16), PackedInt32Array(17, 18, 19), PackedInt32Array(20, 21, 22, 17, 23), PackedInt32Array(24, 16, 15, 25), PackedInt32Array(26, 24, 25, 27, 28, 29), PackedInt32Array(29, 12, 11, 26), PackedInt32Array(14, 13, 30, 21, 31), PackedInt32Array(17, 19, 32, 33), PackedInt32Array(17, 33, 34), PackedInt32Array(35, 17, 34, 28, 36), PackedInt32Array(28, 27, 37), PackedInt32Array(28, 37, 38), PackedInt32Array(28, 38, 39), PackedInt32Array(28, 39, 40), PackedInt32Array(28, 40, 41), PackedInt32Array(28, 41, 42), PackedInt32Array(28, 42, 43), PackedInt32Array(20, 31, 21), PackedInt32Array(44, 23, 17), PackedInt32Array(45, 44, 17), PackedInt32Array(46, 45, 17), PackedInt32Array(47, 46, 17), PackedInt32Array(48, 47, 17), PackedInt32Array(35, 48, 17), PackedInt32Array(28, 43, 36)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-408, 384, -304, 392, -232, 384, -136, 392, -48, 384, 40, 376, 104, 320, 152, 256, 176, 160, 168, 8, 2592, 8, 2592, 1232, 2560, 1232, 2480, 1272, 2416, 1376, 2408, 1472, 2416, 1568, 2408, 1648, 2416, 1808, -184, 1808, -408, 1808)])
 
 [node name="Room" type="Node2D" groups=["rooms"]]
 script = ExtResource("1_r7u0s")
@@ -288,6 +293,20 @@ position = Vector2(1101, 895.00006)
 scale = Vector2(3.2040002, 2)
 energy = 0.5
 texture = SubResource("GradientTexture2D_avhjg")
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+position = Vector2(8, -8)
+navigation_polygon = SubResource("NavigationPolygon_1teyb")
+
+[node name="NavigationObstacle2D2" type="NavigationObstacle2D" parent="NavigationRegion2D"]
+vertices = PackedVector2Array(1016, 840, 1088, 808, 1168, 840, 1200, 912, 1168, 992, 1096, 1016, 1016, 992, 984, 912)
+affect_navigation_mesh = true
+carve_navigation_mesh = true
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="NavigationRegion2D"]
+vertices = PackedVector2Array(-168, 1344, -104, 1272, -32, 1232, 64, 1224, 200, 1224, 376, 1224, 480, 1224, 600, 1224, 696, 1272, 744, 1328, 776, 1384, 768, 1464, 712, 1536, 632, 1584, 496, 1600, 272, 1600, 80, 1592, -40, 1584, -120, 1544, -168, 1472, -184, 1408)
+affect_navigation_mesh = true
+carve_navigation_mesh = true
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

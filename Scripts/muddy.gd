@@ -7,10 +7,11 @@ extends CharacterBody2D
 @onready var point_light_2d: PointLight2D = $PointLight2D
 
 var direction := Vector2(1, 1).normalized()
-var health = 2
+var health = 12
 
+@export var knockback_strength_player = 350
 @export var knockback_strength = 2500
-@export var knockback_duration = 2
+@export var knockback_duration = 1.5
 
 var knockback_velocity := Vector2.ZERO
 var knockback_timer := 0.0
@@ -53,7 +54,7 @@ func _physics_process(delta):
 			explode(collider)
 		
 		if collider.is_in_group("player") and knockback_timer > 0.0:
-			collider.take_damage(1)
+			collider.take_damage(1, global_position, knockback_strength_player)
 	
 	sprite_2d.flip_h = direction[0] < 0
 	if direction[0] < 0:

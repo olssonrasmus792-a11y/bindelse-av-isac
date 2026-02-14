@@ -30,7 +30,8 @@ func _ready():
 func generate_dungeon():
 	start_pos = Vector2(dungeon_width / 2, dungeon_height / 2)
 	place_room(start_pos)
-	player.global_position = Vector2(room_width/2 - tile_size*3,room_height/2 - tile_size)
+	player.spawn_pos = Vector2(room_width/2 - tile_size*3,room_height/2 - tile_size)
+	player.global_position = player.spawn_pos
 	
 	for x in range(dungeon_width):
 		for y in range(dungeon_height):

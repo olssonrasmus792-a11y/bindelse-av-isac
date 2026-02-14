@@ -11,8 +11,9 @@ extends CharacterBody2D
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 
 var direction := Vector2(1, 1).normalized()
-var health = 3
+var health = 20
 
+@export var knockback_strength_player = 200
 @export var knockback_strength = 2000
 @export var knockback_duration = 0.7
 
@@ -30,10 +31,6 @@ func _physics_process(delta):
 		current_knockback = current_knockback.lerp(Vector2.ZERO, 5 * delta)
 		velocity = current_knockback
 		knockback_timer -= delta
-		
-		if knockback_timer <= 0:
-			var tween := create_tween()
-			tween.tween_property(animated_sprite_2d, "modulate", Color(1, 1, 1), 0.5)
 
 	elif animated_sprite_2d.frame >= 5 and animated_sprite_2d.frame <= 12 and health > 0:
 		if player:
@@ -56,9 +53,13 @@ func _physics_process(delta):
 		var normal = collision.get_normal()
 		var collider = collision.get_collider()
 		
+		if collider.is_in_group("player"):
+			collider.take_damage(1, global_position, knockback_strength_player)
+		
 		if knockback_timer > 0.0 and !collider.is_in_group("enemies"):
 			knockback_velocity = knockback_velocity.bounce(normal)
-			direction = knockback_velocity.normalized()
+			current_knockback = current_knockback.bounce(normal)
+			direction = current_knockback.normalized()
 		else:
 			direction = direction.bounce(normal)
 
@@ -77,14 +78,15 @@ func apply_knockback(from_position: Vector2):
 	direction = knockback_direction
 
 func flash_red():
-	animated_sprite_2d.modulate = Color(1, 0, 0)  # red
+	animated_sprite_2d.modulate = Color.WHITE
+	animated_sprite_2d.modulate = Color(1, 0, 0)
 	var tween := create_tween()
 	tween.tween_property(
 		animated_sprite_2d,
 		"modulate",
 		Color(1, 1, 1),
-		0.25
-	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		0.5
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func explode(enemy):
 	var explosion = explosion_scene.instantiate()

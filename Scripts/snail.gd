@@ -4,11 +4,16 @@ extends CharacterBody2D
 @export var trail_scene = preload("res://Scenes/snail_trail.tscn")
 
 @export var speed := 150
+@export var chase_speed_mult := 1.5
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 
-var direction := Vector2(1, 1).normalized()
-var health = 2
+@onready var player := get_tree().get_first_node_in_group("player")
+@onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 
+var direction := Vector2(1, 1).normalized()
+var health = 16
+
+@export var knockback_strength_player = 250
 @export var knockback_strength = 2000
 @export var knockback_duration = 0.7
 
@@ -26,17 +31,22 @@ func _ready() -> void:
 	last_drop_pos = global_position
 
 func _physics_process(delta):
+	direction = direction.normalized()
 	if knockback_timer > 0.0:
 		# Smoothly interpolate knockback velocity to zero
 		current_knockback = current_knockback.lerp(Vector2.ZERO, 5 * delta)
 		velocity = current_knockback
 		knockback_timer -= delta
-		
-		if knockback_timer <= 0:
-			var tween := create_tween()
-			tween.tween_property(animated_sprite_2d, "modulate", Color(1, 1, 1), 0.5)
+	elif player and player.slow_timer > 0:
+			nav_agent.target_position = player.global_position
+			if not nav_agent.is_navigation_finished():
+				var next_pos = nav_agent.get_next_path_position()
+				direction = (next_pos - global_position).normalized()
+				velocity = direction * speed * chase_speed_mult
+				animated_sprite_2d.speed_scale = 2.0
 	else:
 		velocity = direction * speed
+		animated_sprite_2d.speed_scale = 1.0
 	
 	move_and_slide()
 	
@@ -45,16 +55,19 @@ func _physics_process(delta):
 		var normal = collision.get_normal()
 		var collider = collision.get_collider()
 		
+		if collider.is_in_group("player"):
+			collider.take_damage(1, global_position, knockback_strength_player)
+		
 		if knockback_timer > 0.0 and !collider.is_in_group("enemies"):
 			knockback_velocity = knockback_velocity.bounce(normal)
-			direction = knockback_velocity.normalized()
+			current_knockback = current_knockback.bounce(normal)
+			direction = current_knockback.normalized()
 		else:
 			direction = direction.bounce(normal)
 	
 	if global_position.distance_to(last_drop_pos) >= drop_distance:
 		spawn_trail()
 		last_drop_pos = global_position
-	
 	
 	animated_sprite_2d.flip_h = direction[0] > 0
 
@@ -78,14 +91,15 @@ func spawn_trail():
 	get_parent().add_child(trail)
 
 func flash_red():
-	animated_sprite_2d.modulate = Color(1, 0, 0)  # red
+	animated_sprite_2d.modulate = Color.WHITE
+	animated_sprite_2d.modulate = Color(1, 0, 0)
 	var tween := create_tween()
 	tween.tween_property(
 		animated_sprite_2d,
 		"modulate",
 		Color(1, 1, 1),
-		0.25
-	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		0.5
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func explode(enemy):
 	var explosion = explosion_scene.instantiate()

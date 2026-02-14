@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=4 uid="uid://d0d7sxwuns8e8"]
+[gd_scene load_steps=36 format=4 uid="uid://d0d7sxwuns8e8"]
 
 [ext_resource type="Script" uid="uid://bnbcfmjx5x3xm" path="res://Scripts/room.gd" id="1_dl1m8"]
 [ext_resource type="Texture2D" uid="uid://cet2td4yrlbk6" path="res://Textures/Tiles/ground.png" id="2_53ype"]
@@ -123,6 +123,11 @@ height = 1000
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_t1d84"]
+vertices = PackedVector2Array(1200, 912, 2582, 18, 2582, 1798, 1168, 992, -398, 1798, 1096, 1016, 1016, 992, -398, 594.3281, -167.79688, 602.0078, 52.179688, 585.71875, 984, 912, 144.54688, 501.7422, 1016, 840, 1168, 840, 2069.1875, 168.95313, 2170, 42.867188, 2170, 18, 1088, 808, 177.96094, 409.85938, 185.79688, 18, 1615.0469, 18, 1647.6719, 102.171875, 1764.2109, 193.74219, 2127.8828, 110.27344, 1872, 202.03125, 1977.7109, 193.89844)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(3, 2, 4, 5), PackedInt32Array(6, 5, 4, 7), PackedInt32Array(6, 7, 8), PackedInt32Array(6, 8, 9, 10), PackedInt32Array(10, 9, 11, 12), PackedInt32Array(1, 0, 13, 14), PackedInt32Array(15, 16, 1), PackedInt32Array(17, 12, 18, 19, 20, 21), PackedInt32Array(12, 11, 18), PackedInt32Array(13, 17, 21, 22), PackedInt32Array(23, 15, 1), PackedInt32Array(13, 22, 24), PackedInt32Array(13, 24, 25), PackedInt32Array(14, 23, 1), PackedInt32Array(13, 25, 14)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-408, 584, -168, 592, 48, 576, 136, 496, 168, 408, 176, 8, 1621.8884, 8, 1656, 96, 1768, 184, 1872, 192, 1976, 184, 2064, 160, 2120, 104, 2160, 40, 2160, 8, 2592, 8, 2592, 1808, -408, 1808)])
 
 [node name="Room" type="Node2D" groups=["rooms"]]
 script = ExtResource("1_dl1m8")
@@ -288,6 +293,15 @@ position = Vector2(1101, 895.00006)
 scale = Vector2(3.2040002, 2)
 energy = 0.5
 texture = SubResource("GradientTexture2D_t1d84")
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+position = Vector2(8, -8)
+navigation_polygon = SubResource("NavigationPolygon_t1d84")
+
+[node name="NavigationObstacle2D2" type="NavigationObstacle2D" parent="NavigationRegion2D"]
+vertices = PackedVector2Array(1016, 840, 1088, 808, 1168, 840, 1200, 912, 1168, 992, 1096, 1016, 1016, 992, 984, 912)
+affect_navigation_mesh = true
+carve_navigation_mesh = true
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

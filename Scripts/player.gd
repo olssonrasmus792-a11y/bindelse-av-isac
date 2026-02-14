@@ -16,10 +16,13 @@ extends CharacterBody2D
 @onready var attack_area: Area2D = $AttackArea
 @onready var bat_sprite: AnimatedSprite2D = $AttackArea/BatSprite
 @onready var color_timer: Timer = $ColorTimer
+@onready var ambient_light: CanvasModulate = $"../Ambient Light"
+@onready var death_particles: GPUParticles2D = $DeathParticles
 
 enum ColorState { YELLOW, RED, GREEN }
 
-var damage = 1
+var spawn_pos
+var damage = 4
 @export var max_speed = 500
 @export var speed = max_speed
 @export var max_health = 6
@@ -31,8 +34,11 @@ var damage = 1
 @export var invulnerability_duration = 0.3
 var invulnerability_timer = 0.0
 var slow_timer = 0.0
-var slow_duration = 0.5
+var slow_duration = 0.75
 var slow_amount = 0.2
+
+@export var knockback_decay := 100.0
+var knockback_velocity := Vector2.ZERO
 
 @export var acceleration := 50.0
 @export var friction := 60.0
@@ -41,6 +47,12 @@ var slow_amount = 0.2
 @export var stamina_icon_scene = preload("res://Scenes/stamina.tscn")
 var health_icon_size = 50
 var stamina_icon_size = 20
+
+# Death light effect settings
+var death_light_amplitude = 0.5  # max energy swing
+var death_light_base = 0.0      # min energy
+var death_light_time = 0.0       # internal timer
+@export var death_duration = 4.5  # seconds before full death
 
 var rolling = false
 var roll_speed_mult = 1.5
@@ -52,20 +64,25 @@ var target_energy: float
 var lerp_speed = 0.3
 var switching_color = false
 
+var is_dead = false
+
 
 func _ready() -> void:
 	point_light_2d.color = Color.LIGHT_YELLOW
 	roll_light.color = Color.LIGHT_YELLOW
+	death_particles.emitting = false
+	bat_sprite.visible = true
 	update_health()
 	update_stamina_ui()
 
 
 func _physics_process(delta):
-	get_input()
-	move_and_slide()
-	handle_animations()
-	handle_movement()
+	if !is_dead:
+		get_input()
+		move_and_slide()
 	handle_attacking()
+	handle_animations(delta)
+	handle_movement(delta)
 	handle_color()
 	handle_slows(delta)
 	
@@ -83,6 +100,9 @@ func get_input():
 
 
 func _input(event: InputEvent) -> void:
+	if (event.is_action_pressed("attack") or event.is_action_pressed("roll")) and stamina <= 0:
+		no_stamina()
+	
 	if event.is_action_pressed("roll") and input_direction and !rolling and stamina > 0:
 		roll_direction = Input.get_vector("left", "right", "up", "down")
 		roll_timer.start(0.3)
@@ -108,11 +128,10 @@ func _input(event: InputEvent) -> void:
 		upgrade_scene.spawn_random_cards(3)
 
 
-func handle_movement():
+func handle_movement(delta):
 	var target_velocity: Vector2
 
 	if rolling:
-		#velocity = roll_direction * speed * roll_speed_mult
 		velocity = roll_direction * speed * roll_speed_mult + (velocity / 5)
 	else:
 		target_velocity = input_direction * speed
@@ -121,6 +140,9 @@ func handle_movement():
 		velocity = velocity.move_toward(target_velocity, acceleration)
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, friction)
+	
+	velocity += knockback_velocity
+	knockback_velocity = knockback_velocity.lerp(Vector2.ZERO, knockback_decay * delta)
 
 
 func _on_roll_timer_timeout() -> void:
@@ -128,7 +150,7 @@ func _on_roll_timer_timeout() -> void:
 
 
 func handle_attacking():
-	if attacking:
+	if attacking and !is_dead:
 		attack_area.monitoring = true
 	else:
 		attack_area.monitoring = false
@@ -153,23 +175,18 @@ func _on_attack_timer_timeout() -> void:
 	recharging = true
 	attacking = false
 
-
 func _on_attack_cooldown_timeout() -> void:
 	recharging = false
-
 
 func _on_stamina_recharge_timeout() -> void:
 	stamina += 1
 	update_stamina_ui()
 
-
 func _on_color_timer_timeout() -> void:
 	switching_color = false
 
-
 func next_color():
 	color_state = ((color_state + 1) % ColorState.size()) as ColorState
-
 
 func apply_color():
 	match color_state:
@@ -183,12 +200,9 @@ func apply_color():
 			point_light_2d.color = Color.LIGHT_YELLOW
 			roll_light.color = Color.LIGHT_YELLOW
 
-
 func update_health():
 	if health < 1:
-		health = max_health
-		point_light_2d.energy = 0.4 + health * 0.15
-		print("you died")
+		die()
 	
 	for child in health_bar.get_children():
 		child.queue_free()
@@ -200,8 +214,6 @@ func update_health():
 	
 	health_bar.queue_sort()
 	health_panel.queue_sort()
-
-
 
 func update_stamina_ui():
 	# Clear old icons
@@ -217,8 +229,15 @@ func update_stamina_ui():
 	stamina_bar.queue_sort()
 	stamina_panel.queue_sort()
 
+func no_stamina():
+	var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
+	var ft = floating_text_scene.instantiate()
+	ft.text = "No Stamina!"
+	ft.add_theme_color_override("font_color", Color.RED)
+	ft.global_position = global_position
+	get_tree().current_scene.add_child(ft)  # Or a dedicated UI node
 
-func handle_animations():
+func handle_animations(delta):
 	var health_state : int = round(remap(health, 1, max_health, 1, 3))
 	collision_shape_2d.disabled = false
 	roll_collision.disabled = true
@@ -228,6 +247,12 @@ func handle_animations():
 	
 	point_light_2d.energy = lerp(point_light_2d.energy, target_energy, lerp_speed)
 	roll_light.energy = lerp(roll_light.energy, target_energy, lerp_speed)
+	
+	if is_dead:
+		death_light_time += delta * 4  # speed of pulsing
+		point_light_2d.energy = death_light_base + sin(death_light_time) * death_light_amplitude
+		animated_sprite_2d.play("Idle" + str(health_state))
+		bat_sprite.visible = false
 	
 	if rolling:
 		$AnimatedSprite2D.flip_h = input_direction[0] > 0
@@ -248,23 +273,69 @@ func handle_animations():
 	
 	if input_direction.x:
 		$AnimatedSprite2D.flip_h = input_direction[0] < 0
-		if  input_direction[0] < 0:
-			attack_area.scale.x = 1
-		else:
-			attack_area.scale.x = -1
 	
 	if attacking:
 		bat_sprite.play("Attack")
 
-func take_damage(dmg):
-	if invulnerability_timer <= 0:
-		hit_stop(0.05, 0.5)
-		health -= dmg
-		invulnerability_timer = invulnerability_duration
-		for effect_node in get_tree().get_nodes_in_group("damageEffect"):
-			effect_node.flash_vignette()
-		flash_red()
-		update_health()
+func die():
+	is_dead = true
+	death_particles.emitting = true
+	health = 0
+	death_light_time = 0
+	print("you are dying...")
+	
+	for cam in get_tree().get_nodes_in_group("camera"):
+		cam.shake(1.5)
+	
+	# Start a one-shot timer to finish death
+	var death_timer = Timer.new()
+	death_timer.wait_time = death_duration
+	death_particles.amount = 30
+	var tween = create_tween()
+	tween.tween_property(ambient_light, "color", Color(0, 0, 0, 1), death_duration)
+	death_particles.restart()
+	death_timer.one_shot = true
+	add_child(death_timer)
+	death_timer.start()
+	death_timer.timeout.connect(_on_death_timer_timeout)
+
+func _on_death_timer_timeout():
+	# Player fully dead: turn light off
+	point_light_2d.energy = 0
+	print("game over!")
+
+	# Stop the game (or pause)
+	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
+
+func respawn_player():
+	is_dead = false
+	health = max_health
+	point_light_2d.energy = 0.4 + health * 0.15
+	position = spawn_pos
+
+func take_damage(dmg, from_position: Vector2, knockback_strength):
+	if invulnerability_timer > 0 or is_dead:
+		return
+	
+	apply_knockback(from_position, knockback_strength)
+	
+	for cam in get_tree().get_nodes_in_group("camera"):
+		cam.shake(0.5)
+	
+	hit_stop(0.05, 0.5)
+	
+	health -= dmg
+	invulnerability_timer = invulnerability_duration
+	
+	for effect_node in get_tree().get_nodes_in_group("damageEffect"):
+		effect_node.flash_vignette()
+	
+	flash_red()
+	update_health()
+
+func apply_knockback(from_position: Vector2, strength):
+	var direction = (global_position - from_position).normalized()
+	knockback_velocity = direction * strength
 
 func hit_stop(time_scale, duration: float):
 	Engine.time_scale = time_scale

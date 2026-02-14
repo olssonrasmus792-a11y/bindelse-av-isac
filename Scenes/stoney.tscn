@@ -120,6 +120,7 @@ animations = [{
 size = Vector2(108, 56)
 
 [node name="Stoney" type="CharacterBody2D" groups=["enemies"]]
+motion_mode = 1
 script = ExtResource("1_mwejy")
 
 [node name="ColorRect" type="ColorRect" parent="."]

@@ -85,7 +85,7 @@ fill_from = Vector2(0.5, 0.5)
 script = ExtResource("1_6bp64")
 
 [node name="Ambient Light" type="CanvasModulate" parent="."]
-color = Color(0.1428582, 0.14285824, 0.1428582, 1)
+color = Color(0.103743605, 0.103743516, 0.103743516, 1)
 
 [node name="Map" type="Node2D" parent="."]
 
@@ -115,8 +115,7 @@ one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="Player" groups=["camera"]]
 zoom = Vector2(0.5, 0.5)
-position_smoothing_enabled = true
-position_smoothing_speed = 10.0
+position_smoothing_speed = 50.0
 script = ExtResource("5_fdnlq")
 
 [node name="Enemies" type="Node2D" parent="." groups=["enemy_container"]]

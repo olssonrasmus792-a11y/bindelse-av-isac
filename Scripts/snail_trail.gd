@@ -1,6 +1,6 @@
 extends Node2D
 
-@export var lifetime := 1.5  # seconds
+@export var lifetime := 2  # seconds
 
 func _ready():
 	var tween = create_tween()

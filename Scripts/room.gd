@@ -97,9 +97,6 @@ func _input(event: InputEvent) -> void:
 		else:
 			camera.zoom = Vector2(camera_map_zoom, camera_map_zoom)
 			zoomed_out = true
-	
-	if event.is_action_pressed("open") and player_is_in_room:
-		open_room()
 
 
 func _on_enemy_spawn_area_body_entered(body: Node2D) -> void:
@@ -185,4 +182,5 @@ func _on_enemy_died(enemy):
 func drop_key(pos):
 	var key = key_scene.instantiate()
 	key.global_position = pos
-	get_tree().current_scene.add_child(key)
+	if self.get_parent():  # room node still exists
+		self.get_parent().add_child(key)
