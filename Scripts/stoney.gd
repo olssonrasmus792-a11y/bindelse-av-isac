@@ -6,6 +6,7 @@ extends CharacterBody2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var color_rect: ColorRect = $ColorRect
 @onready var color_rect_2: ColorRect = $ColorRect2
+@onready var jump_effect: GPUParticles2D = $JumpEffect
 
 @onready var player := get_tree().get_first_node_in_group("player")
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
@@ -43,6 +44,9 @@ func _physics_process(delta):
 		color_rect.visible = direction.x < 0
 		color_rect_2.visible = direction.x > 0
 
+	elif animated_sprite_2d.frame == 13:
+		jump_effect.restart()
+		velocity = Vector2.ZERO
 	else:
 		velocity = Vector2.ZERO
 	

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cwo7ty8gxg4fn"]
+[gd_scene load_steps=29 format=3 uid="uid://cwo7ty8gxg4fn"]
 
 [ext_resource type="Script" uid="uid://ikkptpfealcp" path="res://Scripts/stoney.gd" id="1_mwejy"]
 [ext_resource type="Texture2D" uid="uid://i8m1aosksca8" path="res://Textures/Enemies/Rocky jump.png" id="1_nw4po"]
@@ -119,6 +119,60 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fcq7u"]
 size = Vector2(108, 56)
 
+[sub_resource type="Gradient" id="Gradient_mwejy"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_y5ntv"]
+gradient = SubResource("Gradient_mwejy")
+width = 256
+height = 256
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_y5ntv"]
+colors = PackedColorArray(0.74978, 0.74978, 0.74977994, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_hi8wa"]
+gradient = SubResource("Gradient_y5ntv")
+
+[sub_resource type="Gradient" id="Gradient_hi8wa"]
+offsets = PackedFloat32Array(0, 0.6603774, 1)
+colors = PackedColorArray(0.44705883, 0.30980393, 0.12941177, 1, 0.57254905, 0.4, 0.18039216, 1, 0.57254905, 0.4, 0.18039216, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_xh2lw"]
+gradient = SubResource("Gradient_hi8wa")
+
+[sub_resource type="Curve" id="Curve_mwejy"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.43939394, 0.92134833), 0.0, 0.0, 0, 0, Vector2(0.76515156, 0.5842697), 0.0, 0.0, 0, 0, Vector2(1, 0.19101131), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_y5ntv"]
+curve = SubResource("Curve_mwejy")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bspdm"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(60, 1, 1)
+velocity_pivot = Vector3(0, -2, 0)
+direction = Vector3(0, -10, 0)
+spread = 40.0
+flatness = 1.0
+initial_velocity_min = 80.0
+initial_velocity_max = 140.0
+gravity = Vector3(0, 300, 0)
+damping_min = 20.0
+damping_max = 40.0
+scale_min = 0.02
+scale_max = 0.03
+scale_curve = SubResource("CurveTexture_y5ntv")
+color_ramp = SubResource("GradientTexture1D_xh2lw")
+color_initial_ramp = SubResource("GradientTexture1D_hi8wa")
+collision_mode = 1
+collision_friction = 0.0
+collision_bounce = 0.84
+
 [node name="Stoney" type="CharacterBody2D" groups=["enemies"]]
 motion_mode = 1
 script = ExtResource("1_mwejy")
@@ -164,7 +218,22 @@ frame_progress = 0.7057131
 offset = Vector2(-28.720655, -104.438644)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(10, -8)
 shape = SubResource("RectangleShape2D_fcq7u")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="JumpEffect" type="GPUParticles2D" parent="."]
+position = Vector2(11, 16)
+emitting = false
+amount = 40
+texture = SubResource("GradientTexture2D_y5ntv")
+interp_to_end = 0.01
+one_shot = true
+speed_scale = 1.5
+explosiveness = 1.0
+randomness = 0.5
+collision_base_size = 2.0
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_bspdm")

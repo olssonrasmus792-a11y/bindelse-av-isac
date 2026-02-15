@@ -9,15 +9,18 @@ extends Control
 @export var epic_chance = 0.15
 @export var legendary_chance = 0.05
 
-var all_cards = [
-	preload("res://Resources/Damage.tres"),
-	preload("res://Resources/Speed.tres"),
-	preload("res://Resources/Stamina.tres"),
-	preload("res://Resources/Health.tres")
-]
+var all_cards := []
 
 func _ready():
-	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
+	var dir = DirAccess.open("res://Resources/Cards")
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if file_name.ends_with(".tres"):
+				var card = load("res://Resources/Cards/" + file_name)
+				all_cards.append(card)
+			file_name = dir.get_next()
 
 func spawn_random_cards(count: int):
 	clear_cards()
@@ -42,12 +45,12 @@ func spawn_random_cards(count: int):
 		#card_instance.card_data.rarity = choose_rarity()
 		cards_container.add_child(card_instance)
 	
-	visible = true
-	
 	if available_cards.is_empty():
 		print("No upgrades available")
 		close_upgrade_screen()
 		return
+	
+	visible = true
 
 func clear_cards():
 	for child in cards_container.get_children():
@@ -67,6 +70,8 @@ func choose_rarity():
 
 func _on_upgrade_chosen(card_data: CardData):
 	print("player chose: ", card_data.card_name)
+	
+	GameState.taken_upgrades[card_data.card_name] = true
 	
 	apply_upgrade(card_data)
 	close_upgrade_screen()

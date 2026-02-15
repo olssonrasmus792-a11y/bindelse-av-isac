@@ -27,7 +27,7 @@ var room_height = GameState.room_tiles_y * tile_size
 var start_pos : Vector2
 var start_room_pos : Vector2
 
-var key_spawn_rate = 1
+var key_spawn_rate = 0.5
 
 var room_entered = false
 var room_closed = false
@@ -44,7 +44,6 @@ var has_door_down
 var has_door_right
 
 var alive_enemies: Array = []
-var enemies_per_room = 10
 
 signal swap_cam(pos)
 
@@ -146,7 +145,7 @@ func open_room():
 func on_room_cleared():
 	open_room()
 	GameState.rooms_cleared += 1
-	enemies_per_room = 10 + GameState.rooms_cleared * 2
+	GameState.enemies_per_room += 2
 
 
 func close_door(door):
@@ -165,7 +164,7 @@ func get_enemy_container() -> Node:
 
 func spawn_enemies():
 	var enemies = get_enemy_container()
-	for x in range(enemies_per_room):
+	for x in range(GameState.enemies_per_room):
 		var enemy_scene = enemy_scenes.pick_random()
 		var enemy = enemy_scene.instantiate()
 		enemy.global_position.x = global_position.x + room_width/2 - tile_size * 3 + randf_range(-room_width/4, room_width/4)

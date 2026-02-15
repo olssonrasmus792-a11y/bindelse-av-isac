@@ -370,6 +370,7 @@ theme_override_font_sizes/font_size = 11
 text = "Tab / M  -  Toggle map"
 
 [node name="UpgradeManager" type="Control" parent="UI" groups=["upgrade_screen"]]
+process_mode = 3
 visible = false
 layout_mode = 3
 anchors_preset = 15

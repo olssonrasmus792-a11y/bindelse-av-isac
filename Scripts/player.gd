@@ -24,16 +24,22 @@ enum ColorState { YELLOW, RED, GREEN }
 
 var spawn_pos
 var damage = 4
+
 @export var max_speed = 500
 @export var speed = max_speed
+
 @export var max_health = 6
 @export var health = max_health
+
 @export var max_stamina = 5
 @export var stamina = max_stamina
-@export var stamina_regen = 1
+@export var stamina_regen = 1.25 # Sekunder per stamina
+
 @export var color_state: ColorState
+
 @export var invulnerability_duration = 0.3
 var invulnerability_timer = 0.0
+
 var slow_timer = 0.0
 var slow_duration = 0.75
 var slow_amount = 0.2
@@ -170,6 +176,8 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemies"):
 		body.take_damage(damage)
 		body.apply_knockback(global_position)
+		for cam in get_tree().get_nodes_in_group("camera"):
+			cam.shake(0.25)
 
 func _on_attack_timer_timeout() -> void:
 	attack_cooldown.start(0.5)
@@ -314,10 +322,8 @@ func _on_death_timer_timeout():
 	await(get_tree().create_timer(0.2).timeout)
 	Engine.time_scale = 1.0
 	
-	print("game over!")
-
-	# Stop the game (or pause)
 	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
+	GameState.reset_game()
 
 func respawn_player():
 	is_dead = false
@@ -326,7 +332,7 @@ func respawn_player():
 	position = spawn_pos
 
 func take_damage(dmg, from_position: Vector2, knockback_strength):
-	if invulnerability_timer > 0 or is_dead:
+	if invulnerability_timer > 0 or is_dead or (rolling and GameState.taken_upgrades.has("Rollin'")):
 		return
 	
 	apply_knockback(from_position, knockback_strength)
