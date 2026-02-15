@@ -3,9 +3,10 @@ extends CharacterBody2D
 @export var explosion_scene = preload("res://Scenes/MuddyExplosion.tscn")
 @export var trail_scene = preload("res://Scenes/snail_trail.tscn")
 
-@export var speed := 150
-@export var chase_speed_mult := 1.5
+@export var speed := 200
+@export var chase_speed_mult := 1.6
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var direction_timer: Timer = $DirectionTimer
 
 @onready var player := get_tree().get_first_node_in_group("player")
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
@@ -13,9 +14,9 @@ extends CharacterBody2D
 var direction := Vector2(1, 1).normalized()
 var health = 16
 
-@export var knockback_strength_player = 250
-@export var knockback_strength = 2000
-@export var knockback_duration = 0.7
+@export var knockback_strength_player = 200
+@export var knockback_strength = 1500
+@export var knockback_duration = 0.6
 
 @export var drop_distance = 20.0
 var last_drop_pos: Vector2
@@ -75,9 +76,7 @@ func take_damage(damage):
 	health -= damage
 	flash_red()
 	if health <= 0:
-		emit_signal("enemy_died")  
 		explode(self)  
-		queue_free()
 
 func apply_knockback(from_position: Vector2):
 	var knockback_direction = (global_position - from_position).normalized()
@@ -110,3 +109,9 @@ func explode(enemy):
 	
 	emit_signal("enemy_died")
 	enemy.queue_free()
+
+
+func _on_direction_timer_timeout() -> void:
+	var new_timer = randf_range(2, 5)
+	direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
+	direction_timer.wait_time = new_timer

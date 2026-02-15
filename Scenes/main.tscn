@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bcyvgbkfd8iqg"]
+[gd_scene load_steps=25 format=3 uid="uid://bcyvgbkfd8iqg"]
 
 [ext_resource type="Script" uid="uid://cy82dwcy7mapg" path="res://Scripts/main.gd" id="1_6bp64"]
 [ext_resource type="PackedScene" uid="uid://bv2axkxq2b6bw" path="res://Scenes/room_generator.tscn" id="1_21xkr"]
@@ -13,6 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://hptj7iwfcn87" path="res://Textures/Key.png" id="8_ynf5e"]
 [ext_resource type="Texture2D" uid="uid://bi3cf83ewrg3n" path="res://Textures/coin.png" id="9_d1ilt"]
 [ext_resource type="Script" uid="uid://cn14tvvyu8vmi" path="res://Scripts/upgrade_manager.gd" id="10_hptm8"]
+[ext_resource type="Script" uid="uid://b08mm372hlrqv" path="res://Scripts/full_size_map.gd" id="13_jkdf5"]
+[ext_resource type="Script" uid="uid://seyb3vxbpmw1" path="res://Scripts/full_size_cam.gd" id="14_wsu2k"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6bp64"]
 shader = ExtResource("7_6bp64")
@@ -271,29 +273,101 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="UI"]
+[node name="Map" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Minimap" type="SubViewportContainer" parent="UI/Map"]
+layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.8125
 anchor_top = 0.024691358
 anchor_right = 0.9861111
 anchor_bottom = 0.33333334
-metadata/_edit_use_anchors_ = true
+grow_horizontal = 0
 
-[node name="SubViewport" type="SubViewport" parent="UI/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="UI/Map/Minimap"]
 handle_input_locally = false
 size = Vector2i(200, 200)
 render_target_update_mode = 4
 script = ExtResource("8_344ge")
 
-[node name="Minimap" type="Camera2D" parent="UI/SubViewportContainer/SubViewport"]
+[node name="Minimap" type="Camera2D" parent="UI/Map/Minimap/SubViewport"]
 zoom = Vector2(0.02, 0.02)
 
-[node name="Line2D" type="Line2D" parent="UI/SubViewportContainer"]
-position = Vector2(-936, -16)
-points = PackedVector2Array(936, 16, 936, 216, 1136, 216, 1136, 16)
+[node name="Line2D" type="Line2D" parent="UI/Map/Minimap"]
+position = Vector2(-930.1325, -10.476191)
+scale = Vector2(0.9904753, 0.952381)
+points = PackedVector2Array(939.077, 11, 939.077, 220.99998, 1141.0002, 220.99998, 1141.0002, 11)
 closed = true
 width = 5.0
 default_color = Color(0.24, 0.142, 0.072000004, 1)
+
+[node name="FullSizeMap" type="SubViewportContainer" parent="UI/Map"]
+process_mode = 3
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+metadata/_edit_use_anchors_ = true
+
+[node name="SubViewport" type="SubViewport" parent="UI/Map/FullSizeMap"]
+handle_input_locally = false
+sdf_scale = 0
+size = Vector2i(1152, 648)
+render_target_update_mode = 0
+script = ExtResource("13_jkdf5")
+
+[node name="FullSizeCam" type="Camera2D" parent="UI/Map/FullSizeMap/SubViewport"]
+zoom = Vector2(0.08, 0.08)
+script = ExtResource("14_wsu2k")
+
+[node name="Line2D" type="Line2D" parent="UI/Map/FullSizeMap"]
+position = Vector2(10.24911, 10.451612)
+scale = Vector2(1.024911, 1.0451612)
+points = PackedVector2Array(-10, -10.000001, 1114, -10.000001, 1114, 610.00006, -10, 610.00006)
+closed = true
+default_color = Color(0.23921569, 0.14117648, 0.07058824, 1)
+
+[node name="Label" type="Label" parent="UI/Map"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_top = -316.0
+offset_right = 272.0
+offset_bottom = -244.0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("8_6iyac")
+text = "Tab / M  -  Toggle map
+LMB + Drag  -  Move camera
+Scroll  -  Zoom"
+
+[node name="Label2" type="Label" parent="UI/Map"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 976.0
+offset_top = -324.0
+offset_right = 1105.0
+offset_bottom = -308.0
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.11764706)
+theme_override_fonts/font = ExtResource("8_6iyac")
+theme_override_font_sizes/font_size = 11
+text = "Tab / M  -  Toggle map"
 
 [node name="UpgradeManager" type="Control" parent="UI" groups=["upgrade_screen"]]
 visible = false

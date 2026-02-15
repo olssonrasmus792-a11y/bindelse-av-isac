@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 @export var explosion_scene = preload("res://Scenes/MuddyExplosion.tscn")
 
-@export var speed := 150
+@export var speed := 250
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var color_rect: ColorRect = $ColorRect
 @onready var color_rect_2: ColorRect = $ColorRect2
@@ -14,8 +14,8 @@ var direction := Vector2(1, 1).normalized()
 var health = 20
 
 @export var knockback_strength_player = 200
-@export var knockback_strength = 2000
-@export var knockback_duration = 0.7
+@export var knockback_strength = 1250
+@export var knockback_duration = 0.5
 
 var current_knockback := Vector2.ZERO
 var knockback_velocity := Vector2.ZERO
@@ -67,9 +67,7 @@ func take_damage(damage):
 	health -= damage
 	flash_red()
 	if health <= 0:
-		emit_signal("enemy_died")  
 		explode(self)  
-		queue_free()
 
 func apply_knockback(from_position: Vector2):
 	var knockback_direction = (global_position - from_position).normalized()

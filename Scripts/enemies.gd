@@ -26,7 +26,7 @@ func spawn_enemy(pos: Vector2):
 
 func _on_spawn_enemy_pressed() -> void:
 	for x in range(2):
-		spawn_enemy(Vector2(400, 600))
+		spawn_enemy(Vector2(randf_range(400, 1600), randf_range(400, 1600)))
 
 func _on_spawn_enemies_signal(pos) -> void:
 	spawn_enemy(pos)

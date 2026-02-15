@@ -62,6 +62,11 @@ func _ready() -> void:
 	camera_normal_zoom = camera.zoom.x
 	camera_map_zoom = camera.zoom.x / 3
 
+func _process(_delta: float) -> void:
+	for player in get_tree().get_nodes_in_group("player"):
+		if player.is_dead:
+			clear_light.visible = false
+
 func doors_finalized():
 	check_doors()
 
@@ -140,6 +145,8 @@ func open_room():
 
 func on_room_cleared():
 	open_room()
+	GameState.rooms_cleared += 1
+	enemies_per_room = 10 + GameState.rooms_cleared * 2
 
 
 func close_door(door):

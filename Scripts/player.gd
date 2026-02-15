@@ -18,6 +18,7 @@ extends CharacterBody2D
 @onready var color_timer: Timer = $ColorTimer
 @onready var ambient_light: CanvasModulate = $"../Ambient Light"
 @onready var death_particles: GPUParticles2D = $DeathParticles
+@onready var damage_vignette: TextureRect = $"../UI/DamageVignette"
 
 enum ColorState { YELLOW, RED, GREEN }
 
@@ -49,10 +50,10 @@ var health_icon_size = 50
 var stamina_icon_size = 20
 
 # Death light effect settings
-var death_light_amplitude = 0.5  # max energy swing
-var death_light_base = 0.0      # min energy
+var death_light_amplitude = 0.6  # max energy swing
+var death_light_base = 0.4      # min energy
 var death_light_time = 0.0       # internal timer
-@export var death_duration = 4.5  # seconds before full death
+@export var death_duration = 4.25  # seconds before full death
 
 var rolling = false
 var roll_speed_mult = 1.5
@@ -291,8 +292,10 @@ func die():
 	var death_timer = Timer.new()
 	death_timer.wait_time = death_duration
 	death_particles.amount = 30
+	damage_vignette.modulate.a = 1
 	var tween = create_tween()
 	tween.tween_property(ambient_light, "color", Color(0, 0, 0, 1), death_duration)
+	tween.tween_property(damage_vignette, "modulate:a", 0, death_duration)
 	death_particles.restart()
 	death_timer.one_shot = true
 	add_child(death_timer)
@@ -302,6 +305,15 @@ func die():
 func _on_death_timer_timeout():
 	# Player fully dead: turn light off
 	point_light_2d.energy = 0
+	ambient_light.color = Color.BLACK
+	
+	for cam in get_tree().get_nodes_in_group("camera"):
+		cam.shake(2.5)
+	
+	Engine.time_scale = 0.1
+	await(get_tree().create_timer(0.2).timeout)
+	Engine.time_scale = 1.0
+	
 	print("game over!")
 
 	# Stop the game (or pause)
