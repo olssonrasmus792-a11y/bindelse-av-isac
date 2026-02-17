@@ -1,0 +1,187 @@
+[gd_scene load_steps=20 format=3 uid="uid://b4qmvkb0gafpl"]
+
+[ext_resource type="Script" uid="uid://02ah20uwe80r" path="res://Scenes/jump_effects.gd" id="1_13wyp"]
+
+[sub_resource type="Gradient" id="Gradient_mwejy"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_y5ntv"]
+gradient = SubResource("Gradient_mwejy")
+width = 256
+height = 256
+use_hdr = true
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_y5ntv"]
+colors = PackedColorArray(0.54901963, 0.54901963, 0.54901963, 0.37254903, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_hi8wa"]
+gradient = SubResource("Gradient_y5ntv")
+
+[sub_resource type="Gradient" id="Gradient_hi8wa"]
+interpolation_mode = 2
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.39215687)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7ef8d"]
+gradient = SubResource("Gradient_hi8wa")
+
+[sub_resource type="Curve" id="Curve_13wyp"]
+_data = [Vector2(0, 1), 0.0, -0.9958265, 0, 0, Vector2(0.99999, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 0.5), -1.0822961, 0.0, 0, 0]
+point_count = 3
+metadata/_snap_enabled = true
+metadata/_snap_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_fu3cw"]
+curve = SubResource("Curve_13wyp")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gf5sf"]
+particle_flag_disable_z = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 0.0
+emission_ring_radius = 170.0
+emission_ring_inner_radius = 210.0
+emission_ring_cone_angle = 90.0
+direction = Vector3(0, -1, 0)
+flatness = 1.0
+initial_velocity_min = 100.0
+initial_velocity_max = 200.0
+gravity = Vector3(0, 0, 0)
+damping_min = 20.0
+damping_max = 40.0
+scale_min = 0.03
+scale_max = 0.04
+scale_curve = SubResource("CurveTexture_fu3cw")
+color_ramp = SubResource("GradientTexture1D_7ef8d")
+color_initial_ramp = SubResource("GradientTexture1D_hi8wa")
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_m016w"]
+gradient = SubResource("Gradient_hi8wa")
+
+[sub_resource type="CurveTexture" id="CurveTexture_13wyp"]
+curve = SubResource("Curve_13wyp")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cxqfq"]
+particle_flag_disable_z = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 0.0
+emission_ring_radius = 120.0
+emission_ring_inner_radius = 150.0
+emission_ring_cone_angle = 90.0
+direction = Vector3(0, -1, 0)
+flatness = 1.0
+initial_velocity_min = 100.0
+initial_velocity_max = 200.0
+gravity = Vector3(0, 0, 0)
+damping_min = 20.0
+damping_max = 40.0
+scale_min = 0.02
+scale_max = 0.03
+scale_curve = SubResource("CurveTexture_13wyp")
+color_ramp = SubResource("GradientTexture1D_m016w")
+color_initial_ramp = SubResource("GradientTexture1D_hi8wa")
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_xh2lw"]
+gradient = SubResource("Gradient_hi8wa")
+
+[sub_resource type="CurveTexture" id="CurveTexture_y5ntv"]
+curve = SubResource("Curve_13wyp")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bspdm"]
+particle_flag_disable_z = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 0.0
+emission_ring_radius = 80.0
+emission_ring_inner_radius = 100.0
+emission_ring_cone_angle = 90.0
+direction = Vector3(0, -1, 0)
+flatness = 1.0
+initial_velocity_min = 100.0
+initial_velocity_max = 200.0
+gravity = Vector3(0, 0, 0)
+damping_min = 20.0
+damping_max = 40.0
+scale_min = 0.02
+scale_max = 0.03
+scale_curve = SubResource("CurveTexture_y5ntv")
+color_ramp = SubResource("GradientTexture1D_xh2lw")
+color_initial_ramp = SubResource("GradientTexture1D_hi8wa")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yk1pb"]
+radius = 105.01904
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_13wyp"]
+radius = 147.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fu3cw"]
+radius = 203.00246
+
+[node name="JumpEffects" type="Node2D"]
+script = ExtResource("1_13wyp")
+
+[node name="JumpEffect3" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 160
+texture = SubResource("GradientTexture2D_y5ntv")
+lifetime = 0.2
+interp_to_end = 0.01
+one_shot = true
+speed_scale = 0.5
+explosiveness = 1.0
+collision_base_size = 3.0
+local_coords = true
+trail_lifetime = 0.09999999999999999
+trail_sections = 12
+process_material = SubResource("ParticleProcessMaterial_gf5sf")
+
+[node name="JumpEffect2" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 120
+texture = SubResource("GradientTexture2D_y5ntv")
+lifetime = 0.2
+interp_to_end = 0.01
+one_shot = true
+speed_scale = 0.75
+explosiveness = 1.0
+collision_base_size = 2.0
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_cxqfq")
+
+[node name="JumpEffect" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 80
+texture = SubResource("GradientTexture2D_y5ntv")
+lifetime = 0.2
+interp_to_end = 0.01
+one_shot = true
+explosiveness = 1.0
+collision_base_size = 2.0
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_bspdm")
+
+[node name="Collision" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision"]
+shape = SubResource("CircleShape2D_yk1pb")
+
+[node name="Collision2" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision2"]
+shape = SubResource("CircleShape2D_13wyp")
+
+[node name="Collision3" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision3"]
+shape = SubResource("CircleShape2D_fu3cw")
+
+[connection signal="body_entered" from="Collision" to="." method="_on_collision_body_entered"]
+[connection signal="body_entered" from="Collision2" to="." method="_on_collision_2_body_entered"]
+[connection signal="body_entered" from="Collision3" to="." method="_on_collision_3_body_entered"]

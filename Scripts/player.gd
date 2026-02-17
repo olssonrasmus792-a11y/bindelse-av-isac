@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
-@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var visuals: Node2D = $Visuals
+@onready var animated_sprite_2d: AnimatedSprite2D = $Visuals/AnimatedSprite2D
 @onready var point_light_2d: PointLight2D = $Node2D/PointLight2D
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 @onready var roll_collision: CollisionShape2D = $RollCollision
@@ -17,7 +18,7 @@ extends CharacterBody2D
 @onready var bat_sprite: AnimatedSprite2D = $AttackArea/BatSprite
 @onready var color_timer: Timer = $ColorTimer
 @onready var ambient_light: CanvasModulate = $"../Ambient Light"
-@onready var death_particles: GPUParticles2D = $DeathParticles
+@onready var death_particles: GPUParticles2D = $Visuals/DeathParticles
 @onready var damage_vignette: TextureRect = $"../UI/DamageVignette"
 
 enum ColorState { YELLOW, RED, GREEN }
@@ -25,7 +26,7 @@ enum ColorState { YELLOW, RED, GREEN }
 var spawn_pos
 var damage = 4
 
-@export var max_speed = 500
+@export var max_speed = 400
 @export var speed = max_speed
 
 @export var max_health = 6
@@ -37,7 +38,7 @@ var damage = 4
 
 @export var color_state: ColorState
 
-@export var invulnerability_duration = 0.3
+@export var invulnerability_duration = 0.4
 var invulnerability_timer = 0.0
 
 var slow_timer = 0.0
@@ -134,12 +135,11 @@ func _input(event: InputEvent) -> void:
 		get_tree().paused = true
 		upgrade_scene.spawn_random_cards(3)
 
-
 func handle_movement(delta):
 	var target_velocity: Vector2
 
 	if rolling:
-		velocity = roll_direction * speed * roll_speed_mult + (velocity / 5)
+		velocity = roll_direction * (speed * roll_speed_mult) + (velocity / 5)
 	else:
 		target_velocity = input_direction * speed
 
@@ -176,8 +176,10 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemies"):
 		body.take_damage(damage)
 		body.apply_knockback(global_position)
+		
 		for cam in get_tree().get_nodes_in_group("camera"):
-			cam.shake(0.25)
+			cam.shake(0.75)
+		hit_stop(0.05, 0.25)
 
 func _on_attack_timer_timeout() -> void:
 	attack_cooldown.start(0.5)
@@ -264,8 +266,8 @@ func handle_animations(delta):
 		bat_sprite.visible = false
 	
 	if rolling:
-		$AnimatedSprite2D.flip_h = input_direction[0] > 0
-		$AnimatedSprite2D.animation = "Roll"
+		visuals.scale.x = -1 if input_direction.x > 0 else 1
+		animated_sprite_2d.animation = "Roll"
 		
 		collision_shape_2d.disabled = true
 		roll_collision.disabled = false
@@ -281,7 +283,7 @@ func handle_animations(delta):
 	
 	
 	if input_direction.x:
-		$AnimatedSprite2D.flip_h = input_direction[0] < 0
+		visuals.scale.x = -1 if input_direction.x < 0 else 1
 	
 	if attacking:
 		bat_sprite.play("Attack")
@@ -365,7 +367,10 @@ func slow_down():
 
 func handle_slows(delta):
 	if slow_timer > 0:
-		speed = max_speed * slow_amount
+		if rolling:
+			speed = max_speed * slow_amount + 250
+		else:
+			speed = max_speed * slow_amount
 		slow_timer -= delta
 		animated_sprite_2d.modulate = Color.LIGHT_GREEN
 		

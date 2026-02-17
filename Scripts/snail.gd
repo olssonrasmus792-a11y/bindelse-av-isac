@@ -5,7 +5,8 @@ extends CharacterBody2D
 
 @export var speed := 200
 @export var chase_speed_mult := 1.6
-@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var visuals: Node2D = $Visuals
+@onready var animated_sprite_2d: AnimatedSprite2D = $Visuals/AnimatedSprite2D
 @onready var direction_timer: Timer = $DirectionTimer
 
 @onready var player := get_tree().get_first_node_in_group("player")
@@ -70,7 +71,7 @@ func _physics_process(delta):
 		spawn_trail()
 		last_drop_pos = global_position
 	
-	animated_sprite_2d.flip_h = direction[0] > 0
+	visuals.scale.x = -1 if direction.x > 0 else 1
 
 func take_damage(damage):
 	health -= damage

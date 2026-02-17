@@ -40,24 +40,25 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tny20"]
-radius = 28.062298
-height = 114.15525
+radius = 22.0
+height = 76.0
 
 [node name="Snail" type="CharacterBody2D" groups=["enemies"]]
 z_index = 1
 motion_mode = 1
 script = ExtResource("1_5346s")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(15.999999, -1.9999999)
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals"]
+position = Vector2(28, 16)
 scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_k0y6n")
 autoplay = "default"
-frame_progress = 0.6721615
-offset = Vector2(-79.99999, 9.999999)
+frame_progress = 0.15565385
+offset = Vector2(-200, -79.99999)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(16, -2)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_tny20")
 

@@ -1,15 +1,15 @@
-[gd_scene load_steps=37 format=3 uid="uid://cyhswvdif7wx7"]
+[gd_scene load_steps=35 format=3 uid="uid://cyhswvdif7wx7"]
 
 [ext_resource type="Script" uid="uid://b2ak88d4qpiug" path="res://Scripts/Weapon.gd" id="1_6t5aa"]
 [ext_resource type="Texture2D" uid="uid://bo61tqjm0cruy" path="res://Textures/Bat.png" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://dqkxms1huepa7" path="res://Textures/Bulb Run sprite sheet.png" id="1_v0iea"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_344ge"]
-radius = 35.0
-height = 108.0
+radius = 28.0
+height = 98.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_v0iea"]
-radius = 30.0
+radius = 24.020824
 
 [sub_resource type="Gradient" id="Gradient_kry3j"]
 offsets = PackedFloat32Array(0.28444445, 0.7111111)
@@ -43,10 +43,6 @@ region = Rect2(800, 200, 200, 200)
 atlas = ExtResource("1_cvnsp")
 region = Rect2(1000, 200, 200, 200)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_bi64h"]
-atlas = ExtResource("1_cvnsp")
-region = Rect2(1200, 200, 200, 200)
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_0gysh"]
 animations = [{
 "frames": [{
@@ -64,18 +60,11 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_wpjfl")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bi64h")
 }],
 "loop": false,
 "name": &"Attack",
-"speed": 15.0
+"speed": 16.0
 }]
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2ijsl"]
-radius = 52.0
-height = 146.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vgqql"]
 atlas = ExtResource("1_v0iea")
@@ -273,11 +262,11 @@ turbulence_initial_displacement_max = 100.0
 motion_mode = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-5, 8)
+position = Vector2(0, 8)
 shape = SubResource("CapsuleShape2D_344ge")
 
 [node name="RollCollision" type="CollisionShape2D" parent="."]
-position = Vector2(-2, 33)
+position = Vector2(0, 34)
 shape = SubResource("CircleShape2D_v0iea")
 
 [node name="Node2D" type="Node2D" parent="."]
@@ -300,28 +289,32 @@ texture = SubResource("GradientTexture2D_v0iea")
 texture_scale = 2.0
 
 [node name="AttackArea" type="Area2D" parent="."]
+rotation = 0.05905618
 script = ExtResource("1_6t5aa")
 
 [node name="BatSprite" type="AnimatedSprite2D" parent="AttackArea"]
 z_index = 2
-position = Vector2(81, 10)
-rotation = -1.8000108
+position = Vector2(65, 9.000002)
+rotation = -1.8844452
 sprite_frames = SubResource("SpriteFrames_0gysh")
 animation = &"Attack"
-frame = 5
+frame = 4
 frame_progress = 1.0
 flip_v = true
 
-[node name="AttackCollision" type="CollisionShape2D" parent="AttackArea"]
-position = Vector2(81, -8)
-shape = SubResource("CapsuleShape2D_2ijsl")
+[node name="AttackCollision" type="CollisionPolygon2D" parent="AttackArea"]
+polygon = PackedVector2Array(47, -55, 81, -49, 102, -32, 117, -18, 125, 4, 123, 14, 111, 20, 83, 29, 62, 37, 42, 40, 35, 25, 37, -7, 36, -43)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals"]
+position = Vector2(5, 0)
 sprite_frames = SubResource("SpriteFrames_6bp64")
 animation = &"Run3"
-frame_progress = 0.16075999
+frame_progress = 0.39226755
 
-[node name="DeathParticles" type="GPUParticles2D" parent="."]
+[node name="DeathParticles" type="GPUParticles2D" parent="Visuals"]
+position = Vector2(-5, 0)
 emitting = false
 amount = 30
 lifetime = 2.0

@@ -42,7 +42,7 @@ func _physics_process(delta):
 		var collider = collision.get_collider()
 		if knockback_timer > 0.0:
 			for cam in get_tree().get_nodes_in_group("camera"):
-				cam.shake(1.5)
+				cam.shake(1.0)
 		
 		if knockback_timer > 0.0 and !collider.is_in_group("enemies"):
 			knockback_velocity = knockback_velocity.bounce(normal)

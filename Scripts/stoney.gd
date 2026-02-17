@@ -1,15 +1,22 @@
 extends CharacterBody2D
 
 @export var explosion_scene = preload("res://Scenes/MuddyExplosion.tscn")
+@export var jump_effect_scene = preload("res://Scenes/jump_effects.tscn")
 
 @export var speed := 250
-@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
-@onready var color_rect: ColorRect = $ColorRect
-@onready var color_rect_2: ColorRect = $ColorRect2
-@onready var jump_effect: GPUParticles2D = $JumpEffect
+@onready var animated_sprite_2d: AnimatedSprite2D = $Visuals/AnimatedSprite2D
+@onready var color_rect: ColorRect = $Visuals/ColorRect
+@onready var direction_timer: Timer = $DirectionTimer
+@onready var visuals: Node2D = $Visuals
 
 @onready var player := get_tree().get_first_node_in_group("player")
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
+
+@export var aggro_range: float = 800.0
+@export var lose_range: float = 1000.0
+var chasing := false
+
+var emitting_particles = false
 
 var direction := Vector2(1, 1).normalized()
 var health = 20
@@ -33,22 +40,37 @@ func _physics_process(delta):
 		velocity = current_knockback
 		knockback_timer -= delta
 
-	elif animated_sprite_2d.frame >= 5 and animated_sprite_2d.frame <= 12 and health > 0:
+	elif animated_sprite_2d.frame >= 5 and animated_sprite_2d.frame <= 10 and health > 0:
 		if player:
-			nav_agent.target_position = player.global_position
-			if not nav_agent.is_navigation_finished():
-				var next_pos = nav_agent.get_next_path_position()
-				direction = (next_pos - global_position).normalized()
-				velocity = direction * speed
-		animated_sprite_2d.flip_h = direction.x > 0
-		color_rect.visible = direction.x < 0
-		color_rect_2.visible = direction.x > 0
+			var distance = global_position.distance_to(player.global_position)
 
-	elif animated_sprite_2d.frame == 13:
-		jump_effect.restart()
-		velocity = Vector2.ZERO
+			# Start chasing
+			if not chasing and distance <= aggro_range:
+				chasing = true
+
+			# Stop chasing
+			elif chasing and distance >= lose_range:
+				chasing = false
+
+			if chasing:
+				nav_agent.target_position = player.global_position
+
+				if not nav_agent.is_navigation_finished():
+					var next_pos = nav_agent.get_next_path_position()
+					direction = (next_pos - global_position).normalized()
+					velocity = direction * speed
+			else:
+				velocity = direction * speed
+
+		visuals.scale.x = -1 if direction.x > 0 else 1
+
 	else:
 		velocity = Vector2.ZERO
+	
+	if animated_sprite_2d.frame == 10 and chasing:
+		play_jump_effects()
+		for cam in get_tree().get_nodes_in_group("camera"):
+			cam.shake(0.25)
 	
 	move_and_slide()
 	
@@ -56,9 +78,6 @@ func _physics_process(delta):
 	if collision:
 		var normal = collision.get_normal()
 		var collider = collision.get_collider()
-		
-		if collider.is_in_group("player"):
-			collider.take_damage(1, global_position, knockback_strength_player)
 		
 		if knockback_timer > 0.0 and !collider.is_in_group("enemies"):
 			knockback_velocity = knockback_velocity.bounce(normal)
@@ -97,5 +116,41 @@ func explode(enemy):
 	get_parent().add_child(explosion)
 	explosion.emitting = true
 	
+	health = 0
 	emit_signal("enemy_died")
 	enemy.queue_free()
+
+func play_jump_effects():
+	if emitting_particles:
+		return
+	
+	var effects = jump_effect_scene.instantiate()
+	get_tree().current_scene.add_child(effects)
+	effects.global_position = global_position
+
+	emitting_particles = true
+
+	var frames = [
+		effects.get_node("JumpEffect"),
+		effects.get_node("JumpEffect2"),
+		effects.get_node("JumpEffect3")
+	]
+
+	for i in range(frames.size()):
+		if health <= 0:  # stop if enemy is dead
+			break
+		frames[i].restart()
+		await get_tree().create_timer(0.2).timeout
+		if i > 0:
+			frames[i-1].visible = false
+
+	if is_instance_valid(effects):
+		effects.queue_free()
+
+	emitting_particles = false
+
+
+func _on_direction_timer_timeout() -> void:
+	var new_timer = randf_range(2, 5)
+	direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
+	direction_timer.wait_time = new_timer

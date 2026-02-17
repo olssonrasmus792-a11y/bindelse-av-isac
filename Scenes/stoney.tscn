@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://cwo7ty8gxg4fn"]
+[gd_scene load_steps=18 format=3 uid="uid://cwo7ty8gxg4fn"]
 
 [ext_resource type="Script" uid="uid://ikkptpfealcp" path="res://Scripts/stoney.gd" id="1_mwejy"]
 [ext_resource type="Texture2D" uid="uid://i8m1aosksca8" path="res://Textures/Enemies/Rocky jump.png" id="1_nw4po"]
@@ -39,17 +39,9 @@ region = Rect2(4200, 0, 600, 600)
 atlas = ExtResource("1_nw4po")
 region = Rect2(4800, 0, 600, 600)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_cxqfq"]
-atlas = ExtResource("1_nw4po")
-region = Rect2(5400, 0, 600, 600)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_gf5sf"]
 atlas = ExtResource("1_nw4po")
 region = Rect2(6000, 0, 600, 600)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_aaguo"]
-atlas = ExtResource("1_nw4po")
-region = Rect2(6600, 0, 600, 600)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8ihl4"]
 atlas = ExtResource("1_nw4po")
@@ -94,13 +86,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_v3ir7")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_cxqfq")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_gf5sf")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_aaguo")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_8ihl4")
@@ -110,82 +96,42 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_68jwf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mwejy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y5ntv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hi8wa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xh2lw")
 }],
 "loop": true,
 "name": &"default",
-"speed": 13.0
+"speed": 10.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fcq7u"]
 size = Vector2(108, 56)
 
-[sub_resource type="Gradient" id="Gradient_mwejy"]
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_y5ntv"]
-gradient = SubResource("Gradient_mwejy")
-width = 256
-height = 256
-use_hdr = true
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 1)
-
-[sub_resource type="Gradient" id="Gradient_y5ntv"]
-colors = PackedColorArray(0.74978, 0.74978, 0.74977994, 1, 1, 1, 1, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_hi8wa"]
-gradient = SubResource("Gradient_y5ntv")
-
-[sub_resource type="Gradient" id="Gradient_hi8wa"]
-offsets = PackedFloat32Array(0, 0.6603774, 1)
-colors = PackedColorArray(0.44705883, 0.30980393, 0.12941177, 1, 0.57254905, 0.4, 0.18039216, 1, 0.57254905, 0.4, 0.18039216, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_xh2lw"]
-gradient = SubResource("Gradient_hi8wa")
-
-[sub_resource type="Curve" id="Curve_mwejy"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.43939394, 0.92134833), 0.0, 0.0, 0, 0, Vector2(0.76515156, 0.5842697), 0.0, 0.0, 0, 0, Vector2(1, 0.19101131), 0.0, 0.0, 0, 0]
-point_count = 4
-
-[sub_resource type="CurveTexture" id="CurveTexture_y5ntv"]
-curve = SubResource("Curve_mwejy")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bspdm"]
-particle_flag_disable_z = true
-emission_shape = 3
-emission_box_extents = Vector3(60, 1, 1)
-velocity_pivot = Vector3(0, -2, 0)
-direction = Vector3(0, -10, 0)
-spread = 40.0
-flatness = 1.0
-initial_velocity_min = 80.0
-initial_velocity_max = 140.0
-gravity = Vector3(0, 300, 0)
-damping_min = 20.0
-damping_max = 40.0
-scale_min = 0.02
-scale_max = 0.03
-scale_curve = SubResource("CurveTexture_y5ntv")
-color_ramp = SubResource("GradientTexture1D_xh2lw")
-color_initial_ramp = SubResource("GradientTexture1D_hi8wa")
-collision_mode = 1
-collision_friction = 0.0
-collision_bounce = 0.84
-
 [node name="Stoney" type="CharacterBody2D" groups=["enemies"]]
 motion_mode = 1
 script = ExtResource("1_mwejy")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Visuals"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -40.0
+offset_left = -52.0
 offset_top = 16.0
-offset_right = 64.0
+offset_right = 52.0
 offset_bottom = 24.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -193,47 +139,22 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 color = Color(0, 0, 0, 0.19607843)
 
-[node name="ColorRect2" type="ColorRect" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -63.0
-offset_top = 16.0
-offset_right = 41.0
-offset_bottom = 24.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-color = Color(0, 0, 0, 0.19607843)
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(11, 0)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals"]
+z_index = 1
 scale = Vector2(0.383, 0.383)
 sprite_frames = SubResource("SpriteFrames_0km8m")
 autoplay = "default"
-frame_progress = 0.7057131
+frame = 4
 offset = Vector2(-28.720655, -104.438644)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(10, -8)
+position = Vector2(0, -10)
 shape = SubResource("RectangleShape2D_fcq7u")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 
-[node name="JumpEffect" type="GPUParticles2D" parent="."]
-position = Vector2(11, 16)
-emitting = false
-amount = 40
-texture = SubResource("GradientTexture2D_y5ntv")
-interp_to_end = 0.01
-one_shot = true
-speed_scale = 1.5
-explosiveness = 1.0
-randomness = 0.5
-collision_base_size = 2.0
-local_coords = true
-process_material = SubResource("ParticleProcessMaterial_bspdm")
+[node name="DirectionTimer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[connection signal="timeout" from="DirectionTimer" to="." method="_on_direction_timer_timeout"]
