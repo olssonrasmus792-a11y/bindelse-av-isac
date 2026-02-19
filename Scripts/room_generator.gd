@@ -3,8 +3,8 @@ extends Node2D
 @onready var enemies: Node2D = $"../Enemies"
 @export var room_scenes = [
 	preload("res://Scenes/room.tscn"),
-	preload("res://Scenes/room2.tscn"),
-	preload("res://Scenes/room3.tscn")
+	#preload("res://Scenes/room2.tscn"),
+	#preload("res://Scenes/room3.tscn")
 ]
 @export var player_scene = preload("res://Scenes/player.tscn")
 @export var chest_scene = preload("res://Scenes/Chest.tscn")

@@ -15,13 +15,17 @@ extends CharacterBody2D
 @onready var health_panel: PanelContainer = $"../UI/health_panel"
 @onready var stamina_panel: PanelContainer = $"../UI/stamina_panel"
 @onready var attack_area: Area2D = $AttackArea
-@onready var bat_sprite: AnimatedSprite2D = $AttackArea/BatSprite
+@onready var sword_sprite: AnimatedSprite2D = $AttackArea/SwordSprite
 @onready var color_timer: Timer = $ColorTimer
 @onready var ambient_light: CanvasModulate = $"../Ambient Light"
 @onready var death_particles: GPUParticles2D = $Visuals/DeathParticles
 @onready var damage_vignette: TextureRect = $"../UI/DamageVignette"
 
 enum ColorState { YELLOW, RED, GREEN }
+
+@onready var sword_base_position = sword_sprite.position
+@onready var sword_base_rotation = sword_sprite.rotation
+@onready var sword_base_scale = sword_sprite.scale
 
 var spawn_pos
 var damage = 4
@@ -79,7 +83,7 @@ func _ready() -> void:
 	point_light_2d.color = Color.LIGHT_YELLOW
 	roll_light.color = Color.LIGHT_YELLOW
 	death_particles.emitting = false
-	bat_sprite.visible = true
+	sword_sprite.visible = true
 	update_health()
 	update_stamina_ui()
 
@@ -121,8 +125,11 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("attack") and !attacking and !recharging and stamina > 0 and !rolling:
 		attacking = true
 		attack_timer.start(0.2)
+		play_sword_swing()
 		stamina -= 1
 		update_stamina_ui()
+		await get_tree().create_timer(0.1).timeout
+		attack_area.monitoring = true
 	
 	if event.is_action_pressed("swap_color") and !attacking and !switching_color:
 		next_color()
@@ -158,10 +165,54 @@ func _on_roll_timer_timeout() -> void:
 
 func handle_attacking():
 	if attacking and !is_dead:
-		attack_area.monitoring = true
+		pass
 	else:
 		attack_area.monitoring = false
 
+func play_sword_swing():
+	var t = create_tween()
+	t.set_parallel(false)
+
+	# Anticipation
+	t.tween_property(sword_sprite, "rotation", sword_base_rotation + deg_to_rad(-20), 0.15)
+
+	# Snap
+	var tw = t.tween_property(sword_sprite, "rotation", sword_base_rotation + deg_to_rad(90), 0.1)
+	tw.set_trans(Tween.TRANS_EXPO)
+	tw.set_ease(Tween.EASE_OUT)
+
+	# Overshoot
+	tw = t.tween_property(sword_sprite, "rotation", sword_base_rotation + deg_to_rad(80), 0.08)
+	tw.set_trans(Tween.TRANS_BACK)
+	tw.set_ease(Tween.EASE_OUT)
+
+	
+	# Return rotation
+	t.tween_property(sword_sprite, "rotation", sword_base_rotation, 0.12)
+
+
+func sword_smear():
+	var t = create_tween()
+	await get_tree().create_timer(0.1).timeout
+	t.tween_property(sword_sprite, "scale", sword_base_scale * Vector2(1.6, 0.7), 0.03)
+	t.tween_property(sword_sprite, "scale", sword_base_scale, 0.03).set_delay(0.03)
+
+
+func spawn_afterimages():
+	for i in 10:
+		var ghost = sword_sprite.duplicate()
+		add_child(ghost)
+		ghost.global_position = sword_sprite.global_position
+		ghost.rotation = sword_sprite.rotation
+		ghost.scale = sword_sprite.scale
+		ghost.modulate = Color(1, 1, 1, 0.8)
+		ghost.z_index -= 1
+
+		var t = create_tween()
+		t.tween_property(ghost, "modulate:a", 0.0, 0.15)
+		t.tween_callback(ghost.queue_free)
+
+		await get_tree().create_timer(0.02).timeout
 
 func handle_color():
 	if switching_color:
@@ -180,6 +231,9 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 		for cam in get_tree().get_nodes_in_group("camera"):
 			cam.shake(0.75)
 		hit_stop(0.05, 0.25)
+	
+	if body.is_in_group("barrel"):
+		body.hit()
 
 func _on_attack_timer_timeout() -> void:
 	attack_cooldown.start(0.5)
@@ -254,7 +308,7 @@ func handle_animations(delta):
 	roll_collision.disabled = true
 	roll_light.visible = false
 	point_light_2d.visible = true
-	bat_sprite.visible = true
+	sword_sprite.visible = true
 	
 	point_light_2d.energy = lerp(point_light_2d.energy, target_energy, lerp_speed)
 	roll_light.energy = lerp(roll_light.energy, target_energy, lerp_speed)
@@ -263,7 +317,7 @@ func handle_animations(delta):
 		death_light_time += delta * 4  # speed of pulsing
 		point_light_2d.energy = death_light_base + sin(death_light_time) * death_light_amplitude
 		animated_sprite_2d.play("Idle" + str(health_state))
-		bat_sprite.visible = false
+		sword_sprite.visible = false
 	
 	if rolling:
 		visuals.scale.x = -1 if input_direction.x > 0 else 1
@@ -275,7 +329,7 @@ func handle_animations(delta):
 		roll_light.visible = true
 		point_light_2d.visible = false
 		
-		bat_sprite.visible = false
+		sword_sprite.visible = false
 	elif input_direction:
 		animated_sprite_2d.play("Run" + str(health_state))
 	else:
@@ -284,9 +338,6 @@ func handle_animations(delta):
 	
 	if input_direction.x:
 		visuals.scale.x = -1 if input_direction.x < 0 else 1
-	
-	if attacking:
-		bat_sprite.play("Attack")
 
 func die():
 	is_dead = true

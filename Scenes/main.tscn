@@ -95,15 +95,12 @@ color = Color(0.103743605, 0.103743516, 0.103743516, 1)
 position = Vector2(576, 320)
 script = ExtResource("3_8gbba")
 
-[node name="BatSprite" parent="Player/AttackArea" index="0"]
-frame_progress = 0.0
-
 [node name="RollTimer" type="Timer" parent="Player" groups=["timers"]]
 wait_time = 0.4
 one_shot = true
 
 [node name="AttackTimer" type="Timer" parent="Player" groups=["timers"]]
-wait_time = 0.1
+wait_time = 0.2
 one_shot = true
 
 [node name="AttackCooldown" type="Timer" parent="Player" groups=["timers"]]

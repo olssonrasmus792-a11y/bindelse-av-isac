@@ -1,6 +1,6 @@
 [gd_scene load_steps=20 format=3 uid="uid://b4qmvkb0gafpl"]
 
-[ext_resource type="Script" uid="uid://02ah20uwe80r" path="res://Scenes/jump_effects.gd" id="1_13wyp"]
+[ext_resource type="Script" uid="uid://02ah20uwe80r" path="res://Scripts/jump_effects.gd" id="1_13wyp"]
 
 [sub_resource type="Gradient" id="Gradient_mwejy"]
 offsets = PackedFloat32Array(0)
@@ -135,7 +135,7 @@ speed_scale = 0.5
 explosiveness = 1.0
 collision_base_size = 3.0
 local_coords = true
-trail_lifetime = 0.09999999999999999
+trail_lifetime = 0.1
 trail_sections = 12
 process_material = SubResource("ParticleProcessMaterial_gf5sf")
 
@@ -165,19 +165,16 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_bspdm")
 
 [node name="Collision" type="Area2D" parent="."]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Collision"]
 shape = SubResource("CircleShape2D_yk1pb")
 
 [node name="Collision2" type="Area2D" parent="."]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Collision2"]
 shape = SubResource("CircleShape2D_13wyp")
 
 [node name="Collision3" type="Area2D" parent="."]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Collision3"]
 shape = SubResource("CircleShape2D_fu3cw")

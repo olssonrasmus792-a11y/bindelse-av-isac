@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=4 uid="uid://dxipiie22wvb4"]
+[gd_scene load_steps=39 format=4 uid="uid://dxipiie22wvb4"]
 
 [ext_resource type="Texture2D" uid="uid://cn0m8rp6vv4pn" path="res://Textures/Tiles/Brown brick tile.png" id="1_ci6au"]
 [ext_resource type="Script" uid="uid://bnbcfmjx5x3xm" path="res://Scripts/room.gd" id="1_fr46g"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://h8djb4sx8vhl" path="res://Textures/Tiles/Drop corner.png" id="11_03u2k"]
 [ext_resource type="Texture2D" uid="uid://nbsolrltr2nk" path="res://Textures/Tiles/Wall 3.png" id="11_wph6n"]
 [ext_resource type="Texture2D" uid="uid://b3dgkrexylwy" path="res://Textures/Tiles/Wall 4.png" id="13_03u2k"]
+[ext_resource type="PackedScene" uid="uid://d4b5t5w22h0ko" path="res://Scenes/barrel.tscn" id="14_5fqy3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4gp0m"]
 texture = ExtResource("2_gkney")
@@ -308,6 +309,7 @@ energy = 0.5
 texture = SubResource("GradientTexture2D_5fqy3")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+visible = false
 position = Vector2(8, -8)
 navigation_polygon = SubResource("NavigationPolygon_03u2k")
 
@@ -320,6 +322,27 @@ carve_navigation_mesh = true
 vertices = PackedVector2Array(1016, 840, 1088, 808, 1168, 840, 1200, 912, 1168, 992, 1096, 1016, 1016, 992, 984, 912)
 affect_navigation_mesh = true
 carve_navigation_mesh = true
+
+[node name="Barrel" parent="." instance=ExtResource("14_5fqy3")]
+position = Vector2(1016, 1240)
+
+[node name="Barrel2" parent="." instance=ExtResource("14_5fqy3")]
+position = Vector2(1313, 1077)
+
+[node name="Barrel3" parent="." instance=ExtResource("14_5fqy3")]
+position = Vector2(723, 713)
+
+[node name="Barrel4" parent="." instance=ExtResource("14_5fqy3")]
+position = Vector2(503, 979)
+
+[node name="Barrel5" parent="." instance=ExtResource("14_5fqy3")]
+position = Vector2(1060, 563)
+
+[node name="Barrel6" parent="." instance=ExtResource("14_5fqy3")]
+position = Vector2(1591, 651)
+
+[node name="Barrel7" parent="." instance=ExtResource("14_5fqy3")]
+position = Vector2(541, 1291)
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

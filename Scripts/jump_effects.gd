@@ -21,12 +21,18 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if jump_effect.emitting:
 		collision.monitoring = true
-		
+	else:
+		collision.monitoring = false
+	
 	if jump_effect_2.emitting:
 		collision_2.monitoring = true
-		
+	else:
+		collision_2.monitoring = false
+	
 	if jump_effect_3.emitting:
 		collision_3.monitoring = true
+	else:
+		collision_3.monitoring = false
 
 
 func _on_collision_body_entered(body: Node2D) -> void:

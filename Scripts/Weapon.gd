@@ -1,7 +1,7 @@
 extends Area2D
 
 
-@export var distance_from_player := 40
+@export var distance_from_player := 15
 
 func _process(_delta):
 	var mouse_pos = get_global_mouse_position()

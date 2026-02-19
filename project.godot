@@ -32,6 +32,7 @@ upgrade_screen=""
 player=""
 camera=""
 damageEffect=""
+barrel=""
 
 [input]
 

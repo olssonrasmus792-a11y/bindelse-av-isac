@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://i070iqw33271"]
+
+[ext_resource type="Script" uid="uid://cukff1cbdas8p" path="res://heart.gd" id="1_fhu63"]
+[ext_resource type="Texture2D" uid="uid://8br0jwustric" path="res://Textures/heart.png" id="2_fhu63"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jc2lb"]
+radius = 32.0
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_fhu63")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -10.0
+offset_top = 14.0
+offset_right = 10.0
+offset_bottom = 18.0
+color = Color(0, 0, 0, 0.19607843)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1, 0)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_fhu63")
+
+[node name="PickUpArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickUpArea"]
+shape = SubResource("CircleShape2D_jc2lb")
+
+[connection signal="body_entered" from="PickUpArea" to="." method="_on_pick_up_area_body_entered"]
+[connection signal="body_exited" from="PickUpArea" to="." method="_on_pick_up_area_body_exited"]
