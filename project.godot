@@ -33,6 +33,7 @@ player=""
 camera=""
 damageEffect=""
 barrel=""
+sword=""
 
 [input]
 

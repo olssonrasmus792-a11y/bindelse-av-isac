@@ -6,7 +6,9 @@
 [resource]
 script = ExtResource("1_yrc72")
 icon = ExtResource("1_7mtkq")
-card_name = "Damage"
+card_name = "Big Biceps"
+max_level = 5
 description = "Increase your melee damage"
-rarity = "Epic"
+rarity = "Rare"
+increase = "+1 Damage"
 metadata/_custom_type_script = "uid://c01qet416k22c"

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://cyh8kfxpe7q0n"]
+
+[ext_resource type="Texture2D" uid="uid://b5hstghnbkq8u" path="res://Textures/Bulb hp full.png" id="1_ou3je"]
+[ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="2_7logj"]
+
+[resource]
+script = ExtResource("2_7logj")
+icon = ExtResource("1_ou3je")
+card_name = "Cardio Enjoyer"
+max_level = 5
+description = "Regenerate your stamina faster"
+rarity = "Rare"
+increase = "-0.25 Seconds"
+metadata/_custom_type_script = "uid://c01qet416k22c"

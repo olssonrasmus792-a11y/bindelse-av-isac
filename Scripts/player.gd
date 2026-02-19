@@ -28,8 +28,10 @@ enum ColorState { YELLOW, RED, GREEN }
 @onready var sword_base_scale = sword_sprite.scale
 
 var spawn_pos
-var damage = 4
-var crit_chance = 0.1
+
+@export var damage = 4
+@export var crit_chance = 0.1
+var enemies_hit := {}
 
 @export var max_speed = 500
 @export var speed = max_speed
@@ -39,7 +41,7 @@ var crit_chance = 0.1
 
 @export var max_stamina = 5
 @export var stamina = max_stamina
-@export var stamina_regen = 1.25 # Sekunder per stamina
+@export var stamina_regen = 1.5 # Sekunder per stamina
 
 @export var color_state: ColorState
 
@@ -88,7 +90,6 @@ func _ready() -> void:
 	update_health()
 	update_stamina_ui()
 
-
 func _physics_process(delta):
 	if !is_dead:
 		get_input()
@@ -107,10 +108,8 @@ func _physics_process(delta):
 		invulnerability_timer -= delta
 		modulate.a = alpha
 
-
 func get_input():
 	input_direction = Input.get_vector("left", "right", "up", "down")
-
 
 func _input(event: InputEvent) -> void:
 	if (event.is_action_pressed("attack") or event.is_action_pressed("roll")) and stamina <= 0:
@@ -125,11 +124,15 @@ func _input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("attack") and !attacking and !recharging and stamina > 0 and !rolling:
 		attacking = true
-		attack_timer.start(0.2)
+		if GameState.taken_upgrades.has("Attack Speed"):
+			attack_timer.start(0.15)
+		else:
+			attack_timer.start(0.25)
 		play_sword_swing()
 		stamina -= 1
 		update_stamina_ui()
-		await get_tree().create_timer(0.1).timeout
+		await get_tree().create_timer(0.05).timeout
+		enemies_hit.clear()
 		attack_area.monitoring = true
 	
 	if event.is_action_pressed("swap_color") and !attacking and !switching_color:
@@ -147,9 +150,9 @@ func handle_movement(delta):
 	var target_velocity: Vector2
 
 	if rolling:
-		velocity = roll_direction * (speed * roll_speed_mult) + (velocity / 5)
+		velocity = roll_direction * (max_speed * roll_speed_mult) + (velocity / 5)
 	else:
-		target_velocity = input_direction * speed
+		target_velocity = input_direction * max_speed
 
 	if input_direction != Vector2.ZERO or rolling:
 		velocity = velocity.move_toward(target_velocity, acceleration)
@@ -159,10 +162,8 @@ func handle_movement(delta):
 	velocity += knockback_velocity
 	knockback_velocity = knockback_velocity.lerp(Vector2.ZERO, knockback_decay * delta)
 
-
 func _on_roll_timer_timeout() -> void:
 	rolling = false
-
 
 func handle_attacking():
 	if attacking and !is_dead:
@@ -175,7 +176,7 @@ func play_sword_swing():
 	t.set_parallel(false)
 
 	# Anticipation
-	t.tween_property(sword_sprite, "rotation", sword_base_rotation + deg_to_rad(-20), 0.15)
+	t.tween_property(sword_sprite, "rotation", sword_base_rotation + deg_to_rad(-20), 0.05)
 
 	# Snap
 	var tw = t.tween_property(sword_sprite, "rotation", sword_base_rotation + deg_to_rad(90), 0.1)
@@ -191,13 +192,11 @@ func play_sword_swing():
 	# Return rotation
 	t.tween_property(sword_sprite, "rotation", sword_base_rotation, 0.12)
 
-
 func sword_smear():
 	var t = create_tween()
 	await get_tree().create_timer(0.1).timeout
 	t.tween_property(sword_sprite, "scale", sword_base_scale * Vector2(1.6, 0.7), 0.03)
 	t.tween_property(sword_sprite, "scale", sword_base_scale, 0.03).set_delay(0.03)
-
 
 func spawn_afterimages():
 	for i in 10:
@@ -223,9 +222,13 @@ func handle_color():
 		target_energy = 0.4 + health * 0.15
 		lerp_speed = 0.2
 
-
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemies"):
+		if enemies_hit.has(body):
+			return  # already hit this attack
+		
+		enemies_hit[body] = true
+		
 		var total_damage = damage
 		var text_color = Color.WHITE
 		var ft_text = "-" + str(int(total_damage))
@@ -240,6 +243,7 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 		
 		for cam in get_tree().get_nodes_in_group("camera"):
 			cam.shake(0.75)
+		
 		hit_stop(0.05, 0.25)
 		
 		var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
@@ -247,8 +251,8 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 		ft.text = ft_text
 		ft.modulate = text_color
 		ft.global_position = body.global_position
-		get_tree().current_scene.add_child(ft)  # Or a dedicated UI node
-	
+		get_tree().current_scene.add_child(ft)
+
 	if body.is_in_group("barrel"):
 		body.hit()
 
@@ -361,7 +365,6 @@ func die():
 	death_particles.emitting = true
 	health = 0
 	death_light_time = 0
-	print("you are dying...")
 	
 	for cam in get_tree().get_nodes_in_group("camera"):
 		cam.shake(1.5)

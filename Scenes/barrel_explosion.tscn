@@ -43,6 +43,7 @@ turbulence_noise_strength = 0.0
 turbulence_noise_scale = 3.077
 
 [node name="BarrelExplosion" type="GPUParticles2D"]
+z_index = 2
 emitting = false
 amount = 40
 texture = SubResource("GradientTexture2D_w6ax0")

@@ -7,3 +7,4 @@ class_name CardData
 @export var max_level: int = 2
 @export var description: String
 @export var rarity: String
+@export var increase: String

@@ -336,7 +336,7 @@ shadow_enabled = true
 texture = SubResource("GradientTexture2D_v0iea")
 texture_scale = 2.0
 
-[node name="AttackArea" type="Area2D" parent="."]
+[node name="AttackArea" type="Area2D" parent="." groups=["sword"]]
 rotation = 0.05905618
 script = ExtResource("1_6t5aa")
 

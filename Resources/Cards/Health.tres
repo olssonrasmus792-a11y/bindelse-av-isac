@@ -6,7 +6,9 @@
 [resource]
 script = ExtResource("1_5ksdi")
 icon = ExtResource("1_vtkyv")
-card_name = "Health"
+card_name = "Healthy Boy"
+max_level = 3
 description = "Increase your maximum health by 1"
 rarity = "Rare"
+increase = "+1 HP"
 metadata/_custom_type_script = "uid://c01qet416k22c"

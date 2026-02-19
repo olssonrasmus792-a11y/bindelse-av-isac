@@ -9,6 +9,7 @@ signal upgrade_chosen(card_data: CardData)
 @onready var level_label = $Panel/Label2
 @onready var desc_label: Label = $Panel/Label3
 @onready var rarity_label: Label = $Panel/Label4
+@onready var increase_label: Label = $Panel/Label5
 @onready var upgrade_button = $Panel/Button
 @onready var icon: TextureRect = $Panel/Panel/TextureRect
 @onready var panel: Panel = $Panel
@@ -35,17 +36,20 @@ func _ready():
 		"Legendary":
 			rarity_color = Color.GOLD
 	
-	print("Rarity Color: ", card_data.rarity)
-	
 	if card_data:
 		name_label.text = card_data.card_name
 		desc_label.text = card_data.description
 		rarity_label.text = card_data.rarity
 		icon.texture = card_data.icon
-		level_label.text = "Level: " + str(card_data.current_level)
+		if card_data.current_level + 1 >= card_data.max_level:
+			level_label.text = "Level: " + str(card_data.current_level) + "  -> " +"Max"
+		else:
+			level_label.text = "Level: " + str(card_data.current_level) + "  -> " + str(card_data.current_level + 1)
+		increase_label.text = card_data.increase
 		style.border_color = rarity_color
 		inner_style.border_color = rarity_color
 		rarity_label.add_theme_color_override("font_color", rarity_color)
+		increase_label.add_theme_color_override("font_color", Color.GREEN)
 	
 	panel.add_theme_stylebox_override("panel", style)
 	inner_panel.add_theme_stylebox_override("panel", inner_style)

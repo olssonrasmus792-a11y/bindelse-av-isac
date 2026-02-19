@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://dpyelpdfd3qbh"]
+
+[ext_resource type="Texture2D" uid="uid://dgebsljj7cksq" path="res://Textures/Bat_icon.png" id="1_fiqkj"]
+[ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="2_hauxm"]
+
+[resource]
+script = ExtResource("2_hauxm")
+icon = ExtResource("1_fiqkj")
+card_name = "Speedy Attacks"
+max_level = 5
+description = "Increase your attack speed"
+rarity = "Rare"
+increase = "-0.25 Seconds"
+metadata/_custom_type_script = "uid://c01qet416k22c"

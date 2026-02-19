@@ -165,18 +165,18 @@ theme_override_font_sizes/font_size = 18
 text = "Spawn Enemy"
 
 [node name="health_panel" type="PanelContainer" parent="UI"]
-offset_left = 16.0
+offset_left = 9.0
 offset_top = 8.0
-offset_right = 16.0
+offset_right = 9.0
 offset_bottom = 8.0
 
 [node name="health_bar" type="HBoxContainer" parent="UI/health_panel"]
 layout_mode = 2
 
 [node name="stamina_panel" type="PanelContainer" parent="UI"]
-offset_left = 24.0
+offset_left = 22.0
 offset_top = 64.0
-offset_right = 24.0
+offset_right = 22.0
 offset_bottom = 64.0
 
 [node name="stamina_bar" type="HBoxContainer" parent="UI/stamina_panel"]
@@ -184,9 +184,9 @@ layout_mode = 2
 
 [node name="KeyPanel" type="Panel" parent="UI"]
 offset_left = 8.0
-offset_top = 608.0
+offset_top = 568.0
 offset_right = 152.0
-offset_bottom = 640.0
+offset_bottom = 600.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/KeyPanel"]
 layout_mode = 0
@@ -217,13 +217,13 @@ flip_v = true
 
 [node name="CoinPanel" type="Panel" parent="UI"]
 offset_left = 8.0
-offset_top = 568.0
-offset_right = 152.0
-offset_bottom = 600.0
+offset_top = 608.0
+offset_right = 168.0
+offset_bottom = 640.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/CoinPanel"]
 layout_mode = 0
-offset_right = 152.0
+offset_right = 160.0
 offset_bottom = 33.0
 alignment = 1
 

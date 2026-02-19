@@ -1,7 +1,7 @@
 extends Area2D
 
-
 @export var distance_from_player := 15
+@export var scale_factor = 1.0
 
 func _process(_delta):
 	var mouse_pos = get_global_mouse_position()
@@ -13,6 +13,7 @@ func _process(_delta):
 		rotation = dir.angle()
 	
 	if get_global_mouse_position().x < global_position.x:
-		scale.y = -1
+		scale.y = -1 * scale_factor
 	else:
-		scale.y = 1
+		scale.y = 1 * scale_factor
+	scale.x = 1 * scale_factor

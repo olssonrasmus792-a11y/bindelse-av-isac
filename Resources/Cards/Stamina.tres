@@ -6,7 +6,9 @@
 [resource]
 script = ExtResource("1_rfl6a")
 icon = ExtResource("1_l0rtg")
-card_name = "Stamina"
+card_name = "Cardio Maxxing"
+max_level = 5
 description = "Increase your maximum stamina by 1"
 rarity = "Rare"
+increase = "+1 Energy"
 metadata/_custom_type_script = "uid://c01qet416k22c"

@@ -25,8 +25,9 @@ func _process(delta: float) -> void:
 	timer.text = format_time(time_left)
 
 func format_time(seconds: float) -> String:
-	var m = int(seconds) / 60
-	var s = int(seconds) % 60
+	var total := int(seconds)
+	var m := int(floor(total / 60.0))
+	var s := total % 60
 	return "%02d:%02d" % [m, s]
 
 

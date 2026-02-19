@@ -9,6 +9,8 @@ extends CharacterBody2D
 var direction := Vector2(1, 1).normalized()
 var health = 12
 
+@export var scale_factor = 1.0
+
 @export var knockback_strength_player = 325
 @export var knockback_strength = 2250
 @export var knockback_duration = 1.0
@@ -23,6 +25,8 @@ func _ready() -> void:
 	point_light_2d.visible = false
 
 func _physics_process(delta):
+	scale = Vector2(scale_factor, scale_factor)
+	
 	if knockback_timer > 0.0:
 		velocity = knockback_velocity
 		knockback_timer -= delta
