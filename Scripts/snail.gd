@@ -3,8 +3,8 @@ extends CharacterBody2D
 @export var explosion_scene = preload("res://Scenes/MuddyExplosion.tscn")
 @export var trail_scene = preload("res://Scenes/snail_trail.tscn")
 
-@export var speed := 200
-@export var chase_speed_mult := 1.6
+@export var speed := 300
+@export var chase_speed_mult := 1.5
 @onready var visuals: Node2D = $Visuals
 @onready var animated_sprite_2d: AnimatedSprite2D = $Visuals/AnimatedSprite2D
 @onready var direction_timer: Timer = $DirectionTimer

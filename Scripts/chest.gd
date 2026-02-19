@@ -5,10 +5,10 @@ extends Node2D
 
 var player_is_close = false
 var chest_opened = false
-var gold_amount
+var coin_amount
 
 func _ready() -> void:
-	gold_amount = randi_range(2, 5)
+	coin_amount = randi_range(2, 5)
 	label.modulate.a = 0
 	animated_sprite_2d.play("Closed")
 
@@ -23,7 +23,7 @@ func _input(event: InputEvent) -> void:
 		
 		if GameState.keys > 0:
 			label.position.y = -88
-			label.text = "+" + str(gold_amount) + " Gold"
+			label.text = "+" + str(coin_amount) + " Coins"
 			label.modulate = Color.YELLOW
 			open_chest()
 		else:
@@ -35,7 +35,6 @@ func _input(event: InputEvent) -> void:
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
 		player_is_close = true
-		
 
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
@@ -52,4 +51,4 @@ func open_chest():
 	chest_opened = true
 	gpu_particles_2d.emitting = true
 	GameState.keys -= 1
-	GameState.gold += gold_amount
+	GameState.coins += coin_amount

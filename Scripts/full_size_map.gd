@@ -21,7 +21,7 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("map") and (!get_tree().paused or opening):
 		opening = !sub_viewport_container.visible
-		
+
 		sub_viewport_container.visible = opening
 		label.visible = opening
 		label_2.visible = !opening

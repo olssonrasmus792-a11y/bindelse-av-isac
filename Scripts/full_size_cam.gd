@@ -1,7 +1,7 @@
 extends Camera2D
 
 var zoom_speed := 0.1
-var min_zoom := 0.04
+var min_zoom := 0.05
 var max_zoom := 2.0
 var drag_speed = 0.8
 
@@ -9,6 +9,8 @@ var dragging := false
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
+	zoom.x = 0.5
+	zoom.y = zoom.x
 
 func _input(event):
 	if event is InputEventMouseButton:

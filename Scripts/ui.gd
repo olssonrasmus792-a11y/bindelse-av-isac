@@ -1,7 +1,7 @@
 extends CanvasLayer
 @onready var label: Label = $Label
 @onready var keys: Label = $KeyPanel/HBoxContainer/Keys
-@onready var gold: Label = $GoldPanel/HBoxContainer/Gold
+@onready var coins: Label = $CoinPanel/HBoxContainer/Coins
 @onready var timer: Label = $Timer
 var time_left
 var start_time = 300.0
@@ -18,7 +18,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	keys.text = "Keys: " + str(GameState.keys)
-	gold.text = "Gold: " + str(GameState.gold)
+	coins.text = "Coins: " + str(GameState.coins)
 	label.text = "Kills: " + str(GameState.kills)
 	
 	time_left -= delta

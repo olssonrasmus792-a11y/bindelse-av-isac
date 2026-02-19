@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 @export var explosion_scene = preload("res://Scenes/MuddyExplosion.tscn")
 
-@export var speed := 250
+@export var speed := 275
 @onready var sprite_2d: Sprite2D = $Sprite2D
 @onready var point_light_2d: PointLight2D = $PointLight2D
 
@@ -52,6 +52,12 @@ func _physics_process(delta):
 
 		if collider.is_in_group("enemies") and knockback_timer > 0.0:
 			explode(collider)
+			var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
+			var ft = floating_text_scene.instantiate()
+			ft.text = "Execute!"
+			ft.modulate = Color.RED
+			ft.global_position = collider.global_position
+			get_tree().current_scene.add_child(ft)  # Or a dedicated UI node
 		
 		if collider.is_in_group("player") and knockback_timer > 0.0:
 			collider.take_damage(1, global_position, knockback_strength_player)

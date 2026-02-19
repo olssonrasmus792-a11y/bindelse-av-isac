@@ -54,10 +54,14 @@ stretch = true
 metadata/_edit_use_anchors_ = true
 
 [node name="SubViewport" type="SubViewport" parent="FullSizeMap"]
+disable_3d = true
 handle_input_locally = false
-sdf_scale = 0
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+vrs_update_mode = 2
 size = Vector2i(1152, 648)
-render_target_update_mode = 0
+size_2d_override = Vector2i(1920, 1080)
+size_2d_override_stretch = true
 script = ExtResource("2_q0mm3")
 
 [node name="FullSizeCam" type="Camera2D" parent="FullSizeMap/SubViewport"]

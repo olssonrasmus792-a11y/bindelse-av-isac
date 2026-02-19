@@ -215,19 +215,19 @@ expand_mode = 2
 flip_h = true
 flip_v = true
 
-[node name="GoldPanel" type="Panel" parent="UI"]
+[node name="CoinPanel" type="Panel" parent="UI"]
 offset_left = 8.0
 offset_top = 568.0
 offset_right = 152.0
 offset_bottom = 600.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/GoldPanel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/CoinPanel"]
 layout_mode = 0
 offset_right = 152.0
 offset_bottom = 33.0
 alignment = 1
 
-[node name="Gold" type="Label" parent="UI/GoldPanel/HBoxContainer"]
+[node name="Coins" type="Label" parent="UI/CoinPanel/HBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.97982806, 0.8728079, 0, 1)
@@ -237,11 +237,11 @@ theme_override_constants/shadow_offset_y = 2
 theme_override_constants/shadow_outline_size = 5
 theme_override_fonts/font = ExtResource("8_6iyac")
 theme_override_font_sizes/font_size = 24
-text = "Gold: 0"
+text = "Coins: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="UI/GoldPanel/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="UI/CoinPanel/HBoxContainer"]
 layout_mode = 2
 texture = ExtResource("9_d1ilt")
 expand_mode = 2

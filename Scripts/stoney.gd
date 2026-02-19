@@ -3,7 +3,7 @@ extends CharacterBody2D
 @export var explosion_scene = preload("res://Scenes/MuddyExplosion.tscn")
 @export var jump_effect_scene = preload("res://Scenes/jump_effects.tscn")
 
-@export var speed := 250
+@export var speed := 325
 @onready var animated_sprite_2d: AnimatedSprite2D = $Visuals/AnimatedSprite2D
 @onready var color_rect: ColorRect = $Visuals/ColorRect
 @onready var direction_timer: Timer = $DirectionTimer

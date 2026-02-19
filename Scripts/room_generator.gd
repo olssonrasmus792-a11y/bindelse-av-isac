@@ -1,11 +1,16 @@
 extends Node2D
 
 @onready var enemies: Node2D = $"../Enemies"
+
 @export var room_scenes = [
 	preload("res://Scenes/room.tscn"),
-	#preload("res://Scenes/room2.tscn"),
-	#preload("res://Scenes/room3.tscn")
+	preload("res://Scenes/room2.tscn"),
+	preload("res://Scenes/room3.tscn"),
+	preload("res://Scenes/room4.tscn"),
+	preload("res://Scenes/room_shop.tscn")
 ]
+@export var room_weights = [5, 5, 5, 5, 1] # Hur stor chans att ett rum spawnar jämfört med andra
+
 @export var player_scene = preload("res://Scenes/player.tscn")
 @export var chest_scene = preload("res://Scenes/Chest.tscn")
 @onready var player: CharacterBody2D = $"../Player"
@@ -83,7 +88,12 @@ func place_room(grid_pos: Vector2):
 		if !(placed_rooms.has(room_left) or placed_rooms.has(room_right) or placed_rooms.has(room_up) or placed_rooms.has(room_down)):
 			return
 	
-	var room_scene = room_scenes.pick_random()
+	var room_scene
+	if grid_pos == start_pos:
+		room_scene = room_scenes[0]
+	else:
+		room_scene = pick_weighted_room()
+	
 	var room = room_scene.instantiate()
 	add_child(room)
 	
@@ -117,7 +127,6 @@ func place_room(grid_pos: Vector2):
 	room.swap_cam.connect(_on_room_swap_cam)
 
 func _on_room_swap_cam(pos):
-	#camera_2d.global_position = pos
 	camera_2d.limit_left = pos.x - room_width/2 + tile_size * 3.25
 	camera_2d.limit_right = pos.x + room_width/2 + tile_size * 2.75
 	camera_2d.limit_bottom = pos.y + room_height/2 + tile_size * 1.75
@@ -138,3 +147,16 @@ func change_door_state(room, room2, dir, dir2, state):
 	placed_rooms[room2].get_node("Doors/Door_" + str(dir2) + "/CollisionShape2D").set_deferred("disabled", !state)
 	placed_rooms[room2].get_node("Doors/Door_" + str(dir2) + "/LightOccluder2D").visible = state
 	return
+
+func pick_weighted_room():
+	var total = 0
+	for w in room_weights:
+		total += w
+
+	var roll = randi() % total
+
+	var cumulative = 0
+	for i in range(room_scenes.size()):
+		cumulative += room_weights[i]
+		if roll < cumulative:
+			return room_scenes[i]

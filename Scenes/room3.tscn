@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=4 uid="uid://bp8oan8a7sbqp"]
+[gd_scene load_steps=37 format=4 uid="uid://bp8oan8a7sbqp"]
 
 [ext_resource type="Script" uid="uid://bnbcfmjx5x3xm" path="res://Scripts/room.gd" id="1_0bpve"]
 [ext_resource type="Texture2D" uid="uid://cet2td4yrlbk6" path="res://Textures/Tiles/ground.png" id="2_lnly0"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://cl7oe5optmoi6" path="res://Textures/Tiles/Platform.png" id="9_2pw20"]
 [ext_resource type="Texture2D" uid="uid://h8djb4sx8vhl" path="res://Textures/Tiles/Drop corner.png" id="11_4ig2l"]
 [ext_resource type="Texture2D" uid="uid://nbsolrltr2nk" path="res://Textures/Tiles/Wall 3.png" id="11_nacy4"]
+[ext_resource type="PackedScene" uid="uid://d4b5t5w22h0ko" path="res://Scenes/barrel.tscn" id="13_4ig2l"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4gp0m"]
 texture = ExtResource("2_lnly0")
@@ -295,6 +296,7 @@ energy = 0.5
 texture = SubResource("GradientTexture2D_nacy4")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+visible = false
 position = Vector2(8, -8)
 navigation_polygon = SubResource("NavigationPolygon_nacy4")
 
@@ -302,6 +304,29 @@ navigation_polygon = SubResource("NavigationPolygon_nacy4")
 vertices = PackedVector2Array(1016, 840, 1088, 808, 1168, 840, 1200, 912, 1168, 992, 1096, 1016, 1016, 992, 984, 912)
 affect_navigation_mesh = true
 carve_navigation_mesh = true
+
+[node name="Barrels" type="Node2D" parent="."]
+
+[node name="Barrel" parent="Barrels" instance=ExtResource("13_4ig2l")]
+position = Vector2(83, 165)
+
+[node name="Barrel2" parent="Barrels" instance=ExtResource("13_4ig2l")]
+position = Vector2(2185, 1238)
+
+[node name="Barrel3" parent="Barrels" instance=ExtResource("13_4ig2l")]
+position = Vector2(2145, 257)
+
+[node name="Barrel4" parent="Barrels" instance=ExtResource("13_4ig2l")]
+position = Vector2(-333, 1656.9999)
+
+[node name="Barrel5" parent="Barrels" instance=ExtResource("13_4ig2l")]
+position = Vector2(-251.99998, 1683)
+
+[node name="Barrel6" parent="Barrels" instance=ExtResource("13_4ig2l")]
+position = Vector2(1551, 1456.9999)
+
+[node name="Barrel7" parent="Barrels" instance=ExtResource("13_4ig2l")]
+position = Vector2(-200, 609)
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
