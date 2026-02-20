@@ -31,6 +31,7 @@ var spawn_pos
 
 @export var damage = 4
 @export var crit_chance = 0.1
+@export var attack_speed = 0.5
 var enemies_hit := {}
 
 @export var max_speed = 500
@@ -124,10 +125,7 @@ func _input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("attack") and !attacking and !recharging and stamina > 0 and !rolling:
 		attacking = true
-		if GameState.taken_upgrades.has("Attack Speed"):
-			attack_timer.start(0.15)
-		else:
-			attack_timer.start(0.25)
+		attack_timer.start(0.25)
 		play_sword_swing()
 		stamina -= 1
 		update_stamina_ui()
@@ -150,9 +148,9 @@ func handle_movement(delta):
 	var target_velocity: Vector2
 
 	if rolling:
-		velocity = roll_direction * (max_speed * roll_speed_mult) + (velocity / 5)
+		velocity = roll_direction * (speed * roll_speed_mult) + (velocity / 5)
 	else:
-		target_velocity = input_direction * max_speed
+		target_velocity = input_direction * speed
 
 	if input_direction != Vector2.ZERO or rolling:
 		velocity = velocity.move_toward(target_velocity, acceleration)
@@ -257,7 +255,7 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 		body.hit()
 
 func _on_attack_timer_timeout() -> void:
-	attack_cooldown.start(0.5)
+	attack_cooldown.start(attack_speed)
 	recharging = true
 	attacking = false
 

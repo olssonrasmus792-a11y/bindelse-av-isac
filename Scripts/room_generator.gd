@@ -9,7 +9,7 @@ extends Node2D
 	preload("res://Scenes/room4.tscn"),
 	preload("res://Scenes/room_shop.tscn")
 ]
-@export var room_weights = [5, 5, 5, 5, 1] # Hur stor chans att ett rum spawnar jämfört med andra
+@export var room_weights = [5, 5, 5, 5, 10] # Hur stor chans att ett rum spawnar jämfört med andra
 
 @export var player_scene = preload("res://Scenes/player.tscn")
 @export var chest_scene = preload("res://Scenes/Chest.tscn")
@@ -117,7 +117,7 @@ func place_room(grid_pos: Vector2):
 	placed_rooms[grid_pos] = room
 	room.doors_finalized()
 	
-	if randf() < chest_spawn_chance and grid_pos != start_pos:
+	if randf() < chest_spawn_chance and grid_pos != start_pos and room_scene != room_scenes[4]:
 		spawnChest(room)
 	
 	if grid_pos == start_pos:

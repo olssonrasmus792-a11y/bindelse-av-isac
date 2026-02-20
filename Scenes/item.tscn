@@ -1,0 +1,113 @@
+[gd_scene load_steps=7 format=3 uid="uid://wrfivba0rg5d"]
+
+[ext_resource type="Script" uid="uid://c4arvh1yfyp4" path="res://Scripts/item.gd" id="1_76mu4"]
+[ext_resource type="Texture2D" uid="uid://ca82twfvheobr" path="res://Textures/icon.svg" id="2_u06aw"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="3_u06aw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ys7tt"]
+size = Vector2(320, 256)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u06aw"]
+bg_color = Color(0.1740711, 0.21042678, 0.2194421, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(1, 1, 1, 1)
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="Theme" id="Theme_btogu"]
+Panel/styles/panel = SubResource("StyleBoxFlat_u06aw")
+
+[node name="Node2D" type="Node2D"]
+z_index = 2
+script = ExtResource("1_76mu4")
+
+[node name="Shadow" type="ColorRect" parent="."]
+offset_left = -32.0
+offset_top = 40.0
+offset_right = 32.0
+offset_bottom = 56.0
+color = Color(0.15, 0.15, 0.15, 0.27450982)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_u06aw")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_ys7tt")
+
+[node name="PopUp" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel" type="Panel" parent="PopUp"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -1.6
+anchor_right = -1.6
+offset_left = 128.0
+offset_top = -192.0
+offset_right = 384.0
+offset_bottom = 192.0
+pivot_offset = Vector2(-64, 192)
+theme = SubResource("Theme_btogu")
+metadata/_edit_use_anchors_ = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PopUp/Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.15625
+anchor_top = 0.20833333
+anchor_right = 0.84375
+anchor_bottom = 0.7916667
+pivot_offset = Vector2(-168, 112)
+text = "mi bombo habluhbhluhbluhb bhlub luh."
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="PopUp/Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.16666667
+pivot_offset = Vector2(-128, 192)
+theme_override_fonts/font = ExtResource("3_u06aw")
+text = "blahblah"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label2" type="Label" parent="PopUp/Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.8333333
+anchor_right = 1.0
+anchor_bottom = 1.0
+pivot_offset = Vector2(-128, -128)
+theme_override_fonts/font = ExtResource("3_u06aw")
+text = "Purchase (E) : 5 coins"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Line2D" type="Line2D" parent="PopUp/Panel"]
+points = PackedVector2Array(32, 64, 224, 64)
+closed = true
+width = 5.0
+
+[node name="Line2D2" type="Line2D" parent="PopUp/Panel"]
+position = Vector2(0, 256)
+points = PackedVector2Array(32, 64, 224, 64)
+closed = true
+width = 5.0
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

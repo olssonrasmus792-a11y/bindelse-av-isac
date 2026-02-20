@@ -12,6 +12,7 @@ var rooms_cleared := 0
 var enemies_per_room = 10
 
 var taken_upgrades := {}
+var taken_items := {}
 
 func reset_game():
 	keys = 0

@@ -307,6 +307,7 @@ turbulence_initial_displacement_min = -100.0
 turbulence_initial_displacement_max = 100.0
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
+z_index = 1
 motion_mode = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

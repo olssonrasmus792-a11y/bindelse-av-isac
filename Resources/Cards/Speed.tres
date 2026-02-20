@@ -10,5 +10,5 @@ card_name = "Speedy"
 max_level = 5
 description = "Increase your movement speed"
 rarity = "Uncommon"
-increase = "+20% Speed"
+increase = "+15% Speed"
 metadata/_custom_type_script = "uid://c01qet416k22c"

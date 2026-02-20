@@ -103,7 +103,8 @@ func apply_upgrade(card_data: CardData):
 		"Big Biceps":
 			player.damage += 1
 		"Speedy":
-			player.max_speed *= 1.2
+			player.max_speed *= 1.15
+			player.speed = player.max_speed
 		"Healthy Boy":
 			player.max_health += 1
 			player.health += 1
@@ -115,6 +116,8 @@ func apply_upgrade(card_data: CardData):
 			player.stamina_regen -= 0.25
 		"Big Ass Sword":
 			sword.scale_factor *= 1.5
+		"Speedy Attacks":
+			player.attack_speed -= 0.25
 
 
 func close_upgrade_screen():

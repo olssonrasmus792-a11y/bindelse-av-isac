@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drpkue2j6vg0j"
-path="res://.godot/imported/Guy.png-c9d20bd35fce27dc9da46afa36c05980.ctex"
+uid="uid://ompf2g311mi1"
+path="res://.godot/imported/Tile set shop.png-3b7cc2cb414f1f7ec8a94eadd9be4d0a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Guy.png"
-dest_files=["res://.godot/imported/Guy.png-c9d20bd35fce27dc9da46afa36c05980.ctex"]
+source_file="res://Textures/Tiles/Tile set shop.png"
+dest_files=["res://.godot/imported/Tile set shop.png-3b7cc2cb414f1f7ec8a94eadd9be4d0a.ctex"]
 
 [params]
 
