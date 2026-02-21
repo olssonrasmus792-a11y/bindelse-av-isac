@@ -1,6 +1,8 @@
 extends Node2D
 @onready var room: Node2D = $"."
 
+@onready var guy := get_tree().get_first_node_in_group("guy")
+
 @export var enemy_scenes = [
 	preload("res://Scenes/Muddy.tscn"),
 	preload("res://Scenes/Snail.tscn"),
@@ -56,7 +58,6 @@ func _ready() -> void:
 	
 	room_entered = false
 	room_closed = false
-	clear_light.visible = false
 	color_rect.visible = true
 	camera_normal_zoom = camera.zoom.x
 	camera_map_zoom = camera.zoom.x / 3
@@ -81,10 +82,12 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		switch_camera()
 		light_up_room()
 		room_entered = true
+		guy.player_is_in_room = true
 		player_is_in_room = true
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body.name == "Player":
+		guy.player_is_in_room = false
 		player_is_in_room = false
 
 func switch_camera():

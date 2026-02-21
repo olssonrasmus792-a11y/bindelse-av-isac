@@ -3,6 +3,7 @@ class_name ShopItem
 
 @export var data: ItemData
 @onready var player := get_tree().get_first_node_in_group("player")
+@onready var guy := get_tree().get_nodes_in_group("guy")
 
 var base_y
 var time := 0.0
@@ -43,11 +44,15 @@ func _input(event: InputEvent) -> void:
 		if GameState.coins >= data.price:
 			buy_item()
 		else:
-			pass
+			for guys in guy:
+				guys.not_enough_money()
 
 func buy_item():
 	GameState.coins -= data.price
 	GameState.taken_items[data.name] = true
+	
+	for guys in guy:
+		guys.item_bought()
 	
 	queue_free()
 

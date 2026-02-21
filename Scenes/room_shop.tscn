@@ -1,6 +1,6 @@
-[gd_scene load_steps=47 format=4 uid="uid://yhwnpjkypqxp"]
+[gd_scene load_steps=48 format=4 uid="uid://yhwnpjkypqxp"]
 
-[ext_resource type="Script" uid="uid://d26n35vkphehu" path="res://Scenes/room_shop.gd" id="1_uv0rh"]
+[ext_resource type="Script" uid="uid://d26n35vkphehu" path="res://Scripts/room_shop.gd" id="1_uv0rh"]
 [ext_resource type="Texture2D" uid="uid://cet2td4yrlbk6" path="res://Textures/Tiles/ground.png" id="2_g5wir"]
 [ext_resource type="Texture2D" uid="uid://cn0m8rp6vv4pn" path="res://Textures/Tiles/Brown brick tile.png" id="3_h3mm1"]
 [ext_resource type="Texture2D" uid="uid://gcgs8ruhlerx" path="res://Textures/Tiles/Drop edge.png" id="4_8klot"]
@@ -15,10 +15,11 @@
 [ext_resource type="Texture2D" uid="uid://h8djb4sx8vhl" path="res://Textures/Tiles/Drop corner.png" id="12_stka6"]
 [ext_resource type="Texture2D" uid="uid://c6dkdm13lljme" path="res://Textures/Tiles/Floor.png" id="13_r2uel"]
 [ext_resource type="PackedScene" uid="uid://d4b5t5w22h0ko" path="res://Scenes/barrel.tscn" id="14_f3edp"]
-[ext_resource type="Script" uid="uid://ml08hgrgs230" path="res://Scenes/item_spawns.gd" id="16_h3mm1"]
+[ext_resource type="Script" uid="uid://ml08hgrgs230" path="res://Scripts/item_spawns.gd" id="16_h3mm1"]
 [ext_resource type="PackedScene" uid="uid://c2p365w32k1w5" path="res://Scenes/Chest.tscn" id="17_8klot"]
 [ext_resource type="Texture2D" uid="uid://drpkue2j6vg0j" path="res://Textures/Guy.png" id="18_kjmdx"]
-[ext_resource type="Script" uid="uid://bipbqyvq5pf5b" path="res://Scenes/guy.gd" id="19_uv0rh"]
+[ext_resource type="Script" uid="uid://bipbqyvq5pf5b" path="res://Scripts/guy.gd" id="19_uv0rh"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="20_mbb8p"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4gp0m"]
 texture = ExtResource("2_g5wir")
@@ -158,7 +159,7 @@ colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 gradient = SubResource("Gradient_1teyb")
 width = 1000
 height = 1000
-fill = 1
+fill = 2
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
@@ -168,17 +169,16 @@ polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4), PackedInt32
 outlines = Array[PackedVector2Array]([PackedVector2Array(-408, 384, -304, 392, -232, 384, -136, 392, -48, 384, 40, 376, 104, 320, 152, 256, 176, 160, 168, 8, 2592, 8, 2592, 1232, 2560, 1232, 2480, 1272, 2416, 1376, 2408, 1472, 2416, 1568, 2408, 1648, 2416, 1808, -184, 1808, -408, 1808)])
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uv0rh"]
-bg_color = Color(0.6665689, 0.6665687, 0.6665685, 0.7882353)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.5958281, 0.5958282, 0.5958279, 1)
-border_blend = true
+bg_color = Color(0.42352942, 0.42352942, 0.42352942, 0.78431374)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.851769, 0.8517689, 0.85176885, 1)
 corner_radius_top_left = 100
 corner_radius_top_right = 100
 corner_radius_bottom_right = 100
-corner_radius_bottom_left = 100
+shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="Theme" id="Theme_mbb8p"]
 Label/styles/normal = SubResource("StyleBoxFlat_uv0rh")
@@ -343,9 +343,10 @@ position = Vector2(1080, 776)
 [node name="Lamps" type="Node2D" parent="."]
 
 [node name="PointLight2D2" type="PointLight2D" parent="Lamps"]
-position = Vector2(1101, 895.00006)
-scale = Vector2(3.2040002, 2)
-energy = 0.5
+position = Vector2(1100, 899.9999)
+scale = Vector2(3.3999994, 2.1999996)
+color = Color(1, 1, 0.9411765, 1)
+energy = 1.25
 texture = SubResource("GradientTexture2D_avhjg")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
@@ -414,7 +415,7 @@ position = Vector2(-96, 304)
 [node name="Chest2" parent="Chests" instance=ExtResource("17_8klot")]
 position = Vector2(2303, 304)
 
-[node name="Guy" type="Sprite2D" parent="."]
+[node name="Guy" type="Sprite2D" parent="." groups=["guy"]]
 modulate = Color(0.6941206, 0.6941206, 0.6941205, 1)
 position = Vector2(1099, 932)
 scale = Vector2(0.49850008, 0.49850008)
@@ -428,18 +429,22 @@ z_index = 2
 anchors_preset = -1
 anchor_left = 0.75677
 anchor_top = -0.13390161
-anchor_right = 2.0045133
+anchor_right = 1.9964889
 anchor_bottom = 0.31143433
 offset_left = -250.0
 offset_top = -250.0
 offset_right = -250.00006
 offset_bottom = -250.0
 theme = SubResource("Theme_mbb8p")
+theme_override_fonts/font = ExtResource("20_mbb8p")
 theme_override_font_sizes/font_size = 36
 text = "wassup broski"
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 3
 metadata/_edit_use_anchors_ = true
+
+[node name="ChatHideTimer" type="Timer" parent="Guy"]
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

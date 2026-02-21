@@ -13,7 +13,6 @@ func _ready() -> void:
 
 func spawn_random_item(pos):
 	if all_items.is_empty():
-		push_error("No possible_items assigned!")
 		return
 
 	var item = item_scene.instantiate()
@@ -26,7 +25,6 @@ func load_items():
 
 	var dir = DirAccess.open("res://Resources/Items")
 	if dir == null:
-		push_error("Items folder not found!")
 		return
 
 	dir.list_dir_begin()
@@ -40,5 +38,3 @@ func load_items():
 		file_name = dir.get_next()
 
 	dir.list_dir_end()
-
-	print("Loaded items:", all_items.size())
