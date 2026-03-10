@@ -1,11 +1,21 @@
-[gd_scene load_steps=7 format=3 uid="uid://wrfivba0rg5d"]
+[gd_scene load_steps=10 format=3 uid="uid://wrfivba0rg5d"]
 
 [ext_resource type="Script" uid="uid://c4arvh1yfyp4" path="res://Scripts/item.gd" id="1_76mu4"]
-[ext_resource type="Texture2D" uid="uid://ca82twfvheobr" path="res://Textures/icon.svg" id="2_u06aw"]
 [ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="3_u06aw"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ys7tt"]
-size = Vector2(320, 256)
+[sub_resource type="Gradient" id="Gradient_1teyb"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_76mu4"]
+gradient = SubResource("Gradient_1teyb")
+width = 1000
+height = 1000
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_76mu4"]
+radius = 152.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u06aw"]
 bg_color = Color(0.1740711, 0.21042678, 0.2194421, 1)
@@ -23,26 +33,52 @@ corner_radius_bottom_left = 20
 [sub_resource type="Theme" id="Theme_btogu"]
 Panel/styles/panel = SubResource("StyleBoxFlat_u06aw")
 
+[sub_resource type="Gradient" id="Gradient_76mu4"]
+offsets = PackedFloat32Array(0, 0.75333333, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.56666666, 0.56666666, 0.56666666, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_u06aw"]
+gradient = SubResource("Gradient_76mu4")
+width = 1000
+height = 1000
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
 [node name="Node2D" type="Node2D"]
 z_index = 2
 script = ExtResource("1_76mu4")
 
 [node name="Shadow" type="ColorRect" parent="."]
 offset_left = -32.0
-offset_top = 40.0
+offset_top = 32.0
 offset_right = 32.0
-offset_bottom = 56.0
+offset_bottom = 48.0
 color = Color(0.15, 0.15, 0.15, 0.27450982)
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_u06aw")
+[node name="PointLight2D2" type="PointLight2D" parent="Shadow"]
+position = Vector2(32.000015, -32.000015)
+scale = Vector2(0.30400002, 0.304)
+color = Color(1, 1, 0.9411765, 1)
+energy = 0.75
+texture = SubResource("GradientTexture2D_76mu4")
+
+[node name="Sprite2D" type="TextureRect" parent="."]
+modulate = Color(0.9407874, 0.9407874, 0.9407874, 1)
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+expand_mode = 2
+stretch_mode = 5
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("RectangleShape2D_ys7tt")
+shape = SubResource("CircleShape2D_76mu4")
 
 [node name="PopUp" type="Control" parent="."]
+z_index = 2
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -108,6 +144,13 @@ position = Vector2(0, 256)
 points = PackedVector2Array(32, 64, 224, 64)
 closed = true
 width = 5.0
+
+[node name="PointLight2D2" type="PointLight2D" parent="PopUp"]
+position = Vector2(191.99998, 0)
+scale = Vector2(0.272, 0.4)
+color = Color(1, 1, 0.9411765, 1)
+energy = 0.75
+texture = SubResource("GradientTexture2D_u06aw")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

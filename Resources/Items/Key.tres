@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://kaawdx4hh4wx"]
+
+[ext_resource type="Texture2D" uid="uid://hptj7iwfcn87" path="res://Textures/Key.png" id="1_g0v2i"]
+[ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="2_hlvcg"]
+
+[resource]
+script = ExtResource("2_hlvcg")
+name = "Key"
+description = "Ts opens stuff or sum like that"
+price = 2
+icon = ExtResource("1_g0v2i")
+metadata/_custom_type_script = "uid://i88s36u6b2ej"

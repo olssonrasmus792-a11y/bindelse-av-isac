@@ -253,6 +253,7 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 
 	if body.is_in_group("barrel"):
 		body.hit()
+		body.apply_knockback(global_position)
 
 func _on_attack_timer_timeout() -> void:
 	attack_cooldown.start(attack_speed)

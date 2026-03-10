@@ -42,4 +42,4 @@ func _process(delta):
 
 
 func shake(strength):
-	shake_strength = strength
+	shake_strength = strength * GameSettings.screen_shake_strength

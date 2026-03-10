@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://kisqr7huo3ym"]
+
+[ext_resource type="Texture2D" uid="uid://drpkue2j6vg0j" path="res://Textures/Guy.png" id="1_kypkd"]
+[ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="2_vo5o6"]
+
+[resource]
+script = ExtResource("2_vo5o6")
+name = "Guy"
+description = "Action figure of Guy himself. This item does absolutely nothing, but Guy gets money if you buy it..."
+price = 100
+icon = ExtResource("1_kypkd")
+metadata/_custom_type_script = "uid://i88s36u6b2ej"

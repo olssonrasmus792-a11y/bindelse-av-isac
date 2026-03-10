@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://bnlvpjlhxaial"]
+
+[ext_resource type="Texture2D" uid="uid://8br0jwustric" path="res://Textures/heart.png" id="1_hvypd"]
+[ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="2_6tcug"]
+
+[resource]
+script = ExtResource("2_6tcug")
+name = "Heart"
+description = "Increase your max health by 1 and also restore all of your health"
+price = 20
+icon = ExtResource("1_hvypd")
+metadata/_custom_type_script = "uid://i88s36u6b2ej"

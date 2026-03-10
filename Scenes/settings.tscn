@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dmy3lyd4fxv85"]
+[gd_scene load_steps=3 format=3 uid="uid://dmy3lyd4fxv85"]
 
 [ext_resource type="Script" uid="uid://cm6887315ju8" path="res://Scripts/settings.gd" id="1_4geyq"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="2_i44u3"]
 
 [node name="Settings" type="Control"]
 layout_mode = 3
@@ -18,33 +19,134 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.24840015, 0.24840018, 0.24840015, 1)
+color = Color(0.24705882, 0.24705882, 0.24705882, 1)
 
 [node name="BackButton" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.020875003
-anchor_top = 0.02455556
-anchor_right = 0.42781252
-anchor_bottom = 0.124555565
-offset_left = -0.04800415
-offset_top = 0.08799744
-offset_right = 0.15997314
-offset_bottom = 0.28796387
+anchor_left = 0.2638889
+anchor_top = 0.024691358
+anchor_right = 0.7361111
+anchor_bottom = 0.09876543
 grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 26
+focus_mode = 0
+theme_override_fonts/font = ExtResource("2_i44u3")
+theme_override_font_sizes/font_size = 24
 text = "its time to go back to the main menu"
 metadata/_edit_use_anchors_ = true
 
-[node name="CheckButton" type="CheckButton" parent="."]
+[node name="ScreenSize" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 1
+anchor_left = 0.048611112
+anchor_top = 0.09876543
+anchor_right = 0.22222222
+anchor_bottom = 0.17592597
+offset_bottom = -3.0517578e-05
+metadata/_edit_use_anchors_ = true
+
+[node name="MenuButton" type="MenuButton" parent="ScreenSize"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2
+anchor_right = 0.835
+anchor_bottom = 0.2884615
+grow_horizontal = 2
+focus_mode = 0
+theme_override_fonts/font = ExtResource("2_i44u3")
+text = "Window Type"
+icon_alignment = 1
+switch_on_hover = true
+item_count = 3
+popup/item_0/text = "Fullscreen"
+popup/item_0/id = 0
+popup/item_1/text = "Windowed Fullscreen"
+popup/item_1/id = 1
+popup/item_2/text = "Windowed Mode"
+popup/item_2/id = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Line2D" type="Line2D" parent="ScreenSize"]
+points = PackedVector2Array(40, 24, 168, 24)
+width = 2.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 448.0
-offset_top = 584.0
-offset_right = 640.0
-offset_bottom = 616.0
+offset_left = 416.0
+offset_top = 128.0
+offset_right = 736.0
+offset_bottom = 568.0
+
+[node name="ScreenShakeStength" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="VBoxContainer/ScreenShakeStength"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="ScreenShakeLabel" type="Label" parent="VBoxContainer/ScreenShakeStength"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.025
+anchor_top = 0.16
+anchor_right = 0.975
+anchor_bottom = 0.65
+theme_override_fonts/font = ExtResource("2_i44u3")
 theme_override_font_sizes/font_size = 16
-text = "Dark mode or sum"
+text = "Screen shake strength: 100%"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="ScreenShakeSlider" type="HSlider" parent="VBoxContainer/ScreenShakeStength"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.025
+anchor_top = 0.6
+anchor_right = 0.975
+anchor_bottom = 1.0
+focus_mode = 0
+mouse_default_cursor_shape = 15
+value = 100.0
+metadata/_edit_use_anchors_ = true
+
+[node name="DarkMode" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="VBoxContainer/DarkMode"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="CheckBox" type="CheckBox" parent="VBoxContainer/DarkMode"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2625
+anchor_top = 0.112499855
+anchor_right = 0.7375
+anchor_bottom = 0.88750017
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("2_i44u3")
+theme_override_font_sizes/font_size = 16
+text = "  True dark mode"
+metadata/_edit_use_anchors_ = true
 
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
-[connection signal="toggled" from="CheckButton" to="." method="_on_check_button_toggled"]
+[connection signal="pressed" from="ScreenSize/MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="value_changed" from="VBoxContainer/ScreenShakeStength/ScreenShakeSlider" to="." method="_on_screen_shake_slider_value_changed"]
+[connection signal="toggled" from="VBoxContainer/DarkMode/CheckBox" to="." method="_on_check_box_toggled"]

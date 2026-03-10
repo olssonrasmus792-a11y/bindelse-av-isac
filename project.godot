@@ -18,6 +18,7 @@ config/icon="res://Textures/icon.svg"
 [autoload]
 
 GameState="*res://Scripts/GameState.gd"
+GameSettings="*res://Scripts/GameSettings.gd"
 
 [display]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=4 uid="uid://yhwnpjkypqxp"]
+[gd_scene load_steps=49 format=4 uid="uid://yhwnpjkypqxp"]
 
 [ext_resource type="Script" uid="uid://d26n35vkphehu" path="res://Scripts/room_shop.gd" id="1_uv0rh"]
 [ext_resource type="Texture2D" uid="uid://cet2td4yrlbk6" path="res://Textures/Tiles/ground.png" id="2_g5wir"]
@@ -152,14 +152,24 @@ polygon = PackedVector2Array(1200.0001, -799.9999, 1200.0001, -599.9999, -199.99
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ilpkg"]
 size = Vector2(2752, 1560)
 
-[sub_resource type="Gradient" id="Gradient_1teyb"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+[sub_resource type="Gradient" id="Gradient_mbb8p"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.88, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.27317092, 0.27317092, 0.27317092, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_avhjg"]
-gradient = SubResource("Gradient_1teyb")
+gradient = SubResource("Gradient_mbb8p")
 width = 1000
 height = 1000
 fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mbb8p"]
+gradient = SubResource("Gradient_mbb8p")
+width = 1000
+height = 1000
+fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
@@ -346,8 +356,16 @@ position = Vector2(1080, 776)
 position = Vector2(1100, 899.9999)
 scale = Vector2(3.3999994, 2.1999996)
 color = Color(1, 1, 0.9411765, 1)
-energy = 1.25
+energy = 0.75
+blend_mode = 2
+shadow_color = Color(1, 1, 1, 0)
 texture = SubResource("GradientTexture2D_avhjg")
+
+[node name="PointLight2D3" type="PointLight2D" parent="Lamps"]
+position = Vector2(1096, 856)
+scale = Vector2(0.76800007, 0.288)
+color = Color(1, 1, 0.9411765, 1)
+texture = SubResource("GradientTexture2D_mbb8p")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 visible = false

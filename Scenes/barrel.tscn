@@ -1,26 +1,36 @@
-[gd_scene load_steps=4 format=3 uid="uid://d4b5t5w22h0ko"]
+[gd_scene load_steps=5 format=3 uid="uid://d4b5t5w22h0ko"]
 
 [ext_resource type="Script" uid="uid://4r5ayjffwgh3" path="res://Scripts/barrel.gd" id="1_m5w3l"]
 [ext_resource type="Texture2D" uid="uid://lyun75p0rj50" path="res://Textures/Barrel.png" id="2_rp70x"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_a12vh"]
-size = Vector2(108, 142)
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_m5w3l"]
+bounce = 1.0
 
-[node name="Barrel" type="StaticBody2D" groups=["barrel"]]
-scale = Vector2(0.55, 0.55)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_m5w3l"]
+radius = 38.090908
+height = 96.18182
+
+[node name="Barrel" type="RigidBody2D" groups=["barrel"]]
+physics_material_override = SubResource("PhysicsMaterial_m5w3l")
+gravity_scale = 0.0
+contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_m5w3l")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -56.0
-offset_top = 58.0
-offset_right = 58.0
-offset_bottom = 78.0
+offset_left = -36.363636
+offset_top = 36.363632
+offset_right = 36.363636
+offset_bottom = 50.90909
 color = Color(0, 0, 0, 0.19607843)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-1.9073486e-06, 1.9073486e-06)
+scale = Vector2(0.64090914, 0.64090914)
 texture = ExtResource("2_rp70x")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(2, 1)
-shape = SubResource("RectangleShape2D_a12vh")
+position = Vector2(0.9090918, 0.90908986)
+shape = SubResource("CapsuleShape2D_m5w3l")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

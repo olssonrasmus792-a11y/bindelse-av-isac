@@ -58,7 +58,7 @@ func _ready() -> void:
 	
 	room_entered = false
 	room_closed = false
-	color_rect.visible = true
+	color_rect.visible = false#true
 	camera_normal_zoom = camera.zoom.x
 	camera_map_zoom = camera.zoom.x / 3
 

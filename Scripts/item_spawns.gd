@@ -4,7 +4,6 @@ extends Node2D
 @onready var item_scene = preload("res://Scenes/item.tscn")
 @onready var spawn_points = $SpawnPoints.get_children()
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	load_items()
@@ -13,11 +12,19 @@ func _ready() -> void:
 
 func spawn_random_item(pos):
 	if all_items.is_empty():
-		return
+		return  # Nothing left to spawn
 
+	# Pick a random index
+	var index = randi() % all_items.size()
+	var item_data = all_items[index]
+
+	# Remove it from the list so it won't spawn again
+	all_items.remove_at(index)
+
+	# Instantiate the item and set it up
 	var item = item_scene.instantiate()
 	item.position = pos
-	item.data = all_items.pick_random()
+	item.data = item_data
 	add_child(item)
 
 func load_items():
