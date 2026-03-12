@@ -2,9 +2,11 @@ extends GPUParticles2D
 
 @onready var player := get_tree().get_first_node_in_group("player")
 
+var explosion_damage
+
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemies"):
-		var total_damage = player.damage
+		var total_damage = explosion_damage
 		var text_color = Color.WHITE
 		var ft_text = "-" + str(int(total_damage))
 		

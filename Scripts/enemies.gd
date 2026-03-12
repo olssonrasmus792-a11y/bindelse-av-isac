@@ -3,7 +3,13 @@ extends Node2D
 @export var enemy_scene := preload("res://Scenes/Muddy.tscn")
 @export var snail_scene := preload("res://Scenes/Snail.tscn")
 @export var stoney_scene := preload("res://Scenes/stoney.tscn")
+@export var clover_boss_scene := preload("res://Scenes/clover_boss.tscn")
 @onready var ui: CanvasLayer = $"../UI"
+
+var spawn_muddy = false
+var spawn_snail = false
+var spawn_stoney = false
+var spawn_clover_boss = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -14,15 +20,25 @@ func _process(_delta: float) -> void:
 	pass
 
 func spawn_enemy(pos: Vector2):
-	var muddy = enemy_scene.instantiate()
-	var snail = snail_scene.instantiate()
-	var stoney = stoney_scene.instantiate()
-	muddy.global_position = pos
-	snail.global_position = pos
-	stoney.global_position = pos
-	get_parent().add_child(muddy)
-	get_parent().add_child(snail)
-	get_parent().add_child(stoney)
+	if spawn_muddy:
+		var muddy = enemy_scene.instantiate()
+		muddy.global_position = pos
+		get_parent().add_child(muddy)
+	
+	if spawn_snail:
+		var snail = snail_scene.instantiate()
+		snail.global_position = pos
+		get_parent().add_child(snail)
+	
+	if spawn_stoney:
+		var stoney = stoney_scene.instantiate()
+		stoney.global_position = pos
+		get_parent().add_child(stoney)
+	
+	if spawn_clover_boss:
+		var clover_boss = clover_boss_scene.instantiate()
+		clover_boss.global_position = pos
+		get_parent().add_child(clover_boss)
 
 func _on_spawn_enemy_pressed() -> void:
 	for x in range(2):

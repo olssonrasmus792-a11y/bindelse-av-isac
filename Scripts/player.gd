@@ -143,6 +143,9 @@ func _input(event: InputEvent) -> void:
 		var upgrade_scene = get_tree().get_first_node_in_group("upgrade_screen")
 		get_tree().paused = true
 		upgrade_scene.spawn_random_cards(3)
+	
+	if event.is_action_pressed("c"):
+		GameState.coins += 10
 
 func handle_movement(delta):
 	var target_velocity: Vector2

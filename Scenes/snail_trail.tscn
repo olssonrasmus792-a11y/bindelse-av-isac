@@ -10,7 +10,7 @@ colors = PackedColorArray(0.44939846, 0.6096873, 0.2589245, 1, 0.7058824, 0.9137
 gradient = SubResource("Gradient_ijlu3")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h373p"]
-size = Vector2(38, 20)
+size = Vector2(28, 14)
 
 [node name="SnailTrail" type="Node2D"]
 script = ExtResource("1_62hch")
@@ -25,8 +25,7 @@ texture = SubResource("GradientTexture1D_62hch")
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-visible = false
-position = Vector2(0, 7)
+position = Vector2(2, 3)
 shape = SubResource("RectangleShape2D_h373p")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

@@ -50,11 +50,25 @@ func _input(event: InputEvent) -> void:
 func buy_item():
 	GameState.coins -= data.price
 	GameState.taken_items[data.name] = true
+	apply_item(data.name)
 	
 	for guys in guy:
 		guys.item_bought()
 	
 	queue_free()
+
+func apply_item(item_name):
+	match item_name:
+		"Heart":
+			player.max_health += 1
+			player.health = player.max_health
+			player.update_health()
+		"Barrel":
+			for barrels in get_tree().get_nodes_in_group("barrel"):
+				barrels.explosion_size *= 2
+				barrels.explosion_damage += 10000
+		"Sword":
+			GameState.enemies_per_room += 100
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):

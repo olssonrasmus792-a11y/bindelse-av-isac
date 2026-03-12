@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_vo5o6")
 name = "Guy"
-description = "Action figure of Guy himself. This item does absolutely nothing, but Guy gets money if you buy it..."
+description = "guy himself"
 price = 100
 icon = ExtResource("1_kypkd")
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

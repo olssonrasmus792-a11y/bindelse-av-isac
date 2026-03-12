@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bshmi8vo0kgb6"]
+
+[ext_resource type="Script" uid="uid://bq63j0vuyniyu" path="res://Scripts/clover_projectile.gd" id="1_4hg8v"]
+[ext_resource type="Texture2D" uid="uid://db2shrm8wye7b" path="res://Textures/Enemies/clove throw.png" id="1_tpbmr"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tpbmr"]
+radius = 19.104973
+
+[node name="CloverProjectile" type="Node2D"]
+script = ExtResource("1_4hg8v")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("1_tpbmr")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_tpbmr")
+
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]

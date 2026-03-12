@@ -24,6 +24,9 @@ var coin_spawn_chance = 0.20
 var key_spawn_chance = 0.01
 var hp_spawn_chance = 0.05
 
+var explosion_size = 1.0
+var explosion_damage = 4
+
 var health = 2
 
 func _physics_process(delta):
@@ -39,7 +42,10 @@ func hit():
 		
 		var explosion = explosion_scene.instantiate()
 		
+		explosion.scale = Vector2(explosion_size, explosion_size)
+		
 		explosion.global_position = position
+		explosion.explosion_damage = explosion_damage
 		get_parent().call_deferred("add_child", explosion)  # defer adding
 		explosion.emitting = true
 		
