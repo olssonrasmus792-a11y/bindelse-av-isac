@@ -55,10 +55,11 @@ position = Vector2(28, 16)
 scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_k0y6n")
 autoplay = "default"
-frame_progress = 0.99522257
+frame_progress = 0.53505987
 offset = Vector2(-200, -79.99999)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_tny20")
 

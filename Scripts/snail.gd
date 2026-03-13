@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
-@export var explosion_scene = preload("res://Scenes/MuddyExplosion.tscn")
-@export var trail_scene = preload("res://Scenes/snail_trail.tscn")
+@export var explosion_scene = preload("res://Scenes/Enemies/MuddyExplosion.tscn")
+@export var trail_scene = preload("res://Scenes/Enemies/snail_trail.tscn")
 
 @export var speed := 300
 @export var chase_speed_mult := 1.5
@@ -13,7 +13,7 @@ extends CharacterBody2D
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 
 var direction := Vector2(1, 1).normalized()
-var health = 16
+var health = 12
 
 @export var knockback_strength_player = 200
 @export var knockback_strength = 1500

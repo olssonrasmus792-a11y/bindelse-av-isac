@@ -7,6 +7,7 @@
 radius = 19.104973
 
 [node name="CloverProjectile" type="Node2D"]
+z_index = 1
 script = ExtResource("1_4hg8v")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

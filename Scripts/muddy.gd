@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@export var explosion_scene = preload("res://Scenes/MuddyExplosion.tscn")
+@export var explosion_scene = preload("res://Scenes/Enemies/MuddyExplosion.tscn")
 
 @export var speed := 275
 @onready var sprite_2d: Sprite2D = $Sprite2D

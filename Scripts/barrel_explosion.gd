@@ -3,6 +3,10 @@ extends GPUParticles2D
 @onready var player := get_tree().get_first_node_in_group("player")
 
 var explosion_damage
+var explosion_particles
+
+func _ready() -> void:
+	amount = explosion_particles
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemies"):

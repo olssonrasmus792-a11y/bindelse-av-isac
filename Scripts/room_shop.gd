@@ -4,9 +4,9 @@ extends Node2D
 @onready var guy := get_tree().get_first_node_in_group("guy")
 
 @export var enemy_scenes = [
-	preload("res://Scenes/Muddy.tscn"),
-	preload("res://Scenes/Snail.tscn"),
-	preload("res://Scenes/stoney.tscn")
+	preload("res://Scenes/Enemies/Muddy.tscn"),
+	preload("res://Scenes/Enemies/Snail.tscn"),
+	preload("res://Scenes/Enemies/stoney.tscn")
 ]
 @export var key_scene := preload("res://Scenes/Key.tscn")
 

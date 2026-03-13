@@ -1,8 +1,8 @@
 extends Node2D
 
-@export var enemy_scene := preload("res://Scenes/Muddy.tscn")
-@export var snail_scene := preload("res://Scenes/Snail.tscn")
-@export var stoney_scene := preload("res://Scenes/stoney.tscn")
+@export var enemy_scene := preload("res://Scenes/Enemies/Muddy.tscn")
+@export var snail_scene := preload("res://Scenes/Enemies/Snail.tscn")
+@export var stoney_scene := preload("res://Scenes/Enemies/stoney.tscn")
 @export var clover_boss_scene := preload("res://Scenes/clover_boss.tscn")
 @onready var ui: CanvasLayer = $"../UI"
 
@@ -41,7 +41,7 @@ func spawn_enemy(pos: Vector2):
 		get_parent().add_child(clover_boss)
 
 func _on_spawn_enemy_pressed() -> void:
-	for x in range(2):
+	for x in range(1):
 		spawn_enemy(Vector2(randf_range(400, 1600), randf_range(400, 1600)))
 
 func _on_spawn_enemies_signal(pos) -> void:

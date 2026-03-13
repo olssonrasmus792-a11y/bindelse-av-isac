@@ -66,7 +66,8 @@ func apply_item(item_name):
 		"Barrel":
 			for barrels in get_tree().get_nodes_in_group("barrel"):
 				barrels.explosion_size *= 2
-				barrels.explosion_damage += 10000
+				barrels.explosion_particles *= 2
+				barrels.explosion_damage += 2
 		"Sword":
 			GameState.enemies_per_room += 100
 

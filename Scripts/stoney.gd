@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
-@export var explosion_scene = preload("res://Scenes/MuddyExplosion.tscn")
-@export var jump_effect_scene = preload("res://Scenes/jump_effects.tscn")
+@export var explosion_scene = preload("res://Scenes/Enemies/MuddyExplosion.tscn")
+@export var jump_effect_scene = preload("res://Scenes/Enemies/jump_effects.tscn")
 
 @export var speed := 325
 @onready var animated_sprite_2d: AnimatedSprite2D = $Visuals/AnimatedSprite2D
@@ -19,7 +19,7 @@ var chasing := false
 var emitting_particles = false
 
 var direction := Vector2(1, 1).normalized()
-var health = 20
+var health = 16
 
 @export var knockback_strength_player = 200
 @export var knockback_strength = 1250

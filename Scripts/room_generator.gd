@@ -116,7 +116,6 @@ func place_room(grid_pos: Vector2):
 	
 	if room_scene == room_scenes[4]:
 		shop_rooms_spawned += 1
-		print("Spawning shop")
 	
 	if placed_rooms.has(room_left):
 		change_door_state(room, room_left, "Left", "Right", false)
@@ -216,7 +215,6 @@ func add_extra_rooms():
 		
 		if not placed_rooms.has(new_pos):
 			place_room(new_pos)
-			print("Forcing new room...")
 
 func ensure_shop_exists():
 	if shop_rooms_spawned >= min_shop_rooms:
@@ -246,7 +244,5 @@ func ensure_shop_exists():
 		# Prevent shop next to start
 		if new_pos.distance_to(start_pos) <= 1:
 			continue
-		
-		print("Forcing shop...")
 		
 		place_room(new_pos)

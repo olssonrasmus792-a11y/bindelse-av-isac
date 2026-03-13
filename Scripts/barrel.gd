@@ -26,6 +26,7 @@ var hp_spawn_chance = 0.05
 
 var explosion_size = 1.0
 var explosion_damage = 4
+var explosion_particles = 40
 
 var health = 2
 
@@ -46,6 +47,7 @@ func hit():
 		
 		explosion.global_position = position
 		explosion.explosion_damage = explosion_damage
+		explosion.explosion_particles = explosion_particles
 		get_parent().call_deferred("add_child", explosion)  # defer adding
 		explosion.emitting = true
 		
