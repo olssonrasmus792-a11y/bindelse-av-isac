@@ -3,15 +3,13 @@ extends CanvasLayer
 @onready var keys: Label = $KeyPanel/HBoxContainer/Keys
 @onready var coins: Label = $CoinPanel/HBoxContainer/Coins
 @onready var timer: Label = $Timer
-var time_left
-var start_time = 300.0
 
 @onready var vignette: TextureRect = $DamageVignette
 @export var flash_duration: float = 0.25
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	time_left = start_time
+	GameState.time_left = GameState.start_time
 	vignette.modulate.a = 0
 
 
@@ -21,15 +19,31 @@ func _process(delta: float) -> void:
 	coins.text = "Coins: " + str(GameState.coins)
 	label.text = "Kills: " + str(GameState.kills)
 	
-	time_left -= delta
-	timer.text = format_time(time_left)
+	handle_boss_timer(delta)
+
+func handle_boss_timer(delta: float):
+	if GameState.time_left <= 0:
+		if GameState.boss_killed:
+			timer.modulate = Color.GREEN
+			timer.text = "yippie!"
+		else:
+			timer.modulate = Color.RED
+			timer.text = "Kill the boss!"
+		return
+	
+	if GameState.pause_timer:
+		timer.modulate = Color.YELLOW
+		return
+	
+	timer.modulate = Color.WHITE
+	GameState.time_left -= delta
+	timer.text = format_time(GameState.time_left)
 
 func format_time(seconds: float) -> String:
 	var total := int(seconds)
 	var m := int(floor(total / 60.0))
 	var s := total % 60
 	return "%02d:%02d" % [m, s]
-
 
 func flash_vignette():
 	# Immediately show vignette

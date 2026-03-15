@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cxe35o132aucm" path="res://Scripts/control.gd" id="1_kddo8"]
 
 [node name="Control" type="Control"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

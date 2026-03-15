@@ -1,6 +1,7 @@
 extends Node2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var gpu_particles_2d: GPUParticles2D = $GPUParticles2D
+@onready var collision: CollisionShape2D = $CollisionClosed
 @onready var label: Label = $NoKeys
 
 var player_is_close = false
@@ -16,6 +17,9 @@ func _process(delta: float) -> void:
 	if label.modulate.a > 0:
 		label.modulate.a -= delta
 		label.position.y -= delta * 20
+	
+	if GameState.boss_spawned:
+		queue_free()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and player_is_close and !chest_opened:

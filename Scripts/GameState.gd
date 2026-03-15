@@ -9,6 +9,13 @@ var kills := 0
 var rooms_cleared := 0
 var enemies_per_room = 10
 
+var start_time = 10.0
+var time_left = start_time
+var pause_timer = false
+
+var boss_spawned = false
+var boss_killed = false
+
 var taken_upgrades := {}
 var taken_items := {}
 

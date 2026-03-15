@@ -113,6 +113,7 @@ anchor_right = 0.975
 anchor_bottom = 1.0
 focus_mode = 0
 mouse_default_cursor_shape = 15
+max_value = 200.0
 value = 100.0
 metadata/_edit_use_anchors_ = true
 
@@ -147,6 +148,5 @@ text = "  True dark mode"
 metadata/_edit_use_anchors_ = true
 
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
-[connection signal="pressed" from="ScreenSize/MenuButton" to="." method="_on_menu_button_pressed"]
 [connection signal="value_changed" from="VBoxContainer/ScreenShakeStength/ScreenShakeSlider" to="." method="_on_screen_shake_slider_value_changed"]
 [connection signal="toggled" from="VBoxContainer/DarkMode/CheckBox" to="." method="_on_check_box_toggled"]

@@ -6,6 +6,8 @@ extends Node2D
 	preload("res://Scenes/Enemies/Snail.tscn"),
 	preload("res://Scenes/Enemies/stoney.tscn")
 ]
+@export var clover_boss_scene := preload("res://Scenes/clover_boss.tscn")
+@export var coin_scene = preload("res://Scenes/Coin.tscn")
 @export var key_scene := preload("res://Scenes/Key.tscn")
 
 @onready var camera: Camera2D = $Camera2D
@@ -28,6 +30,7 @@ var start_pos : Vector2
 var start_room_pos : Vector2
 
 var key_spawn_rate = 0.5
+var item_pos_offset = 50
 
 var room_entered = false
 var room_closed = false
@@ -44,6 +47,7 @@ var has_door_down
 var has_door_right
 
 var alive_enemies: Array = []
+var can_spawn_boss = false
 
 signal swap_cam(pos)
 
@@ -65,6 +69,11 @@ func _process(_delta: float) -> void:
 	for player in get_tree().get_nodes_in_group("player"):
 		if player.is_dead:
 			clear_light.visible = false
+	
+	if can_spawn_boss and GameState.time_left <= 0 and !GameState.boss_spawned:
+		spawn_boss()
+		close_room()
+		GameState.boss_spawned = true
 
 func doors_finalized():
 	check_doors()
@@ -74,7 +83,6 @@ func check_doors():
 	has_door_left  = door_left.get_node("Door").visible
 	has_door_down  = door_down.get_node("Door").visible
 	has_door_right = door_right.get_node("Door").visible
-
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
@@ -102,12 +110,18 @@ func _input(event: InputEvent) -> void:
 			camera.zoom = Vector2(camera_map_zoom, camera_map_zoom)
 			zoomed_out = true
 
-
 func _on_enemy_spawn_area_body_entered(body: Node2D) -> void:
 	if body.name == "Player" and room.position != start_room_pos and !room_closed and !room_cleared:
 		check_doors()
 		call_deferred("spawn_enemies")
 		close_room()
+	
+	if body.name == "Player":
+		can_spawn_boss = true
+
+func _on_enemy_spawn_area_body_exited(body: Node2D) -> void:
+	if body.name == "Player":
+		can_spawn_boss = false
 
 func close_room():
 	room_closed = true
@@ -141,12 +155,10 @@ func open_room():
 	if !has_door_right:
 		open_door(door_right)
 
-
 func on_room_cleared():
 	open_room()
 	GameState.rooms_cleared += 1
 	GameState.enemies_per_room += 2
-
 
 func close_door(door):
 	door.get_node("Door").visible = true
@@ -157,7 +169,6 @@ func open_door(door):
 	door.get_node("Door").visible = false
 	door.get_node("CollisionShape2D").set_deferred("disabled", true)
 	door.get_node("LightOccluder2D").visible = false
-
 
 func get_enemy_container() -> Node:
 	return get_tree().get_first_node_in_group("enemy_container")
@@ -174,6 +185,28 @@ func spawn_enemies():
 		alive_enemies.append(enemy)
 		enemy.tree_exited.connect(_on_enemy_died.bind(enemy))
 
+func spawn_boss():
+	var enemies = get_enemy_container()
+	
+	for e in enemies.get_children():
+		if e.tree_exited.is_connected(_on_enemy_died):
+			e.tree_exited.disconnect(_on_enemy_died)
+		e.queue_free()
+	
+	alive_enemies.clear()
+	on_room_cleared()
+	
+	var enemy_scene = clover_boss_scene
+	var enemy = enemy_scene.instantiate()
+	
+	enemy.global_position.x = global_position.x + room_width/2 - tile_size * 3
+	enemy.global_position.y = global_position.y + room_height/2 - tile_size
+	
+	enemies.add_child(enemy)
+	
+	alive_enemies.append(enemy)
+	enemy.tree_exited.connect(_on_enemy_died.bind(enemy))
+
 func _on_enemy_died(enemy):
 	var last_position = enemy.global_position
 	alive_enemies.erase(enemy)
@@ -184,6 +217,16 @@ func _on_enemy_died(enemy):
 		on_room_cleared()
 		if randf() < key_spawn_rate:
 			drop_key(last_position)
+		
+		if GameState.boss_spawned:
+			GameState.boss_killed = true
+			#boss_spawned = false
+			drop_key(last_position)
+			if self.get_parent():  # room node still exists
+				for x in range(randi_range(5, 20)):
+					var coin = coin_scene.instantiate()
+					coin.global_position = last_position + Vector2(randi_range(-item_pos_offset, item_pos_offset), randi_range(-item_pos_offset, item_pos_offset))
+					self.get_parent().add_child(coin)
 
 func drop_key(pos):
 	var key = key_scene.instantiate()

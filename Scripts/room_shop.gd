@@ -84,11 +84,13 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		room_entered = true
 		guy.player_is_in_room = true
 		player_is_in_room = true
+		GameState.pause_timer = true
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body.name == "Player":
 		guy.player_is_in_room = false
 		player_is_in_room = false
+		GameState.pause_timer = false
 
 func switch_camera():
 	emit_signal("swap_cam", target_position)
