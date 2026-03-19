@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://tc0vm2g1hohq"]
 
 [ext_resource type="Shader" uid="uid://ccnwywmpuht17" path="res://Shaders/main_menu.gdshader" id="1_0tts5"]
-[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="1_fpf3r"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Textures/Bungee-Regular.ttf" id="1_fpf3r"]
 [ext_resource type="Script" uid="uid://bixgacvojfhc1" path="res://Scripts/label.gd" id="2_f7o28"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7scqb"]

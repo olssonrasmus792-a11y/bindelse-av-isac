@@ -13,8 +13,8 @@ extends Node2D
 
 @export var shop_scene = preload("res://Scenes/room_shop.tscn")
 var shop_rooms_spawned = 0
-var min_shop_rooms = 40
-var max_shop_rooms = 40
+var min_shop_rooms = 80
+var max_shop_rooms = 80
 
 @export var player_scene = preload("res://Scenes/player.tscn")
 @export var chest_scene = preload("res://Scenes/Chest.tscn")

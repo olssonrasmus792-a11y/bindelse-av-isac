@@ -9,7 +9,7 @@ var kills := 0
 var rooms_cleared := 0
 var enemies_per_room = 10
 
-var start_time = 10.0
+var start_time = 300.0
 var time_left = start_time
 var pause_timer = false
 
@@ -17,7 +17,7 @@ var boss_spawned = false
 var boss_killed = false
 
 var taken_upgrades := {}
-var taken_items := {}
+var taken_items: Array[ItemData] = []
 
 func reset_game():
 	keys = 0
@@ -25,4 +25,7 @@ func reset_game():
 	kills = 0
 	rooms_cleared = 0
 	enemies_per_room = 10
+	boss_killed = false
+	boss_spawned = false
 	taken_upgrades.clear()
+	taken_items.clear()

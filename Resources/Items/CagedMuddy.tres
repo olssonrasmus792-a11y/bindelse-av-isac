@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://c2wmiytcicxuo"]
+
+[ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_ldeti"]
+[ext_resource type="Texture2D" uid="uid://c8ajqqe58hudt" path="res://Textures/Items/spawn rate.png" id="1_lh3i0"]
+
+[resource]
+script = ExtResource("1_ldeti")
+name = "Caged Muddy"
+description = "Increase spawn rate of Muddy"
+price = 25
+icon = ExtResource("1_lh3i0")
+metadata/_custom_type_script = "uid://i88s36u6b2ej"

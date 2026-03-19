@@ -1,0 +1,39 @@
+[gd_scene load_steps=4 format=3 uid="uid://kfbd1b5hty2c"]
+
+[ext_resource type="Script" uid="uid://mvu3gpemf814" path="res://Scripts/item_slot.gd" id="1_0qr27"]
+[ext_resource type="Texture2D" uid="uid://ca82twfvheobr" path="res://Textures/icon.svg" id="1_ohl0e"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Textures/Bungee-Regular.ttf" id="3_rka6j"]
+
+[node name="ItemSlot" type="TextureRect"]
+custom_minimum_size = Vector2(25, 25)
+anchors_preset = -1
+anchor_right = 0.034722224
+anchor_bottom = 0.061728396
+offset_right = -15.0
+offset_bottom = -15.0
+texture = ExtResource("1_ohl0e")
+expand_mode = 3
+stretch_mode = 5
+script = ExtResource("1_0qr27")
+metadata/_edit_use_anchors_ = true
+
+[node name="CountLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -13.0
+offset_top = -23.0
+offset_right = 5.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("3_rka6j")
+theme_override_font_sizes/font_size = 6
+text = "x1"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

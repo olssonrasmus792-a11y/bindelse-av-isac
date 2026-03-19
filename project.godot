@@ -36,6 +36,7 @@ damageEffect=""
 barrel=""
 sword=""
 guy=""
+inventory=""
 
 [input]
 

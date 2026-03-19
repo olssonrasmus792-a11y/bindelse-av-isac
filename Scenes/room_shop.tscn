@@ -19,7 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://c2p365w32k1w5" path="res://Scenes/Chest.tscn" id="17_8klot"]
 [ext_resource type="Texture2D" uid="uid://drpkue2j6vg0j" path="res://Textures/Guy.png" id="18_kjmdx"]
 [ext_resource type="Script" uid="uid://bipbqyvq5pf5b" path="res://Scripts/guy.gd" id="19_uv0rh"]
-[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="20_mbb8p"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Textures/Bungee-Regular.ttf" id="20_mbb8p"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4gp0m"]
 texture = ExtResource("2_g5wir")

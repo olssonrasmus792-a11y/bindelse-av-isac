@@ -4,6 +4,7 @@ class_name ShopItem
 @export var data: ItemData
 @onready var player := get_tree().get_first_node_in_group("player")
 @onready var guy := get_tree().get_nodes_in_group("guy")
+@onready var inventory := get_tree().get_first_node_in_group("inventory")
 
 var base_y
 var time := 0.0
@@ -49,11 +50,13 @@ func _input(event: InputEvent) -> void:
 
 func buy_item():
 	GameState.coins -= data.price
-	GameState.taken_items[data.name] = true
+	GameState.taken_items.append(data)
 	apply_item(data.name)
 	
 	for guys in guy:
 		guys.item_bought()
+	
+	inventory.display_inventory()
 	
 	queue_free()
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=21 format=3 uid="uid://jirg8w1p0uyb"]
 
 [ext_resource type="Script" uid="uid://cmosnc2vxvti4" path="res://Scripts/card_scene.gd" id="1_hn4tc"]
-[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="2_1eyib"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Textures/Bungee-Regular.ttf" id="2_1eyib"]
 [ext_resource type="Shader" uid="uid://ccnwywmpuht17" path="res://Shaders/main_menu.gdshader" id="3_b5yic"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hn4tc"]
