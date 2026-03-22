@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_b0tl3")
 name = "Barrel"
-description = "Idk broski, it's just a barrel..."
-price = 5
+description = "+50% Barrel explosion damage, +25% explosion size"
+price = 10
 icon = ExtResource("1_vu4p0")
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

@@ -7,6 +7,6 @@
 script = ExtResource("2_6tcug")
 name = "Heart"
 description = "+1 max hp and restore all health"
-price = 20
+price = 5
 icon = ExtResource("1_hvypd")
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

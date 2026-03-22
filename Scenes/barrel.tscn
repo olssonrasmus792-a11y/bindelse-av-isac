@@ -4,7 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://lyun75p0rj50" path="res://Textures/Barrel.png" id="2_rp70x"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_m5w3l"]
-bounce = 1.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_m5w3l"]
 radius = 38.090908

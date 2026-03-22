@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_hlvcg")
 name = "Key"
-description = "Ts opens stuff or sum like that"
-price = 2
+description = "Ts opens stuff or sum like that (+1 key)"
+price = 3
 icon = ExtResource("1_g0v2i")
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

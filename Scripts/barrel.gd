@@ -26,7 +26,7 @@ var hp_spawn_chance = 0.05
 
 var explosion_size = 1.0
 var explosion_damage = 4
-var explosion_particles = 40
+var explosion_particles = 20
 
 var health = 2
 
@@ -69,12 +69,12 @@ func drop_loot():
 		item.global_position = position + Vector2(randi_range(-item_pos_offset, item_pos_offset), randi_range(-item_pos_offset, item_pos_offset))
 		get_parent().call_deferred("add_child", item)  # defer adding
 
-func apply_knockback(from_position: Vector2):
-	var dir = (global_position - from_position).normalized()
+func apply_knockback(aim_direction: Vector2):
+	var knockback_direction = aim_direction.normalized()
 	knocked_back = true
 
 	# push the barrel
-	apply_central_impulse(dir * knockback_strength)
+	apply_central_impulse(knockback_direction * knockback_strength)
 
 	# add random spin
 	sprite_spin = randf_range(-20.0, 20.0)

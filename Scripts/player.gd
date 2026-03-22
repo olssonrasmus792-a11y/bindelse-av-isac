@@ -224,13 +224,15 @@ func handle_color():
 		lerp_speed = 0.2
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
+	var aim_direction = (get_global_mouse_position() - global_position).normalized()
+	
 	if body.is_in_group("enemies"):
 		if enemies_hit.has(body):
 			return  # already hit this attack
 		
 		enemies_hit[body] = true
 		
-		var total_damage = damage
+		var total_damage = calculate_base_damage()
 		var text_color = Color.WHITE
 		var ft_text = "-" + str(int(total_damage))
 		
@@ -240,7 +242,7 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 			ft_text = "-" + str(int(total_damage))
 		
 		body.take_damage(total_damage)
-		body.apply_knockback(global_position)
+		body.apply_knockback(aim_direction)
 		
 		for cam in get_tree().get_nodes_in_group("camera"):
 			cam.shake(0.75)
@@ -256,7 +258,19 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 
 	if body.is_in_group("barrel"):
 		body.hit()
-		body.apply_knockback(global_position)
+		body.apply_knockback(aim_direction)
+
+func calculate_base_damage():
+	var total_damage
+	
+	total_damage = damage
+	
+	total_damage += GameState.get_item_count("Sword")
+	for item in GameState.taken_items:
+		if item.name == "Sword":
+			item.damage_dealt += 1
+	
+	return total_damage
 
 func _on_attack_timer_timeout() -> void:
 	attack_cooldown.start(attack_speed)

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://mvu3gpemf814" path="res://Scripts/item_slot.gd" id="1_0qr27"]
 [ext_resource type="Texture2D" uid="uid://ca82twfvheobr" path="res://Textures/icon.svg" id="1_ohl0e"]
-[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Textures/Bungee-Regular.ttf" id="3_rka6j"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="3_rka6j"]
 
 [node name="ItemSlot" type="TextureRect"]
 custom_minimum_size = Vector2(25, 25)

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cmwas7j5lm6sj" path="res://Scripts/sub_viewport.gd" id="1_myvm1"]
 [ext_resource type="Script" uid="uid://b08mm372hlrqv" path="res://Scripts/full_size_map.gd" id="2_q0mm3"]
 [ext_resource type="Script" uid="uid://seyb3vxbpmw1" path="res://Scripts/full_size_cam.gd" id="3_np2xp"]
-[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Textures/Bungee-Regular.ttf" id="4_w7jjh"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="4_w7jjh"]
 
 [node name="Map" type="Control"]
 layout_mode = 3
@@ -62,6 +62,7 @@ vrs_update_mode = 2
 size = Vector2i(1152, 648)
 size_2d_override = Vector2i(1920, 1080)
 size_2d_override_stretch = true
+render_target_update_mode = 0
 script = ExtResource("2_q0mm3")
 
 [node name="FullSizeCam" type="Camera2D" parent="FullSizeMap/SubViewport"]

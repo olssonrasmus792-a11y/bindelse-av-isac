@@ -9,8 +9,10 @@ func _ready() -> void:
 	amount = explosion_particles
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
+	var aim_direction = (body.global_position - global_position).normalized()
+	
 	if body.is_in_group("enemies"):
-		var total_damage = explosion_damage
+		var total_damage = calculate_base_damage()
 		var text_color = Color.WHITE
 		var ft_text = "-" + str(int(total_damage))
 		
@@ -20,7 +22,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 			ft_text = "-" + str(int(total_damage))
 		
 		body.take_damage(total_damage)
-		body.apply_knockback(global_position)
+		body.apply_knockback(aim_direction)
 		
 		for cam in get_tree().get_nodes_in_group("camera"):
 			cam.shake(0.75)
@@ -33,6 +35,23 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		ft.modulate = text_color
 		ft.global_position = body.global_position
 		get_tree().current_scene.add_child(ft)
+	
+	if body.is_in_group("barrel"):
+		body.hit()
+		body.apply_knockback(aim_direction)
+
+func calculate_base_damage():
+	var total_damage
+	
+	total_damage = explosion_damage
+	
+	total_damage *= 1 + (GameState.get_item_count("Barrel") * 0.5)
+	for item in GameState.taken_items:
+		if item.name == "Barrel":
+			item.damage_dealt += total_damage - explosion_damage
+			break
+	
+	return int(total_damage)
 
 func _on_finished() -> void:
 	queue_free()

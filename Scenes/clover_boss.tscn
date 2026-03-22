@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b3rp4nwetfivt" path="res://Textures/Enemies/Clove.png" id="1_7w1ik"]
 [ext_resource type="Texture2D" uid="uid://cnyjbitxwpsgp" path="res://Textures/Enemies/clove 2.png" id="3_6y4kc"]
 [ext_resource type="Texture2D" uid="uid://b7e1373ttxxxa" path="res://Textures/Enemies/clove 3 (2).png" id="4_isro6"]
-[ext_resource type="Texture2D" uid="uid://c61f4l2d4kb6q" path="res://Textures/Enemies/clove 4.png" id="5_ykxau"]
+[ext_resource type="Texture2D" uid="uid://iab3k8551e4l" path="res://Textures/Enemies/clove 5.png" id="4_ykxau"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3jepr"]
 atlas = ExtResource("1_7w1ik")
@@ -95,44 +95,44 @@ atlas = ExtResource("3_6y4kc")
 region = Rect2(8400, 0, 600, 600)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mw43n"]
-atlas = ExtResource("5_ykxau")
-region = Rect2(0, 1604, 600, 802)
+atlas = ExtResource("4_ykxau")
+region = Rect2(0, 1200, 600, 600)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ilgi6"]
-atlas = ExtResource("5_ykxau")
-region = Rect2(600, 1604, 600, 802)
+atlas = ExtResource("4_ykxau")
+region = Rect2(600, 1200, 600, 600)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h1cfn"]
-atlas = ExtResource("5_ykxau")
-region = Rect2(1200, 1604, 600, 802)
+atlas = ExtResource("4_ykxau")
+region = Rect2(1200, 1200, 600, 600)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ijews"]
-atlas = ExtResource("5_ykxau")
-region = Rect2(1800, 1604, 600, 802)
+atlas = ExtResource("4_ykxau")
+region = Rect2(1800, 1200, 600, 600)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_38sqk"]
-atlas = ExtResource("5_ykxau")
-region = Rect2(2400, 1604, 600, 802)
+atlas = ExtResource("4_ykxau")
+region = Rect2(2400, 1200, 600, 600)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c2jtp"]
-atlas = ExtResource("5_ykxau")
-region = Rect2(3000, 1604, 600, 802)
+atlas = ExtResource("4_ykxau")
+region = Rect2(3000, 1200, 600, 600)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jvi1x"]
-atlas = ExtResource("5_ykxau")
-region = Rect2(3600, 1604, 600, 802)
+atlas = ExtResource("4_ykxau")
+region = Rect2(3600, 1200, 600, 600)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ysfuh"]
-atlas = ExtResource("5_ykxau")
-region = Rect2(4200, 1604, 600, 802)
+atlas = ExtResource("4_ykxau")
+region = Rect2(4200, 1200, 600, 600)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_odswi"]
-atlas = ExtResource("5_ykxau")
-region = Rect2(4800, 1604, 600, 802)
+atlas = ExtResource("4_ykxau")
+region = Rect2(4800, 1200, 600, 600)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eolo4"]
-atlas = ExtResource("5_ykxau")
-region = Rect2(5400, 1604, 600, 802)
+atlas = ExtResource("4_ykxau")
+region = Rect2(5400, 1200, 600, 600)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xngtj"]
 atlas = ExtResource("4_isro6")
@@ -281,7 +281,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"Spawn",
-"speed": 3.0
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -357,13 +357,13 @@ color = Color(0, 0, 0, 0.25490198)
 
 [node name="Visuals" type="Node2D" parent="."]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals" groups=["boss"]]
 position = Vector2(1.3552527e-20, 0)
 scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_k0y6n")
 animation = &"Spawn"
 autoplay = "Idle"
-frame_progress = 0.3254544
+frame = 3
 offset = Vector2(-9.999996, -79.99999)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

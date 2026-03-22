@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_bn40t")
 name = "Sword"
-description = "Could be useful for killing stuff, but you already have a sword bro"
+description = "+1 Damage, +25% enemies"
 price = 10
 icon = ExtResource("1_qvvkx")
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

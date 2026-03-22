@@ -2,9 +2,9 @@ extends Node2D
 @onready var room: Node2D = $"."
 
 @export var enemy_scenes = [
-	preload("res://Scenes/Enemies/Muddy.tscn"),
-	preload("res://Scenes/Enemies/Snail.tscn"),
-	preload("res://Scenes/Enemies/stoney.tscn")
+	{ "scene": preload("res://Scenes/Enemies/Muddy.tscn"), "weight": GameState.muddy_spawn_rate },
+	{ "scene": preload("res://Scenes/Enemies/Snail.tscn"), "weight": GameState.snail_spawn_rate },
+	{ "scene": preload("res://Scenes/Enemies/stoney.tscn"), "weight": GameState.stoney_spawn_rate }
 ]
 @export var clover_boss_scene := preload("res://Scenes/clover_boss.tscn")
 @export var coin_scene = preload("res://Scenes/Coin.tscn")
@@ -29,7 +29,8 @@ var room_height = GameState.room_tiles_y * tile_size
 var start_pos : Vector2
 var start_room_pos : Vector2
 
-var key_spawn_rate = 0.5
+var key_spawn_rate = 0.75
+var coin_spawn_rate = 0.1
 var item_pos_offset = 50
 
 var room_entered = false
@@ -173,10 +174,26 @@ func open_door(door):
 func get_enemy_container() -> Node:
 	return get_tree().get_first_node_in_group("enemy_container")
 
+func pick_weighted_enemy():
+	var total_weight = 0
+	
+	for e in enemy_scenes:
+		total_weight += e.weight
+	
+	var roll = randf_range(0, total_weight)
+	var current = 0
+	
+	for e in enemy_scenes:
+		current += e.weight
+		if roll <= current:
+			return e.scene
+	
+	return enemy_scenes[0].scene
+
 func spawn_enemies():
 	var enemies = get_enemy_container()
 	for x in range(GameState.enemies_per_room):
-		var enemy_scene = enemy_scenes.pick_random()
+		var enemy_scene = pick_weighted_enemy()
 		var enemy = enemy_scene.instantiate()
 		enemy.global_position.x = global_position.x + room_width/2 - tile_size * 3 + randf_range(-room_width/4, room_width/4)
 		enemy.global_position.y = global_position.y + room_height/2 - tile_size + randf_range(-room_height/4, room_height/4)
@@ -213,23 +230,28 @@ func _on_enemy_died(enemy):
 	
 	GameState.kills += 1
 	
+	if randf() < coin_spawn_rate:
+		drop_coin(last_position)
+	
 	if alive_enemies.is_empty():
 		on_room_cleared()
 		if randf() < key_spawn_rate:
 			drop_key(last_position)
-		
-		if GameState.boss_spawned:
-			GameState.boss_killed = true
-			#boss_spawned = false
-			drop_key(last_position)
-			if self.get_parent():  # room node still exists
-				for x in range(randi_range(5, 20)):
-					var coin = coin_scene.instantiate()
-					coin.global_position = last_position + Vector2(randi_range(-item_pos_offset, item_pos_offset), randi_range(-item_pos_offset, item_pos_offset))
-					self.get_parent().add_child(coin)
+	
+	if enemy.name == "CloverBoss":
+		drop_key(last_position)
+		if self.get_parent():  # room node still exists
+			for x in range(randi_range(5, 20)):
+				drop_coin(last_position)
 
 func drop_key(pos):
 	var key = key_scene.instantiate()
-	key.global_position = pos
+	key.global_position = pos + Vector2(randi_range(-item_pos_offset, item_pos_offset), randi_range(-item_pos_offset, item_pos_offset))
 	if self.get_parent():  # room node still exists
 		self.get_parent().add_child(key)
+
+func drop_coin(pos):
+	var coin = coin_scene.instantiate()
+	coin.global_position = pos + Vector2(randi_range(-item_pos_offset, item_pos_offset), randi_range(-item_pos_offset, item_pos_offset))
+	if self.get_parent():  # room node still exists
+		self.get_parent().add_child(coin)

@@ -4,6 +4,9 @@ extends Control
 @onready var tooltip: Panel = $Tooltip
 @onready var item_name: Label = $Tooltip/ItemName
 @onready var item_description: Label = $Tooltip/ItemDescription
+@onready var item_icon: TextureRect = $Tooltip/ItemIcon
+@onready var item_amount: Label = $Tooltip/ItemAmount
+@onready var item_damage: Label = $Tooltip/ItemDamage
 
 var slot_scene = preload("res://Scenes/item_slot.tscn")
 
@@ -39,11 +42,16 @@ func get_stacked_items(items: Array) -> Dictionary:
 
 	return stacked
 
-func _on_item_hovered(item: ItemData):
+func _on_item_hovered(item: ItemData, count: int):
 	tooltip.visible = true
 	item_name.text = item.name
 	item_description.text = item.description
-	print("hovered")
+	item_icon.texture = item.icon
+	item_amount.text = "x" + str(count)
+	if item.damage_dealt > 0:
+		item_damage.text = "Damage dealt: " + str(item.damage_dealt)
+	else:
+		item_damage.text = ""
 
 func _on_item_unhovered():
 	tooltip.visible = false

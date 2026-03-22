@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_ldeti")
 name = "Caged Muddy"
-description = "Increase spawn rate of Muddy"
-price = 25
+description = "+20% Muddy spawn rate"
+price = 10
 icon = ExtResource("1_lh3i0")
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

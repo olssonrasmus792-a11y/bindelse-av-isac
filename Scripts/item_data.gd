@@ -5,3 +5,4 @@ class_name ItemData
 @export var description: String
 @export var price: int
 @export var icon: Texture2D
+@export var damage_dealt: int

@@ -29,7 +29,7 @@ func _ready():
 
 
 func _on_mouse_entered() -> void:
-	emit_signal("hovered", item)
+	emit_signal("hovered", item, count)
 
 
 func _on_mouse_exited() -> void:

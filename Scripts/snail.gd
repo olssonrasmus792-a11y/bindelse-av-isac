@@ -79,8 +79,8 @@ func take_damage(damage):
 	if health <= 0:
 		explode(self)  
 
-func apply_knockback(from_position: Vector2):
-	var knockback_direction = (global_position - from_position).normalized()
+func apply_knockback(aim_direction: Vector2):
+	var knockback_direction = aim_direction.normalized()
 	current_knockback = knockback_direction * knockback_strength
 	knockback_timer = knockback_duration
 	direction = knockback_direction

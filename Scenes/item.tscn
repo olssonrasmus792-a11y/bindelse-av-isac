@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://wrfivba0rg5d"]
 
 [ext_resource type="Script" uid="uid://c4arvh1yfyp4" path="res://Scripts/item.gd" id="1_76mu4"]
-[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Textures/Bungee-Regular.ttf" id="3_u06aw"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="3_u06aw"]
 
 [sub_resource type="Gradient" id="Gradient_1teyb"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)

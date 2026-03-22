@@ -49,4 +49,15 @@ func _on_spawn_enemies_signal(pos) -> void:
 	print("Spawning enemies")
 
 func _on_remove_enemies_pressed() -> void:
-	get_tree().call_group("enemies", "queue_free")
+	# Get all enemies in the "enemies" group
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		# If enemy has health property
+		if "health" in enemy:
+			enemy.health = 0.0
+			# Trigger the death logic
+			if enemy.has_method("take_damage"):
+				enemy.take_damage(0) # Some enemies might check health inside take_damage
+			elif enemy.has_method("explode"):
+				enemy.explode(enemy)  # call existing death function
+			else:
+				enemy.queue_free()  # fallback

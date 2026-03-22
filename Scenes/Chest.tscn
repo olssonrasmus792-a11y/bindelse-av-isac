@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://ekwtd2j7ltcu" path="res://Textures/Chest sheet.png" id="1_ghm5h"]
 [ext_resource type="Script" uid="uid://1ke4wdiujwc8" path="res://Scripts/chest.gd" id="1_mr3w3"]
 [ext_resource type="Shader" uid="uid://d066glvj82psy" path="res://Shaders/Chest.gdshader" id="3_fqgxf"]
-[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Textures/Bungee-Regular.ttf" id="4_2bf1p"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="4_2bf1p"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_v1rbb"]
 atlas = ExtResource("1_ghm5h")

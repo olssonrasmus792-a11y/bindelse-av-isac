@@ -37,6 +37,9 @@ func _ready() -> void:
 	hp_bar.max_value = max_health
 	hp_bar.value = max_health
 	shoot_timer.wait_time = 1.5
+	animated_sprite_2d.play("Spawn")
+	await animated_sprite_2d.animation_finished
+	await get_tree().create_timer(1).timeout
 
 func _process(_delta: float) -> void:
 	hp_bar.value = lerp(hp_bar.value, health, 0.25)
@@ -256,7 +259,7 @@ func take_damage(damage):
 	health -= damage
 	flash_red()
 	if health <= 0:
-		explode(self)  
+		explode(self)
 
 func fade_red():
 	var base_scale = 0.2
@@ -335,6 +338,7 @@ func explode(enemy):
 	explosion.emitting = true
 	
 	emit_signal("enemy_died")
+	GameState.boss_killed = true
 	enemy.queue_free()
 
 func _on_detection_area_body_entered(body: Node2D) -> void:

@@ -7,9 +7,13 @@ var keys := 0
 var coins := 0
 var kills := 0
 var rooms_cleared := 0
-var enemies_per_room = 10
 
-var start_time = 300.0
+var enemies_per_room = 3
+var muddy_spawn_rate = 10
+var snail_spawn_rate = 20
+var stoney_spawn_rate = 20
+
+var start_time = 5.0
 var time_left = start_time
 var pause_timer = false
 
@@ -24,8 +28,15 @@ func reset_game():
 	coins = 0
 	kills = 0
 	rooms_cleared = 0
-	enemies_per_room = 10
+	enemies_per_room = 3
 	boss_killed = false
 	boss_spawned = false
 	taken_upgrades.clear()
 	taken_items.clear()
+
+func get_item_count(item_name: String) -> int:
+	var count = 0
+	for item in taken_items:
+		if item.name == item_name:
+			count += 1
+	return count
