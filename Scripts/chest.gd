@@ -3,6 +3,7 @@ extends Node2D
 @onready var gpu_particles_2d: GPUParticles2D = $GPUParticles2D
 @onready var collision: CollisionShape2D = $CollisionClosed
 @onready var label: Label = $NoKeys
+@onready var pop_3: AudioStreamPlayer = $Pop3
 
 var player_is_close = false
 var chest_opened = false
@@ -50,6 +51,7 @@ func open_chest():
 	var upgrade_scene = get_tree().get_first_node_in_group("upgrade_screen")
 	get_tree().paused = true
 	upgrade_scene.spawn_random_cards(3)
+	pop_3.play()
 	
 	animated_sprite_2d.play("Open")
 	chest_opened = true

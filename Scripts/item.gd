@@ -16,6 +16,8 @@ var time := 0.0
 @onready var label: Label = $PopUp/Panel/Label
 @onready var price: Label = $PopUp/Panel/Label2
 @onready var description: RichTextLabel = $PopUp/Panel/RichTextLabel
+@onready var purchase: AudioStreamPlayer = $Purchase
+@onready var deny: AudioStreamPlayer = $Deny
 
 func _ready():
 	if data:
@@ -45,6 +47,7 @@ func _input(event: InputEvent) -> void:
 		if GameState.coins >= data.price:
 			buy_item()
 		else:
+			deny.play()
 			shake_label()
 			for guys in guy:
 				guys.not_enough_money()
@@ -58,6 +61,11 @@ func buy_item():
 		guys.item_bought()
 	
 	inventory.display_inventory()
+	
+	var sound = purchase
+	sound.get_parent().remove_child(sound)
+	get_tree().current_scene.add_child(sound)
+	sound.play()
 	
 	queue_free()
 

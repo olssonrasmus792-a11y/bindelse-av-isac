@@ -1,8 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://wrfivba0rg5d"]
+[gd_scene load_steps=14 format=3 uid="uid://wrfivba0rg5d"]
 
 [ext_resource type="Script" uid="uid://c4arvh1yfyp4" path="res://Scripts/item.gd" id="1_76mu4"]
 [ext_resource type="Shader" uid="uid://ccnwywmpuht17" path="res://Shaders/main_menu.gdshader" id="2_u06aw"]
 [ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="3_u06aw"]
+[ext_resource type="AudioStream" uid="uid://sqgyorqdkfmr" path="res://SFX/Purchase.wav" id="4_btogu"]
+[ext_resource type="AudioStream" uid="uid://y7j1luuklmw7" path="res://SFX/Deny.wav" id="5_tnst4"]
 
 [sub_resource type="Gradient" id="Gradient_1teyb"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -175,6 +177,12 @@ scale = Vector2(0.36799997, 0.192)
 color = Color(1, 1, 0.9411765, 1)
 energy = 0.75
 texture = SubResource("GradientTexture2D_u06aw")
+
+[node name="Purchase" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_btogu")
+
+[node name="Deny" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_tnst4")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

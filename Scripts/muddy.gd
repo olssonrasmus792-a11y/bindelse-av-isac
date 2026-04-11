@@ -6,6 +6,11 @@ extends CharacterBody2D
 @onready var sprite_2d: Sprite2D = $Sprite2D
 @onready var point_light_2d: PointLight2D = $PointLight2D
 
+@onready var bounce_1: AudioStreamPlayer = $Bounce1
+@onready var bounce_2: AudioStreamPlayer = $Bounce2
+@onready var splat: AudioStreamPlayer = $Splat
+var splat_pitch = 1.0
+
 var direction := Vector2(1, 1).normalized()
 var health = 12
 
@@ -32,6 +37,7 @@ func _physics_process(delta):
 		knockback_timer -= delta
 		point_light_2d.visible = true
 		if knockback_timer <= 0:
+			splat_pitch = 1.0
 			var tween := create_tween()
 			tween.tween_property(sprite_2d, "modulate", Color(1, 1, 1), 0.5)
 	else:
@@ -49,12 +55,16 @@ func _physics_process(delta):
 				cam.shake(1.0)
 		
 		if knockback_timer > 0.0 and !collider.is_in_group("enemies"):
+			play_bounce_sound()
 			knockback_velocity = knockback_velocity.bounce(normal)
 			direction = knockback_velocity.normalized()
 		else:
 			direction = direction.bounce(normal)
 
 		if collider.is_in_group("enemies") and knockback_timer > 0.0:
+			splat_pitch += 0.2
+			splat.pitch_scale = splat_pitch
+			splat.play()
 			explode(collider)
 			var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
 			var ft = floating_text_scene.instantiate()
@@ -93,3 +103,13 @@ func explode(enemy):
 	
 	emit_signal("enemy_died")
 	enemy.queue_free()
+
+func play_bounce_sound():
+	var roll = randf()
+	
+	if roll < 0.5:
+		bounce_1.pitch_scale = randf_range(1.0, 1.4)
+		bounce_1.play(0.2)
+	else:
+		bounce_2.pitch_scale = randf_range(1.0, 1.4)
+		bounce_2.play(0.12)

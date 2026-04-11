@@ -6,12 +6,15 @@ extends Node
 var keys := 0
 var coins := 0
 var kills := 0
+var combo := 0
 var rooms_cleared := 0
 
 var enemies_per_room = 3
 var muddy_spawn_rate = 10
 var snail_spawn_rate = 20
 var stoney_spawn_rate = 20
+
+var coin_drop_chance = 0.1
 
 var start_time = 300.0
 var time_left = start_time

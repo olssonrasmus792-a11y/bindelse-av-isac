@@ -22,7 +22,6 @@ var rarity_color
 var target_y
 
 func _ready():
-	
 	var style := panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
 	var inner_style := inner_panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
 

@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://d4b5t5w22h0ko"]
+[gd_scene load_steps=6 format=3 uid="uid://d4b5t5w22h0ko"]
 
 [ext_resource type="Script" uid="uid://4r5ayjffwgh3" path="res://Scripts/barrel.gd" id="1_m5w3l"]
 [ext_resource type="Texture2D" uid="uid://lyun75p0rj50" path="res://Textures/Barrel.png" id="2_rp70x"]
+[ext_resource type="AudioStream" uid="uid://bqp8ud64y528d" path="res://SFX/Flying.wav" id="3_rp70x"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_m5w3l"]
 
@@ -31,5 +32,10 @@ texture = ExtResource("2_rp70x")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.9090918, 0.90908986)
 shape = SubResource("CapsuleShape2D_m5w3l")
+
+[node name="Flying" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_rp70x")
+volume_db = -5.778
+pitch_scale = 0.5
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -3,10 +3,13 @@ extends GPUParticles2D
 @onready var gpu_particles_2d: GPUParticles2D = $"."
 var timer = 0.0
 var has_emitted
+@onready var stone_fall: AudioStreamPlayer = $StoneFall
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	has_emitted = false
+	stone_fall.pitch_scale = randf_range(0.75, 1.75)
+	stone_fall.play()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -30,7 +30,6 @@ var start_pos : Vector2
 var start_room_pos : Vector2
 
 var key_spawn_rate = 0.75
-var coin_spawn_rate = 0.1
 var item_pos_offset = 50
 
 var room_entered = false
@@ -229,8 +228,9 @@ func _on_enemy_died(enemy):
 	alive_enemies.erase(enemy)
 	
 	GameState.kills += 1
+	GameState.combo += 1
 	
-	if randf() < coin_spawn_rate:
+	if randf() < GameState.coin_drop_chance:
 		drop_coin(last_position)
 	
 	if alive_enemies.is_empty():

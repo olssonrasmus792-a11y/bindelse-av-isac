@@ -8,6 +8,7 @@ extends CharacterBody2D
 @onready var color_rect: ColorRect = $Visuals/ColorRect
 @onready var direction_timer: Timer = $DirectionTimer
 @onready var visuals: Node2D = $Visuals
+@onready var stone_fall: AudioStreamPlayer = $StoneFall
 
 @onready var player := get_tree().get_first_node_in_group("player")
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D

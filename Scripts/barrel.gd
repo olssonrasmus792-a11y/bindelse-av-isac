@@ -5,6 +5,7 @@ extends RigidBody2D
 @export var key_scene := preload("res://Scenes/Key.tscn")
 @export var heart_scene := preload("res://Scenes/Heart_pickup.tscn")
 @onready var sprite: Sprite2D = $Sprite2D
+@onready var flying: AudioStreamPlayer = $Flying
 
 @export var knockback_strength_player = 200
 @export var knockback_strength = 1500
@@ -70,13 +71,15 @@ func drop_loot():
 		get_parent().call_deferred("add_child", item)  # defer adding
 
 func apply_knockback(aim_direction: Vector2):
+	flying.play(randf_range(0.25, 2.0))
+	
 	var knockback_direction = aim_direction.normalized()
 	knocked_back = true
 
 	# push the barrel
 	apply_central_impulse(knockback_direction * knockback_strength)
 
-	# add random spin
+	# add random spin 
 	sprite_spin = randf_range(-20.0, 20.0)
 
 func _on_body_entered(body: Node) -> void:

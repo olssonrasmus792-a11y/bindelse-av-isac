@@ -4,6 +4,8 @@ extends Control
 @onready var sword := get_tree().get_first_node_in_group("sword")
 var card_scene = preload("res://Scenes/card_scene.tscn")
 @onready var cards_container: HBoxContainer = $HBoxContainer
+@onready var pop_4: AudioStreamPlayer = $Pop4
+@onready var coin: AudioStreamPlayer = $Coin
 
 @export var uncommon_chance = 0.5
 @export var rare_chance = 0.3
@@ -94,6 +96,8 @@ func get_rarity_weight(rarity: String) -> float:
 
 func _on_upgrade_chosen(card_data: CardData):
 	GameState.taken_upgrades[card_data.card_name] = true
+	pop_4.play()
+	coin.play()
 	apply_upgrade(card_data)
 	close_upgrade_screen()
 

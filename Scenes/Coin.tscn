@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://domnfqwbnuort"]
+[gd_scene load_steps=5 format=3 uid="uid://domnfqwbnuort"]
 
 [ext_resource type="Script" uid="uid://dulmb4485ipqf" path="res://Scripts/coin.gd" id="1_somhs"]
 [ext_resource type="Texture2D" uid="uid://bi3cf83ewrg3n" path="res://Textures/coin.png" id="2_wjfxq"]
+[ext_resource type="AudioStream" uid="uid://b0bl3n36b3g5f" path="res://SFX/Coin.wav" id="3_wjfxq"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jc2lb"]
 radius = 22.022715
@@ -25,6 +26,10 @@ texture = ExtResource("2_wjfxq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PickUpArea"]
 shape = SubResource("CircleShape2D_jc2lb")
+
+[node name="Coin" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_wjfxq")
+pitch_scale = 1.38
 
 [connection signal="body_entered" from="PickUpArea" to="." method="_on_pick_up_area_body_entered"]
 [connection signal="body_exited" from="PickUpArea" to="." method="_on_pick_up_area_body_exited"]

@@ -1,6 +1,9 @@
 extends Node2D
 
 @onready var sprite_2d: Sprite2D = $Sprite2D
+@onready var pop_1: AudioStreamPlayer = $Pop1
+@onready var pop_2: AudioStreamPlayer = $Pop2
+@onready var pop_4: AudioStreamPlayer = $Pop4
 
 var base_y
 var time := 0.0
@@ -24,6 +27,7 @@ func _process(delta: float) -> void:
 			can_pick_up = true
 	
 	if player_is_close and can_pick_up:
+		play_pickup_sound()
 		GameState.keys += 1
 		var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
 		var ft = floating_text_scene.instantiate()
@@ -42,3 +46,20 @@ func _on_pick_up_area_body_entered(body: Node2D) -> void:
 func _on_pick_up_area_body_exited(body: Node2D) -> void:
 	if body.name == "Player":
 		player_is_close = false
+
+func play_pickup_sound():
+	var roll = randf()
+	var sound
+	var offset = 0.0
+	
+	if roll < 0.33:
+		sound = pop_1
+	elif roll < 0.66:
+		sound = pop_2
+		offset = 0.03
+	else:
+		sound = pop_4
+	
+	sound.get_parent().remove_child(sound)
+	get_tree().current_scene.add_child(sound)
+	sound.play(offset)

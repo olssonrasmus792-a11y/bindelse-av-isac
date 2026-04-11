@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://dddnxhabc8fbn"]
+[gd_scene load_steps=11 format=3 uid="uid://dddnxhabc8fbn"]
 
 [ext_resource type="Script" uid="uid://dxioj4j1s7q14" path="res://Scripts/barrel_explosion.gd" id="1_psbmr"]
+[ext_resource type="AudioStream" uid="uid://dhkx02c4t2wml" path="res://SFX/Explosion.wav" id="2_3wmwm"]
 
 [sub_resource type="Gradient" id="Gradient_1tdys"]
 offsets = PackedFloat32Array(0, 0.28)
@@ -63,6 +64,10 @@ script = ExtResource("1_psbmr")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_3wmwm")
+
+[node name="Explosion" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_3wmwm")
+pitch_scale = 0.48
 
 [connection signal="finished" from="." to="." method="_on_finished"]
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

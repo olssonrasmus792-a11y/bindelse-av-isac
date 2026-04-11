@@ -4,9 +4,22 @@ extends GPUParticles2D
 
 var explosion_damage
 var explosion_particles
+var monitoring_time = 0.1
+var time_left
+@onready var area_2d: Area2D = $Area2D
+@onready var explosion: AudioStreamPlayer = $Explosion
 
 func _ready() -> void:
 	amount = explosion_particles
+	time_left = monitoring_time
+	explosion.pitch_scale = randf_range(0.5, 0.75)
+	explosion.play()
+
+func _process(delta: float) -> void:
+	time_left -= delta
+	
+	if time_left <= 0:
+		area_2d.monitoring = false
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	var aim_direction = (body.global_position - global_position).normalized()

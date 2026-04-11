@@ -20,6 +20,13 @@ extends CharacterBody2D
 @onready var ambient_light: CanvasModulate = $"../Ambient Light"
 @onready var death_particles: GPUParticles2D = $Visuals/DeathParticles
 @onready var damage_vignette: TextureRect = $"../UI/DamageVignette"
+@onready var low_battery: Panel = $LowBattery
+@onready var glass_break: AudioStreamPlayer = $GlassBreak
+@onready var punch_1: AudioStreamPlayer = $Punch1
+@onready var punch_2: AudioStreamPlayer = $Punch2
+@onready var punch_3: AudioStreamPlayer = $Punch3
+@onready var sparks: AudioStreamPlayer = $Sparks
+@onready var deny: AudioStreamPlayer = $Deny
 
 enum ColorState { YELLOW, RED, GREEN }
 
@@ -88,6 +95,7 @@ func _ready() -> void:
 	roll_light.color = Color.LIGHT_YELLOW
 	death_particles.emitting = false
 	sword_sprite.visible = true
+	low_battery.visible = false
 	update_health()
 	update_stamina_ui()
 
@@ -231,6 +239,7 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 		if enemies_hit.has(body):
 			return  # already hit this attack
 		
+		play_hit_sound()
 		enemies_hit[body] = true
 		
 		var total_damage = calculate_base_damage()
@@ -258,8 +267,22 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 		get_tree().current_scene.add_child(ft)
 
 	if body.is_in_group("barrel"):
+		play_hit_sound()
 		body.hit()
 		body.apply_knockback(aim_direction)
+
+func play_hit_sound():
+	var roll = randf()
+	
+	if roll < 0.33:
+		punch_1.pitch_scale = randf_range(1.2, 1.6)
+		punch_1.play(0.1)
+	elif roll < 0.66:
+		punch_2.pitch_scale = randf_range(0.9, 1.3)
+		punch_2.play()
+	else:
+		punch_3.pitch_scale = randf_range(0.9, 1.3)
+		punch_3.play()
 
 func calculate_base_damage():
 	var total_damage
@@ -329,6 +352,11 @@ func update_stamina_ui():
 		stamina_bar.add_child(icon)
 		icon.modulate.a = 1.0 if i < stamina else 0.1
 	
+	if stamina == 1 or stamina < 2 and stamina_recharge.time_left > stamina_regen / 2:
+		low_battery.visible = true
+	else:
+		low_battery.visible = false
+	
 	stamina_bar.queue_sort()
 	stamina_panel.queue_sort()
 
@@ -339,6 +367,7 @@ func no_stamina():
 	ft.add_theme_color_override("font_color", Color.RED)
 	ft.global_position = global_position
 	get_tree().current_scene.add_child(ft)  # Or a dedicated UI node
+	deny.play()
 
 func handle_animations(delta):
 	var health_state : int = round(remap(health, 1, max_health, 1, 3))
@@ -380,6 +409,7 @@ func handle_animations(delta):
 func die():
 	is_dead = true
 	death_particles.emitting = true
+	sparks.play()
 	health = 0
 	death_light_time = 0
 	
@@ -426,6 +456,9 @@ func take_damage(dmg, from_position: Vector2, knockback_strength):
 		if invulnerability_timer > 0.1:
 			invulnerability_timer -= 0.01
 		return
+	
+	glass_break.pitch_scale = randf_range(1.0, 1.75)
+	glass_break.play()
 	
 	apply_knockback(from_position, knockback_strength)
 	

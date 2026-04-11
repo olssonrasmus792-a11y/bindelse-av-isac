@@ -1,7 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://dxogqxysy2jhw"]
+[gd_scene load_steps=9 format=3 uid="uid://dxogqxysy2jhw"]
 
 [ext_resource type="Script" uid="uid://6aieiikcb248" path="res://Scripts/muddy.gd" id="1_10ykd"]
 [ext_resource type="Texture2D" uid="uid://cqodias6yulyn" path="res://Textures/Enemies/muddy.png" id="2_rtjbt"]
+[ext_resource type="AudioStream" uid="uid://b1x7y731jfsgl" path="res://SFX/Bounce1.wav" id="3_j1std"]
+[ext_resource type="AudioStream" uid="uid://cl6fbbunv1u01" path="res://SFX/Bounce2.wav" id="4_ltj6o"]
+[ext_resource type="AudioStream" uid="uid://dicus887lpaph" path="res://SFX/Splat.wav" id="5_ltj6o"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4a5km"]
 radius = 1021.50134
@@ -38,3 +41,13 @@ range_z_max = 200
 shadow_enabled = true
 texture = SubResource("GradientTexture2D_10ykd")
 texture_scale = 0.5
+
+[node name="Bounce1" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_j1std")
+pitch_scale = 1.27
+
+[node name="Bounce2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_ltj6o")
+
+[node name="Splat" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_ltj6o")
