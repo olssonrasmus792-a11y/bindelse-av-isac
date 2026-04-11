@@ -6,7 +6,8 @@
 [resource]
 script = ExtResource("1_ldeti")
 name = "Caged Muddy"
-description = "+20% Muddy spawn rate"
+stats = Array[String](["+20% Muddy Spawn Rate"])
+stat_colors = Array[Color]([Color(0, 0.78431374, 0.39215687, 1)])
 price = 10
 icon = ExtResource("1_lh3i0")
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

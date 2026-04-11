@@ -6,7 +6,8 @@
 [resource]
 script = ExtResource("2_b0tl3")
 name = "Barrel"
-description = "+50% Barrel explosion damage, +25% explosion size"
+stats = Array[String](["+50% Explosion Damage", "+25% Explosion Size"])
+stat_colors = Array[Color]([Color(0, 0.78431374, 0.39215687, 1), Color(0, 0.78431374, 0.39215687, 1)])
 price = 10
 icon = ExtResource("1_vu4p0")
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

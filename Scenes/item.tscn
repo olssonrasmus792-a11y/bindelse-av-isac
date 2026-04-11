@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://wrfivba0rg5d"]
+[gd_scene load_steps=12 format=3 uid="uid://wrfivba0rg5d"]
 
 [ext_resource type="Script" uid="uid://c4arvh1yfyp4" path="res://Scripts/item.gd" id="1_76mu4"]
+[ext_resource type="Shader" uid="uid://ccnwywmpuht17" path="res://Shaders/main_menu.gdshader" id="2_u06aw"]
 [ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="3_u06aw"]
 
 [sub_resource type="Gradient" id="Gradient_1teyb"]
@@ -18,20 +19,28 @@ fill_to = Vector2(1, 0.5)
 radius = 152.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u06aw"]
-bg_color = Color(0.1740711, 0.21042678, 0.2194421, 1)
-border_width_left = 10
-border_width_top = 10
-border_width_right = 10
-border_width_bottom = 10
-border_color = Color(1, 1, 1, 1)
+bg_color = Color(0.28627452, 0.19215687, 0.16078432, 0.78431374)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 1, 1, 0.5882353)
 border_blend = true
 corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
+shadow_color = Color(0, 0, 0, 0.6627451)
+shadow_size = 2
 
 [sub_resource type="Theme" id="Theme_btogu"]
 Panel/styles/panel = SubResource("StyleBoxFlat_u06aw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_btogu"]
+shader = ExtResource("2_u06aw")
+shader_parameter/height = 1.0
+shader_parameter/frequency = 10.0
+shader_parameter/speed = 1.5
 
 [sub_resource type="Gradient" id="Gradient_76mu4"]
 offsets = PackedFloat32Array(0, 0.75333333, 1)
@@ -50,6 +59,7 @@ z_index = 2
 script = ExtResource("1_76mu4")
 
 [node name="Shadow" type="ColorRect" parent="."]
+z_index = -1
 offset_left = -32.0
 offset_top = 32.0
 offset_right = 32.0
@@ -87,12 +97,10 @@ offset_bottom = 40.0
 [node name="Panel" type="Panel" parent="PopUp"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -1.6
-anchor_right = -1.6
-offset_left = 128.0
-offset_top = -192.0
-offset_right = 384.0
-offset_bottom = 192.0
+anchor_left = -4.4
+anchor_top = -5.6
+anchor_right = 4.4
+anchor_bottom = -1.2
 pivot_offset = Vector2(-64, 192)
 theme = SubResource("Theme_btogu")
 metadata/_edit_use_anchors_ = true
@@ -100,22 +108,33 @@ metadata/_edit_use_anchors_ = true
 [node name="RichTextLabel" type="RichTextLabel" parent="PopUp/Panel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.15625
-anchor_top = 0.20833333
-anchor_right = 0.84375
-anchor_bottom = 0.7916667
+anchor_left = 0.045454547
+anchor_top = 0.3636363
+anchor_right = 0.95454544
+anchor_bottom = 0.7272727
 pivot_offset = Vector2(-168, 112)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("3_u06aw")
+bbcode_enabled = true
 text = "mi bombo habluhbhluhbluhb bhlub luh."
+fit_content = true
+autowrap_mode = 2
 horizontal_alignment = 1
+vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="Label" type="Label" parent="PopUp/Panel"]
+material = SubResource("ShaderMaterial_btogu")
 layout_mode = 1
 anchors_preset = -1
+anchor_top = 0.04545453
 anchor_right = 1.0
-anchor_bottom = 0.16666667
+anchor_bottom = 0.31818178
 pivot_offset = Vector2(-128, 192)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_outline_size = 16
 theme_override_fonts/font = ExtResource("3_u06aw")
+theme_override_font_sizes/font_size = 24
 text = "blahblah"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -124,10 +143,12 @@ metadata/_edit_use_anchors_ = true
 [node name="Label2" type="Label" parent="PopUp/Panel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 0.8333333
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = 0.045454547
+anchor_top = 0.77272725
+anchor_right = 0.95454544
+anchor_bottom = 0.95454544
 pivot_offset = Vector2(-128, -128)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_u06aw")
 text = "Purchase (E) : 5 coins"
 horizontal_alignment = 1
@@ -135,19 +156,22 @@ vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="Line2D" type="Line2D" parent="PopUp/Panel"]
-points = PackedVector2Array(32, 64, 224, 64)
+position = Vector2(0, -16)
+points = PackedVector2Array(32, 72, 320, 72)
 closed = true
 width = 5.0
+default_color = Color(1, 1, 1, 0.39215687)
 
 [node name="Line2D2" type="Line2D" parent="PopUp/Panel"]
 position = Vector2(0, 256)
-points = PackedVector2Array(32, 64, 224, 64)
+points = PackedVector2Array(32, -120, 320, -120)
 closed = true
 width = 5.0
+default_color = Color(1, 1, 1, 0.39215687)
 
 [node name="PointLight2D2" type="PointLight2D" parent="PopUp"]
-position = Vector2(191.99998, 0)
-scale = Vector2(0.272, 0.4)
+position = Vector2(-1.7166138e-05, -136)
+scale = Vector2(0.36799997, 0.192)
 color = Color(1, 1, 0.9411765, 1)
 energy = 0.75
 texture = SubResource("GradientTexture2D_u06aw")

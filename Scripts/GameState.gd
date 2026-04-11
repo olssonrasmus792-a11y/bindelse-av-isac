@@ -13,7 +13,7 @@ var muddy_spawn_rate = 10
 var snail_spawn_rate = 20
 var stoney_spawn_rate = 20
 
-var start_time = 5.0
+var start_time = 300.0
 var time_left = start_time
 var pause_timer = false
 

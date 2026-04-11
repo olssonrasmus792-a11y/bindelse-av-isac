@@ -6,7 +6,8 @@
 [resource]
 script = ExtResource("2_6tcug")
 name = "Heart"
-description = "+1 max hp and restore all health"
+stats = Array[String](["+1 Max HP", "Restore All Health"])
+stat_colors = Array[Color]([Color(0, 0.78431374, 0.39215687, 1), Color(0.9233477, 0.4325546, 0.9010629, 1)])
 price = 5
 icon = ExtResource("1_hvypd")
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

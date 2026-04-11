@@ -3,7 +3,7 @@ extends Control
 @onready var grid = $ItemsGrid
 @onready var tooltip: Panel = $Tooltip
 @onready var item_name: Label = $Tooltip/ItemName
-@onready var item_description: Label = $Tooltip/ItemDescription
+@onready var item_description: RichTextLabel = $Tooltip/ItemDescription
 @onready var item_icon: TextureRect = $Tooltip/ItemIcon
 @onready var item_amount: Label = $Tooltip/ItemAmount
 @onready var item_damage: Label = $Tooltip/ItemDamage
@@ -46,6 +46,8 @@ func _on_item_hovered(item: ItemData, count: int):
 	tooltip.visible = true
 	item_name.text = item.name
 	item_description.text = item.description
+	if item.description == "":
+		item_description.text = get_stats_text(item.stats, item.stat_colors)
 	item_icon.texture = item.icon
 	item_amount.text = "x" + str(count)
 	if item.damage_dealt > 0:
@@ -55,3 +57,18 @@ func _on_item_hovered(item: ItemData, count: int):
 
 func _on_item_unhovered():
 	tooltip.visible = false
+
+func get_stats_text(stats: Array[String], stat_colors: Array[Color]) -> String:
+	var text := ""
+	
+	for i in range(stats.size()):
+		var stat = stats[i]
+		
+		# fallback color if missing
+		var color = Color.WHITE
+		if i < stat_colors.size():
+			color = stat_colors[i]
+		
+		text += "[color=#%s]• %s[/color]\n" % [color.to_html(), stat]
+	
+	return text.strip_edges()

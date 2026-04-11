@@ -105,7 +105,7 @@ func _physics_process(delta):
 		stamina_recharge.start(stamina_regen)
 	
 	if invulnerability_timer > 0:
-		var alpha = remap(invulnerability_timer, 0, invulnerability_duration, 1, 0.5)
+		var alpha = remap(invulnerability_timer, 0, invulnerability_duration, 0.75, 0.5)
 		invulnerability_timer -= delta
 		modulate.a = alpha
 
@@ -120,6 +120,7 @@ func _input(event: InputEvent) -> void:
 		roll_direction = Input.get_vector("left", "right", "up", "down")
 		roll_timer.start(0.3)
 		rolling = true
+		invulnerability_timer = 0.45
 		stamina -= 1
 		update_stamina_ui()
 	
@@ -421,7 +422,9 @@ func respawn_player():
 	position = spawn_pos
 
 func take_damage(dmg, from_position: Vector2, knockback_strength):
-	if invulnerability_timer > 0 or is_dead or (rolling and GameState.taken_upgrades.has("Rollin'")):
+	if invulnerability_timer > 0 or is_dead or rolling:
+		if invulnerability_timer > 0.1:
+			invulnerability_timer -= 0.01
 		return
 	
 	apply_knockback(from_position, knockback_strength)

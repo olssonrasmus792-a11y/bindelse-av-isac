@@ -22,9 +22,11 @@ func _ready():
 		sprite.texture = data.icon
 		label.text = data.name
 		description.text = data.description
-		price.text = "Purchase(E) : " + str(data.price) + " Coins"
+		price.text = "Purchase (E) : " + str(data.price) + " Coins"
 		base_y = sprite.position.y
 		pop_up.visible = false
+		if data.description == "":
+			description.text = get_stats_text(data.stats, data.stat_colors)
 
 func _process(delta: float) -> void:
 	time += delta
@@ -35,16 +37,15 @@ func _process(delta: float) -> void:
 	else:
 		price.modulate = Color.RED
 	
-	if player.global_position.x > global_position.x:
-		pop_up.position.x = -384
-	else:
-		pop_up.position.x = 0
+	if data.price == 0:
+		price.text = "Take Item (E) : Free"
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and pop_up.visible == true:
 		if GameState.coins >= data.price:
 			buy_item()
 		else:
+			shake_label()
 			for guys in guy:
 				guys.not_enough_money()
 
@@ -92,3 +93,52 @@ func show_item_popup():
 
 func hide_item_popup():
 	pop_up.visible = false
+
+func get_stats_text(stats: Array[String], stat_colors: Array[Color]) -> String:
+	var text := ""
+	
+	for i in range(stats.size()):
+		var stat = stats[i]
+		
+		# fallback color if missing
+		var color = Color.WHITE
+		if i < stat_colors.size():
+			color = stat_colors[i]
+		
+		text += "[color=#%s]• %s[/color]\n" % [color.to_html(), stat]
+	
+	return text.strip_edges()
+
+func shake_label():
+	var original_pos = price.position
+
+	var strength = 10.0
+	var duration = 0.15
+	var elapsed = 0.0
+
+	# instant punch (important for feel)
+	price.scale = Vector2(1.15, 1.15)
+
+	while elapsed < duration:
+		var offset = Vector2(
+			randf_range(-strength, strength),
+			randf_range(-strength, strength)
+		)
+
+		price.position = original_pos + offset
+		price.rotation = randf_range(-0.02, 0.02)
+
+		await get_tree().process_frame
+
+		elapsed += get_process_delta_time()
+
+		# fast decay = “impact → settle”
+		strength = lerp(strength, 0.0, 0.35)
+
+		# smooth return scale
+		price.scale = lerp(price.scale, Vector2.ONE, 0.25)
+
+	# reset cleanly
+	price.position = original_pos
+	price.rotation = 0
+	price.scale = Vector2.ONE

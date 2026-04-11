@@ -11,6 +11,7 @@ extends Node2D
 ]
 @export var room_weights = [5, 5, 5, 5, 1] # Hur stor chans att ett rum spawnar jämfört med andra
 
+@export var start_room_scene = preload("res://Scenes/room_start.tscn")
 @export var shop_scene = preload("res://Scenes/room_shop.tscn")
 var shop_rooms_spawned = 0
 var min_shop_rooms = 80
@@ -106,7 +107,7 @@ func place_room(grid_pos: Vector2):
 		room_scene = room_scenes[4]
 	else:
 		if grid_pos == start_pos:
-			room_scene = room_scenes[0]
+			room_scene = start_room_scene
 		else:
 			room_scene = pick_weighted_room()
 	

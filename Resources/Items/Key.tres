@@ -6,7 +6,8 @@
 [resource]
 script = ExtResource("2_hlvcg")
 name = "Key"
-description = "Ts opens stuff or sum like that (+1 key)"
+stats = Array[String](["+1 Key"])
+stat_colors = Array[Color]([Color(0.7287947, 0.6241101, 0.20166373, 1)])
 price = 3
 icon = ExtResource("1_g0v2i")
 metadata/_custom_type_script = "uid://i88s36u6b2ej"
