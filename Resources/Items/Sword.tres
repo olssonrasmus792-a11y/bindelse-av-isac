@@ -10,4 +10,7 @@ stats = Array[String](["+1 Damage", "+25% Enemies"])
 stat_colors = Array[Color]([Color(0.8901961, 0.36862746, 0.03529412, 1), Color(0.45452452, 0.45452416, 0.45452422, 1)])
 price = 10
 icon = ExtResource("1_qvvkx")
+tracked_stats = Array[String](["Damage dealt", "Extra enemies spawned"])
+tracked_stat_values = Array[int]([0, 0])
+tracked_stat_colors = Array[Color]([Color(9.62615e-08, 0.8229906, 1.1551381e-06, 1), Color(0.72156864, 0, 0, 1)])
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

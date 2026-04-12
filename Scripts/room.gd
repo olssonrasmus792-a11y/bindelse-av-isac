@@ -2,10 +2,11 @@ extends Node2D
 @onready var room: Node2D = $"."
 
 @export var enemy_scenes = [
-	{ "scene": preload("res://Scenes/Enemies/Muddy.tscn"), "weight": GameState.muddy_spawn_rate },
-	{ "scene": preload("res://Scenes/Enemies/Snail.tscn"), "weight": GameState.snail_spawn_rate },
-	{ "scene": preload("res://Scenes/Enemies/stoney.tscn"), "weight": GameState.stoney_spawn_rate }
+	preload("res://Scenes/Enemies/Muddy.tscn"),
+	preload("res://Scenes/Enemies/Snail.tscn"),
+	preload("res://Scenes/Enemies/stoney.tscn")
 ]
+
 @export var clover_boss_scene := preload("res://Scenes/clover_boss.tscn")
 @export var coin_scene = preload("res://Scenes/Coin.tscn")
 @export var key_scene := preload("res://Scenes/Key.tscn")
@@ -158,7 +159,6 @@ func open_room():
 func on_room_cleared():
 	open_room()
 	GameState.rooms_cleared += 1
-	GameState.enemies_per_room += 2
 
 func close_door(door):
 	door.get_node("Door").visible = true
@@ -173,25 +173,43 @@ func open_door(door):
 func get_enemy_container() -> Node:
 	return get_tree().get_first_node_in_group("enemy_container")
 
+func get_enemy_weight(scene):
+	if scene == preload("res://Scenes/Enemies/Muddy.tscn"):
+		return GameState.muddy_spawn_rate
+
+	if scene == preload("res://Scenes/Enemies/Snail.tscn"):
+		return GameState.snail_spawn_rate
+
+	if scene == preload("res://Scenes/Enemies/stoney.tscn"):
+		return GameState.stoney_spawn_rate
+
+	return 1
+
 func pick_weighted_enemy():
 	var total_weight = 0
 	
 	for e in enemy_scenes:
-		total_weight += e.weight
+		total_weight += get_enemy_weight(e)
 	
 	var roll = randf_range(0, total_weight)
 	var current = 0
 	
 	for e in enemy_scenes:
-		current += e.weight
-		if roll <= current:
-			return e.scene
+		var weight = get_enemy_weight(e)
+		current += weight
 	
-	return enemy_scenes[0].scene
+		if roll <= current:
+			if e == preload("res://Scenes/Enemies/Muddy.tscn") and roll > GameState.muddy_base_spawn_rate:
+				for item in GameState.taken_items:
+					if item.name == "Caged Muddy":
+						item.tracked_stat_values[0] += 1
+			return e
+	
+	return enemy_scenes[0]
 
 func spawn_enemies():
 	var enemies = get_enemy_container()
-	for x in range(GameState.enemies_per_room):
+	for x in range(GameState.get_enemy_amount()):
 		var enemy_scene = pick_weighted_enemy()
 		var enemy = enemy_scene.instantiate()
 		enemy.global_position.x = global_position.x + room_width/2 - tile_size * 3 + randf_range(-room_width/4, room_width/4)

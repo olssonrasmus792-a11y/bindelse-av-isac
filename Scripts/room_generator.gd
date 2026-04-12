@@ -14,8 +14,8 @@ extends Node2D
 @export var start_room_scene = preload("res://Scenes/room_start.tscn")
 @export var shop_scene = preload("res://Scenes/room_shop.tscn")
 var shop_rooms_spawned = 0
-var min_shop_rooms = 2
-var max_shop_rooms = 5
+var min_shop_rooms = 4
+var max_shop_rooms = 8
 
 @export var player_scene = preload("res://Scenes/player.tscn")
 @export var chest_scene = preload("res://Scenes/Chest.tscn")
@@ -23,8 +23,8 @@ var max_shop_rooms = 5
 @export var room_size := Vector2i(GameState.room_tiles_x, GameState.room_tiles_y) # tiles
 @onready var camera_2d: Camera2D = $"../Player/Camera2D"
 @export var tile_size := 200.0
-@export var dungeon_width := 4.0
-@export var dungeon_height := 4.0
+@export var dungeon_width := 3.0
+@export var dungeon_height := 3.0
 var room_width  = GameState.room_tiles_x * tile_size
 var room_height = GameState.room_tiles_y * tile_size
 

@@ -292,7 +292,7 @@ func calculate_base_damage():
 	total_damage += GameState.get_item_count("Sword")
 	for item in GameState.taken_items:
 		if item.name == "Sword":
-			item.damage_dealt += 1
+			item.tracked_stat_values[0] += 1
 	
 	return total_damage
 

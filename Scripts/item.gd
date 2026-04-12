@@ -83,8 +83,6 @@ func apply_item(item_name):
 				barrels.explosion_size = clamp(barrels.explosion_size, 1, 16)
 				barrels.explosion_particles *= 1.05
 				barrels.explosion_particles = clamp(barrels.explosion_particles, 20, 60)
-		"Sword":
-			GameState.enemies_per_room *= 1.25
 		"Caged Muddy":
 			GameState.muddy_spawn_rate *= 1.2
 

@@ -6,7 +6,7 @@ extends Control
 @onready var item_description: RichTextLabel = $Tooltip/ItemDescription
 @onready var item_icon: TextureRect = $Tooltip/ItemIcon
 @onready var item_amount: Label = $Tooltip/ItemAmount
-@onready var item_damage: Label = $Tooltip/ItemDamage
+@onready var item_tracked_stats: Label = $Tooltip/ItemTrackedStats
 
 var slot_scene = preload("res://Scenes/item_slot.tscn")
 
@@ -21,11 +21,16 @@ func display_inventory():
 
 	var stacked_items = get_stacked_items(GameState.taken_items)
 
-	for item in stacked_items.keys():
-		var count = stacked_items[item]
+	for key in stacked_items.keys():
+
+		var entry = stacked_items[key]
+
+		var item = entry["item"]
+		var count = entry["count"]
 
 		var slot = slot_scene.instantiate()
 		grid.add_child(slot)
+
 		slot.set_item(item, count)
 
 		slot.hovered.connect(_on_item_hovered)
@@ -35,25 +40,53 @@ func get_stacked_items(items: Array) -> Dictionary:
 	var stacked := {}
 
 	for item in items:
-		if stacked.has(item):
-			stacked[item] += 1
-		else:
-			stacked[item] = 1
+
+		var key = item.name
+
+		if not stacked.has(key):
+			stacked[key] = {
+				"item": item,
+				"count": 0,
+				"values": item.tracked_stat_values.duplicate()
+			}
+
+		stacked[key]["count"] += 1
+
+		# Add tracked values
+		for i in range(item.tracked_stat_values.size()):
+			stacked[key]["values"][i] += item.tracked_stat_values[i]
 
 	return stacked
 
 func _on_item_hovered(item: ItemData, count: int):
+
 	tooltip.visible = true
+
 	item_name.text = item.name
 	item_description.text = item.description
+
 	if item.description == "":
-		item_description.text = get_stats_text(item.stats, item.stat_colors)
+		item_description.text = get_stats_text(
+			item.stats,
+			item.stat_colors
+		)
+
 	item_icon.texture = item.icon
 	item_amount.text = "x" + str(count)
-	if item.damage_dealt > 0:
-		item_damage.text = "Damage dealt: " + str(item.damage_dealt)
-	else:
-		item_damage.text = ""
+
+	var tracked_text := ""
+
+	for i in range(item.tracked_stats.size()):
+
+		var stat_name = item.tracked_stats[i]
+		var stat_value = item.tracked_stat_values[i]
+
+		tracked_text += stat_name + ": " + str(stat_value)
+
+		if i < item.tracked_stats.size() - 1:
+			tracked_text += "\n"
+
+	item_tracked_stats.text = tracked_text
 
 func _on_item_unhovered():
 	tooltip.visible = false

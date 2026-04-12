@@ -59,9 +59,10 @@ func calculate_base_damage():
 	total_damage = explosion_damage
 	
 	total_damage *= 1 + (GameState.get_item_count("Barrel") * 0.5)
+	
 	for item in GameState.taken_items:
 		if item.name == "Barrel":
-			item.damage_dealt += total_damage - explosion_damage
+			item.tracked_stat_values[0] += int(total_damage - explosion_damage)
 			break
 	
 	return int(total_damage)

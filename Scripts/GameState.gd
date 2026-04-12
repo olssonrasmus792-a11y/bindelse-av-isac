@@ -9,8 +9,9 @@ var kills := 0
 var combo := 0
 var rooms_cleared := 0
 
-var enemies_per_room = 3
-var muddy_spawn_rate = 10
+var enemy_start_count = 3
+var muddy_base_spawn_rate = 10
+var muddy_spawn_rate = muddy_base_spawn_rate
 var snail_spawn_rate = 20
 var stoney_spawn_rate = 20
 
@@ -31,7 +32,7 @@ func reset_game():
 	coins = 0
 	kills = 0
 	rooms_cleared = 0
-	enemies_per_room = 3
+	enemy_start_count = 3
 	boss_killed = false
 	boss_spawned = false
 	taken_upgrades.clear()
@@ -43,3 +44,17 @@ func get_item_count(item_name: String) -> int:
 		if item.name == item_name:
 			count += 1
 	return count
+
+func get_enemy_amount():
+	var amount = enemy_start_count
+	
+	amount += rooms_cleared * 2
+	
+	for item in GameState.taken_items:
+		if item.name == "Sword":
+			item.tracked_stat_values[1] += (roundi(amount * 0.25 * get_item_count("Sword")))
+	
+	amount += amount * 0.25 * get_item_count("Sword")
+	amount = roundi(amount)
+	
+	return amount
