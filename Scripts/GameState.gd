@@ -30,8 +30,9 @@ var taken_items: Array[ItemData] = []
 func reset_game():
 	keys = 0
 	coins = 0
-	kills = 0
+	kills = 0	
 	rooms_cleared = 0
+	combo = 0
 	enemy_start_count = 3
 	boss_killed = false
 	boss_spawned = false

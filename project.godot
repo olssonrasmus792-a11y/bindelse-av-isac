@@ -38,6 +38,8 @@ sword=""
 guy=""
 inventory=""
 boss=""
+arrow_manager=""
+main_menu_muddy=""
 
 [input]
 

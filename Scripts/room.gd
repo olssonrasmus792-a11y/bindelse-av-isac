@@ -209,6 +209,7 @@ func pick_weighted_enemy():
 
 func spawn_enemies():
 	var enemies = get_enemy_container()
+	var arrow_manager = get_tree().get_first_node_in_group("arrow_manager")
 	for x in range(GameState.get_enemy_amount()):
 		var enemy_scene = pick_weighted_enemy()
 		var enemy = enemy_scene.instantiate()
@@ -218,6 +219,9 @@ func spawn_enemies():
 		
 		alive_enemies.append(enemy)
 		enemy.tree_exited.connect(_on_enemy_died.bind(enemy))
+		
+		if arrow_manager and !GameSettings.dark_mode:
+			arrow_manager.create_arrow(enemy)
 
 func spawn_boss():
 	var enemies = get_enemy_container()

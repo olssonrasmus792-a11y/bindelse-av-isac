@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b5usxadoxspgb"]
+
+[ext_resource type="Script" uid="uid://ksfvvx26sy0w" path="res://Scripts/off_screen_arrow.gd" id="1_ji3pk"]
+[ext_resource type="Texture2D" uid="uid://dugjopd1nxski" path="res://Textures/724843.png" id="2_ji3pk"]
+
+[node name="OffScreenArrow" type="Node2D"]
+script = ExtResource("1_ji3pk")
+
+[node name="Arrow" type="Sprite2D" parent="."]
+scale = Vector2(0.015625002, 0.015625002)
+texture = ExtResource("2_ji3pk")
