@@ -4,7 +4,8 @@ extends Node2D
 @export var enemy_scenes = [
 	preload("res://Scenes/Enemies/Muddy.tscn"),
 	preload("res://Scenes/Enemies/Snail.tscn"),
-	preload("res://Scenes/Enemies/stoney.tscn")
+	preload("res://Scenes/Enemies/stoney.tscn"),
+	preload("res://Scenes/Enemies/water_guy.tscn")
 ]
 
 @export var clover_boss_scene := preload("res://Scenes/clover_boss.tscn")
@@ -182,6 +183,9 @@ func get_enemy_weight(scene):
 
 	if scene == preload("res://Scenes/Enemies/stoney.tscn"):
 		return GameState.stoney_spawn_rate
+	
+	if scene == preload("res://Scenes/Enemies/water_guy.tscn"):
+		return GameState.waterguy_spawn_rate
 
 	return 1
 

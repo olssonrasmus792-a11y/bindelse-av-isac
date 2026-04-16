@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://bwblrsll6nfoe"]
+
+[ext_resource type="Script" uid="uid://bq63j0vuyniyu" path="res://Scripts/clover_projectile.gd" id="1_h43i6"]
+[ext_resource type="Texture2D" uid="uid://ckelyfs0bau6x" path="res://Textures/Enemies/Waterball.png" id="2_6hau2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tpbmr"]
+radius = 13.038404
+
+[node name="WaterProjectile" type="Node2D"]
+z_index = 1
+script = ExtResource("1_h43i6")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.16583334, 0.16583334)
+texture = ExtResource("2_6hau2")
+offset = Vector2(-5.3097363, 26.548674)
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_tpbmr")
+
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
