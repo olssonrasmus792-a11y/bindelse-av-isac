@@ -1,4 +1,8 @@
 extends Node2D
+
+@export var all_items: Array[ItemData] = []
+@onready var item_scene = preload("res://Scenes/item.tscn")
+
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var gpu_particles_2d: GPUParticles2D = $GPUParticles2D
 @onready var collision: CollisionShape2D = $CollisionClosed
@@ -48,13 +52,58 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 
 
 func open_chest():
-	var upgrade_scene = get_tree().get_first_node_in_group("upgrade_screen")
-	get_tree().paused = true
-	upgrade_scene.spawn_random_cards(3)
-	pop_3.play()
-	
 	animated_sprite_2d.play("Open")
 	chest_opened = true
 	gpu_particles_2d.emitting = true
 	GameState.keys -= 1
 	GameState.coins += coin_amount
+	spawn_item()
+
+
+func spawn_item():
+	load_items()
+
+	if all_items.is_empty():
+		return
+
+	# Pick random item
+	var index = randi() % all_items.size()
+	var item_data = all_items[index].duplicate()
+
+	# Create item
+	var item = item_scene.instantiate()
+	item.global_position = global_position + Vector2(0, -16)
+	item.data = item_data
+	item_data.price = 0
+
+	get_tree().current_scene.add_child(item)
+
+
+func load_items():
+	all_items.clear()
+
+	var dir = DirAccess.open("res://Resources/Items")
+	if dir == null:
+		return
+
+	dir.list_dir_begin()
+	var file_name = dir.get_next()
+
+	while file_name != "":
+		if file_name.ends_with(".tres"):
+			var item: ItemData = load("res://Resources/Items/" + file_name)
+			if item:
+				all_items.append(item)
+		file_name = dir.get_next()
+
+	dir.list_dir_end()
+
+
+
+
+
+func upgrade_cards(): #Använd för xp system sen
+	var upgrade_scene = get_tree().get_first_node_in_group("upgrade_screen")
+	get_tree().paused = true
+	upgrade_scene.spawn_random_cards(3)
+	pop_3.play()
