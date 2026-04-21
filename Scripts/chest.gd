@@ -2,16 +2,27 @@ extends Node2D
 
 @export var all_items: Array[ItemData] = []
 @onready var item_scene = preload("res://Scenes/item.tscn")
+@export var coin_scene = preload("res://Scenes/Coin.tscn")
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var gpu_particles_2d: GPUParticles2D = $GPUParticles2D
 @onready var collision: CollisionShape2D = $CollisionClosed
 @onready var label: Label = $NoKeys
 @onready var pop_3: AudioStreamPlayer = $Pop3
+@onready var deny: AudioStreamPlayer = $Deny
+
+var item_pos_offset = 50
 
 var player_is_close = false
 var chest_opened = false
 var coin_amount
+
+var lines = [
+	"Holy moly!",
+	"Wow!",
+	"Nice bro",
+	"Yippie!"
+]
 
 func _ready() -> void:
 	coin_amount = randi_range(2, 5)
@@ -32,13 +43,14 @@ func _input(event: InputEvent) -> void:
 		
 		if GameState.keys > 0:
 			label.position.y = -88
-			label.text = "+" + str(coin_amount) + " Coins"
+			label.text = lines.pick_random()
 			label.modulate = Color.YELLOW
 			open_chest()
 		else:
 			label.position.y = -64
 			label.text = "No Keys!"
 			label.modulate = Color.RED
+			deny.play()
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
@@ -56,7 +68,8 @@ func open_chest():
 	chest_opened = true
 	gpu_particles_2d.emitting = true
 	GameState.keys -= 1
-	GameState.coins += coin_amount
+	for i in range(coin_amount):
+		drop_coin(global_position)
 	spawn_item()
 
 
@@ -75,6 +88,11 @@ func spawn_item():
 	item.global_position = global_position + Vector2(0, -16)
 	item.data = item_data
 	item_data.price = 0
+
+	var dir = [-1, 1].pick_random()
+	item.flying = true
+	item.velocity = Vector2(randf_range(80, 140) * dir, -300) # up + sideways
+	item.floor_y = global_position.y + 10 # ground level
 
 	get_tree().current_scene.add_child(item)
 
@@ -99,7 +117,16 @@ func load_items():
 	dir.list_dir_end()
 
 
-
+func drop_coin(pos):
+	var coin = coin_scene.instantiate()
+	
+	coin.global_position = pos
+	var dir = [-1, 1].pick_random()
+	coin.flying = true
+	coin.velocity = Vector2(randf_range(100, 160) * dir, randf_range(-250, -500)) # up + sideways
+	coin.floor_y = global_position.y + randi_range(1, 25) # ground level
+	
+	get_tree().current_scene.add_child(coin)
 
 
 func upgrade_cards(): #Använd för xp system sen

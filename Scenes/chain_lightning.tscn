@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bkwh4ls1317pa"]
+
+[ext_resource type="Script" uid="uid://cfi36nhoimr21" path="res://Scenes/chain_lightning.gd" id="1_px3fa"]
+
+[node name="ChainLightning" type="Line2D"]
+default_color = Color(0.98039216, 0.95686275, 0.2901961, 1)
+script = ExtResource("1_px3fa")
+segments = 10

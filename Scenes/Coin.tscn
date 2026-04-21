@@ -8,9 +8,10 @@
 radius = 22.022715
 
 [node name="Node2D" type="Node2D"]
+z_index = 2
 script = ExtResource("1_somhs")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Shadow" type="ColorRect" parent="."]
 offset_left = -14.0
 offset_top = 19.0
 offset_right = 14.0

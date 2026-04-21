@@ -11,13 +11,23 @@ var time := 0.0
 @export var float_speed := 2.0
 @export var float_amount := 5.0
 
+var velocity := Vector2.ZERO
+var gravity := 900.0
+var bounce := 0.4
+var floor_y := 0.0
+var flying := false
+var has_bounced := false
+
 @onready var sprite := $Sprite2D
+@onready var area_2d: Area2D = $Area2D
 @onready var pop_up: Control = $PopUp
+@onready var shadow: ColorRect = $Shadow
 @onready var label: Label = $PopUp/Panel/Label
 @onready var price: Label = $PopUp/Panel/Label2
 @onready var description: RichTextLabel = $PopUp/Panel/RichTextLabel
 @onready var purchase: AudioStreamPlayer = $Purchase
 @onready var deny: AudioStreamPlayer = $Deny
+@onready var pop: AudioStreamPlayer = $Pop
 
 func _ready():
 	if data:
@@ -29,6 +39,35 @@ func _ready():
 		pop_up.visible = false
 		if data.description == "":
 			description.text = get_stats_text(data.stats, data.stat_colors)
+
+func _physics_process(delta):
+	if flying:
+		if !has_bounced:
+			shadow.visible = false
+			area_2d.monitoring = false
+
+		velocity.y += gravity * delta
+		position += velocity * delta
+		sprite.rotation += velocity.x * 0.002
+
+		# Hit ground
+		if global_position.y >= floor_y:
+			global_position.y = floor_y
+			has_bounced = true
+
+			# Bounce
+			if abs(velocity.y) > 50:
+				velocity.y *= -bounce
+				velocity.x *= randf_range(0.4, 0.8) # lose some sideways speed
+				area_2d.monitoring = true
+				shadow.visible = true
+			else:
+				velocity = Vector2.ZERO
+				flying = false
+				area_2d.monitoring = true
+				shadow.visible = true
+	else:
+		sprite.rotation = lerp_angle(sprite.rotation, 0.0, 5 * delta)
 
 func _process(delta: float) -> void:
 	time += delta
@@ -63,6 +102,8 @@ func buy_item():
 	inventory.display_inventory()
 	
 	var sound = purchase
+	if data.price == 0:
+		sound = pop
 	sound.get_parent().remove_child(sound)
 	get_tree().current_scene.add_child(sound)
 	sound.play()

@@ -41,6 +41,10 @@ var spawn_pos
 @export var attack_speed = 0.5
 var enemies_hit := {}
 
+var chain_count := 10          # how many extra enemies it can hit
+var chain_range := 500.0     # how far it can jump
+var chain_falloff := 0.8    # damage multiplier per jump
+
 @export var max_speed = 500
 @export var speed = max_speed
 
@@ -265,11 +269,80 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 		ft.modulate = text_color
 		ft.global_position = body.global_position
 		get_tree().current_scene.add_child(ft)
+		
+		if GameState.get_item_count("Chainy") > 0:
+			chain_hit(body, total_damage, chain_count)
 
 	if body.is_in_group("barrel"):
 		play_hit_sound()
 		body.hit()
 		body.apply_knockback(aim_direction)
+
+func chain_hit(from_enemy: CharacterBody2D, dmg: float, remaining_chains: int) -> void:
+	if remaining_chains <= 0:
+		return
+
+	if not is_instance_valid(from_enemy):
+		return
+
+	var from_pos := from_enemy.global_position
+
+	var enemies = get_tree().get_nodes_in_group("enemies")
+
+	var closest_enemy: CharacterBody2D = null
+	var closest_dist := chain_range
+
+	for enemy in enemies:
+		if not is_instance_valid(enemy):
+			continue
+		if enemy == from_enemy:
+			continue
+		if enemies_hit.has(enemy):
+			continue
+
+		var dist = from_pos.distance_to(enemy.global_position)
+
+		if dist < closest_dist:
+			closest_dist = dist
+			closest_enemy = enemy
+
+	if closest_enemy == null:
+		return
+
+	# ⚡ always spawn lightning from last known position
+	spawn_lightning(from_pos, closest_enemy.global_position)
+
+	await get_tree().create_timer(0.06).timeout
+
+	if not is_instance_valid(closest_enemy):
+		return
+
+	enemies_hit[closest_enemy] = true
+
+	var new_damage = dmg * chain_falloff
+	closest_enemy.take_damage(new_damage)
+	for item in GameState.taken_items:
+		if item.name == "Chainy":
+			item.tracked_stat_values[0] += int(new_damage)
+
+	var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
+	var ft = floating_text_scene.instantiate()
+	ft.text = "-" + str(int(new_damage))
+	ft.modulate = Color.WHITE
+	ft.global_position = closest_enemy.global_position
+	get_tree().current_scene.add_child(ft)
+
+	var dir = (closest_enemy.global_position - from_pos).normalized()
+	closest_enemy.apply_knockback(dir)
+
+	await chain_hit(closest_enemy, new_damage, remaining_chains - 1)
+
+func spawn_lightning(start: Vector2, end: Vector2):
+	var lightning_scene = preload("res://Scenes/chain_lightning.tscn")
+	var lightning = lightning_scene.instantiate()
+
+	get_tree().current_scene.add_child(lightning)
+	lightning.setup(start, end)
 
 func play_hit_sound():
 	var roll = randf()

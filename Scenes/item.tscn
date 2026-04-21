@@ -1,10 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://wrfivba0rg5d"]
+[gd_scene load_steps=15 format=3 uid="uid://wrfivba0rg5d"]
 
 [ext_resource type="Script" uid="uid://c4arvh1yfyp4" path="res://Scripts/item.gd" id="1_76mu4"]
 [ext_resource type="Shader" uid="uid://ccnwywmpuht17" path="res://Shaders/main_menu.gdshader" id="2_u06aw"]
 [ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="3_u06aw"]
 [ext_resource type="AudioStream" uid="uid://sqgyorqdkfmr" path="res://SFX/Purchase.wav" id="4_btogu"]
 [ext_resource type="AudioStream" uid="uid://y7j1luuklmw7" path="res://SFX/Deny.wav" id="5_tnst4"]
+[ext_resource type="AudioStream" uid="uid://c4p6crthvs73j" path="res://SFX/Pop4.wav" id="6_renmp"]
 
 [sub_resource type="Gradient" id="Gradient_1teyb"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -81,6 +82,7 @@ offset_left = -40.0
 offset_top = -40.0
 offset_right = 40.0
 offset_bottom = 40.0
+pivot_offset = Vector2(40, 40)
 expand_mode = 2
 stretch_mode = 5
 
@@ -183,6 +185,9 @@ stream = ExtResource("4_btogu")
 
 [node name="Deny" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_tnst4")
+
+[node name="Pop" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_renmp")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

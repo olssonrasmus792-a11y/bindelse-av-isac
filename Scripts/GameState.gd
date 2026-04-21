@@ -9,7 +9,7 @@ var kills := 0
 var combo := 0
 var rooms_cleared := 0
 
-var enemy_start_count = 3
+var enemy_start_count = 30
 var muddy_base_spawn_rate = 8
 var muddy_spawn_rate = muddy_base_spawn_rate
 var snail_spawn_rate = 20
