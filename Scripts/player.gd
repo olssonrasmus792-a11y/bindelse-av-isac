@@ -12,10 +12,11 @@ extends CharacterBody2D
 @onready var attack_cooldown: Timer = $AttackCooldown
 @onready var health_bar: HBoxContainer = $"../UI/health_panel/health_bar"
 @onready var stamina_bar: HBoxContainer = $"../UI/stamina_panel/stamina_bar"
+@onready var cooldown_bar: ProgressBar = $CooldownBar
 @onready var health_panel: PanelContainer = $"../UI/health_panel"
 @onready var stamina_panel: PanelContainer = $"../UI/stamina_panel"
-@onready var attack_area: Area2D = $AttackArea
-@onready var sword_sprite: AnimatedSprite2D = $AttackArea/SwordSprite
+@onready var attack_area: Area2D = $Sword/SwordPivot/AttackArea
+@onready var sword_sprite: AnimatedSprite2D = $Sword/SwordPivot/SwordSprite
 @onready var color_timer: Timer = $ColorTimer
 @onready var ambient_light: CanvasModulate = $"../Ambient Light"
 @onready var death_particles: GPUParticles2D = $Visuals/DeathParticles
@@ -27,6 +28,7 @@ extends CharacterBody2D
 @onready var punch_3: AudioStreamPlayer = $Punch3
 @onready var sparks: AudioStreamPlayer = $Sparks
 @onready var deny: AudioStreamPlayer = $Deny
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 enum ColorState { YELLOW, RED, GREEN }
 
@@ -39,6 +41,8 @@ var spawn_pos
 @export var damage = 4
 @export var crit_chance = 0.1
 @export var attack_speed = 0.5
+@export var knockback = 650
+
 var enemies_hit := {}
 
 var chain_count := 10          # how many extra enemies it can hit
@@ -51,9 +55,9 @@ var chain_falloff := 0.8    # damage multiplier per jump
 @export var max_health = 6
 @export var health = max_health
 
-@export var max_stamina = 5
+@export var max_stamina = 6
 @export var stamina = max_stamina
-@export var stamina_regen = 1.5 # Sekunder per stamina
+@export var stamina_regen = 1.0 # Sekunder per stamina
 
 @export var color_state: ColorState
 
@@ -107,7 +111,7 @@ func _physics_process(delta):
 	if !is_dead:
 		get_input()
 		move_and_slide()
-	handle_attacking()
+	handle_attacking(delta)
 	handle_animations(delta)
 	handle_movement(delta)
 	handle_color()
@@ -138,11 +142,12 @@ func _input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("attack") and !attacking and !recharging and stamina > 0 and !rolling:
 		attacking = true
-		attack_timer.start(0.25)
+		cooldown_bar.value = 0.0
+		cooldown_bar.visible = true
+		attack_timer.start(attack_speed)
 		play_sword_swing()
 		stamina -= 1
 		update_stamina_ui()
-		await get_tree().create_timer(0.05).timeout
 		enemies_hit.clear()
 		attack_area.monitoring = true
 	
@@ -179,54 +184,29 @@ func handle_movement(delta):
 func _on_roll_timer_timeout() -> void:
 	rolling = false
 
-func handle_attacking():
+func handle_attacking(delta):
 	if attacking and !is_dead:
 		pass
 	else:
 		attack_area.monitoring = false
+	
+	cooldown_bar.visible = not attack_timer.is_stopped()
+
+	if attack_timer.is_stopped():
+		cooldown_bar.value = 1.0
+		return
+
+	# Progress = elapsed / total
+	var progress := 1.0 - (attack_timer.time_left / attack_timer.wait_time)
+
+	# Smooth fill
+	cooldown_bar.value = lerp(cooldown_bar.value, progress, 60 * delta)
 
 func play_sword_swing():
-	var t = create_tween()
-	t.set_parallel(false)
+	var speed_mult = 1 / attack_speed
 
-	# Anticipation
-	t.tween_property(sword_sprite, "rotation", sword_base_rotation + deg_to_rad(-20), 0.05)
-
-	# Snap
-	var tw = t.tween_property(sword_sprite, "rotation", sword_base_rotation + deg_to_rad(90), 0.1)
-	tw.set_trans(Tween.TRANS_EXPO)
-	tw.set_ease(Tween.EASE_OUT)
-
-	# Overshoot
-	tw = t.tween_property(sword_sprite, "rotation", sword_base_rotation + deg_to_rad(80), 0.08)
-	tw.set_trans(Tween.TRANS_BACK)
-	tw.set_ease(Tween.EASE_OUT)
-
-	
-	# Return rotation
-	t.tween_property(sword_sprite, "rotation", sword_base_rotation, 0.12)
-
-func sword_smear():
-	var t = create_tween()
-	await get_tree().create_timer(0.1).timeout
-	t.tween_property(sword_sprite, "scale", sword_base_scale * Vector2(1.6, 0.7), 0.03)
-	t.tween_property(sword_sprite, "scale", sword_base_scale, 0.03).set_delay(0.03)
-
-func spawn_afterimages():
-	for i in 10:
-		var ghost = sword_sprite.duplicate()
-		add_child(ghost)
-		ghost.global_position = sword_sprite.global_position
-		ghost.rotation = sword_sprite.rotation
-		ghost.scale = sword_sprite.scale
-		ghost.modulate = Color(1, 1, 1, 0.8)
-		ghost.z_index -= 1
-
-		var t = create_tween()
-		t.tween_property(ghost, "modulate:a", 0.0, 0.15)
-		t.tween_callback(ghost.queue_free)
-
-		await get_tree().create_timer(0.02).timeout
+	animation_player.speed_scale = speed_mult
+	animation_player.play("sword_swing")
 
 func handle_color():
 	if switching_color:
@@ -256,7 +236,7 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 			ft_text = "-" + str(int(total_damage))
 		
 		body.take_damage(total_damage)
-		body.apply_knockback(aim_direction)
+		body.apply_knockback(aim_direction, knockback)
 		
 		for cam in get_tree().get_nodes_in_group("camera"):
 			cam.shake(0.75)
@@ -311,8 +291,9 @@ func chain_hit(from_enemy: CharacterBody2D, dmg: float, remaining_chains: int) -
 
 	# ⚡ always spawn lightning from last known position
 	spawn_lightning(from_pos, closest_enemy.global_position)
+	hit_stop(0.5, 0.02)
 
-	await get_tree().create_timer(0.06).timeout
+	await get_tree().create_timer(0.12).timeout
 
 	if not is_instance_valid(closest_enemy):
 		return
@@ -321,9 +302,12 @@ func chain_hit(from_enemy: CharacterBody2D, dmg: float, remaining_chains: int) -
 
 	var new_damage = dmg * chain_falloff
 	closest_enemy.take_damage(new_damage)
+
 	for item in GameState.taken_items:
 		if item.name == "Chainy":
+			item.tracked_stat_values[1] += 1
 			item.tracked_stat_values[0] += int(new_damage)
+			continue
 
 	var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
 	var ft = floating_text_scene.instantiate()
@@ -333,7 +317,7 @@ func chain_hit(from_enemy: CharacterBody2D, dmg: float, remaining_chains: int) -
 	get_tree().current_scene.add_child(ft)
 
 	var dir = (closest_enemy.global_position - from_pos).normalized()
-	closest_enemy.apply_knockback(dir)
+	closest_enemy.apply_knockback(dir, 0)
 
 	await chain_hit(closest_enemy, new_damage, remaining_chains - 1)
 

@@ -17,7 +17,7 @@ var health = 12
 @export var scale_factor = 1.0
 
 @export var knockback_strength_player = 325
-@export var knockback_strength = 2250
+@export var knockback_strength_mult = 4.0
 @export var knockback_duration = 1.0
 
 var knockback_velocity := Vector2.ZERO
@@ -87,9 +87,11 @@ func take_damage(damage):
 	if health <= 0:
 		explode(self)  
 
-func apply_knockback(aim_direction: Vector2):
+func apply_knockback(aim_direction: Vector2, knockback_strength: int):
+	if knockback_strength == 0:
+		return
 	var knockback_direction = aim_direction.normalized()
-	knockback_velocity = knockback_direction * knockback_strength
+	knockback_velocity = knockback_direction * knockback_strength *  knockback_strength_mult
 	knockback_timer = knockback_duration
 	direction = knockback_direction
 	sprite_2d.modulate = Color(1, 0, 0)

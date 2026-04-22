@@ -16,7 +16,7 @@ var direction := Vector2(1, 1).normalized()
 var health = 12
 
 @export var knockback_strength_player = 200
-@export var knockback_strength = 1500
+@export var knockback_strength_mult = 1.0
 @export var knockback_duration = 0.6
 
 @export var drop_distance = 20.0
@@ -79,9 +79,9 @@ func take_damage(damage):
 	if health <= 0:
 		explode(self)  
 
-func apply_knockback(aim_direction: Vector2):
+func apply_knockback(aim_direction: Vector2, knockback_strength: int):
 	var knockback_direction = aim_direction.normalized()
-	current_knockback = knockback_direction * knockback_strength
+	current_knockback = knockback_direction * knockback_strength * knockback_strength_mult
 	knockback_timer = knockback_duration
 	direction = knockback_direction
 

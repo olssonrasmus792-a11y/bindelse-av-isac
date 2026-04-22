@@ -8,6 +8,7 @@ var monitoring_time = 0.1
 var time_left
 @onready var area_2d: Area2D = $Area2D
 @onready var explosion: AudioStreamPlayer = $Explosion
+@export var knockback = 450
 
 func _ready() -> void:
 	amount = explosion_particles
@@ -35,7 +36,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 			ft_text = "-" + str(int(total_damage))
 		
 		body.take_damage(total_damage)
-		body.apply_knockback(aim_direction)
+		body.apply_knockback(aim_direction, knockback)
 		
 		for cam in get_tree().get_nodes_in_group("camera"):
 			cam.shake(0.75)

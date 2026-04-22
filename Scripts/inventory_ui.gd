@@ -6,7 +6,7 @@ extends Control
 @onready var item_description: RichTextLabel = $Tooltip/ItemDescription
 @onready var item_icon: TextureRect = $Tooltip/ItemIcon
 @onready var item_amount: Label = $Tooltip/ItemAmount
-@onready var item_tracked_stats: Label = $Tooltip/ItemTrackedStats
+@onready var item_tracked_stats: RichTextLabel = $Tooltip/ItemTrackedStats
 
 var slot_scene = preload("res://Scenes/item_slot.tscn")
 
@@ -80,8 +80,11 @@ func _on_item_hovered(item: ItemData, count: int):
 
 		var stat_name = item.tracked_stats[i]
 		var stat_value = item.tracked_stat_values[i]
+		var color = item.tracked_stat_colors[i]
 
+		tracked_text += "[color=" + color.to_html() + "]"
 		tracked_text += stat_name + ": " + str(stat_value)
+		tracked_text += "[/color]"
 
 		if i < item.tracked_stats.size() - 1:
 			tracked_text += "\n"

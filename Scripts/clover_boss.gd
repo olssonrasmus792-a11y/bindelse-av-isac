@@ -327,7 +327,7 @@ func flash_red():
 		0.5
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
-func apply_knockback(_from_position: Vector2):
+func apply_knockback(_aim_direction: Vector2, _knockback_strength: int):
 	pass
 
 func explode(enemy):

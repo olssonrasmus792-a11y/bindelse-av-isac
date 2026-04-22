@@ -505,9 +505,9 @@ width = 1.0
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.35714287
-anchor_top = 0.35714275
+anchor_top = 0.33035702
 anchor_right = 0.96428573
-anchor_bottom = 0.78571427
+anchor_bottom = 0.75892854
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/normal_font = ExtResource("8_6iyac")
 theme_override_font_sizes/normal_font_size = 10
@@ -543,17 +543,18 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="ItemTrackedStats" type="Label" parent="UI/InventoryUI/Tooltip"]
+[node name="ItemTrackedStats" type="RichTextLabel" parent="UI/InventoryUI/Tooltip"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.35714287
-anchor_top = 0.72321427
+anchor_top = 0.7410714
 anchor_right = 0.96428573
-anchor_bottom = 0.9285714
+anchor_bottom = 0.95535713
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/line_spacing = -3
-theme_override_fonts/font = ExtResource("8_6iyac")
-theme_override_font_sizes/font_size = 8
+theme_override_constants/line_separation = -3
+theme_override_fonts/normal_font = ExtResource("8_6iyac")
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
 text = "Damage Dealt: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -606,7 +607,7 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("24_3pmx8")
 
-[connection signal="body_entered" from="Player/AttackArea" to="Player" method="_on_attack_area_body_entered"]
+[connection signal="body_entered" from="Player/Sword/SwordPivot/AttackArea" to="Player" method="_on_attack_area_body_entered"]
 [connection signal="timeout" from="Player/RollTimer" to="Player" method="_on_roll_timer_timeout"]
 [connection signal="timeout" from="Player/AttackTimer" to="Player" method="_on_attack_timer_timeout"]
 [connection signal="timeout" from="Player/AttackCooldown" to="Player" method="_on_attack_cooldown_timeout"]

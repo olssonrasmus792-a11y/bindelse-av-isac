@@ -108,6 +108,15 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_xh2lw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mngi8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_68jwf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mwejy")
 }],
 "loop": true,
 "name": &"default",
@@ -146,10 +155,11 @@ color = Color(0, 0, 0, 0.19607843)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals"]
 z_index = 1
+position = Vector2(8, 0)
 scale = Vector2(0.383, 0.383)
 sprite_frames = SubResource("SpriteFrames_0km8m")
 autoplay = "default"
-frame = 4
+frame_progress = 0.6836148
 offset = Vector2(-28.720655, -104.438644)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
