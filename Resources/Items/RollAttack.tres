@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://bytoufctsc6w3"]
+
+[ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_j84p1"]
+[ext_resource type="Texture2D" uid="uid://dr443p3wlxcw0" path="res://Textures/Bulb Roll Icon.png" id="1_us5sg"]
+
+[resource]
+script = ExtResource("1_j84p1")
+name = "Rollin'"
+stats = Array[String](["+2 Roll Damage"])
+stat_colors = Array[Color]([Color(0.7845968, 0.32831553, 0, 1)])
+price = 8
+icon = ExtResource("1_us5sg")
+tracked_stats = Array[String](["Damage Dealt"])
+tracked_stat_values = Array[int]([0])
+tracked_stat_colors = Array[Color]([Color(0.8097802, 0.30610073, 0, 1)])
+metadata/_custom_type_script = "uid://i88s36u6b2ej"

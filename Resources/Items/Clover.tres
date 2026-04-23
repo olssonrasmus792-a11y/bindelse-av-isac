@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://dql3euwcl7a0f"]
+
+[ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_iyy07"]
+[ext_resource type="Texture2D" uid="uid://db2shrm8wye7b" path="res://Textures/Enemies/clove throw.png" id="1_yhe4q"]
+
+[resource]
+script = ExtResource("1_iyy07")
+name = "Clover"
+stats = Array[String](["+10% Luck"])
+stat_colors = Array[Color]([Color(0, 0.68, 0.045333292, 1)])
+price = 7
+icon = ExtResource("1_yhe4q")
+metadata/_custom_type_script = "uid://i88s36u6b2ej"

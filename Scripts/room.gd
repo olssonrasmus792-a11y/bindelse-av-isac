@@ -261,7 +261,7 @@ func _on_enemy_died(enemy):
 	
 	if alive_enemies.is_empty():
 		on_room_cleared()
-		if randf() < key_spawn_rate:
+		if randf() < key_spawn_rate * (1 + GameState.luck):
 			drop_key(last_position)
 	
 	if enemy.name == "CloverBoss":

@@ -55,17 +55,17 @@ func hit():
 		queue_free()
 
 func drop_loot():
-	if randf() < coin_spawn_chance:
+	if randf() < coin_spawn_chance * (1 + GameState.luck):
 		var item = coin_scene.instantiate()
 		item.global_position = position + Vector2(randi_range(-item_pos_offset, item_pos_offset), randi_range(-item_pos_offset, item_pos_offset))
 		get_parent().call_deferred("add_child", item)  # defer adding
 	
-	if randf() < key_spawn_chance:
+	if randf() < key_spawn_chance * (1 + GameState.luck):
 		var item = key_scene.instantiate()
 		item.global_position = position + Vector2(randi_range(-item_pos_offset, item_pos_offset), randi_range(-item_pos_offset, item_pos_offset))
 		get_parent().call_deferred("add_child", item)  # defer adding
 	
-	if randf() < hp_spawn_chance:
+	if randf() < hp_spawn_chance * (1 + GameState.luck):
 		var item = heart_scene.instantiate()
 		item.global_position = position + Vector2(randi_range(-item_pos_offset, item_pos_offset), randi_range(-item_pos_offset, item_pos_offset))
 		get_parent().call_deferred("add_child", item)  # defer adding

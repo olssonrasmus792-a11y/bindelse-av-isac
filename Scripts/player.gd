@@ -40,7 +40,7 @@ var spawn_pos
 
 @export var damage = 4
 @export var crit_chance = 0.1
-@export var attack_speed = 0.5
+@export var attack_speed = 0.3
 @export var knockback = 650
 
 var enemies_hit := {}
@@ -138,6 +138,7 @@ func _input(event: InputEvent) -> void:
 		rolling = true
 		invulnerability_timer = 0.45
 		stamina -= 1
+		enemies_hit.clear()
 		update_stamina_ui()
 	
 	if event.is_action_pressed("attack") and !attacking and !recharging and stamina > 0 and !rolling:
@@ -166,6 +167,9 @@ func _input(event: InputEvent) -> void:
 		GameState.coins += 10
 
 func handle_movement(delta):
+	if is_dead:
+		return
+	
 	var target_velocity: Vector2
 
 	if rolling:
@@ -180,30 +184,92 @@ func handle_movement(delta):
 	
 	velocity += knockback_velocity
 	knockback_velocity = knockback_velocity.lerp(Vector2.ZERO, knockback_decay * delta)
+	
+	var collision = get_last_slide_collision()
+	if collision:
+		var collider = collision.get_collider()
+		if rolling and GameState.get_item_count("Rollin'") > 0:
+			if collider.is_in_group("enemies"):
+				if enemies_hit.has(collider):
+					return  # already hit this attack
+				
+				play_hit_sound()
+				enemies_hit[collider] = true
+				
+				collider.take_damage(GameState.get_item_count("Rollin'") * 2)
+				collider.apply_knockback(collider.global_position - global_position, knockback * 2)
+				for item in GameState.taken_items:
+					if item.name == "Rollin'":
+						item.tracked_stat_values[0] += 2
+				
+				var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
+				var ft = floating_text_scene.instantiate()
+				ft.text = "-" + str(int(GameState.get_item_count("Rollin'") * 2))
+				ft.modulate = Color.WHITE
+				ft.global_position = collider.global_position
+				get_tree().current_scene.add_child(ft)
 
 func _on_roll_timer_timeout() -> void:
 	rolling = false
 
 func handle_attacking(delta):
+
+	# Handle attack hitbox
 	if attacking and !is_dead:
 		pass
 	else:
 		attack_area.monitoring = false
-	
-	cooldown_bar.visible = not attack_timer.is_stopped()
 
-	if attack_timer.is_stopped():
+	# Detect attacking from animation
+	attacking = animation_player.is_playing()
+
+	var attack_running := !attack_timer.is_stopped()
+	var cooldown_running := !attack_cooldown.is_stopped()
+
+	# Show bar while attack OR cooldown active
+	cooldown_bar.visible = attack_running or cooldown_running
+
+	# Ready again
+	if not attack_running and not cooldown_running:
 		cooldown_bar.value = 1.0
 		return
 
-	# Progress = elapsed / total
-	var progress := 1.0 - (attack_timer.time_left / attack_timer.wait_time)
+	# --- TOTAL TIME ---
+	var attack_time := attack_timer.wait_time
+	var cooldown_time := attack_cooldown.wait_time
+	var total_time := attack_time + cooldown_time
 
-	# Smooth fill
-	cooldown_bar.value = lerp(cooldown_bar.value, progress, 60 * delta)
+	var progress := 0.0
+
+	# --- DURING ATTACK ---
+	if attack_running:
+		var elapsed_attack := (
+			attack_time - attack_timer.time_left
+		)
+
+		progress = elapsed_attack / total_time
+
+	# --- DURING COOLDOWN ---
+	elif cooldown_running:
+		var elapsed_cooldown := (
+			cooldown_time - attack_cooldown.time_left
+		)
+
+		progress = (
+			attack_time + elapsed_cooldown
+		) / total_time
+
+	cooldown_bar.value = progress
+
+func _on_attack_timer_timeout() -> void:
+	attack_cooldown.start(attack_speed)
+	recharging = true
+
+func _on_attack_cooldown_timeout() -> void:
+	recharging = false
 
 func play_sword_swing():
-	var speed_mult = 1 / attack_speed
+	var speed_mult = 1 / (attack_speed * 2)
 
 	animation_player.speed_scale = speed_mult
 	animation_player.play("sword_swing")
@@ -352,14 +418,6 @@ func calculate_base_damage():
 			item.tracked_stat_values[0] += 2
 	
 	return total_damage
-
-func _on_attack_timer_timeout() -> void:
-	attack_cooldown.start(attack_speed)
-	recharging = true
-	attacking = false
-
-func _on_attack_cooldown_timeout() -> void:
-	recharging = false
 
 func _on_stamina_recharge_timeout() -> void:
 	stamina += 1

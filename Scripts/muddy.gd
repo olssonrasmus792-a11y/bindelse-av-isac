@@ -17,7 +17,7 @@ var health = 12
 @export var scale_factor = 1.0
 
 @export var knockback_strength_player = 325
-@export var knockback_strength_mult = 4.0
+@export var knockback_fly_speed = 2000
 @export var knockback_duration = 1.0
 
 var knockback_velocity := Vector2.ZERO
@@ -74,7 +74,16 @@ func _physics_process(delta):
 			get_tree().current_scene.add_child(ft)  # Or a dedicated UI node
 		
 		if collider.is_in_group("player") and knockback_timer > 0.0:
-			collider.take_damage(1, global_position, knockback_strength_player)
+			if GameState.get_item_count("Friend") > 0:
+				play_bounce_sound()
+				knockback_velocity = knockback_velocity.bounce(normal)
+				direction = knockback_velocity.normalized()
+				for item in GameState.taken_items:
+					if item.name == "Friend":
+						item.tracked_stat_values[0] += 1
+						continue
+			else:
+				collider.take_damage(1, global_position, knockback_strength_player)
 	
 	sprite_2d.flip_h = direction[0] < 0
 	if direction[0] < 0:
@@ -91,7 +100,7 @@ func apply_knockback(aim_direction: Vector2, knockback_strength: int):
 	if knockback_strength == 0:
 		return
 	var knockback_direction = aim_direction.normalized()
-	knockback_velocity = knockback_direction * knockback_strength *  knockback_strength_mult
+	knockback_velocity = knockback_direction * knockback_fly_speed
 	knockback_timer = knockback_duration
 	direction = knockback_direction
 	sprite_2d.modulate = Color(1, 0, 0)

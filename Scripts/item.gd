@@ -126,6 +126,9 @@ func apply_item(item_name):
 				barrels.explosion_particles = clamp(barrels.explosion_particles, 20, 60)
 		"Caged Muddy":
 			GameState.muddy_spawn_rate *= 1.2
+		"Clover":
+			GameState.luck += 0.1
+			GameState.calculate_stats()
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):

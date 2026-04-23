@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://cuqt71wu4kg4j"]
+
+[ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_ecmg0"]
+[ext_resource type="Texture2D" uid="uid://bv55uupft8aea" path="res://Textures/Items/Def up.png" id="1_g8hx7"]
+
+[resource]
+script = ExtResource("1_ecmg0")
+name = "Friend"
+description = "Muddy won't hurt you anymore"
+price = 5
+icon = ExtResource("1_g8hx7")
+tracked_stats = Array[String](["Damage avoided"])
+tracked_stat_values = Array[int]([0])
+tracked_stat_colors = Array[Color]([Color(0.99999994, 0.3077489, 0.8478175, 1)])
+metadata/_custom_type_script = "uid://i88s36u6b2ej"
