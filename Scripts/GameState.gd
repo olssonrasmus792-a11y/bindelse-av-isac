@@ -20,10 +20,11 @@ var coin_drop_chance = 0.1
 
 var luck = 0.0
 
-var start_time = 480.0
+var start_time = 20.0
 var time_left = start_time
 var pause_timer = false
 
+var current_room
 var boss_spawned = false
 var boss_killed = false
 
@@ -65,3 +66,7 @@ func get_enemy_amount():
 
 func calculate_stats():
 	coin_drop_chance = 0.1 * (1 + luck)
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("interact"):
+		print("Current room: " + str(current_room))

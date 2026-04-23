@@ -66,13 +66,27 @@ func _ready() -> void:
 	color_rect.visible = true
 	camera_normal_zoom = camera.zoom.x
 	camera_map_zoom = camera.zoom.x / 3
+	can_spawn_boss = false
 
 func _process(_delta: float) -> void:
 	for player in get_tree().get_nodes_in_group("player"):
 		if player.is_dead:
 			clear_light.visible = false
 	
-	if can_spawn_boss and GameState.time_left <= 0 and !GameState.boss_spawned:
+	var player_inside := is_player_inside()
+
+	if player_inside:
+		# This room becomes active ONLY if player is fully inside
+		GameState.current_room = self
+		player_is_in_room = true
+	else:
+		# Only clear if THIS room was the active one
+		if GameState.current_room == self:
+			GameState.current_room = null
+
+		player_is_in_room = false
+	
+	if can_spawn_boss and GameState.time_left <= 0 and !GameState.boss_spawned and GameState.current_room == self:
 		spawn_boss()
 		close_room()
 		GameState.boss_spawned = true
@@ -118,12 +132,21 @@ func _on_enemy_spawn_area_body_entered(body: Node2D) -> void:
 		call_deferred("spawn_enemies")
 		close_room()
 	
-	if body.name == "Player":
+	if body.is_in_group("player"):
+		GameState.current_room = self
 		can_spawn_boss = true
 
 func _on_enemy_spawn_area_body_exited(body: Node2D) -> void:
-	if body.name == "Player":
+	if body.is_in_group("player"):
+		GameState.current_room = null
 		can_spawn_boss = false
+
+func is_player_inside() -> bool:
+	var area := $EnemySpawnArea
+	for body in area.get_overlapping_bodies():
+		if body.is_in_group("player"):
+			return true
+	return false
 
 func close_room():
 	room_closed = true
