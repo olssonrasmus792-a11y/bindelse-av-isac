@@ -1,10 +1,12 @@
-[gd_scene load_steps=58 format=3 uid="uid://cyhswvdif7wx7"]
+[gd_scene load_steps=60 format=3 uid="uid://cyhswvdif7wx7"]
 
 [ext_resource type="Texture2D" uid="uid://dqkxms1huepa7" path="res://Textures/Bulb Run sprite sheet.png" id="1_v0iea"]
 [ext_resource type="Texture2D" uid="uid://crgjvc2x6p5mk" path="res://Textures/Sword.png" id="2_6t5aa"]
 [ext_resource type="Script" uid="uid://yl66xqi50qs3" path="res://Scripts/sword.gd" id="3_fkybt"]
 [ext_resource type="Texture2D" uid="uid://dyt6v2vuvu7c0" path="res://Textures/Sword new (3).png" id="3_vgqql"]
 [ext_resource type="Texture2D" uid="uid://ce0uhg8w68lv8" path="res://Textures/LowBattery.png" id="5_fkybt"]
+[ext_resource type="AudioStream" uid="uid://bvp100ykmdgiv" path="res://SFX/Whoosh.wav" id="6_x3wgy"]
+[ext_resource type="AudioStream" uid="uid://cudhghm2w64it" path="res://SFX/Whoosh2.wav" id="7_3smsa"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_344ge"]
 radius = 28.0
@@ -321,6 +323,54 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector2(1, 1)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sword/SwordPivot/AttackArea:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sword/SwordPivot/Trail:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Whoosh:playing")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Whoosh2:playing")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_fkybt"]
 resource_name = "sword_swing"
@@ -331,10 +381,10 @@ tracks/0/path = NodePath("Sword/SwordPivot:rotation")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.13333334, 0.23333333, 0.33333334, 0.73333335, 1),
-"transitions": PackedFloat32Array(1, 2, -0.5, 1, 0.5, 1),
+"times": PackedFloat32Array(0, 0.1, 0.23333332, 0.36666667, 0.73333335, 1),
+"transitions": PackedFloat32Array(1, 2.462291, -0.5, 1, 0.5, 1),
 "update": 0,
-"values": [0.0, -0.5235987755982988, 1.5707963267948966, 1.3962634015954636, 0.0, 0.0]
+"values": [0.0, -0.6981317007977318, 1.3962634015954636, 1.2217304763960306, 0.0, 0.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -343,7 +393,7 @@ tracks/1/path = NodePath("Sword/SwordPivot:skew")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.13333334, 0.23333333, 0.33333334, 0.73333335, 1),
+"times": PackedFloat32Array(0, 0.1, 0.23333332, 0.36666667, 0.73333335, 1),
 "transitions": PackedFloat32Array(1, 2, -0.5, 1, 0.5, 1),
 "update": 0,
 "values": [0.0, -0.08726646259971647, 0.2617993877991494, 0.17453292519943295, 0.0, 0.0]
@@ -355,10 +405,58 @@ tracks/2/path = NodePath("Sword/SwordPivot:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.13333334, 0.23333333, 0.33333334, 0.73333335, 1),
+"times": PackedFloat32Array(0, 0.1, 0.23333332, 0.36666667, 0.73333335, 1),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(1, 1), Vector2(1, 1.5), Vector2(1, 1.25), Vector2(1, 1), Vector2(1, 1)]
+"values": [Vector2(1, 1), Vector2(1, 1), Vector2(2, 1.5), Vector2(1, 1.25), Vector2(1, 1), Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sword/SwordPivot/AttackArea:monitoring")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15785123, 0.36666667, 0.73333335, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [false, true, true, false, false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sword/SwordPivot/Trail:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.14065538, 0.16053717, 0.2544077),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [false, false, true, false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = false
+tracks/5/path = NodePath("Whoosh:playing")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.0527135),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Whoosh2:playing")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.08458677),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3smsa"]
@@ -545,11 +643,16 @@ libraries = {
 }
 
 [node name="Sword" type="Node2D" parent="."]
-position = Vector2(1, 23)
+position = Vector2(2, 10)
 script = ExtResource("3_fkybt")
 
 [node name="SwordPivot" type="Node2D" parent="Sword"]
-position = Vector2(16, 1)
+position = Vector2(16, 17)
+skew = 0.14346454
+
+[node name="Trail" type="Polygon2D" parent="Sword/SwordPivot"]
+color = Color(1, 1, 0.43137255, 1)
+polygon = PackedVector2Array(55, -92, 51, -69, 38, -63, 38.23318, -39.75245, 19.184807, -54.579926, -3.363555, -56.10144, 11.18564, -83.54057, 31.409946, -100.14998)
 
 [node name="SwordSprite" type="AnimatedSprite2D" parent="Sword/SwordPivot"]
 position = Vector2(37.88964, -8.486374)
@@ -564,5 +667,13 @@ offset = Vector2(96.62975, -84.13229)
 rotation = 0.05905618
 
 [node name="AttackCollision" type="CollisionPolygon2D" parent="Sword/SwordPivot/AttackArea"]
+visible = false
 position = Vector2(-12.95449, -47.805115)
-polygon = PackedVector2Array(62.442924, -54.244373, 72.489624, -36.80695, 77.781136, -15.08139, 70.32628, -5.6249046, 70.041405, 23.442581, 61.18025, 42.99968, 44.032818, 41.008278, 35.74654, 19.459785, 40.373463, -20.883636, 50.52798, -35.50847)
+polygon = PackedVector2Array(62.428604, -47.280704, 77.93365, -39.18172, 78.233864, -17.161053, 70.95608, -4.709797, 71.551414, 22.302156, 57.40387, 37.16308, 50.41607, 37.57623, 43.48218, 21.958254, 42.950985, 12.973945, 47.94227, 12.678835, 47.529114, 5.691038, 28.675165, -8.220419, 5.656239, -7.8611717, 18.977476, -36.69769, 37.93924, -54.84849)
+
+[node name="Whoosh" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_x3wgy")
+volume_db = -20.0
+
+[node name="Whoosh2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_3smsa")

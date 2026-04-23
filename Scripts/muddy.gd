@@ -5,6 +5,7 @@ extends CharacterBody2D
 @export var speed := 275
 @onready var sprite_2d: Sprite2D = $Sprite2D
 @onready var point_light_2d: PointLight2D = $PointLight2D
+@onready var hit_particles: GPUParticles2D = $HitParticles
 
 @onready var bounce_1: AudioStreamPlayer = $Bounce1
 @onready var bounce_2: AudioStreamPlayer = $Bounce2
@@ -28,6 +29,7 @@ signal enemy_died
 func _ready() -> void:
 	direction = Vector2(randf_range(-1, 1), randf_range(-1, 1))
 	point_light_2d.visible = false
+	hit_particles.emitting = false
 
 func _physics_process(delta):
 	scale = Vector2(scale_factor, scale_factor)
@@ -53,6 +55,10 @@ func _physics_process(delta):
 		if knockback_timer > 0.0:
 			for cam in get_tree().get_nodes_in_group("camera"):
 				cam.shake(1.0)
+		
+		if collider.is_in_group("barrel") and knockback_timer > 0.0:
+			collider.health = 0
+			collider.hit()
 		
 		if knockback_timer > 0.0 and !collider.is_in_group("enemies"):
 			play_bounce_sound()
@@ -100,6 +106,7 @@ func apply_knockback(aim_direction: Vector2, knockback_strength: int):
 	if knockback_strength == 0:
 		return
 	var knockback_direction = aim_direction.normalized()
+	hit_particles.rotation = knockback_direction.angle()
 	knockback_velocity = knockback_direction * knockback_fly_speed
 	knockback_timer = knockback_duration
 	direction = knockback_direction

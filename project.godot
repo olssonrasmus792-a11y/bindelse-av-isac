@@ -40,6 +40,7 @@ inventory=""
 boss=""
 arrow_manager=""
 main_menu_muddy=""
+projectiles=""
 
 [input]
 

@@ -9,6 +9,8 @@ extends CharacterBody2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $Visuals/AnimatedSprite2D
 @onready var shoot_timer: Timer = $ShootTimer
 @onready var hp_bar: TextureProgressBar = $TextureProgressBar
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var hit_particles: GPUParticles2D = $HitParticles
 
 var base_y = 0
 
@@ -38,6 +40,7 @@ func _ready() -> void:
 	hp_bar.value = max_health
 	shoot_timer.wait_time = 1.5
 	animated_sprite_2d.play("Spawn")
+	hit_particles.emitting = false
 	await animated_sprite_2d.animation_finished
 	await get_tree().create_timer(1).timeout
 
@@ -258,6 +261,7 @@ func _on_shoot_timer_timeout() -> void:
 func take_damage(damage):
 	health -= damage
 	flash_red()
+	animation_player.play("hit")
 	if health <= 0:
 		explode(self)
 
@@ -327,8 +331,9 @@ func flash_red():
 		0.5
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
-func apply_knockback(_aim_direction: Vector2, _knockback_strength: int):
-	pass
+func apply_knockback(aim_direction: Vector2, _knockback_strength: int):
+	var knockback_direction = aim_direction.normalized()
+	hit_particles.rotation = knockback_direction.angle()
 
 func explode(enemy):
 	var explosion = explosion_scene.instantiate()

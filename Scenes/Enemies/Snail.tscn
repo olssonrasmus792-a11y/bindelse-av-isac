@@ -1,7 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://liad3wcg5iqj"]
+[gd_scene load_steps=19 format=3 uid="uid://liad3wcg5iqj"]
 
 [ext_resource type="Script" uid="uid://b225733yfsgfr" path="res://Scripts/snail.gd" id="1_5346s"]
 [ext_resource type="Texture2D" uid="uid://c7cidaon7x34n" path="res://Textures/Enemies/Snail Run.png" id="1_i7c5s"]
+[ext_resource type="Shader" uid="uid://cny0trqyuchv4" path="res://Shaders/WhiteFlash.gdshader" id="2_ovxyt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ovxyt"]
+shader = ExtResource("2_ovxyt")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_value = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bbiew"]
 atlas = ExtResource("1_i7c5s")
@@ -43,6 +49,92 @@ animations = [{
 radius = 22.0
 height = 76.0
 
+[sub_resource type="Animation" id="Animation_nw2lc"]
+resource_name = "hit"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/AnimatedSprite2D:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.17453292519943295, -0.17453292519943295, 0.0, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HitParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_ovxyt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/AnimatedSprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HitParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ympyn"]
+_data = {
+&"RESET": SubResource("Animation_ovxyt"),
+&"hit": SubResource("Animation_nw2lc")
+}
+
+[sub_resource type="Gradient" id="Gradient_ovxyt"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 1, 0.39215687)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ovxyt"]
+gradient = SubResource("Gradient_ovxyt")
+
+[sub_resource type="Curve" id="Curve_ovxyt"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.57251906, 0.8988764), 0.0, 0.0, 0, 0, Vector2(1, 0.22471917), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_ympyn"]
+curve = SubResource("Curve_ovxyt")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6m2ku"]
+particle_flag_disable_z = true
+spread = 30.0
+initial_velocity_min = 658.87
+initial_velocity_max = 865.38
+gravity = Vector3(0, 50, 0)
+damping_min = 100.00001
+damping_max = 100.00001
+scale_min = 10.0
+scale_max = 14.0
+scale_curve = SubResource("CurveTexture_ympyn")
+color_ramp = SubResource("GradientTexture1D_ovxyt")
+
 [node name="Snail" type="CharacterBody2D" groups=["enemies"]]
 z_index = 1
 motion_mode = 1
@@ -51,12 +143,14 @@ script = ExtResource("1_5346s")
 [node name="Visuals" type="Node2D" parent="."]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals"]
-position = Vector2(28, 16)
+material = SubResource("ShaderMaterial_ovxyt")
+use_parent_material = true
+position = Vector2(1.9073486e-06, -0.9999981)
 scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_k0y6n")
 autoplay = "default"
-frame_progress = 0.53505987
-offset = Vector2(-200, -79.99999)
+frame_progress = 0.4946232
+offset = Vector2(-60.000015, 5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
@@ -68,5 +162,19 @@ shape = SubResource("CapsuleShape2D_tny20")
 [node name="DirectionTimer" type="Timer" parent="."]
 wait_time = 2.0
 autostart = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ympyn")
+}
+
+[node name="HitParticles" type="GPUParticles2D" parent="."]
+amount = 12
+lifetime = 0.4
+one_shot = true
+preprocess = 0.03
+explosiveness = 0.8
+randomness = 0.5
+process_material = SubResource("ParticleProcessMaterial_6m2ku")
 
 [connection signal="timeout" from="DirectionTimer" to="." method="_on_direction_timer_timeout"]

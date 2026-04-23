@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=4 uid="uid://cwo7ty8gxg4fn"]
+[gd_scene load_steps=27 format=4 uid="uid://cwo7ty8gxg4fn"]
 
 [ext_resource type="Script" uid="uid://ikkptpfealcp" path="res://Scripts/stoney.gd" id="1_mwejy"]
 [ext_resource type="Texture2D" uid="uid://i8m1aosksca8" path="res://Textures/Enemies/Rocky jump.png" id="1_nw4po"]
@@ -131,6 +131,92 @@ data = PackedByteArray("cW9hZgAA8eICAKxEFAAQKAAAAAAAAAAAAAAAAOAAQAAAAAAAAAAAAAAA
 format = 3
 stereo = true
 
+[sub_resource type="Animation" id="Animation_nw2lc"]
+resource_name = "hit"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/AnimatedSprite2D:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.17453292519943295, -0.17453292519943295, 0.0, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HitParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_ovxyt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/AnimatedSprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HitParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ympyn"]
+_data = {
+&"RESET": SubResource("Animation_ovxyt"),
+&"hit": SubResource("Animation_nw2lc")
+}
+
+[sub_resource type="Gradient" id="Gradient_c4kng"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 1, 0.39215687)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_vydjb"]
+gradient = SubResource("Gradient_c4kng")
+
+[sub_resource type="Curve" id="Curve_ivm52"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.57251906, 0.8988764), 0.0, 0.0, 0, 0, Vector2(1, 0.22471917), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_km4i5"]
+curve = SubResource("Curve_ivm52")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cr3x1"]
+particle_flag_disable_z = true
+spread = 30.0
+initial_velocity_min = 658.87
+initial_velocity_max = 865.38
+gravity = Vector3(0, 50, 0)
+damping_min = 100.00001
+damping_max = 100.00001
+scale_min = 10.0
+scale_max = 14.0
+scale_curve = SubResource("CurveTexture_km4i5")
+color_ramp = SubResource("GradientTexture1D_vydjb")
+
 [node name="Stoney" type="CharacterBody2D" groups=["enemies"]]
 motion_mode = 1
 script = ExtResource("1_mwejy")
@@ -174,5 +260,20 @@ autostart = true
 
 [node name="StoneFall" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamWAV_c4kng")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ympyn")
+}
+
+[node name="HitParticles" type="GPUParticles2D" parent="."]
+z_index = 1
+amount = 12
+lifetime = 0.4
+one_shot = true
+preprocess = 0.03
+explosiveness = 0.8
+randomness = 0.5
+process_material = SubResource("ParticleProcessMaterial_cr3x1")
 
 [connection signal="timeout" from="DirectionTimer" to="." method="_on_direction_timer_timeout"]

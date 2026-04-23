@@ -505,9 +505,9 @@ width = 1.0
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.35714287
-anchor_top = 0.33035702
+anchor_top = 0.32142845
 anchor_right = 0.96428573
-anchor_bottom = 0.75892854
+anchor_bottom = 0.6696428
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/normal_font = ExtResource("8_6iyac")
 theme_override_font_sizes/normal_font_size = 10
@@ -515,6 +515,7 @@ bbcode_enabled = true
 text = "desc"
 fit_content = true
 horizontal_alignment = 1
+vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="ItemIcon" type="TextureRect" parent="UI/InventoryUI/Tooltip"]

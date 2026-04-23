@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dxogqxysy2jhw"]
+[gd_scene load_steps=14 format=3 uid="uid://dxogqxysy2jhw"]
 
 [ext_resource type="Script" uid="uid://6aieiikcb248" path="res://Scripts/muddy.gd" id="1_10ykd"]
 [ext_resource type="Texture2D" uid="uid://cqodias6yulyn" path="res://Textures/Enemies/muddy.png" id="2_rtjbt"]
@@ -19,6 +19,32 @@ width = 256
 height = 256
 fill = 1
 fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_ltj6o"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 1, 0.39215687)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_s8hno"]
+gradient = SubResource("Gradient_ltj6o")
+
+[sub_resource type="Curve" id="Curve_6kss8"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.57251906, 0.8988764), 0.0, 0.0, 0, 0, Vector2(1, 0.22471917), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_gm7nj"]
+curve = SubResource("Curve_6kss8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3eg22"]
+particle_flag_disable_z = true
+spread = 30.0
+initial_velocity_min = 658.87
+initial_velocity_max = 865.38
+gravity = Vector3(0, 50, 0)
+damping_min = 100.00001
+damping_max = 100.00001
+scale_min = 10.0
+scale_max = 14.0
+scale_curve = SubResource("CurveTexture_gm7nj")
+color_ramp = SubResource("GradientTexture1D_s8hno")
 
 [node name="CharacterBody2D" type="CharacterBody2D" groups=["enemies"]]
 motion_mode = 1
@@ -51,3 +77,13 @@ stream = ExtResource("4_ltj6o")
 
 [node name="Splat" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_ltj6o")
+
+[node name="HitParticles" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 12
+lifetime = 0.4
+one_shot = true
+preprocess = 0.03
+explosiveness = 0.8
+randomness = 0.5
+process_material = SubResource("ParticleProcessMaterial_3eg22")

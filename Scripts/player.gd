@@ -104,6 +104,7 @@ func _ready() -> void:
 	death_particles.emitting = false
 	sword_sprite.visible = true
 	low_battery.visible = false
+	attack_area.monitoring = false
 	update_health()
 	update_stamina_ui()
 
@@ -150,7 +151,6 @@ func _input(event: InputEvent) -> void:
 		stamina -= 1
 		update_stamina_ui()
 		enemies_hit.clear()
-		attack_area.monitoring = true
 	
 	if event.is_action_pressed("swap_color") and !attacking and !switching_color:
 		next_color()
@@ -212,13 +212,7 @@ func handle_movement(delta):
 func _on_roll_timer_timeout() -> void:
 	rolling = false
 
-func handle_attacking(delta):
-
-	# Handle attack hitbox
-	if attacking and !is_dead:
-		pass
-	else:
-		attack_area.monitoring = false
+func handle_attacking(_delta):
 
 	# Detect attacking from animation
 	attacking = animation_player.is_playing()
@@ -269,7 +263,7 @@ func _on_attack_cooldown_timeout() -> void:
 	recharging = false
 
 func play_sword_swing():
-	var speed_mult = 1 / (attack_speed * 2)
+	var speed_mult = 1 / (attack_speed * 2.5)
 
 	animation_player.speed_scale = speed_mult
 	animation_player.play("sword_swing")
@@ -320,7 +314,10 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 			chain_hit(body, total_damage, chain_count)
 
 	if body.is_in_group("barrel"):
+		if enemies_hit.has(body):
+			return  # already hit this attack
 		play_hit_sound()
+		enemies_hit[body] = true
 		body.hit()
 		body.apply_knockback(aim_direction)
 
@@ -331,7 +328,7 @@ func chain_hit(from_enemy: CharacterBody2D, dmg: float, remaining_chains: int) -
 	if not is_instance_valid(from_enemy):
 		return
 
-	var from_pos := from_enemy.global_position
+	var from_pos: Vector2 = from_enemy.global_position
 
 	var enemies = get_tree().get_nodes_in_group("enemies")
 
@@ -355,37 +352,45 @@ func chain_hit(from_enemy: CharacterBody2D, dmg: float, remaining_chains: int) -
 	if closest_enemy == null:
 		return
 
-	# ⚡ always spawn lightning from last known position
-	spawn_lightning(from_pos, closest_enemy.global_position)
+	# 🔒 ALWAYS cache position for visuals
+	var target_pos: Vector2 = closest_enemy.global_position
+	var target_enemy: CharacterBody2D = closest_enemy
+
+	await get_tree().create_timer(0.06).timeout
+
+	# ⚡ ALWAYS spawn lightning (even if enemy dies later)
+	spawn_lightning(from_pos, target_pos)
 	hit_stop(0.5, 0.02)
 
-	await get_tree().create_timer(0.12).timeout
+	await get_tree().create_timer(0.06).timeout
 
-	if not is_instance_valid(closest_enemy):
-		return
+	# 💀 DAMAGE ONLY if still alive
+	if is_instance_valid(target_enemy):
+		enemies_hit[target_enemy] = true
 
-	enemies_hit[closest_enemy] = true
+		var new_damage = dmg * chain_falloff
+		target_enemy.take_damage(new_damage)
 
-	var new_damage = dmg * chain_falloff
-	closest_enemy.take_damage(new_damage)
+		for item in GameState.taken_items:
+			if item.name == "Chainy":
+				item.tracked_stat_values[1] += 1
+				item.tracked_stat_values[0] += int(new_damage)
+				break
 
-	for item in GameState.taken_items:
-		if item.name == "Chainy":
-			item.tracked_stat_values[1] += 1
-			item.tracked_stat_values[0] += int(new_damage)
-			continue
+		var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
+		var ft = floating_text_scene.instantiate()
+		ft.text = "-" + str(int(new_damage))
+		ft.modulate = Color.WHITE
+		ft.global_position = target_pos
+		get_tree().current_scene.add_child(ft)
 
-	var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
-	var ft = floating_text_scene.instantiate()
-	ft.text = "-" + str(int(new_damage))
-	ft.modulate = Color.WHITE
-	ft.global_position = closest_enemy.global_position
-	get_tree().current_scene.add_child(ft)
+		var dir = (target_pos - from_pos).normalized()
+		target_enemy.apply_knockback(dir, 0)
 
-	var dir = (closest_enemy.global_position - from_pos).normalized()
-	closest_enemy.apply_knockback(dir, 0)
-
-	await chain_hit(closest_enemy, new_damage, remaining_chains - 1)
+		await chain_hit(target_enemy, new_damage, remaining_chains - 1)
+	else:
+		# ⚡ still continue chain even if dead (optional design choice)
+		await chain_hit(from_enemy, dmg, remaining_chains - 1)
 
 func spawn_lightning(start: Vector2, end: Vector2):
 	var lightning_scene = preload("res://Scenes/chain_lightning.tscn")

@@ -6,7 +6,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_tpbmr"]
 radius = 13.038404
 
-[node name="WaterProjectile" type="Node2D"]
+[node name="WaterProjectile" type="Node2D" groups=["projectiles"]]
 z_index = 1
 script = ExtResource("1_h43i6")
 
@@ -15,9 +15,10 @@ scale = Vector2(0.16583334, 0.16583334)
 texture = ExtResource("2_6hau2")
 offset = Vector2(-5.3097363, 26.548674)
 
-[node name="DetectionArea" type="Area2D" parent="."]
+[node name="DetectionArea" type="Area2D" parent="." groups=["projectiles"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
 shape = SubResource("CircleShape2D_tpbmr")
 
+[connection signal="area_entered" from="DetectionArea" to="." method="_on_detection_area_area_entered"]
 [connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]

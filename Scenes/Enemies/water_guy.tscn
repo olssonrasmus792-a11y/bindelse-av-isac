@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://cniiwpek7nwme"]
+[gd_scene load_steps=32 format=3 uid="uid://cniiwpek7nwme"]
 
 [ext_resource type="Texture2D" uid="uid://frmrf5mkduh1" path="res://Textures/Enemies/WaterGuy.png" id="1_djxah"]
 [ext_resource type="Script" uid="uid://neo7bytqaxo5" path="res://Scripts/water_guy.gd" id="1_hreou"]
@@ -153,6 +153,92 @@ animations = [{
 radius = 22.0
 height = 76.0
 
+[sub_resource type="Animation" id="Animation_nw2lc"]
+resource_name = "hit"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/AnimatedSprite2D:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.17453292519943295, -0.17453292519943295, 0.0, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HitParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_ovxyt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/AnimatedSprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HitParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ympyn"]
+_data = {
+&"RESET": SubResource("Animation_ovxyt"),
+&"hit": SubResource("Animation_nw2lc")
+}
+
+[sub_resource type="Gradient" id="Gradient_hreou"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 1, 0.39215687)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_gmlae"]
+gradient = SubResource("Gradient_hreou")
+
+[sub_resource type="Curve" id="Curve_a2dkt"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.57251906, 0.8988764), 0.0, 0.0, 0, 0, Vector2(1, 0.22471917), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_t6mw8"]
+curve = SubResource("Curve_a2dkt")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_q8vby"]
+particle_flag_disable_z = true
+spread = 30.0
+initial_velocity_min = 658.87
+initial_velocity_max = 865.38
+gravity = Vector3(0, 50, 0)
+damping_min = 100.00001
+damping_max = 100.00001
+scale_min = 10.0
+scale_max = 14.0
+scale_curve = SubResource("CurveTexture_t6mw8")
+color_ramp = SubResource("GradientTexture1D_gmlae")
+
 [node name="WaterGuy" type="CharacterBody2D" groups=["enemies"]]
 script = ExtResource("1_hreou")
 
@@ -176,5 +262,19 @@ shape = SubResource("CapsuleShape2D_o6cjd")
 [node name="ShootTimer" type="Timer" parent="."]
 wait_time = 2.0
 autostart = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ympyn")
+}
+
+[node name="HitParticles" type="GPUParticles2D" parent="."]
+amount = 12
+lifetime = 0.4
+one_shot = true
+preprocess = 0.03
+explosiveness = 0.8
+randomness = 0.5
+process_material = SubResource("ParticleProcessMaterial_q8vby")
 
 [connection signal="timeout" from="ShootTimer" to="." method="_on_shoot_timer_timeout"]

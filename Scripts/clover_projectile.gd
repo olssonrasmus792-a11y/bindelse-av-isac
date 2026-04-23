@@ -21,3 +21,8 @@ func _on_detection_area_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
 		body.take_damage(1, global_position, -knockback_strength_player)
 		queue_free()
+
+func _on_detection_area_area_entered(area: Area2D) -> void:
+	print(area)
+	if area.name == "AttackArea" and area.monitoring:
+		queue_free()

@@ -9,6 +9,8 @@ extends CharacterBody2D
 @onready var direction_timer: Timer = $DirectionTimer
 @onready var visuals: Node2D = $Visuals
 @onready var stone_fall: AudioStreamPlayer = $StoneFall
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var hit_particles: GPUParticles2D = $HitParticles
 
 @onready var player := get_tree().get_first_node_in_group("player")
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
@@ -34,6 +36,7 @@ signal enemy_died
 
 func _ready() -> void:
 	direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
+	hit_particles.emitting = false
 
 func _physics_process(delta):
 	if knockback_timer > 0.0:
@@ -90,11 +93,13 @@ func _physics_process(delta):
 func take_damage(damage):
 	health -= damage
 	flash_red()
+	animation_player.play("hit")
 	if health <= 0:
 		explode(self)  
 
 func apply_knockback(aim_direction: Vector2, knockback_strength: int):
 	var knockback_direction = aim_direction.normalized()
+	hit_particles.rotation = knockback_direction.angle()
 	current_knockback = knockback_direction * knockback_strength * knockback_strength_mult
 	knockback_timer = knockback_duration
 	direction = knockback_direction
