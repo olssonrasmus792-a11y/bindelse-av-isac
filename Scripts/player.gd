@@ -338,9 +338,13 @@ func chain_hit(from_enemy: CharacterBody2D, dmg: float, remaining_chains: int) -
 	for enemy in enemies:
 		if not is_instance_valid(enemy):
 			continue
+
 		if enemy == from_enemy:
 			continue
-		if enemies_hit.has(enemy):
+
+		var id = enemy.get_instance_id()
+
+		if enemies_hit.has(id):
 			continue
 
 		var dist = from_pos.distance_to(enemy.global_position)
@@ -352,51 +356,65 @@ func chain_hit(from_enemy: CharacterBody2D, dmg: float, remaining_chains: int) -
 	if closest_enemy == null:
 		return
 
-	# 🔒 ALWAYS cache position for visuals
+	# Cache BEFORE awaits
 	var target_pos: Vector2 = closest_enemy.global_position
 	var target_enemy: CharacterBody2D = closest_enemy
+	var target_id = target_enemy.get_instance_id()
 
 	await get_tree().create_timer(0.06).timeout
 
-	# ⚡ ALWAYS spawn lightning (even if enemy dies later)
+	# Always spawn lightning (visual even if dead)
 	spawn_lightning(from_pos, target_pos)
 	hit_stop(0.5, 0.02)
 
 	await get_tree().create_timer(0.06).timeout
 
-	# 💀 DAMAGE ONLY if still alive
+	# DAMAGE only if still alive
 	if is_instance_valid(target_enemy):
-		enemies_hit[target_enemy] = true
+
+		enemies_hit[target_id] = true
 
 		var new_damage = dmg * chain_falloff
+
 		target_enemy.take_damage(new_damage)
 
+		# Track item stats
 		for item in GameState.taken_items:
 			if item.name == "Chainy":
 				item.tracked_stat_values[1] += 1
 				item.tracked_stat_values[0] += int(new_damage)
 				break
 
+		# Floating damage text
 		var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
 		var ft = floating_text_scene.instantiate()
+
 		ft.text = "-" + str(int(new_damage))
 		ft.modulate = Color.WHITE
 		ft.global_position = target_pos
+
 		get_tree().current_scene.add_child(ft)
 
+		# Knockback
 		var dir = (target_pos - from_pos).normalized()
 		target_enemy.apply_knockback(dir, 0)
 
-		await chain_hit(target_enemy, new_damage, remaining_chains - 1)
+		# Safe recursive call
+		if is_instance_valid(target_enemy):
+			await chain_hit(target_enemy, new_damage, remaining_chains - 1)
+
 	else:
-		# ⚡ still continue chain even if dead (optional design choice)
-		await chain_hit(from_enemy, dmg, remaining_chains - 1)
+		# Continue chain ONLY if original still exists
+		if is_instance_valid(from_enemy):
+			await chain_hit(from_enemy, dmg, remaining_chains - 1)
+
 
 func spawn_lightning(start: Vector2, end: Vector2):
 	var lightning_scene = preload("res://Scenes/chain_lightning.tscn")
 	var lightning = lightning_scene.instantiate()
 
 	get_tree().current_scene.add_child(lightning)
+
 	lightning.setup(start, end)
 
 func play_hit_sound():

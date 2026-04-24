@@ -20,7 +20,7 @@ var coin_drop_chance = 0.1
 
 var luck = 0.0
 
-var start_time = 20.0
+var start_time = 300.0
 var time_left = start_time
 var pause_timer = false
 
