@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://btbxodi47yw7x"]
+
+[ext_resource type="Texture2D" uid="uid://ca82twfvheobr" path="res://Textures/icon.svg" id="1_bnyq0"]
+[ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_mko3n"]
+
+[resource]
+script = ExtResource("1_mko3n")
+name = "Knock knock"
+stats = Array[String](["+25% Knockback"])
+stat_colors = Array[Color]([Color(0.9999997, 0.54066265, 0.10843041, 1)])
+price = 8
+icon = ExtResource("1_bnyq0")
+metadata/_custom_type_script = "uid://i88s36u6b2ej"

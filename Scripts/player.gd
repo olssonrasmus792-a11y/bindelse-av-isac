@@ -440,6 +440,11 @@ func calculate_base_damage():
 		if item.name == "Sword":
 			item.tracked_stat_values[0] += 2
 	
+	@warning_ignore("integer_division")
+	var coin_groups = floor(GameState.coins / 5)
+	
+	total_damage *= 1 + 0.1 * GameState.get_item_count("Greedy ahh") * coin_groups
+	
 	return total_damage
 
 func _on_stamina_recharge_timeout() -> void:

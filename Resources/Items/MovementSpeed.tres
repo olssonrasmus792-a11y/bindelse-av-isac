@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3 uid="uid://cjwa2lnrhmfwv"]
+
+[ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_1x56d"]
+
+[resource]
+script = ExtResource("1_1x56d")
+name = "Old boot"
+stats = Array[String](["+10% Movement speed"])
+stat_colors = Array[Color]([Color(0, 0.4862745, 1, 1)])
+price = 6
+metadata/_custom_type_script = "uid://i88s36u6b2ej"

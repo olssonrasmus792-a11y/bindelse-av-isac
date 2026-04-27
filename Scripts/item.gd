@@ -129,6 +129,13 @@ func apply_item(item_name):
 		"Clover":
 			GameState.luck += 0.1
 			GameState.calculate_stats()
+		"Critty":
+			player.crit_chance += 0.1
+		"Knock knock":
+			player.knockback = 650 * (1 + (GameState.get_item_count("Knock knock") * 0.25))
+		"Old boot":
+			player.max_speed *= 1.10
+			player.speed = player.max_speed
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
