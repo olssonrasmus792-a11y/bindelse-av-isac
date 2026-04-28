@@ -57,20 +57,21 @@ func get_enemy_amount():
 	
 	for item in GameState.taken_items:
 		if item.name == "Sword":
-			item.tracked_stat_values[1] += (roundi(amount * 0.25 * get_item_count("Sword")))
+			item.tracked_stat_values[1] += (roundi(amount * 0.2 * get_item_count("Sword")))
 	
-	amount += amount * 0.25 * get_item_count("Sword")
+	amount += amount * 0.2 * get_item_count("Sword")
 	amount = roundi(amount)
 	
 	return amount
 
 func calculate_stats():
 	coin_drop_chance = 0.1 * (1 + luck)
+	
 	for item in taken_items:
 		if item.name == "Greedy ahh":
 			@warning_ignore("integer_division")
 			var coin_groups = floor(GameState.coins / 5)
-			var value = 0.1 * GameState.get_item_count("Greedy ahh") * coin_groups * 100
+			var value : int = 0.1 * GameState.get_item_count("Greedy ahh") * coin_groups * 100
 			item.tracked_stat_values[0] = value
 			break
 

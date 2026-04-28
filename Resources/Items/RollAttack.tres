@@ -12,5 +12,6 @@ price = 8
 icon = ExtResource("1_us5sg")
 tracked_stats = Array[String](["Damage Dealt"])
 tracked_stat_values = Array[int]([0])
+tracked_stat_value_percentage = Array[bool]([false])
 tracked_stat_colors = Array[Color]([Color(0.8097802, 0.30610073, 0, 1)])
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

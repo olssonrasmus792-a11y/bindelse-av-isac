@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dxogqxysy2jhw"]
+[gd_scene load_steps=18 format=3 uid="uid://dxogqxysy2jhw"]
 
 [ext_resource type="Script" uid="uid://6aieiikcb248" path="res://Scripts/muddy.gd" id="1_10ykd"]
 [ext_resource type="Texture2D" uid="uid://cqodias6yulyn" path="res://Textures/Enemies/muddy.png" id="2_rtjbt"]
@@ -46,6 +46,26 @@ scale_max = 14.0
 scale_curve = SubResource("CurveTexture_gm7nj")
 color_ramp = SubResource("GradientTexture1D_s8hno")
 
+[sub_resource type="Gradient" id="Gradient_s8hno"]
+offsets = PackedFloat32Array(0.5362319)
+colors = PackedColorArray(0.33, 0.016500005, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6kss8"]
+gradient = SubResource("Gradient_s8hno")
+width = 60
+height = 5
+repeat = 1
+
+[sub_resource type="Gradient" id="Gradient_gm7nj"]
+offsets = PackedFloat32Array(0.5362319)
+colors = PackedColorArray(1.973361e-06, 0.7039606, 0.039600056, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_3eg22"]
+gradient = SubResource("Gradient_gm7nj")
+width = 60
+height = 5
+repeat = 1
+
 [node name="CharacterBody2D" type="CharacterBody2D" groups=["enemies"]]
 motion_mode = 1
 script = ExtResource("1_10ykd")
@@ -87,3 +107,12 @@ preprocess = 0.03
 explosiveness = 0.8
 randomness = 0.5
 process_material = SubResource("ParticleProcessMaterial_3eg22")
+
+[node name="HpBar" type="TextureProgressBar" parent="."]
+offset_left = -29.0
+offset_top = -46.0
+offset_right = 31.0
+offset_bottom = -41.0
+value = 18.0
+texture_under = SubResource("GradientTexture2D_6kss8")
+texture_progress = SubResource("GradientTexture2D_3eg22")

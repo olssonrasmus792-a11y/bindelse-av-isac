@@ -6,6 +6,7 @@ extends CharacterBody2D
 @onready var sprite_2d: Sprite2D = $Sprite2D
 @onready var point_light_2d: PointLight2D = $PointLight2D
 @onready var hit_particles: GPUParticles2D = $HitParticles
+@onready var hp_bar: TextureProgressBar = $HpBar
 
 @onready var bounce_1: AudioStreamPlayer = $Bounce1
 @onready var bounce_2: AudioStreamPlayer = $Bounce2
@@ -13,7 +14,8 @@ extends CharacterBody2D
 var splat_pitch = 1.0
 
 var direction := Vector2(1, 1).normalized()
-var health = 12
+var max_health = 60.0
+var health = max_health
 
 @export var scale_factor = 1.0
 
@@ -27,11 +29,14 @@ var knockback_timer := 0.0
 signal enemy_died
 
 func _ready() -> void:
+	hp_bar.max_value = max_health
+	hp_bar.value = max_health
 	direction = Vector2(randf_range(-1, 1), randf_range(-1, 1))
 	point_light_2d.visible = false
 	hit_particles.emitting = false
 
 func _physics_process(delta):
+	hp_bar.value = lerp(hp_bar.value, float(health), 0.25)
 	scale = Vector2(scale_factor, scale_factor)
 	
 	if knockback_timer > 0.0:

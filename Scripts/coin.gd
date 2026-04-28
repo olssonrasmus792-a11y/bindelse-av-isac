@@ -36,6 +36,7 @@ func _process(delta: float) -> void:
 	if player_is_close and can_pick_up:
 		play_pickup_sound()
 		GameState.coins += 1
+		GameState.calculate_stats()
 		var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
 		var ft = floating_text_scene.instantiate()
 		ft.text = "+1 Coin"

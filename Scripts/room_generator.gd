@@ -9,13 +9,20 @@ extends Node2D
 	preload("res://Scenes/room4.tscn"),
 	preload("res://Scenes/room_shop.tscn")
 ]
-@export var room_weights = [5, 5, 5, 5, 1] # Hur stor chans att ett rum spawnar jämfört med andra
+@export var room_weights = [5, 5, 5, 5, 0] # Hur stor chans att ett rum spawnar jämfört med andra
 
 @export var start_room_scene = preload("res://Scenes/room_start.tscn")
+
 @export var shop_scene = preload("res://Scenes/room_shop.tscn")
 var shop_rooms_spawned = 0
-var min_shop_rooms = 4
-var max_shop_rooms = 8
+var min_shop_rooms = 6
+var max_shop_rooms = 10
+
+var shop_positions: Array = []
+@export var min_shop_distance_from_start := 1.4
+@export var max_shop_distance_from_start := 3
+@export var min_shop_distance_between := 1.4
+
 
 @export var player_scene = preload("res://Scenes/player.tscn")
 @export var chest_scene = preload("res://Scenes/Chest.tscn")
@@ -23,12 +30,12 @@ var max_shop_rooms = 8
 @export var room_size := Vector2i(GameState.room_tiles_x, GameState.room_tiles_y) # tiles
 @onready var camera_2d: Camera2D = $"../Player/Camera2D"
 @export var tile_size := 200.0
-@export var dungeon_width := 3.0
-@export var dungeon_height := 3.0
+@export var dungeon_width := 5.0
+@export var dungeon_height := 5.0
 var room_width  = GameState.room_tiles_x * tile_size
 var room_height = GameState.room_tiles_y * tile_size
 
-@export var min_rooms := 10
+@export var min_rooms := 20
 var placed_rooms := {}
 var rooms_spawned = false
 
@@ -117,6 +124,7 @@ func place_room(grid_pos: Vector2):
 	
 	if room_scene == room_scenes[4]:
 		shop_rooms_spawned += 1
+		shop_positions.append(grid_pos)
 	
 	if placed_rooms.has(room_left):
 		change_door_state(room, room_left, "Left", "Right", false)
@@ -214,7 +222,7 @@ func add_extra_rooms():
 		
 		var new_pos = base_pos + directions.pick_random()
 		
-		if not placed_rooms.has(new_pos):
+		if not placed_rooms.has(new_pos) and not shop_positions.has(new_pos):
 			place_room(new_pos)
 
 func ensure_shop_exists():
@@ -223,7 +231,7 @@ func ensure_shop_exists():
 	
 	var attempts := 0
 	
-	while shop_rooms_spawned < min_shop_rooms and attempts < 100:
+	while shop_rooms_spawned < min_shop_rooms and attempts < 200:
 		attempts += 1
 		
 		var existing_positions = placed_rooms.keys()
@@ -238,12 +246,30 @@ func ensure_shop_exists():
 		
 		var new_pos = base_pos + directions.pick_random()
 		
-		# Must not already exist
+		# ❌ Already occupied
 		if placed_rooms.has(new_pos):
 			continue
 		
-		# Prevent shop next to start
-		if new_pos.distance_to(start_pos) <= 1:
+		var dist_to_start = new_pos.distance_to(start_pos)
+		
+		# ❌ Too close to start
+		if dist_to_start < min_shop_distance_from_start:
 			continue
 		
+		# ❌ Too far from start
+		if dist_to_start > max_shop_distance_from_start:
+			continue
+		
+		# ❌ Too close to another shop
+		var too_close_to_shop = false
+		for shop_pos in shop_positions:
+			if new_pos.distance_to(shop_pos) < min_shop_distance_between:
+				too_close_to_shop = true
+				break
+		
+		if too_close_to_shop:
+			continue
+		
+		# ✅ Valid → place shop
 		place_room(new_pos)
+		shop_positions.append(new_pos)

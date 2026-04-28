@@ -10,12 +10,14 @@ extends CharacterBody2D
 @onready var direction_timer: Timer = $DirectionTimer
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var hit_particles: GPUParticles2D = $HitParticles
+@onready var hp_bar: TextureProgressBar = $HpBar
 
 @onready var player := get_tree().get_first_node_in_group("player")
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 
 var direction := Vector2(1, 1).normalized()
-var health = 12
+var max_health = 60.0
+var health = max_health
 
 @export var knockback_strength_player = 200
 @export var knockback_strength_mult = 1.0
@@ -31,11 +33,14 @@ var knockback_timer := 0.0
 signal enemy_died
 
 func _ready() -> void:
+	hp_bar.max_value = max_health
+	hp_bar.value = max_health
 	direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
 	last_drop_pos = global_position
 	hit_particles.emitting = false
 
 func _physics_process(delta):
+	hp_bar.value = lerp(hp_bar.value, float(health), 0.25)
 	direction = direction.normalized()
 	if knockback_timer > 0.0:
 		# Smoothly interpolate knockback velocity to zero
@@ -81,7 +86,7 @@ func take_damage(damage):
 	flash_red()
 	animation_player.play("hit")
 	if health <= 0:
-		explode(self)  
+		explode(self)
 
 func apply_knockback(aim_direction: Vector2, knockback_strength: int):
 	var knockback_direction = aim_direction.normalized()

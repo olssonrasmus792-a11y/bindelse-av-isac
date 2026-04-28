@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=4 uid="uid://cwo7ty8gxg4fn"]
+[gd_scene load_steps=31 format=4 uid="uid://cwo7ty8gxg4fn"]
 
 [ext_resource type="Script" uid="uid://ikkptpfealcp" path="res://Scripts/stoney.gd" id="1_mwejy"]
 [ext_resource type="Texture2D" uid="uid://i8m1aosksca8" path="res://Textures/Enemies/Rocky jump.png" id="1_nw4po"]
@@ -131,19 +131,19 @@ data = PackedByteArray("cW9hZgAA8eICAKxEFAAQKAAAAAAAAAAAAAAAAOAAQAAAAAAAAAAAAAAA
 format = 3
 stereo = true
 
-[sub_resource type="Animation" id="Animation_nw2lc"]
-resource_name = "hit"
+[sub_resource type="Animation" id="Animation_ovxyt"]
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath("Visuals/AnimatedSprite2D:rotation")
-tracks/0/interp = 2
+tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.17453292519943295, -0.17453292519943295, 0.0, 0.0]
+"values": [0.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -158,19 +158,19 @@ tracks/1/keys = {
 "values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_ovxyt"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_nw2lc"]
+resource_name = "hit"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath("Visuals/AnimatedSprite2D:rotation")
-tracks/0/interp = 1
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.2, 0.4, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [0.0]
+"values": [0.17453292519943295, -0.17453292519943295, 0.0, 0.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -216,6 +216,26 @@ scale_min = 10.0
 scale_max = 14.0
 scale_curve = SubResource("CurveTexture_km4i5")
 color_ramp = SubResource("GradientTexture1D_vydjb")
+
+[sub_resource type="Gradient" id="Gradient_isro6"]
+offsets = PackedFloat32Array(0.5362319)
+colors = PackedColorArray(0.33, 0.016500005, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_c4kng"]
+gradient = SubResource("Gradient_isro6")
+width = 60
+height = 5
+repeat = 1
+
+[sub_resource type="Gradient" id="Gradient_e8udj"]
+offsets = PackedFloat32Array(0.5362319)
+colors = PackedColorArray(1.973361e-06, 0.7039606, 0.039600056, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_vydjb"]
+gradient = SubResource("Gradient_e8udj")
+width = 60
+height = 5
+repeat = 1
 
 [node name="Stoney" type="CharacterBody2D" groups=["enemies"]]
 motion_mode = 1
@@ -275,5 +295,14 @@ preprocess = 0.03
 explosiveness = 0.8
 randomness = 0.5
 process_material = SubResource("ParticleProcessMaterial_cr3x1")
+
+[node name="HpBar" type="TextureProgressBar" parent="."]
+offset_left = -30.0
+offset_top = -53.0
+offset_right = 30.0
+offset_bottom = -48.0
+value = 18.0
+texture_under = SubResource("GradientTexture2D_c4kng")
+texture_progress = SubResource("GradientTexture2D_vydjb")
 
 [connection signal="timeout" from="DirectionTimer" to="." method="_on_direction_timer_timeout"]

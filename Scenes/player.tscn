@@ -417,7 +417,7 @@ tracks/3/path = NodePath("Sword/SwordPivot/AttackArea:monitoring")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.15785123, 0.36666667, 0.73333335, 1),
+"times": PackedFloat32Array(0, 0.12480144, 0.27513546, 0.29697546, 1),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
 "values": [false, true, true, false, false]
@@ -648,7 +648,7 @@ script = ExtResource("3_fkybt")
 
 [node name="SwordPivot" type="Node2D" parent="Sword"]
 position = Vector2(16, 17)
-skew = 0.14346454
+skew = 0.22745755
 
 [node name="Trail" type="Polygon2D" parent="Sword/SwordPivot"]
 color = Color(1, 1, 0.43137255, 1)

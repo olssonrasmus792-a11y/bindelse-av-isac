@@ -7,17 +7,6 @@
 [ext_resource type="AudioStream" uid="uid://y7j1luuklmw7" path="res://SFX/Deny.wav" id="5_tnst4"]
 [ext_resource type="AudioStream" uid="uid://c4p6crthvs73j" path="res://SFX/Pop4.wav" id="6_renmp"]
 
-[sub_resource type="Gradient" id="Gradient_1teyb"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_76mu4"]
-gradient = SubResource("Gradient_1teyb")
-width = 1000
-height = 1000
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 0.5)
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_76mu4"]
 radius = 152.0
 
@@ -57,6 +46,17 @@ fill = 2
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 1)
 
+[sub_resource type="Gradient" id="Gradient_1teyb"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_renmp"]
+gradient = SubResource("Gradient_1teyb")
+width = 1000
+height = 1000
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
 [node name="Node2D" type="Node2D"]
 z_index = 2
 script = ExtResource("1_76mu4")
@@ -68,13 +68,6 @@ offset_top = 32.0
 offset_right = 32.0
 offset_bottom = 48.0
 color = Color(0.15, 0.15, 0.15, 0.27450982)
-
-[node name="PointLight2D2" type="PointLight2D" parent="Shadow"]
-position = Vector2(32.000015, -32.000015)
-scale = Vector2(0.30400002, 0.304)
-color = Color(1, 1, 0.9411765, 1)
-energy = 0.75
-texture = SubResource("GradientTexture2D_76mu4")
 
 [node name="Sprite2D" type="TextureRect" parent="."]
 modulate = Color(0.9407874, 0.9407874, 0.9407874, 1)
@@ -179,6 +172,14 @@ scale = Vector2(0.36799997, 0.192)
 color = Color(1, 1, 0.9411765, 1)
 energy = 0.75
 texture = SubResource("GradientTexture2D_u06aw")
+
+[node name="PointLight2D2" type="PointLight2D" parent="."]
+z_index = 2
+position = Vector2(1.5258789e-05, -1.5258789e-05)
+scale = Vector2(0.30400002, 0.304)
+color = Color(1, 1, 0.9411765, 1)
+energy = 0.75
+texture = SubResource("GradientTexture2D_renmp")
 
 [node name="Purchase" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_btogu")

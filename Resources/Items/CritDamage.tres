@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://dk7jdkbha4yvg"]
+
+[ext_resource type="Texture2D" uid="uid://ca82twfvheobr" path="res://Textures/icon.svg" id="1_aruwg"]
+[ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_i6w7t"]
+
+[resource]
+script = ExtResource("1_i6w7t")
+name = "Big Crit"
+stats = Array[String](["+15% Crit damage"])
+stat_colors = Array[Color]([Color(1, 0.3529412, 1, 1)])
+price = 10
+icon = ExtResource("1_aruwg")
+tracked_stats = Array[String](["Crit damage", "Crit damage dealt"])
+tracked_stat_values = Array[int]([0, 0])
+tracked_stat_value_percentage = Array[bool]([true, false])
+tracked_stat_colors = Array[Color]([Color(1, 0.38039216, 1, 1), Color(1, 0.5254902, 0, 1)])
+metadata/_custom_type_script = "uid://i88s36u6b2ej"

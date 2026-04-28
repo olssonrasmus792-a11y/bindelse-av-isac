@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://5rkthr5gwgc8"]
+
+[ext_resource type="Texture2D" uid="uid://ca82twfvheobr" path="res://Textures/icon.svg" id="1_2txvf"]
+[ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_b7rmu"]
+
+[resource]
+script = ExtResource("1_b7rmu")
+name = "Boss Killer"
+stats = Array[String](["+15% Damage against bosses"])
+stat_colors = Array[Color]([Color(1, 0.14117648, 0, 1)])
+price = 10
+icon = ExtResource("1_2txvf")
+tracked_stats = Array[String](["Damage Dealt"])
+tracked_stat_values = Array[int]([0])
+tracked_stat_value_percentage = Array[bool]([false])
+tracked_stat_colors = Array[Color]([Color(1, 0.41568628, 0, 1)])
+metadata/_custom_type_script = "uid://i88s36u6b2ej"

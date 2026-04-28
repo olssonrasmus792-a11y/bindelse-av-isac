@@ -6,11 +6,12 @@
 [resource]
 script = ExtResource("1_bn40t")
 name = "Sword"
-stats = Array[String](["+2 Damage", "+25% Enemies"])
+stats = Array[String](["+5 Damage", "+20% Enemies"])
 stat_colors = Array[Color]([Color(0.8901961, 0.36862746, 0.03529412, 1), Color(0.45452452, 0.45452416, 0.45452422, 1)])
-price = 8
+price = 6
 icon = ExtResource("1_qvvkx")
 tracked_stats = Array[String](["Damage dealt", "Extra enemies spawned"])
 tracked_stat_values = Array[int]([0, 0])
+tracked_stat_value_percentage = Array[bool]([false, false])
 tracked_stat_colors = Array[Color]([Color(0.8901961, 0.36862746, 0.03529412, 1), Color(0.43134022, 0.43134025, 0.43134025, 1)])
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

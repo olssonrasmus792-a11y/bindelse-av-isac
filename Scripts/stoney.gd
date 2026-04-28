@@ -11,6 +11,7 @@ extends CharacterBody2D
 @onready var stone_fall: AudioStreamPlayer = $StoneFall
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var hit_particles: GPUParticles2D = $HitParticles
+@onready var hp_bar: TextureProgressBar = $HpBar
 
 @onready var player := get_tree().get_first_node_in_group("player")
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
@@ -22,7 +23,8 @@ var chasing := false
 var emitting_particles = false
 
 var direction := Vector2(1, 1).normalized()
-var health = 16
+var max_health = 80.0
+var health = max_health
 
 @export var knockback_strength_player = 200
 @export var knockback_strength_mult = 0.75
@@ -35,10 +37,13 @@ var knockback_timer := 0.0
 signal enemy_died
 
 func _ready() -> void:
+	hp_bar.max_value = max_health
+	hp_bar.value = max_health
 	direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
 	hit_particles.emitting = false
 
 func _physics_process(delta):
+	hp_bar.value = lerp(hp_bar.value, float(health), 0.25)
 	if knockback_timer > 0.0:
 		current_knockback = current_knockback.lerp(Vector2.ZERO, 5 * delta)
 		velocity = current_knockback

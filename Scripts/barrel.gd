@@ -1,5 +1,7 @@
 extends RigidBody2D
 
+@onready var player := get_tree().get_first_node_in_group("player")
+
 @export var explosion_scene = preload("res://Scenes/barrel_explosion.tscn")
 @export var coin_scene = preload("res://Scenes/Coin.tscn")
 @export var key_scene := preload("res://Scenes/Key.tscn")
@@ -25,10 +27,6 @@ var coin_spawn_chance = 0.20
 var key_spawn_chance = 0.01
 var hp_spawn_chance = 0.05
 
-var explosion_size = 1.0
-var explosion_damage = 4
-var explosion_particles = 20
-
 var health = 2
 
 func _physics_process(delta):
@@ -44,11 +42,11 @@ func hit():
 		
 		var explosion = explosion_scene.instantiate()
 		
-		explosion.scale = Vector2(explosion_size, explosion_size)
+		explosion.scale = Vector2(player.explosion_size, player.explosion_size)
 		
 		explosion.global_position = position
-		explosion.explosion_damage = explosion_damage
-		explosion.explosion_particles = explosion_particles
+		explosion.explosion_damage = player.explosion_damage
+		explosion.explosion_particles = player.explosion_particles
 		get_parent().call_deferred("add_child", explosion)  # defer adding
 		explosion.emitting = true
 		

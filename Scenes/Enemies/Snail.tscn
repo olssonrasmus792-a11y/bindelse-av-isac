@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://liad3wcg5iqj"]
+[gd_scene load_steps=23 format=3 uid="uid://liad3wcg5iqj"]
 
 [ext_resource type="Script" uid="uid://b225733yfsgfr" path="res://Scripts/snail.gd" id="1_5346s"]
 [ext_resource type="Texture2D" uid="uid://c7cidaon7x34n" path="res://Textures/Enemies/Snail Run.png" id="1_i7c5s"]
@@ -49,19 +49,19 @@ animations = [{
 radius = 22.0
 height = 76.0
 
-[sub_resource type="Animation" id="Animation_nw2lc"]
-resource_name = "hit"
+[sub_resource type="Animation" id="Animation_ovxyt"]
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath("Visuals/AnimatedSprite2D:rotation")
-tracks/0/interp = 2
+tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.17453292519943295, -0.17453292519943295, 0.0, 0.0]
+"values": [0.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -76,19 +76,19 @@ tracks/1/keys = {
 "values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_ovxyt"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_nw2lc"]
+resource_name = "hit"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath("Visuals/AnimatedSprite2D:rotation")
-tracks/0/interp = 1
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.2, 0.4, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [0.0]
+"values": [0.17453292519943295, -0.17453292519943295, 0.0, 0.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -135,6 +135,26 @@ scale_max = 14.0
 scale_curve = SubResource("CurveTexture_ympyn")
 color_ramp = SubResource("GradientTexture1D_ovxyt")
 
+[sub_resource type="Gradient" id="Gradient_ympyn"]
+offsets = PackedFloat32Array(0.5362319)
+colors = PackedColorArray(0.33, 0.016500005, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ovxyt"]
+gradient = SubResource("Gradient_ympyn")
+width = 60
+height = 5
+repeat = 1
+
+[sub_resource type="Gradient" id="Gradient_6m2ku"]
+offsets = PackedFloat32Array(0.5362319)
+colors = PackedColorArray(1.973361e-06, 0.7039606, 0.039600056, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ympyn"]
+gradient = SubResource("Gradient_6m2ku")
+width = 60
+height = 5
+repeat = 1
+
 [node name="Snail" type="CharacterBody2D" groups=["enemies"]]
 z_index = 1
 motion_mode = 1
@@ -176,5 +196,14 @@ preprocess = 0.03
 explosiveness = 0.8
 randomness = 0.5
 process_material = SubResource("ParticleProcessMaterial_6m2ku")
+
+[node name="HpBar" type="TextureProgressBar" parent="."]
+offset_left = -30.0
+offset_top = -39.0
+offset_right = 30.0
+offset_bottom = -34.0
+value = 18.0
+texture_under = SubResource("GradientTexture2D_ovxyt")
+texture_progress = SubResource("GradientTexture2D_ympyn")
 
 [connection signal="timeout" from="DirectionTimer" to="." method="_on_direction_timer_timeout"]

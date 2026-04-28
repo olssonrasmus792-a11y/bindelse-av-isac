@@ -8,7 +8,7 @@ extends CharacterBody2D
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $Visuals/AnimatedSprite2D
 @onready var shoot_timer: Timer = $ShootTimer
-@onready var hp_bar: TextureProgressBar = $TextureProgressBar
+@onready var hp_bar: TextureProgressBar = $HpBar
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var hit_particles: GPUParticles2D = $HitParticles
 
@@ -30,7 +30,7 @@ var normal_speed = 450
 var bullet_hell_speed = 400
 var burst_hell_speed = 150
 
-var max_health = 200.0
+var max_health = 800.0
 var health = max_health
 signal enemy_died
 

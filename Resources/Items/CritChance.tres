@@ -7,7 +7,11 @@
 script = ExtResource("1_chsb7")
 name = "Critter"
 stats = Array[String](["+10% Crit chance"])
-stat_colors = Array[Color]([Color(0.74397665, 0.74397665, 3.85046e-07, 1)])
+stat_colors = Array[Color]([Color(1, 1, 0, 1)])
 price = 6
 icon = ExtResource("1_0hs5s")
+tracked_stats = Array[String](["Crit Chance", "Total Crits"])
+tracked_stat_values = Array[int]([0, 0])
+tracked_stat_value_percentage = Array[bool]([true, false])
+tracked_stat_colors = Array[Color]([Color(1, 1, 0, 1), Color(1, 1, 1, 1)])
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

@@ -80,10 +80,15 @@ func _on_item_hovered(item: ItemData, count: int):
 
 		var stat_name = item.tracked_stats[i]
 		var stat_value = item.tracked_stat_values[i]
+		var stat_is_percentage = item.tracked_stat_value_percentage[i]
 		var color = item.tracked_stat_colors[i]
 
 		tracked_text += "[color=" + color.to_html() + "]"
 		tracked_text += stat_name + ": " + str(stat_value)
+		
+		if stat_is_percentage:
+			tracked_text += "%"
+		
 		tracked_text += "[/color]"
 
 		if i < item.tracked_stats.size() - 1:

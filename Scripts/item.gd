@@ -28,6 +28,7 @@ var has_bounced := false
 @onready var purchase: AudioStreamPlayer = $Purchase
 @onready var deny: AudioStreamPlayer = $Deny
 @onready var pop: AudioStreamPlayer = $Pop
+@onready var light: PointLight2D = $PointLight2D2
 
 func _ready():
 	if data:
@@ -72,6 +73,9 @@ func _physics_process(delta):
 func _process(delta: float) -> void:
 	time += delta
 	sprite.position.y = base_y + sin(time * float_speed) * float_amount
+	light.visible = true
+	light.enabled = true
+	light.energy = 0.75
 	
 	if GameState.coins >= data.price:
 		price.modulate = Color.LIME_GREEN
@@ -94,6 +98,7 @@ func _input(event: InputEvent) -> void:
 func buy_item():
 	GameState.coins -= data.price
 	GameState.taken_items.append(data)
+	GameState.calculate_stats()
 	apply_item(data.name)
 	
 	for guys in guy:
@@ -119,11 +124,10 @@ func apply_item(item_name):
 			player.health = player.max_health
 			player.update_health()
 		"Barrel":
-			for barrels in get_tree().get_nodes_in_group("barrel"):
-				barrels.explosion_size *= 1.25
-				barrels.explosion_size = clamp(barrels.explosion_size, 1, 16)
-				barrels.explosion_particles *= 1.05
-				barrels.explosion_particles = clamp(barrels.explosion_particles, 20, 60)
+			player.explosion_size *= 1.25
+			player.explosion_size = clamp(player.explosion_size, 1, 16)
+			player.explosion_particles *= 1.05
+			player.explosion_particles = clamp(player.explosion_particles, 20, 60)
 		"Caged Muddy":
 			GameState.muddy_spawn_rate *= 1.2
 		"Clover":
@@ -136,6 +140,18 @@ func apply_item(item_name):
 		"Old boot":
 			player.max_speed *= 1.10
 			player.speed = player.max_speed
+		"Big Crit":
+			player.crit_damage = 1.5 + GameState.get_item_count("Big Crit") * 0.15
+			for item in GameState.taken_items:
+				if item.name == "Big Crit":
+					item.tracked_stat_values[0] = int(player.crit_damage * 100)
+					item.tracked_stat_values[1] = player.crit_damage_dealt
+		"Critter":
+			player.crit_chance += 0.1
+			for item in GameState.taken_items:
+				if item.name == "Critter":
+					item.tracked_stat_values[0] = int(player.crit_chance * 100)
+					item.tracked_stat_values[1] = player.total_crit_hits
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):

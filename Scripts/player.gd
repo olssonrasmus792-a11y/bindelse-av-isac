@@ -38,10 +38,17 @@ enum ColorState { YELLOW, RED, GREEN }
 
 var spawn_pos
 
-@export var damage = 4
-@export var crit_chance = 0.1
+@export var damage = 20
+@export var crit_chance = 0.05
+@export var crit_damage = 1.5
 @export var attack_speed = 0.3
 @export var knockback = 650
+@export var total_crit_hits = 0
+@export var crit_damage_dealt = 0
+
+@export var explosion_size = 1.0
+@export var explosion_damage = 20
+@export var explosion_particles = 20
 
 var enemies_hit := {}
 
@@ -288,12 +295,26 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 		
 		var total_damage = calculate_base_damage()
 		var text_color = Color.WHITE
+		
+		if body.is_in_group("boss"):
+			total_damage *= (1 + (GameState.get_item_count("Boss Killer") * 0.15))
+		
 		var ft_text = "-" + str(int(total_damage))
 		
 		if randf() < crit_chance:
-			total_damage *= 1.5
+			total_crit_hits += 1
+			crit_damage_dealt += int((total_damage * crit_damage) - total_damage)
+			total_damage *= crit_damage
 			text_color = Color.YELLOW
 			ft_text = "-" + str(int(total_damage))
+		
+		for item in GameState.taken_items:
+			if item.name == "Big Crit":
+				item.tracked_stat_values[1] = crit_damage_dealt
+			if item.name == "Critter":
+				item.tracked_stat_values[1] = total_crit_hits
+			if item.name == "Boss Killer":
+				item.tracked_stat_values[0] += int((total_damage * (1 + (GameState.get_item_count("Boss Killer") * 0.15))) - total_damage)
 		
 		body.take_damage(total_damage)
 		body.apply_knockback(aim_direction, knockback)
@@ -432,17 +453,19 @@ func play_hit_sound():
 
 func calculate_base_damage():
 	var total_damage
-	
-	total_damage = damage
-	
-	total_damage += GameState.get_item_count("Sword") * 2
-	for item in GameState.taken_items:
-		if item.name == "Sword":
-			item.tracked_stat_values[0] += 2
-	
 	@warning_ignore("integer_division")
 	var coin_groups = floor(GameState.coins / 5)
 	
+	total_damage = damage
+	
+	for item in GameState.taken_items:
+		if item.name == "Sword":
+			item.tracked_stat_values[0] += 5
+	total_damage += GameState.get_item_count("Sword") * 5
+	
+	for item in GameState.taken_items:
+		if item.name == "Greedy ahh":
+			item.tracked_stat_values[1] += int((total_damage * (1 + 0.1 * GameState.get_item_count("Greedy ahh") * coin_groups)) - total_damage)
 	total_damage *= 1 + 0.1 * GameState.get_item_count("Greedy ahh") * coin_groups
 	
 	return total_damage
