@@ -51,6 +51,7 @@ var spawn_pos
 @export var explosion_particles = 20
 
 var enemies_hit := {}
+var enemies_hit_roll := {}
 
 var chain_count := 10          # how many extra enemies it can hit
 var chain_range := 500.0     # how far it can jump
@@ -146,18 +147,8 @@ func _input(event: InputEvent) -> void:
 		rolling = true
 		invulnerability_timer = 0.45
 		stamina -= 1
-		enemies_hit.clear()
+		enemies_hit_roll.clear()
 		update_stamina_ui()
-	
-	if event.is_action_pressed("attack") and !attacking and !recharging and stamina > 0 and !rolling:
-		attacking = true
-		cooldown_bar.value = 0.0
-		cooldown_bar.visible = true
-		attack_timer.start(attack_speed)
-		play_sword_swing()
-		stamina -= 1
-		update_stamina_ui()
-		enemies_hit.clear()
 	
 	if event.is_action_pressed("swap_color") and !attacking and !switching_color:
 		next_color()
@@ -197,21 +188,21 @@ func handle_movement(delta):
 		var collider = collision.get_collider()
 		if rolling and GameState.get_item_count("Rollin'") > 0:
 			if collider.is_in_group("enemies"):
-				if enemies_hit.has(collider):
+				if enemies_hit_roll.has(collider):
 					return  # already hit this attack
 				
 				play_hit_sound()
-				enemies_hit[collider] = true
+				enemies_hit_roll[collider] = true
 				
-				collider.take_damage(GameState.get_item_count("Rollin'") * 2)
+				collider.take_damage(GameState.get_item_count("Rollin'") * 6)
 				collider.apply_knockback(collider.global_position - global_position, knockback * 2)
 				for item in GameState.taken_items:
 					if item.name == "Rollin'":
-						item.tracked_stat_values[0] += 2
+						item.tracked_stat_values[0] += 6
 				
 				var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
 				var ft = floating_text_scene.instantiate()
-				ft.text = "-" + str(int(GameState.get_item_count("Rollin'") * 2))
+				ft.text = "-" + str(int(GameState.get_item_count("Rollin'") * 6))
 				ft.modulate = Color.WHITE
 				ft.global_position = collider.global_position
 				get_tree().current_scene.add_child(ft)
@@ -220,6 +211,16 @@ func _on_roll_timer_timeout() -> void:
 	rolling = false
 
 func handle_attacking(_delta):
+
+	if Input.is_action_pressed("attack") and !attacking and !recharging and stamina > 0 and !rolling and !is_dead:
+		attacking = true
+		cooldown_bar.value = 0.0
+		cooldown_bar.visible = true
+		attack_timer.start(attack_speed)
+		play_sword_swing()
+		stamina -= 1
+		update_stamina_ui()
+		enemies_hit.clear()
 
 	# Detect attacking from animation
 	attacking = animation_player.is_playing()

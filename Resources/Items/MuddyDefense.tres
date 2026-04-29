@@ -6,9 +6,9 @@
 [resource]
 script = ExtResource("1_ecmg0")
 name = "Friend"
-description = "Muddy won't hurt you anymore"
-price = 5
 icon = ExtResource("1_g8hx7")
+price = 4
+description = "Muddy won't hurt you anymore"
 tracked_stats = Array[String](["Hits avoided"])
 tracked_stat_values = Array[int]([0])
 tracked_stat_value_percentage = Array[bool]([false])

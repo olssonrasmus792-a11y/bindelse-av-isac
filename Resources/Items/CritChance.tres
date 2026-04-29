@@ -1,15 +1,15 @@
 [gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://d3lml6jgw6tsd"]
 
-[ext_resource type="Texture2D" uid="uid://ca82twfvheobr" path="res://Textures/icon.svg" id="1_0hs5s"]
+[ext_resource type="Texture2D" uid="uid://dgebsljj7cksq" path="res://Textures/Bat_icon.png" id="1_0hs5s"]
 [ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_chsb7"]
 
 [resource]
 script = ExtResource("1_chsb7")
 name = "Critter"
-stats = Array[String](["+10% Crit chance"])
-stat_colors = Array[Color]([Color(1, 1, 0, 1)])
-price = 6
 icon = ExtResource("1_0hs5s")
+price = 6
+stats = Array[String](["+10% Crit chance"])
+stat_colors = Array[Color]([Color(0, 0.78431374, 0.28235295, 1)])
 tracked_stats = Array[String](["Crit Chance", "Total Crits"])
 tracked_stat_values = Array[int]([0, 0])
 tracked_stat_value_percentage = Array[bool]([true, false])

@@ -1,13 +1,13 @@
 [gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://cjwa2lnrhmfwv"]
 
 [ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_1x56d"]
-[ext_resource type="Texture2D" uid="uid://ca82twfvheobr" path="res://Textures/icon.svg" id="1_6uj4e"]
+[ext_resource type="Texture2D" uid="uid://bl75ynxq1cirf" path="res://Textures/Bulb_Run_Icon.png" id="1_6uj4e"]
 
 [resource]
 script = ExtResource("1_1x56d")
 name = "Old boot"
+icon = ExtResource("1_6uj4e")
+price = 6
 stats = Array[String](["+10% Movement speed"])
 stat_colors = Array[Color]([Color(0, 0.4862745, 1, 1)])
-price = 6
-icon = ExtResource("1_6uj4e")
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

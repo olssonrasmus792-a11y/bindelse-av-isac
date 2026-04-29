@@ -7,6 +7,10 @@ extends Control
 @onready var item_icon: TextureRect = $Tooltip/ItemIcon
 @onready var item_amount: Label = $Tooltip/ItemAmount
 @onready var item_tracked_stats: RichTextLabel = $Tooltip/ItemTrackedStats
+@onready var rarity: Label = $Tooltip/Panel2/rarity
+
+var rarity_color
+var rarity_intensity
 
 var slot_scene = preload("res://Scenes/item_slot.tscn")
 
@@ -64,7 +68,28 @@ func _on_item_hovered(item: ItemData, count: int):
 
 	item_name.text = item.name
 	item_description.text = item.description
-
+	
+	match item.rarity:
+			ItemData.Rarity.COMMON:
+				rarity_color = Color(0.873, 0.873, 0.873, 1.0)
+				rarity.text = "Common"
+				rarity_intensity = 0.1
+			ItemData.Rarity.RARE:
+				rarity_color = Color(0.2, 0.435, 1.0, 1.0)
+				rarity.text = "Rare"
+				rarity_intensity = 0.5
+			ItemData.Rarity.EPIC:
+				rarity_color = Color(0.484, 0.003, 0.983)
+				rarity.text = "Epic"
+				rarity_intensity = 0.8
+			ItemData.Rarity.LEGENDARY:
+				rarity_color = Color(1.0, 1.0, 0.0, 1.0)
+				rarity.text = "Legendary"
+				rarity_intensity = 1.2
+	
+	item_name.modulate = rarity_color
+	rarity.modulate = rarity_color
+	
 	if item.description == "":
 		item_description.text = get_stats_text(
 			item.stats,

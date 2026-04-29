@@ -6,7 +6,8 @@
 [resource]
 script = ExtResource("2_vo5o6")
 name = "Guy"
-description = "guy himself"
-price = 100
 icon = ExtResource("1_kypkd")
+price = 100
+rarity = 3
+description = "guy himself"
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

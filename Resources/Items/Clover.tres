@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1_iyy07")
 name = "Clover"
-stats = Array[String](["+10% Luck"])
-stat_colors = Array[Color]([Color(9.1448425e-07, 0.82254297, 0.06711328, 1)])
-price = 7
 icon = ExtResource("1_yhe4q")
+price = 5
+stats = Array[String](["+10% Luck"])
+stat_colors = Array[Color]([Color(0, 0.78431374, 0.28235295, 1)])
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

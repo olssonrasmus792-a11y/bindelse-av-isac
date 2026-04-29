@@ -5,6 +5,7 @@ signal hovered(item)
 signal unhovered()
 
 @onready var count_label: Label = $CountLabel
+var rarity_color
 
 var item: ItemData
 var count: int = 1
@@ -13,6 +14,17 @@ func set_item(new_item: ItemData, new_count: int = 1):
 	item = new_item
 	count = new_count
 
+	match item.rarity:
+			ItemData.Rarity.COMMON:
+				rarity_color = Color(0.873, 0.873, 0.873, 1.0)
+			ItemData.Rarity.RARE:
+				rarity_color = Color(0.2, 0.435, 1.0, 1.0)
+			ItemData.Rarity.EPIC:
+				rarity_color = Color(0.484, 0.003, 0.983)
+			ItemData.Rarity.LEGENDARY:
+				rarity_color = Color(1.0, 1.0, 0.0, 1.0)
+	count_label.modulate = rarity_color
+	
 	texture = item.icon
 
 	if count_label and count > 1:

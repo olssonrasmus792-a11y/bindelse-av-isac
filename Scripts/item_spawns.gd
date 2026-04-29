@@ -1,5 +1,12 @@
 extends Node2D
 
+var rarity_weights = {
+	ItemData.Rarity.COMMON: 50,
+	ItemData.Rarity.RARE: 20,
+	ItemData.Rarity.EPIC: 8,
+	ItemData.Rarity.LEGENDARY: 2
+}
+
 @export var all_items: Array[ItemData] = []
 @onready var item_scene = preload("res://Scenes/item.tscn")
 @onready var spawn_points = $SpawnPoints.get_children()
@@ -12,20 +19,53 @@ func _ready() -> void:
 
 func spawn_random_item(pos):
 	if all_items.is_empty():
-		return  # Nothing left to spawn
+		return
 
-	# Pick a random index
-	var index = randi() % all_items.size()
-	var item_data = all_items[index]
+	var item_data = get_weighted_random_item()
 
-	# Remove it from the list so it won't spawn again
-	all_items.remove_at(index)
+	# Remove it so it doesn't spawn again
+	all_items.erase(item_data)
 
-	# Instantiate the item and set it up
 	var item = item_scene.instantiate()
 	item.position = pos
 	item.data = item_data
 	add_child(item)
+
+func get_weighted_random_item():
+	var total_weight = 0
+	var adjusted_weights = []
+
+	var luck = GameState.luck  # or wherever you store it
+
+	# Build adjusted weights per item
+	for item in all_items:
+		var base_weight = rarity_weights.get(item.rarity, 1)
+		var weight = base_weight
+
+		# Apply luck scaling here
+		match item.rarity:
+			ItemData.Rarity.COMMON:
+				weight *= max(0.1, 1.0 - luck * 0.05) # reduce commons
+			ItemData.Rarity.RARE:
+				weight *= 1.0 + luck * 0.06
+			ItemData.Rarity.EPIC:
+				weight *= 1.0 + luck * 0.10
+			ItemData.Rarity.LEGENDARY:
+				weight *= 1.0 + luck * 0.15
+
+		adjusted_weights.append(weight)
+		total_weight += weight
+
+	# Roll
+	var rand_value = randf() * total_weight
+	var current_sum = 0
+
+	for i in range(all_items.size()):
+		current_sum += adjusted_weights[i]
+		if rand_value < current_sum:
+			return all_items[i]
+
+	return all_items[0]
 
 func load_items():
 	all_items.clear()

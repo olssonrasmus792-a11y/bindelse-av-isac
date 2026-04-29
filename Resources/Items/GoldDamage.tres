@@ -1,14 +1,15 @@
 [gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://cqcgp1t2c8ic2"]
 
 [ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_iwrr5"]
-[ext_resource type="Texture2D" uid="uid://ca82twfvheobr" path="res://Textures/icon.svg" id="1_j77eo"]
+[ext_resource type="Texture2D" uid="uid://bi3cf83ewrg3n" path="res://Textures/coin.png" id="1_j77eo"]
 
 [resource]
 script = ExtResource("1_iwrr5")
 name = "Greedy ahh"
-description = "Deal 10% extra damage per 5 coins held"
-price = 5
 icon = ExtResource("1_j77eo")
+price = 5
+rarity = 2
+description = "Deal 10% extra damage per 5 coins held"
 tracked_stats = Array[String](["Current Bonus", "Damage dealt"])
 tracked_stat_values = Array[int]([0, 0])
 tracked_stat_value_percentage = Array[bool]([true, false])

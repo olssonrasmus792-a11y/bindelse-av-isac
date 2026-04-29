@@ -6,9 +6,10 @@
 [resource]
 script = ExtResource("1_qdqhm")
 name = "Chainy"
-description = "Chain-hit nearby enemies dealing 80% of previous damage"
-price = 15
 icon = ExtResource("1_viit7")
+price = 15
+rarity = 3
+description = "Chain-hit nearby enemies dealing 80% of previous damage"
 tracked_stats = Array[String](["Damage dealt", "Chain Hits"])
 tracked_stat_values = Array[int]([0, 0])
 tracked_stat_value_percentage = Array[bool]([false, false])

@@ -156,9 +156,9 @@ Panel/styles/panel = SubResource("StyleBoxFlat_k12tt")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b3802"]
 shader = ExtResource("15_h1bgf")
-shader_parameter/height = 1.0
+shader_parameter/height = 0.5
 shader_parameter/frequency = 10.0
-shader_parameter/speed = 1.5
+shader_parameter/speed = 1.0
 
 [sub_resource type="Gradient" id="Gradient_fdnlq"]
 offsets = PackedFloat32Array(0.8488889, 1)
@@ -557,6 +557,33 @@ theme_override_fonts/normal_font = ExtResource("8_6iyac")
 theme_override_font_sizes/normal_font_size = 8
 bbcode_enabled = true
 text = "Damage Dealt: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel2" type="Panel" parent="UI/InventoryUI/Tooltip"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.32142857
+anchor_top = 1.0089285
+anchor_right = 0.6785714
+anchor_bottom = 1.1160715
+pivot_offset = Vector2(-64, 192)
+metadata/_edit_use_anchors_ = true
+
+[node name="rarity" type="Label" parent="UI/InventoryUI/Tooltip/Panel2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.03125
+anchor_top = 0.06666614
+anchor_right = 0.96875
+anchor_bottom = 0.9333332
+pivot_offset = Vector2(-128, 192)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("8_6iyac")
+theme_override_font_sizes/font_size = 6
+text = "Legendary"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true

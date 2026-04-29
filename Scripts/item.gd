@@ -29,12 +29,42 @@ var has_bounced := false
 @onready var deny: AudioStreamPlayer = $Deny
 @onready var pop: AudioStreamPlayer = $Pop
 @onready var light: PointLight2D = $PointLight2D2
+@onready var rarity: Label = $PopUp/Panel2/rarity
+@onready var point_light_2d_2: PointLight2D = $PointLight2D2
+
+var rarity_color: Color = Color.WHITE
+var fade_time := 0.0
+@export var fade_speed := 2.0
+var shimmer_time := 0.0
+var rarity_intensity := 0.0
 
 func _ready():
 	if data:
 		sprite.texture = data.icon
 		label.text = data.name
 		description.text = data.description
+		if sprite.material:
+			sprite.material = sprite.material.duplicate()
+		match data.rarity:
+			ItemData.Rarity.COMMON:
+				rarity_color = Color(0.873, 0.873, 0.873, 1.0)
+				rarity.text = "Common"
+				rarity_intensity = 0.1
+			ItemData.Rarity.RARE:
+				rarity_color = Color(0.2, 0.435, 1.0, 1.0)
+				rarity.text = "Rare"
+				rarity_intensity = 0.5
+			ItemData.Rarity.EPIC:
+				rarity_color = Color(0.484, 0.003, 0.983)
+				rarity.text = "Epic"
+				rarity_intensity = 0.8
+			ItemData.Rarity.LEGENDARY:
+				rarity_color = Color(1.0, 1.0, 0.0, 1.0)
+				rarity.text = "Legendary"
+				rarity_intensity = 1.2
+
+		rarity.modulate = rarity_color
+		label.modulate = rarity_color
 		price.text = "Purchase (E) : " + str(data.price) + " Coins"
 		base_y = sprite.position.y
 		pop_up.visible = false
@@ -76,6 +106,14 @@ func _process(delta: float) -> void:
 	light.visible = true
 	light.enabled = true
 	light.energy = 0.75
+	
+	shimmer_time += delta * 0.8
+	
+	var mat := sprite.material as ShaderMaterial
+	if mat:
+		mat.set_shader_parameter("shine_color", rarity_color)
+		mat.set_shader_parameter("intensity", rarity_intensity)
+		mat.set_shader_parameter("sweep_pos", fmod(shimmer_time, 1.5) - 0.25)
 	
 	if GameState.coins >= data.price:
 		price.modulate = Color.LIME_GREEN

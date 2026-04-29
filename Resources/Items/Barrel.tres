@@ -6,10 +6,11 @@
 [resource]
 script = ExtResource("2_b0tl3")
 name = "Barrel"
-stats = Array[String](["+50% Explosion Damage", "+25% Explosion Size"])
-stat_colors = Array[Color]([Color(0, 0.78431374, 0.39215687, 1), Color(0, 0.78431374, 0.39215687, 1)])
-price = 6
 icon = ExtResource("1_vu4p0")
+price = 6
+rarity = 1
+stats = Array[String](["+50% Explosion Damage", "+25% Explosion Size"])
+stat_colors = Array[Color]([Color(0, 0.78431374, 0.28235295, 1), Color(0, 0.78431374, 0.28235295, 1)])
 tracked_stats = Array[String](["Damage dealt"])
 tracked_stat_values = Array[int]([0])
 tracked_stat_value_percentage = Array[bool]([false])

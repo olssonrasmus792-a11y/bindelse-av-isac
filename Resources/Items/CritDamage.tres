@@ -6,10 +6,11 @@
 [resource]
 script = ExtResource("1_i6w7t")
 name = "Big Crit"
-stats = Array[String](["+15% Crit damage"])
-stat_colors = Array[Color]([Color(1, 0.3529412, 1, 1)])
-price = 10
 icon = ExtResource("1_aruwg")
+price = 8
+rarity = 1
+stats = Array[String](["+15% Crit damage"])
+stat_colors = Array[Color]([Color(0, 0.78431374, 0.28235295, 1)])
 tracked_stats = Array[String](["Crit damage", "Crit damage dealt"])
 tracked_stat_values = Array[int]([0, 0])
 tracked_stat_value_percentage = Array[bool]([true, false])
