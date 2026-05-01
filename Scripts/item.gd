@@ -37,6 +37,7 @@ var fade_time := 0.0
 @export var fade_speed := 2.0
 var shimmer_time := 0.0
 var rarity_intensity := 0.0
+var rainbow_time := 0.0
 
 func _ready():
 	if data:
@@ -49,7 +50,7 @@ func _ready():
 			ItemData.Rarity.COMMON:
 				rarity_color = Color(0.873, 0.873, 0.873, 1.0)
 				rarity.text = "Common"
-				rarity_intensity = 0.1
+				rarity_intensity = 0.2
 			ItemData.Rarity.RARE:
 				rarity_color = Color(0.2, 0.435, 1.0, 1.0)
 				rarity.text = "Rare"
@@ -103,17 +104,27 @@ func _physics_process(delta):
 func _process(delta: float) -> void:
 	time += delta
 	sprite.position.y = base_y + sin(time * float_speed) * float_amount
+
 	light.visible = true
 	light.enabled = true
-	light.energy = 0.75
-	
-	shimmer_time += delta * 0.8
-	
+
+	shimmer_time += delta * 0.4
+
 	var mat := sprite.material as ShaderMaterial
 	if mat:
-		mat.set_shader_parameter("shine_color", rarity_color)
-		mat.set_shader_parameter("intensity", rarity_intensity)
-		mat.set_shader_parameter("sweep_pos", fmod(shimmer_time, 1.5) - 0.25)
+		if data.rarity == ItemData.Rarity.LEGENDARY:
+			rainbow_time += delta * 0.3
+			
+			var rainbow = get_rainbow_color(rainbow_time)
+			
+			# 🔥 rainbow shimmer
+			mat.set_shader_parameter("shine_color", rainbow)
+			mat.set_shader_parameter("intensity", 1.5)
+		else:
+			mat.set_shader_parameter("shine_color", rarity_color)
+			mat.set_shader_parameter("intensity", rarity_intensity)
+
+	mat.set_shader_parameter("sweep_pos", fmod(shimmer_time, 1.5) - 0.25)
 	
 	if GameState.coins >= data.price:
 		price.modulate = Color.LIME_GREEN
@@ -122,6 +133,9 @@ func _process(delta: float) -> void:
 	
 	if data.price == 0:
 		price.text = "Take Item (E) : Free"
+
+func get_rainbow_color(t: float) -> Color:
+	return Color.from_hsv(fmod(t, 1.0), 1.0, 1.0)
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and pop_up.visible == true:
@@ -175,6 +189,7 @@ func apply_item(item_name):
 			player.crit_chance += 0.1
 		"Knock knock":
 			player.knockback = 650 * (1 + (GameState.get_item_count("Knock knock") * 0.25))
+			print("Knockback: " + str(player.knockback))
 		"Old boot":
 			player.max_speed *= 1.10
 			player.speed = player.max_speed

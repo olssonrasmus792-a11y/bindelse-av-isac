@@ -2,9 +2,14 @@ extends CharacterBody2D
 
 @onready var player := get_tree().get_first_node_in_group("player")
 
+@export var xp_orbs: int = 5
+@export var xp_reward: int = 4
+var xp_reward_range = 2 # xp rewards +- range
+
 @onready var projectile_scene = preload("res://Scenes/clover_projectile.tscn")
 @export var explosion_scene = preload("res://Scenes/Enemies/MuddyExplosion.tscn")
 @export var jump_effect_scene = preload("res://Scenes/Enemies/jump_effects.tscn")
+@export var xp_orb_scene = preload("res://Scenes/xp_orb.tscn")
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $Visuals/AnimatedSprite2D
 @onready var shoot_timer: Timer = $ShootTimer
@@ -30,7 +35,7 @@ var normal_speed = 450
 var bullet_hell_speed = 400
 var burst_hell_speed = 150
 
-var max_health = 800.0
+var max_health = 1600.0
 var health = max_health
 signal enemy_died
 
@@ -342,6 +347,13 @@ func explode(enemy):
 	explosion.global_position = global_position
 	get_parent().add_child(explosion)
 	explosion.emitting = true
+	
+	for x in range(xp_orbs):
+		var orb = xp_orb_scene.instantiate()
+		orb.global_position = global_position + Vector2(randf_range(-10, 10), randf_range(-10, 10))
+		orb.xp_value = xp_reward + randi_range(-xp_reward_range, xp_reward_range)
+		
+		get_tree().current_scene.call_deferred("add_child", orb)
 	
 	emit_signal("enemy_died")
 	GameState.boss_killed = true

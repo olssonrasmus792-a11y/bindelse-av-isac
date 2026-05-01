@@ -3,6 +3,9 @@ extends CanvasLayer
 @onready var keys: Label = $KeyPanel/HBoxContainer/Keys
 @onready var coins: Label = $CoinPanel/HBoxContainer/Coins
 @onready var timer: Label = $Timer
+@onready var xp_bar: TextureProgressBar = $XpBar
+@onready var player: CharacterBody2D = $"../Player"
+@onready var level: Label = $XpBar/Level
 
 @onready var vignette: TextureRect = $DamageVignette
 @export var flash_duration: float = 0.25
@@ -20,6 +23,10 @@ func _process(delta: float) -> void:
 	label.text = "Kills: " + str(GameState.kills)
 	
 	handle_boss_timer(delta)
+	
+	xp_bar.value = player.xp
+	xp_bar.max_value = player.xp_to_next_level
+	level.text = "LVL " + str(player.level)
 
 func handle_boss_timer(delta: float):
 	if GameState.time_left <= 0:

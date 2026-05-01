@@ -3,6 +3,11 @@ extends CharacterBody2D
 @export var explosion_scene = preload("res://Scenes/Enemies/MuddyExplosion.tscn")
 @export var trail_scene = preload("res://Scenes/Enemies/snail_trail.tscn")
 @export var projectile_scene = preload("res://Scenes/Enemies/water_projectile.tscn")
+@export var xp_orb_scene = preload("res://Scenes/xp_orb.tscn")
+
+@export var xp_orbs: int = 5
+@export var xp_reward: int = 4
+var xp_reward_range = 2 # xp rewards +- range
 
 @export var speed := 150
 @onready var visuals: Node2D = $Visuals
@@ -99,6 +104,13 @@ func explode(enemy):
 	explosion.global_position = global_position
 	get_parent().add_child(explosion)
 	explosion.emitting = true
+	
+	for x in range(xp_orbs):
+		var orb = xp_orb_scene.instantiate()
+		orb.global_position = global_position + Vector2(randf_range(-10, 10), randf_range(-10, 10))
+		orb.xp_value = xp_reward + randi_range(-xp_reward_range, xp_reward_range)
+		
+		get_tree().current_scene.call_deferred("add_child", orb)
 	
 	emit_signal("enemy_died")
 	enemy.queue_free()

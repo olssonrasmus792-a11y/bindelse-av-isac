@@ -25,6 +25,7 @@ var time_left = start_time
 var pause_timer = false
 
 var current_room
+var is_fighting = false
 var boss_spawned = false
 var boss_killed = false
 
@@ -74,7 +75,3 @@ func calculate_stats():
 			var value : int = 0.1 * GameState.get_item_count("Greedy ahh") * coin_groups * 100
 			item.tracked_stat_values[0] = value
 			break
-
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("interact"):
-		print("Current room: " + str(current_room))

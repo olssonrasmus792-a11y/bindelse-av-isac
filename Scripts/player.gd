@@ -38,6 +38,10 @@ enum ColorState { YELLOW, RED, GREEN }
 
 var spawn_pos
 
+@export var level: int = 1
+@export var xp: int = 0
+@export var xp_to_next_level: int = 100
+
 @export var damage = 20
 @export var crit_chance = 0.05
 @export var crit_damage = 1.5
@@ -53,9 +57,9 @@ var spawn_pos
 var enemies_hit := {}
 var enemies_hit_roll := {}
 
-var chain_count := 10          # how many extra enemies it can hit
-var chain_range := 500.0     # how far it can jump
-var chain_falloff := 0.8    # damage multiplier per jump
+var chain_count := 5          # how many extra enemies it can hit
+var chain_range := 450.0     # how far it can jump
+var chain_falloff := 0.75    # damage multiplier per jump
 
 @export var max_speed = 500
 @export var speed = max_speed
@@ -194,18 +198,13 @@ func handle_movement(delta):
 				play_hit_sound()
 				enemies_hit_roll[collider] = true
 				
-				collider.take_damage(GameState.get_item_count("Rollin'") * 6)
+				collider.take_damage(GameState.get_item_count("Rollin'") * 10)
 				collider.apply_knockback(collider.global_position - global_position, knockback * 2)
 				for item in GameState.taken_items:
 					if item.name == "Rollin'":
-						item.tracked_stat_values[0] += 6
+						item.tracked_stat_values[0] += 10
 				
-				var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
-				var ft = floating_text_scene.instantiate()
-				ft.text = "-" + str(int(GameState.get_item_count("Rollin'") * 6))
-				ft.modulate = Color.WHITE
-				ft.global_position = collider.global_position
-				get_tree().current_scene.add_child(ft)
+				spawn_floating_text("-" + str(int(GameState.get_item_count("Rollin'") * 10)), Color.WHITE, collider.global_position)
 
 func _on_roll_timer_timeout() -> void:
 	rolling = false
@@ -281,7 +280,7 @@ func handle_color():
 		target_energy = 1.5 + health * 0.15
 		lerp_speed = 0.5
 	else:
-		target_energy = 0.4 + health * 0.15
+		target_energy = 1.0 + health * 0.05
 		lerp_speed = 0.2
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
@@ -325,12 +324,7 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 		
 		hit_stop(0.05, 0.25)
 		
-		var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
-		var ft = floating_text_scene.instantiate()
-		ft.text = ft_text
-		ft.modulate = text_color
-		ft.global_position = body.global_position
-		get_tree().current_scene.add_child(ft)
+		spawn_floating_text(ft_text, text_color, body.global_position)
 		
 		if GameState.get_item_count("Chainy") > 0:
 			chain_hit(body, total_damage, chain_count)
@@ -407,15 +401,7 @@ func chain_hit(from_enemy: CharacterBody2D, dmg: float, remaining_chains: int) -
 				item.tracked_stat_values[0] += int(new_damage)
 				break
 
-		# Floating damage text
-		var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
-		var ft = floating_text_scene.instantiate()
-
-		ft.text = "-" + str(int(new_damage))
-		ft.modulate = Color.WHITE
-		ft.global_position = target_pos
-
-		get_tree().current_scene.add_child(ft)
+		spawn_floating_text("-" + str(int(new_damage)), Color.WHITE, target_pos)
 
 		# Knockback
 		var dir = (target_pos - from_pos).normalized()
@@ -429,7 +415,6 @@ func chain_hit(from_enemy: CharacterBody2D, dmg: float, remaining_chains: int) -
 		# Continue chain ONLY if original still exists
 		if is_instance_valid(from_enemy):
 			await chain_hit(from_enemy, dmg, remaining_chains - 1)
-
 
 func spawn_lightning(start: Vector2, end: Vector2):
 	var lightning_scene = preload("res://Scenes/chain_lightning.tscn")
@@ -519,7 +504,7 @@ func update_stamina_ui():
 		stamina_bar.add_child(icon)
 		icon.modulate.a = 1.0 if i < stamina else 0.1
 	
-	if stamina == 1 or stamina < 2 and stamina_recharge.time_left > stamina_regen / 2:
+	if stamina < 2 or (stamina == 1 and stamina_recharge.time_left > stamina_regen / 2):
 		low_battery.visible = true
 	else:
 		low_battery.visible = false
@@ -528,13 +513,32 @@ func update_stamina_ui():
 	stamina_panel.queue_sort()
 
 func no_stamina():
-	var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
-	var ft = floating_text_scene.instantiate()
-	ft.text = "No Stamina!"
-	ft.add_theme_color_override("font_color", Color.RED)
-	ft.global_position = global_position
-	get_tree().current_scene.add_child(ft)  # Or a dedicated UI node
+	spawn_floating_text("No Stamina!", Color.RED, global_position)
 	deny.play()
+
+func add_xp(amount: int):
+	xp += amount
+	spawn_floating_text("+" + str(amount) + "xp", Color.DEEP_SKY_BLUE, global_position)
+	
+	while xp >= xp_to_next_level:
+		xp -= xp_to_next_level
+		level_up()
+
+func level_up():
+	level += 1
+	
+	# Scale XP requirement (important!)
+	xp_to_next_level = int(xp_to_next_level * 1.25)
+	
+	print("Level Up! Now level ", level)
+	
+	# Trigger upgrade selection here
+	upgrade_cards()
+
+func upgrade_cards(): #Använd för xp system sen
+	var upgrade_scene = get_tree().get_first_node_in_group("upgrade_screen")
+	get_tree().paused = true
+	upgrade_scene.spawn_random_cards(3)
 
 func handle_animations(delta):
 	var health_state : int = round(remap(health, 1, max_health, 1, 3))
@@ -678,3 +682,13 @@ func flash_red():
 		Color(1, 1, 1),
 		invulnerability_duration
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func spawn_floating_text(text: String, color: Color, pos: Vector2):
+	var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
+	var ft = floating_text_scene.instantiate()
+	
+	ft.text = text
+	ft.modulate = color
+	ft.global_position = pos
+	
+	get_tree().current_scene.call_deferred("add_child", ft)

@@ -12,6 +12,7 @@ extends Node2D
 
 @onready var camera: Camera2D = $Camera2D
 @onready var color_rect: ColorRect = $ColorRect
+@onready var lamps: Node2D = $Lamps
 
 @onready var door_up: StaticBody2D = $Doors/Door_Up
 @onready var door_left: StaticBody2D = $Doors/Door_Left
@@ -58,7 +59,7 @@ func _ready() -> void:
 	
 	room_entered = false
 	room_closed = false
-	color_rect.visible = false#true
+	color_rect.visible = true
 	camera_normal_zoom = camera.zoom.x
 	camera_map_zoom = camera.zoom.x / 3
 

@@ -1,33 +1,47 @@
 extends Label
 
-@export var float_distance: float
-@export var float_time: float = 1.0
+@export var life_time: float = 1.4
+@export var gravity: float = 1000.0
+@export var bounce_damping: float = 0.5
 
+var velocity: Vector2
 var start_position: Vector2
-var direction: Vector2
 var timer: float = 0.0
 
+var bounced := false
+
 func _ready():
-	start_position = Vector2(position.x - 50, position.y)
+	start_position = global_position
 	modulate.a = 1.0
 	
-	# Random distance
-	float_distance = randf_range(40, 100)
+	# Random throw direction
+	var horizontal = randf_range(-180, 180)
+	var upward = randf_range(-280, -140)
 	
-	# Random direction (normalized so speed is consistent)
-	direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
+	velocity = Vector2(horizontal, upward)
 	
+	scale = Vector2(1.2, 1.2)
 
 func _process(delta):
 	timer += delta
-	var t = timer / float_time
-	
-	if t > 1:
+	if timer > life_time:
 		queue_free()
 		return
 
-	# Move in random direction
-	position = start_position + direction * float_distance * t
+	# Gravity
+	velocity.y += gravity * delta
+
+	# Move
+	global_position += velocity * delta
 	
-	# Fade out
-	modulate.a = 1.0 - t
+	scale = lerp(scale, Vector2.ONE, 5 * delta)
+
+	# Bounce once when hitting "ground"
+	if global_position.y > (start_position.y + 20):
+		global_position.y = start_position.y + 20
+		velocity.y *= -0.4
+		velocity.x *= 0.8
+
+	# Fade out over time (smooth)
+	var t = timer / life_time
+	modulate.a = 1.2 - t

@@ -1,5 +1,12 @@
 extends Node2D
 
+var rarity_weights = {
+	ItemData.Rarity.COMMON: 50,
+	ItemData.Rarity.RARE: 20,
+	ItemData.Rarity.EPIC: 8,
+	ItemData.Rarity.LEGENDARY: 2
+}
+
 @export var all_items: Array[ItemData] = []
 @onready var item_scene = preload("res://Scenes/item.tscn")
 @export var coin_scene = preload("res://Scenes/Coin.tscn")
@@ -64,6 +71,7 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 
 
 func open_chest():
+	pop_3.play()
 	animated_sprite_2d.play("Open")
 	chest_opened = true
 	gpu_particles_2d.emitting = true
@@ -79,9 +87,7 @@ func spawn_item():
 	if all_items.is_empty():
 		return
 
-	# Pick random item
-	var index = randi() % all_items.size()
-	var item_data = all_items[index].duplicate()
+	var item_data = get_weighted_random_item()
 
 	# Create item
 	var item = item_scene.instantiate()
@@ -116,6 +122,41 @@ func load_items():
 
 	dir.list_dir_end()
 
+func get_weighted_random_item():
+	var total_weight = 0
+	var adjusted_weights = []
+
+	var luck = GameState.luck  # or wherever you store it
+
+	# Build adjusted weights per item
+	for item in all_items:
+		var base_weight = rarity_weights.get(item.rarity, 1)
+		var weight = base_weight
+
+		# Apply luck scaling here
+		match item.rarity:
+			ItemData.Rarity.COMMON:
+				weight *= max(0.1, 1.0 - luck * 0.05) # reduce commons
+			ItemData.Rarity.RARE:
+				weight *= 1.0 + luck * 0.06
+			ItemData.Rarity.EPIC:
+				weight *= 1.0 + luck * 0.10
+			ItemData.Rarity.LEGENDARY:
+				weight *= 1.0 + luck * 0.15
+
+		adjusted_weights.append(weight)
+		total_weight += weight
+
+	# Roll
+	var rand_value = randf() * total_weight
+	var current_sum = 0
+
+	for i in range(all_items.size()):
+		current_sum += adjusted_weights[i]
+		if rand_value < current_sum:
+			return all_items[i]
+
+	return all_items[0]
 
 func drop_coin(pos):
 	var coin = coin_scene.instantiate()
@@ -127,10 +168,3 @@ func drop_coin(pos):
 	coin.floor_y = global_position.y + randi_range(1, 25) # ground level
 	
 	get_tree().current_scene.add_child(coin)
-
-
-func upgrade_cards(): #Använd för xp system sen
-	var upgrade_scene = get_tree().get_first_node_in_group("upgrade_screen")
-	get_tree().paused = true
-	upgrade_scene.spawn_random_cards(3)
-	pop_3.play()

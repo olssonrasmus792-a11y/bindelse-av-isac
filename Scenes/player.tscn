@@ -16,13 +16,13 @@ height = 98.0
 radius = 24.020824
 
 [sub_resource type="Gradient" id="Gradient_kry3j"]
-offsets = PackedFloat32Array(0.28444445, 0.7111111)
-colors = PackedColorArray(1, 1, 1, 0.5921569, 0, 0, 0, 1)
+offsets = PackedFloat32Array(0.2751678, 0.7986577)
+colors = PackedColorArray(1, 1, 1, 0.5921569, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_v0iea"]
 gradient = SubResource("Gradient_kry3j")
-width = 600
-height = 600
+width = 650
+height = 650
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.9626168, 0.07165109)
@@ -572,6 +572,8 @@ shape = SubResource("CircleShape2D_v0iea")
 
 [node name="PointLight2D" type="PointLight2D" parent="Node2D"]
 color = Color(0.91, 0.8205167, 0.37310004, 1)
+energy = 1.5
+blend_mode = 2
 range_z_min = -200
 range_z_max = 200
 shadow_enabled = true
@@ -581,6 +583,8 @@ texture_scale = 2.0
 [node name="RollLight" type="PointLight2D" parent="Node2D"]
 position = Vector2(-1, 35)
 color = Color(0.91, 0.8205167, 0.37310004, 1)
+energy = 1.5
+blend_mode = 2
 range_z_min = -200
 range_z_max = 200
 shadow_enabled = true

@@ -46,7 +46,6 @@ func _on_spawn_enemy_pressed() -> void:
 
 func _on_spawn_enemies_signal(pos) -> void:
 	spawn_enemy(pos)
-	print("Spawning enemies")
 
 func _on_remove_enemies_pressed() -> void:
 	# Get all enemies in the "enemies" group

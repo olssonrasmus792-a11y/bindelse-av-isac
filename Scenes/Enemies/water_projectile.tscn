@@ -1,10 +1,21 @@
-[gd_scene load_steps=4 format=3 uid="uid://bwblrsll6nfoe"]
+[gd_scene load_steps=6 format=3 uid="uid://bwblrsll6nfoe"]
 
 [ext_resource type="Script" uid="uid://bq63j0vuyniyu" path="res://Scripts/clover_projectile.gd" id="1_h43i6"]
 [ext_resource type="Texture2D" uid="uid://ckelyfs0bau6x" path="res://Textures/Enemies/Waterball.png" id="2_6hau2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tpbmr"]
 radius = 13.038404
+
+[sub_resource type="Gradient" id="Gradient_1teyb"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_p2l2a"]
+gradient = SubResource("Gradient_1teyb")
+width = 1000
+height = 1000
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
 
 [node name="WaterProjectile" type="Node2D" groups=["projectiles"]]
 z_index = 1
@@ -19,6 +30,15 @@ offset = Vector2(-5.3097363, 26.548674)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
 shape = SubResource("CircleShape2D_tpbmr")
+
+[node name="PointLight2D2" type="PointLight2D" parent="."]
+z_index = 2
+position = Vector2(-1.9073486e-06, 1.9073486e-06)
+scale = Vector2(0.060000014, 0.060000006)
+color = Color(0.2901961, 1, 0.9411765, 1)
+energy = 0.75
+blend_mode = 2
+texture = SubResource("GradientTexture2D_p2l2a")
 
 [connection signal="area_entered" from="DetectionArea" to="." method="_on_detection_area_area_entered"]
 [connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]

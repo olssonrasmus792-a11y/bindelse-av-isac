@@ -15,6 +15,8 @@ extends Node2D
 @onready var camera: Camera2D = $Camera2D
 @onready var color_rect: ColorRect = $ColorRect
 
+@onready var tile_map: TileMapLayer = $TileMapLayer
+
 @onready var door_up: StaticBody2D = $Doors/Door_Up
 @onready var door_left: StaticBody2D = $Doors/Door_Left
 @onready var door_down: StaticBody2D = $Doors/Door_Down
@@ -24,8 +26,8 @@ extends Node2D
 
 @export var room_size := Vector2i(GameState.room_tiles_x, GameState.room_tiles_y)
 @export var tile_size := 200.0
-@export var dungeon_width := 6.0
-@export var dungeon_height := 6.0
+@export var dungeon_width := 5.0
+@export var dungeon_height := 5.0
 var room_width  = GameState.room_tiles_x * tile_size
 var room_height = GameState.room_tiles_y * tile_size
 var start_pos : Vector2
@@ -63,7 +65,7 @@ func _ready() -> void:
 	room_entered = false
 	room_closed = false
 	clear_light.visible = false
-	color_rect.visible = false#true
+	color_rect.visible = true
 	camera_normal_zoom = camera.zoom.x
 	camera_map_zoom = camera.zoom.x / 3
 	can_spawn_boss = false
@@ -92,13 +94,66 @@ func _process(_delta: float) -> void:
 		GameState.boss_spawned = true
 
 func doors_finalized():
+	await get_tree().create_timer(0.2).timeout
 	check_doors()
+	draw_paths()
 
 func check_doors():
 	has_door_up    = door_up.get_node("Door").visible
 	has_door_left  = door_left.get_node("Door").visible
 	has_door_down  = door_down.get_node("Door").visible
 	has_door_right = door_right.get_node("Door").visible
+
+func draw_paths():
+	var center = get_room_center()
+
+	if !has_door_up:
+		var door_pos = door_up.get_node("Door").global_position
+		draw_path_line(door_pos, Vector2(door_pos.x, center.y))  # lock X to door
+
+	if !has_door_down:
+		var door_pos = door_down.get_node("Door").global_position
+		draw_path_line(door_pos, Vector2(door_pos.x, center.y))  # lock X to door
+
+	if !has_door_left:
+		var door_pos = door_left.get_node("Door").global_position
+		draw_path_line(door_pos, Vector2(center.x, door_pos.y))  # lock Y to door
+
+	if !has_door_right:
+		var door_pos = door_right.get_node("Door").global_position
+		draw_path_line(door_pos, Vector2(center.x, door_pos.y))  # lock Y to door
+
+func get_room_center() -> Vector2:
+	return global_position + Vector2(
+		get_parent().room_width / 2.0 - 3 * tile_size,
+		get_parent().room_height / 2.0 - 1 * tile_size
+	)
+
+func draw_path_line(from: Vector2, to: Vector2):
+	var start: Vector2i = to_tile(from)
+	var end: Vector2i   = to_tile(to)
+	draw_path_cells(start, end)
+
+func to_tile(pos: Vector2) -> Vector2i:
+	return tile_map.local_to_map(tile_map.to_local(pos))
+
+func draw_path_cells(start: Vector2i, end: Vector2i):
+	var x = start.x
+	var y = start.y
+
+	# Walk horizontally first
+	while x != end.x:
+		x += sign(end.x - x)
+		var coords = Vector2i(x, y)
+		if tile_map.get_cell_source_id(coords) == 0:
+			tile_map.set_cell(Vector2i(x, y), 4, Vector2i(0, 0))
+
+	# Then vertically
+	while y != end.y:
+		y += sign(end.y - y)
+		var coords = Vector2i(x, y)
+		if tile_map.get_cell_source_id(coords) == 0:
+			tile_map.set_cell(Vector2i(x, y), 4, Vector2i(0, 0))
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
@@ -182,6 +237,7 @@ func open_room():
 
 func on_room_cleared():
 	open_room()
+	GameState.is_fighting = false
 	GameState.rooms_cleared += 1
 
 func close_door(door):
@@ -235,6 +291,7 @@ func pick_weighted_enemy():
 	return enemy_scenes[0]
 
 func spawn_enemies():
+	GameState.is_fighting = true
 	var enemies = get_enemy_container()
 	var arrow_manager = get_tree().get_first_node_in_group("arrow_manager")
 	for x in range(GameState.get_enemy_amount()):

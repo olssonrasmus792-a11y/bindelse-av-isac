@@ -15,12 +15,12 @@ extends Node2D
 
 @export var shop_scene = preload("res://Scenes/room_shop.tscn")
 var shop_rooms_spawned = 0
-var min_shop_rooms = 6
-var max_shop_rooms = 10
+var min_shop_rooms = 3
+var max_shop_rooms = 5
 
 var shop_positions: Array = []
 @export var min_shop_distance_from_start := 1.4
-@export var max_shop_distance_from_start := 3
+@export var max_shop_distance_from_start := 5
 @export var min_shop_distance_between := 1.4
 
 
@@ -35,7 +35,7 @@ var shop_positions: Array = []
 var room_width  = GameState.room_tiles_x * tile_size
 var room_height = GameState.room_tiles_y * tile_size
 
-@export var min_rooms := 20
+@export var min_rooms := 5
 var placed_rooms := {}
 var rooms_spawned = false
 
@@ -43,61 +43,99 @@ var room_spawn_rate = 0.6
 var chest_spawn_chance = 0.6 # 1.0 = 100% chans, 0.0 = 0%
 
 var start_pos : Vector2
+var main_path := []
+var end_room_pos := Vector2.ZERO
 
 func _ready():
 	generate_dungeon()
 	add_extra_rooms()
 	rooms_spawned = true
-	if shop_rooms_spawned < min_shop_rooms:
-		for i in (min_shop_rooms - shop_rooms_spawned):
-			ensure_shop_exists()
+	await get_tree().create_timer(0.1).timeout
+	ensure_shop_exists()
 
 func generate_dungeon():
 	start_pos = Vector2(dungeon_width / 2, dungeon_height / 2)
+
 	place_room(start_pos)
-	player.spawn_pos = Vector2(room_width/2 - tile_size*3,room_height/2 - tile_size)
+
+	player.spawn_pos = Vector2(room_width/2 - tile_size*3, room_height/2 - tile_size)
 	player.global_position = player.spawn_pos
-	
-	for x in range(dungeon_width):
-		for y in range(dungeon_height):
-			var pos := Vector2(start_pos.x + x, start_pos.y + y)
-			if pos == start_pos:
-				continue
-			
-			if randf() < room_spawn_rate:
-				place_room(pos)
-	
-	for x in range(dungeon_width):
-		for y in range(dungeon_height):
-			var pos := Vector2(start_pos.x - x, start_pos.y - y)
-			if pos == start_pos:
-				continue
-			
-			if randf() < room_spawn_rate:
-				place_room(pos)
-	
-	for x in range(dungeon_width):
-		for y in range(dungeon_height):
-			var pos := Vector2(start_pos.x+ x, start_pos.y - y)
-			if pos == start_pos:
-				continue
-			
-			if randf() < room_spawn_rate:
-				place_room(pos)
-	
-	for x in range(dungeon_width):
-		for y in range(dungeon_height):
-			var pos := Vector2(start_pos.x - x, start_pos.y + y)
-			if pos == start_pos:
-				continue
-			
-			if randf() < room_spawn_rate:
-				place_room(pos)
+
+	# pick farthest end point
+	end_room_pos = get_final_room_pos()
+
+	# build clean path first
+	generate_clean_path(start_pos, end_room_pos)
+
+	# spawn rooms from path
+	for pos in main_path:
+		place_room(pos)
+
+	# ensure end room overrides last tile
+	place_room(end_room_pos)
+
+	rooms_spawned = true
+
+func get_final_room_pos() -> Vector2:
+	var best_pos = start_pos
+	var best_dist = 0.0
+
+	for x in range(-dungeon_width, dungeon_width):
+		for y in range(-dungeon_height, dungeon_height):
+			var pos = start_pos + Vector2(x, y)
+
+			var dist = pos.distance_to(start_pos)
+
+			if dist > best_dist:
+				best_dist = dist
+				best_pos = pos
+
+	return best_pos
+
+func generate_clean_path(start: Vector2, end: Vector2):
+	main_path.clear()
+
+	var current = start
+	main_path.append(current)
+
+	var safety = 0
+
+	while current != end and safety < 200:
+		safety += 1
+
+		var step_options = []
+
+		# bias toward target (no chaos anymore)
+		if current.x < end.x:
+			step_options.append(Vector2.RIGHT)
+		elif current.x > end.x:
+			step_options.append(Vector2.LEFT)
+
+		if current.y < end.y:
+			step_options.append(Vector2.DOWN)
+		elif current.y > end.y:
+			step_options.append(Vector2.UP)
+
+		# small controlled randomness (prevents straight boring lines)
+		if randf() < 0.35:
+			step_options.append(Vector2.LEFT)
+			step_options.append(Vector2.RIGHT)
+			step_options.append(Vector2.UP)
+			step_options.append(Vector2.DOWN)
+
+		var dir = step_options.pick_random()
+		current += dir
+
+		if not main_path.has(current):
+			main_path.append(current)
+
+	# guarantee end connection
+	if not main_path.has(end):
+		main_path.append(end)
 
 func place_room(grid_pos: Vector2):
-	if placed_rooms.has(grid_pos):
+	if placed_rooms.has(grid_pos) and !rooms_spawned:
 		return
-	
 	
 	var room_left = Vector2(grid_pos.x - 1, grid_pos.y)
 	var room_right = Vector2(grid_pos.x + 1, grid_pos.y)
@@ -110,13 +148,18 @@ func place_room(grid_pos: Vector2):
 			return
 	
 	var room_scene
-	if rooms_spawned:
-		room_scene = room_scenes[4]
+
+	if grid_pos == start_pos:
+		room_scene = start_room_scene
+
+	elif grid_pos == end_room_pos:
+		room_scene = start_room_scene
+
+	elif main_path.has(grid_pos):
+		room_scene = pick_weighted_room() # MAIN PATH ROOMS
+
 	else:
-		if grid_pos == start_pos:
-			room_scene = start_room_scene
-		else:
-			room_scene = pick_weighted_room()
+		room_scene = shop_scene	 # SIDE ROOMS
 	
 	
 	var room = room_scene.instantiate()
@@ -222,7 +265,7 @@ func add_extra_rooms():
 		
 		var new_pos = base_pos + directions.pick_random()
 		
-		if not placed_rooms.has(new_pos) and not shop_positions.has(new_pos):
+		if not placed_rooms.has(new_pos) and not shop_positions.has(new_pos) and not main_path.has(new_pos):
 			place_room(new_pos)
 
 func ensure_shop_exists():
@@ -271,5 +314,6 @@ func ensure_shop_exists():
 			continue
 		
 		# ✅ Valid → place shop
+		print("Shop Forced!")
 		place_room(new_pos)
 		shop_positions.append(new_pos)

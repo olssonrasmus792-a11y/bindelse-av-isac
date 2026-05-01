@@ -5,6 +5,7 @@ extends Control
 var card_scene = preload("res://Scenes/card_scene.tscn")
 @onready var cards_container: HBoxContainer = $HBoxContainer
 @onready var pop_4: AudioStreamPlayer = $Pop4
+@onready var pop_3: AudioStreamPlayer = $Pop3
 @onready var coin: AudioStreamPlayer = $Coin
 
 @export var uncommon_chance = 0.5
@@ -27,6 +28,7 @@ func _ready():
 
 func spawn_random_cards(count: int):
 	clear_cards()
+	pop_3.play()
 	
 	var available_cards = all_cards.duplicate()
 	
@@ -107,7 +109,7 @@ func apply_upgrade(card_data: CardData):
 		"Big Biceps":
 			player.damage += 1
 		"Speedy":
-			player.max_speed *= 1.15
+			player.max_speed *= 1.05
 			player.speed = player.max_speed
 		"Healthy Boy":
 			player.max_health += 1

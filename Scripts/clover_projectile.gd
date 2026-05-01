@@ -23,6 +23,5 @@ func _on_detection_area_body_entered(body: Node2D) -> void:
 		queue_free()
 
 func _on_detection_area_area_entered(area: Area2D) -> void:
-	print(area)
 	if area.name == "AttackArea" and area.monitoring:
 		queue_free()
