@@ -17,6 +17,8 @@ var rarity_weights = {
 @onready var label: Label = $NoKeys
 @onready var pop_3: AudioStreamPlayer = $Pop3
 @onready var deny: AudioStreamPlayer = $Deny
+@onready var pop_up: Control = $PopUp
+@onready var label_2: Label = $PopUp/Panel/Label2
 
 var item_pos_offset = 50
 
@@ -35,45 +37,51 @@ func _ready() -> void:
 	coin_amount = randi_range(2, 5)
 	label.modulate.a = 0
 	animated_sprite_2d.play("Closed")
+	pop_up.visible = false
 
 func _process(delta: float) -> void:
 	if label.modulate.a > 0:
-		label.modulate.a -= delta
+		label.modulate.a -= delta * 0.5
 		label.position.y -= delta * 20
 	
 	if GameState.boss_spawned:
 		queue_free()
+	
+	if GameState.keys >= 1:
+		label_2.modulate = Color.LIME_GREEN
+	else:
+		label_2.modulate = Color.RED
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and player_is_close and !chest_opened:
-		label.modulate.a = 1
-		
 		if GameState.keys > 0:
+			label.modulate.a = 1
 			label.position.y = -88
 			label.text = lines.pick_random()
 			label.modulate = Color.YELLOW
 			open_chest()
 		else:
-			label.position.y = -64
-			label.text = "No Keys!"
-			label.modulate = Color.RED
+			shake_label()
 			deny.play()
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.name == "Player":
+	if body.name == "Player" and !chest_opened:
 		player_is_close = true
+		pop_up.visible = true
 
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body.name == "Player":
 		player_is_close = false
+		pop_up.visible = false
 
 
 func open_chest():
 	pop_3.play()
 	animated_sprite_2d.play("Open")
 	chest_opened = true
+	pop_up.visible = false
 	gpu_particles_2d.emitting = true
 	GameState.keys -= 1
 	for i in range(coin_amount):
@@ -87,13 +95,19 @@ func spawn_item():
 	if all_items.is_empty():
 		return
 
-	var item_data = get_weighted_random_item()
+	var item_data: ItemData = get_weighted_random_item()
 
-	# Create item
+	# remove the ORIGINAL so it can’t spawn again
+	all_items.erase(item_data)
+
+	# create runtime copy (for the world)
+	var runtime_data: ItemData = item_data.duplicate()
+	runtime_data.price = 0
+
 	var item = item_scene.instantiate()
+
 	item.global_position = global_position + Vector2(0, -16)
-	item.data = item_data
-	item_data.price = 0
+	item.data = runtime_data
 
 	var dir = [-1, 1].pick_random()
 	item.flying = true
@@ -168,3 +182,37 @@ func drop_coin(pos):
 	coin.floor_y = global_position.y + randi_range(1, 25) # ground level
 	
 	get_tree().current_scene.add_child(coin)
+
+func shake_label():
+	var original_pos = label_2.position
+
+	var strength = 10.0
+	var duration = 0.15
+	var elapsed = 0.0
+
+	# instant punch (important for feel)
+	label_2.scale = Vector2(1.15, 1.15)
+
+	while elapsed < duration:
+		var offset = Vector2(
+			randf_range(-strength, strength),
+			randf_range(-strength, strength)
+		)
+
+		label_2.position = original_pos + offset
+		label_2.rotation = randf_range(-0.02, 0.02)
+
+		await get_tree().process_frame
+
+		elapsed += get_process_delta_time()
+
+		# fast decay = “impact → settle”
+		strength = lerp(strength, 0.0, 0.35)
+
+		# smooth return scale
+		label_2.scale = lerp(label_2.scale, Vector2.ONE, 0.25)
+
+	# reset cleanly
+	label_2.position = original_pos
+	label_2.rotation = 0
+	label_2.scale = Vector2.ONE

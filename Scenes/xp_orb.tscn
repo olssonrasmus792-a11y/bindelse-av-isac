@@ -18,6 +18,7 @@ radius = 13.152946
 script = ExtResource("1_c7xup")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.7647059, 1, 1, 1)
 material = SubResource("ShaderMaterial_5ktd6")
 position = Vector2(1.000001, -2.000001)
 scale = Vector2(0.28337863, 0.28337863)
@@ -25,6 +26,7 @@ texture = ExtResource("3_5ktd6")
 offset = Vector2(-6.4515333, 25.806423)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, -4)
 shape = SubResource("CircleShape2D_fb8i0")
 

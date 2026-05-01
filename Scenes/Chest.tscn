@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://c2p365w32k1w5"]
+[gd_scene load_steps=31 format=3 uid="uid://c2p365w32k1w5"]
 
 [ext_resource type="Texture2D" uid="uid://ekwtd2j7ltcu" path="res://Textures/Chest sheet.png" id="1_ghm5h"]
 [ext_resource type="Script" uid="uid://1ke4wdiujwc8" path="res://Scripts/chest.gd" id="1_mr3w3"]
@@ -132,6 +132,36 @@ scale_max = 8.0
 color = Color(0.95984524, 0.8670839, 0.40638828, 1)
 color_ramp = SubResource("GradientTexture1D_hl2rv")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hl2rv"]
+bg_color = Color(0.28627452, 0.19215687, 0.16078432, 0.78431374)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 1, 1, 0.5882353)
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_color = Color(0, 0, 0, 0.6627451)
+shadow_size = 2
+
+[sub_resource type="Theme" id="Theme_hl2rv"]
+Panel/styles/panel = SubResource("StyleBoxFlat_hl2rv")
+
+[sub_resource type="Gradient" id="Gradient_l4t8t"]
+offsets = PackedFloat32Array(0, 0.75333333, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.56666666, 0.56666666, 0.56666666, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_l4t8t"]
+gradient = SubResource("Gradient_l4t8t")
+width = 1000
+height = 1000
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_l4t8t"]
 shader = ExtResource("4_hl2rv")
 shader_parameter/height = 1.0
@@ -145,7 +175,6 @@ script = ExtResource("1_mr3w3")
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_v1rbb")
 animation = &"Open"
-frame = 9
 
 [node name="CollisionClosed" type="CollisionShape2D" parent="."]
 visible = false
@@ -172,12 +201,51 @@ trail_enabled = true
 trail_lifetime = 0.2
 process_material = SubResource("ParticleProcessMaterial_l4t8t")
 
+[node name="PopUp" type="Control" parent="."]
+z_index = 2
+layout_mode = 3
+anchors_preset = 0
+offset_left = -56.0
+offset_top = -40.0
+offset_right = -16.0
+
+[node name="Panel" type="Panel" parent="PopUp"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.0
+anchor_top = -1.0
+anchor_right = 4.8
+anchor_bottom = -0.2
+pivot_offset = Vector2(-64, 192)
+theme = SubResource("Theme_hl2rv")
+metadata/_edit_use_anchors_ = true
+
+[node name="Label2" type="Label" parent="PopUp/Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0000002
+pivot_offset = Vector2(-128, -128)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_2bf1p")
+text = "Open chest (E): 1 key"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="PointLight2D2" type="PointLight2D" parent="PopUp"]
+position = Vector2(56, -24.000004)
+scale = Vector2(0.288, 0.047999997)
+color = Color(1, 1, 0.9411765, 1)
+energy = 0.75
+texture = SubResource("GradientTexture2D_l4t8t")
+
 [node name="NoKeys" type="Label" parent="."]
 z_index = 2
 material = SubResource("ShaderMaterial_l4t8t")
-offset_left = -64.0
+offset_left = -168.0
 offset_top = -64.0
-offset_right = 64.0
+offset_right = 168.0
 offset_bottom = -30.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 6

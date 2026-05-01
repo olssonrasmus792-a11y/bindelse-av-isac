@@ -9,7 +9,7 @@ var kills := 0
 var combo := 0
 var rooms_cleared := 0
 
-var enemy_start_count = 5
+var enemy_start_count = 4
 var muddy_base_spawn_rate = 8
 var muddy_spawn_rate = muddy_base_spawn_rate
 var snail_spawn_rate = 24
@@ -20,7 +20,7 @@ var coin_drop_chance = 0.1
 
 var luck = 0.0
 
-var start_time = 300.0
+var start_time = 480.0
 var time_left = start_time
 var pause_timer = false
 

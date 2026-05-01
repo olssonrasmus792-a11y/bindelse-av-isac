@@ -3,17 +3,18 @@ extends Node2D
 @onready var enemies: Node2D = $"../Enemies"
 
 @export var room_scenes = [
-	preload("res://Scenes/room.tscn"),
-	preload("res://Scenes/room2.tscn"),
-	preload("res://Scenes/room3.tscn"),
-	preload("res://Scenes/room4.tscn"),
-	preload("res://Scenes/room_shop.tscn")
+	preload("res://Scenes/Rooms/room.tscn"),
+	preload("res://Scenes/Rooms/room2.tscn"),
+	preload("res://Scenes/Rooms/room3.tscn"),
+	preload("res://Scenes/Rooms/room4.tscn"),
+	preload("res://Scenes/Rooms/room_shop.tscn")
 ]
 @export var room_weights = [5, 5, 5, 5, 0] # Hur stor chans att ett rum spawnar jämfört med andra
 
-@export var start_room_scene = preload("res://Scenes/room_start.tscn")
+@export var start_room_scene = preload("res://Scenes/Rooms/room_start.tscn")
+@export var boss_room_scene = preload("res://Scenes/Rooms/room_boss.tscn")
 
-@export var shop_scene = preload("res://Scenes/room_shop.tscn")
+@export var shop_scene = preload("res://Scenes/Rooms/room_shop.tscn")
 var shop_rooms_spawned = 0
 var min_shop_rooms = 3
 var max_shop_rooms = 5
@@ -153,13 +154,13 @@ func place_room(grid_pos: Vector2):
 		room_scene = start_room_scene
 
 	elif grid_pos == end_room_pos:
-		room_scene = start_room_scene
+		room_scene = boss_room_scene
 
 	elif main_path.has(grid_pos):
 		room_scene = pick_weighted_room() # MAIN PATH ROOMS
 
 	else:
-		room_scene = shop_scene	 # SIDE ROOMS
+		room_scene = shop_scene # SIDE ROOMS
 	
 	
 	var room = room_scene.instantiate()
@@ -189,7 +190,7 @@ func place_room(grid_pos: Vector2):
 	placed_rooms[grid_pos] = room
 	room.doors_finalized()
 	
-	if randf() < chest_spawn_chance and grid_pos != start_pos and room_scene != room_scenes[4]:
+	if randf() < chest_spawn_chance and grid_pos != start_pos and room_scene != room_scenes[4] and room_scene != boss_room_scene:
 		spawnChest(room)
 	
 	if grid_pos == start_pos:

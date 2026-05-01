@@ -1,10 +1,11 @@
-[gd_scene load_steps=62 format=3 uid="uid://cuoeosnctc6od"]
+[gd_scene load_steps=69 format=3 uid="uid://cuoeosnctc6od"]
 
 [ext_resource type="Script" uid="uid://qvbshe272w2x" path="res://Scripts/clover_boss.gd" id="1_3jepr"]
 [ext_resource type="Texture2D" uid="uid://b3rp4nwetfivt" path="res://Textures/Enemies/Clove.png" id="1_7w1ik"]
 [ext_resource type="Texture2D" uid="uid://cnyjbitxwpsgp" path="res://Textures/Enemies/clove 2.png" id="3_6y4kc"]
 [ext_resource type="Texture2D" uid="uid://b7e1373ttxxxa" path="res://Textures/Enemies/clove 3 (2).png" id="4_isro6"]
 [ext_resource type="Texture2D" uid="uid://iab3k8551e4l" path="res://Textures/Enemies/clove 5.png" id="4_ykxau"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="6_e8udj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3jepr"]
 atlas = ExtResource("1_7w1ik")
@@ -93,6 +94,10 @@ region = Rect2(7800, 0, 600, 600)
 [sub_resource type="AtlasTexture" id="AtlasTexture_7lhba"]
 atlas = ExtResource("3_6y4kc")
 region = Rect2(8400, 0, 600, 600)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_po1dq"]
+atlas = ExtResource("4_ykxau")
+region = Rect2(0, 1200, 600, 600)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mw43n"]
 atlas = ExtResource("4_ykxau")
@@ -247,6 +252,14 @@ animations = [{
 "loop": false,
 "name": &"Shoot",
 "speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_po1dq")
+}],
+"loop": true,
+"name": &"Sleep",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -429,6 +442,39 @@ scale_max = 14.0
 scale_curve = SubResource("CurveTexture_ympyn")
 color_ramp = SubResource("GradientTexture1D_ympyn")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ykxau"]
+size = Vector2(208, 208)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u06aw"]
+bg_color = Color(0.28627452, 0.19215687, 0.16078432, 0.78431374)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 1, 1, 0.5882353)
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_color = Color(0, 0, 0, 0.6627451)
+shadow_size = 2
+
+[sub_resource type="Theme" id="Theme_s4bv2"]
+Panel/styles/panel = SubResource("StyleBoxFlat_u06aw")
+
+[sub_resource type="Gradient" id="Gradient_76mu4"]
+offsets = PackedFloat32Array(0, 0.75333333, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.56666666, 0.56666666, 0.56666666, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_v847c"]
+gradient = SubResource("Gradient_76mu4")
+width = 1000
+height = 1000
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
 [node name="CloverBoss" type="CharacterBody2D" groups=["boss", "enemies"]]
 z_index = 1
 motion_mode = 1
@@ -447,9 +493,8 @@ color = Color(0, 0, 0, 0.25490198)
 position = Vector2(1.3552527e-20, 0)
 scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_k0y6n")
-animation = &"Spawn"
-autoplay = "Idle"
-frame = 3
+animation = &"Sleep"
+autoplay = "Sleep"
 offset = Vector2(-9.999996, -79.99999)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -470,6 +515,7 @@ wait_time = 1.5
 autostart = true
 
 [node name="HpBar" type="TextureProgressBar" parent="."]
+visible = false
 offset_left = -28.0
 offset_top = -69.0
 offset_right = 32.0
@@ -492,6 +538,54 @@ explosiveness = 0.8
 randomness = 0.5
 process_material = SubResource("ParticleProcessMaterial_s4bv2")
 
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+visible = false
+shape = SubResource("RectangleShape2D_ykxau")
+
+[node name="PopUp" type="Control" parent="."]
+z_index = 2
+layout_mode = 3
+anchors_preset = 0
+offset_left = -56.0
+offset_top = -64.0
+offset_right = -16.0
+offset_bottom = -24.0
+
+[node name="Panel" type="Panel" parent="PopUp"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.4
+anchor_top = -0.6
+anchor_right = 3.2
+anchor_bottom = 0.2
+pivot_offset = Vector2(-64, 192)
+theme = SubResource("Theme_s4bv2")
+metadata/_edit_use_anchors_ = true
+
+[node name="Label2" type="Label" parent="PopUp/Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+pivot_offset = Vector2(-128, -128)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_e8udj")
+text = "??? (E)"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="PointLight2D2" type="PointLight2D" parent="PopUp"]
+position = Vector2(56.000008, -8.000001)
+scale = Vector2(0.16000001, 0.048)
+color = Color(1, 1, 0.9411765, 1)
+energy = 0.75
+texture = SubResource("GradientTexture2D_v847c")
+
 [connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]
 [connection signal="timeout" from="ShootTimer" to="." method="_on_shoot_timer_timeout"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

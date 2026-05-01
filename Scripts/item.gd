@@ -108,7 +108,7 @@ func _process(delta: float) -> void:
 	light.visible = true
 	light.enabled = true
 
-	shimmer_time += delta * 0.4
+	shimmer_time += delta * 0.5
 
 	var mat := sprite.material as ShaderMaterial
 	if mat:
@@ -119,7 +119,7 @@ func _process(delta: float) -> void:
 			
 			# 🔥 rainbow shimmer
 			mat.set_shader_parameter("shine_color", rainbow)
-			mat.set_shader_parameter("intensity", 1.5)
+			mat.set_shader_parameter("intensity", rarity_intensity)
 		else:
 			mat.set_shader_parameter("shine_color", rarity_color)
 			mat.set_shader_parameter("intensity", rarity_intensity)

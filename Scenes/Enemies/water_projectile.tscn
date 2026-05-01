@@ -35,7 +35,6 @@ shape = SubResource("CircleShape2D_tpbmr")
 z_index = 2
 position = Vector2(-1.9073486e-06, 1.9073486e-06)
 scale = Vector2(0.060000014, 0.060000006)
-color = Color(0.2901961, 1, 0.9411765, 1)
 energy = 0.75
 blend_mode = 2
 texture = SubResource("GradientTexture2D_p2l2a")

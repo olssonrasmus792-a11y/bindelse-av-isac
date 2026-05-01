@@ -16,8 +16,12 @@ var xp_reward_range = 2 # xp rewards +- range
 @onready var hp_bar: TextureProgressBar = $HpBar
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var hit_particles: GPUParticles2D = $HitParticles
+@onready var pop_up: Control = $PopUp
 
 var base_y = 0
+
+var player_in_spawn_range = false
+var spawned = false
 
 var player_is_close = false
 
@@ -43,24 +47,37 @@ signal enemy_died
 func _ready() -> void:
 	hp_bar.max_value = max_health
 	hp_bar.value = max_health
+	hp_bar.visible = false
+	pop_up.visible = false
 	shoot_timer.wait_time = 1.5
-	animated_sprite_2d.play("Spawn")
+	shoot_timer.paused = true
+	animated_sprite_2d.play("Sleep")
 	hit_particles.emitting = false
-	await animated_sprite_2d.animation_finished
-	await get_tree().create_timer(1).timeout
 
 func _process(_delta: float) -> void:
 	hp_bar.value = lerp(hp_bar.value, health, 0.25)
 	
 	if bullet_hell_active or burst_hell_active:
 		shoot_timer.paused = true
-	else:
+	elif spawned:
 		shoot_timer.paused = false
 	
 	if animated_sprite_2d.animation == "Spin":
 		animated_sprite_2d.position.y = base_y - 15
 	else:
 		animated_sprite_2d.position.y = base_y
+	
+	if Input.is_action_just_pressed("interact") and player_in_spawn_range and !spawned:
+		GameState.time_left = 0
+		spawned = true
+		hp_bar.visible = true
+		pop_up.visible = false
+		shoot_timer.paused = false
+		animated_sprite_2d.play("Spawn")
+	
+	if animated_sprite_2d.animation == "Spawn":
+		for cam in get_tree().get_nodes_in_group("camera"):
+			cam.shake(1.0)
 
 func spawn_projectile(direction: Vector2, speed: int) -> void:
 	var projectile = projectile_scene.instantiate()
@@ -366,3 +383,13 @@ func _on_detection_area_body_entered(body: Node2D) -> void:
 func _on_detection_area_body_exited(body: Node2D) -> void:
 	if body.name == "Player":
 		player_is_close = false
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	if body.name == "Player" and !spawned:
+		player_in_spawn_range = true
+		pop_up.visible = true
+
+func _on_area_2d_body_exited(body: Node2D) -> void:
+	if body.name == "Player":
+		player_in_spawn_range = false
+		pop_up.visible = false
