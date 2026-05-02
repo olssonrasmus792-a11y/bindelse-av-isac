@@ -557,6 +557,8 @@ animations = [{
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 z_index = 1
+collision_layer = 3
+collision_mask = 3
 motion_mode = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -669,6 +671,7 @@ offset = Vector2(96.62975, -84.13229)
 
 [node name="AttackArea" type="Area2D" parent="Sword/SwordPivot" groups=["sword"]]
 rotation = 0.05905618
+collision_mask = 3
 
 [node name="AttackCollision" type="CollisionPolygon2D" parent="Sword/SwordPivot/AttackArea"]
 visible = false

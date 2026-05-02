@@ -1,23 +1,52 @@
 extends Node2D
 
+@onready var player := get_tree().get_first_node_in_group("player")
+
 @export var enemy_scene := preload("res://Scenes/Enemies/Muddy.tscn")
 @export var snail_scene := preload("res://Scenes/Enemies/Snail.tscn")
 @export var stoney_scene := preload("res://Scenes/Enemies/stoney.tscn")
+@export var ghosty_scene := preload("res://Scenes/Enemies/ghosty.tscn")
 @export var clover_boss_scene := preload("res://Scenes/clover_boss.tscn")
 @onready var ui: CanvasLayer = $"../UI"
 
 var spawn_muddy = false
 var spawn_snail = false
 var spawn_stoney = false
-var spawn_clover_boss = true
+var spawn_clover_boss = false
+var spawn_ghosty = true
+
+var ghosty_timer = 0.0
+var ghosty_spawn_interval = 5.0
+var ghost_increase_timer = 0.0
+var ghost_increase_interval = 5.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
+func _process(delta: float) -> void:
+	if GameState.boss_spawned and !GameState.boss_killed:
+		return
+	
+	if GameState.time_left < 0:
+		ghosty_timer += delta
+		ghost_increase_timer += delta
+	
+	if ghost_increase_timer >= ghost_increase_interval:
+		ghost_increase_timer = 0.0
+		ghosty_spawn_interval -= 0.25
+		ghosty_spawn_interval = clampf(ghosty_spawn_interval, 0.2, 5.0)
+	
+	if ghosty_timer >= ghosty_spawn_interval:
+		ghosty_timer = 0.0
+		var roll = randf()
+		var dir
+		if roll < 0.5:
+			dir = -1
+		else:
+			dir = 1
+		spawn_enemy(Vector2(player.global_position.x + (randi_range(1200, 2000) * dir), player.global_position.y + (randi_range(800, 1600) * dir)))
 
 func spawn_enemy(pos: Vector2):
 	if spawn_muddy:
@@ -39,6 +68,11 @@ func spawn_enemy(pos: Vector2):
 		var clover_boss = clover_boss_scene.instantiate()
 		clover_boss.global_position = pos
 		get_parent().add_child(clover_boss)
+	
+	if spawn_ghosty:
+		var ghosty = ghosty_scene.instantiate()
+		ghosty.global_position = pos
+		get_parent().add_child(ghosty)
 
 func _on_spawn_enemy_pressed() -> void:
 	for x in range(1):

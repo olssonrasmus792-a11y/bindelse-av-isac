@@ -10,5 +10,5 @@ card_name = "Cardio Enjoyer"
 max_level = 5
 description = "Regenerate your stamina faster"
 rarity = "Rare"
-increase = "-0.25 Seconds"
+increase = "-0.1 Seconds"
 metadata/_custom_type_script = "uid://c01qet416k22c"

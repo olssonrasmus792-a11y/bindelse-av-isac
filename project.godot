@@ -42,6 +42,7 @@ arrow_manager=""
 main_menu_muddy=""
 projectiles=""
 rooms=""
+ghosty=""
 
 [input]
 

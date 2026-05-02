@@ -297,6 +297,8 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 		var text_color = Color.WHITE
 		
 		if body.is_in_group("boss"):
+			if !body.spawned:
+				return
 			total_damage *= (1 + (GameState.get_item_count("Boss Killer") * 0.15))
 		
 		var ft_text = "-" + str(int(total_damage))

@@ -70,6 +70,7 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("interact") and player_in_spawn_range and !spawned:
 		GameState.time_left = 0
 		spawned = true
+		GameState.boss_spawned = true
 		hp_bar.visible = true
 		pop_up.visible = false
 		shoot_timer.paused = false
@@ -281,6 +282,8 @@ func _on_shoot_timer_timeout() -> void:
 	shoot_timer.wait_time = 1.5
 
 func take_damage(damage):
+	if !spawned:
+		return
 	health -= damage
 	flash_red()
 	animation_player.stop()

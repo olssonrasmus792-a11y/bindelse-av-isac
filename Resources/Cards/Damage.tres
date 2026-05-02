@@ -10,5 +10,5 @@ card_name = "Big Biceps"
 max_level = 5
 description = "Increase your melee damage"
 rarity = "Rare"
-increase = "+1 Damage"
+increase = "+4 Damage"
 metadata/_custom_type_script = "uid://c01qet416k22c"

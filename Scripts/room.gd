@@ -87,11 +87,6 @@ func _process(_delta: float) -> void:
 			GameState.current_room = null
 
 		player_is_in_room = false
-	
-	if can_spawn_boss and GameState.time_left <= 0 and !GameState.boss_spawned and GameState.current_room == self:
-		spawn_boss()
-		close_room()
-		GameState.boss_spawned = true
 
 func doors_finalized():
 	await get_tree().create_timer(0.2).timeout
@@ -306,28 +301,6 @@ func spawn_enemies():
 		
 		if arrow_manager and !GameSettings.dark_mode:
 			arrow_manager.create_arrow(enemy)
-
-func spawn_boss():
-	var enemies = get_enemy_container()
-	
-	for e in enemies.get_children():
-		if e.tree_exited.is_connected(_on_enemy_died):
-			e.tree_exited.disconnect(_on_enemy_died)
-		e.queue_free()
-	
-	alive_enemies.clear()
-	on_room_cleared()
-	
-	var enemy_scene = clover_boss_scene
-	var enemy = enemy_scene.instantiate()
-	
-	enemy.global_position.x = global_position.x + room_width/2 - tile_size * 3
-	enemy.global_position.y = global_position.y + room_height/2 - tile_size
-	
-	enemies.add_child(enemy)
-	
-	alive_enemies.append(enemy)
-	enemy.tree_exited.connect(_on_enemy_died.bind(enemy))
 
 func _on_enemy_died(enemy):
 	var last_position = enemy.global_position

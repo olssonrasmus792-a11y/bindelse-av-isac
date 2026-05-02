@@ -56,6 +56,8 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 
 func calculate_base_damage():
 	var total_damage
+	@warning_ignore("integer_division")
+	var coin_groups = floor(GameState.coins / 5)
 	
 	total_damage = explosion_damage
 	
@@ -65,6 +67,11 @@ func calculate_base_damage():
 		if item.name == "Barrel":
 			item.tracked_stat_values[0] += int(total_damage - explosion_damage)
 			break
+	
+	for item in GameState.taken_items:
+		if item.name == "Greedy ahh":
+			item.tracked_stat_values[1] += int((total_damage * (1 + 0.1 * GameState.get_item_count("Greedy ahh") * coin_groups)) - total_damage)
+	total_damage *= 1 + 0.1 * GameState.get_item_count("Greedy ahh") * coin_groups
 	
 	return int(total_damage)
 

@@ -1,0 +1,206 @@
+[gd_scene load_steps=21 format=3 uid="uid://fxrp2falwohf"]
+
+[ext_resource type="Script" uid="uid://c6ymmjnr3wmbq" path="res://Scripts/ghosty.gd" id="1_xsik8"]
+[ext_resource type="Shader" uid="uid://cny0trqyuchv4" path="res://Shaders/WhiteFlash.gdshader" id="2_o8hnh"]
+[ext_resource type="Texture2D" uid="uid://cp18sirwr2vy7" path="res://Textures/Enemies/Shade idle.png" id="3_cp5uw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ovxyt"]
+shader = ExtResource("2_o8hnh")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_value = 1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nsjbk"]
+atlas = ExtResource("3_cp5uw")
+region = Rect2(0, 0, 600, 600)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wivnw"]
+atlas = ExtResource("3_cp5uw")
+region = Rect2(600, 0, 600, 600)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t4pmp"]
+atlas = ExtResource("3_cp5uw")
+region = Rect2(1200, 0, 600, 600)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_k0y6n"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nsjbk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wivnw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t4pmp")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_ovxyt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/AnimatedSprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HitParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_nw2lc"]
+resource_name = "hit"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/AnimatedSprite2D:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.17453292519943295, -0.17453292519943295, 0.0, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HitParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ympyn"]
+_data = {
+&"RESET": SubResource("Animation_ovxyt"),
+&"hit": SubResource("Animation_nw2lc")
+}
+
+[sub_resource type="Gradient" id="Gradient_ovxyt"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 1, 0.39215687)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ovxyt"]
+gradient = SubResource("Gradient_ovxyt")
+
+[sub_resource type="Curve" id="Curve_ovxyt"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.57251906, 0.8988764), 0.0, 0.0, 0, 0, Vector2(1, 0.22471917), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_ympyn"]
+curve = SubResource("Curve_ovxyt")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6m2ku"]
+particle_flag_disable_z = true
+spread = 30.0
+initial_velocity_min = 658.87
+initial_velocity_max = 865.38
+gravity = Vector3(0, 50, 0)
+damping_min = 100.00001
+damping_max = 100.00001
+scale_min = 10.0
+scale_max = 14.0
+scale_curve = SubResource("CurveTexture_ympyn")
+color_ramp = SubResource("GradientTexture1D_ovxyt")
+
+[sub_resource type="Gradient" id="Gradient_ympyn"]
+offsets = PackedFloat32Array(0.5362319)
+colors = PackedColorArray(0.33, 0.016500005, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ovxyt"]
+gradient = SubResource("Gradient_ympyn")
+width = 60
+height = 5
+repeat = 1
+
+[sub_resource type="Gradient" id="Gradient_6m2ku"]
+offsets = PackedFloat32Array(0.5362319)
+colors = PackedColorArray(1.973361e-06, 0.7039606, 0.039600056, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ympyn"]
+gradient = SubResource("Gradient_6m2ku")
+width = 60
+height = 5
+repeat = 1
+
+[node name="Ghosty" type="CharacterBody2D" groups=["enemies", "ghosty"]]
+z_index = 1
+collision_layer = 2
+collision_mask = 2
+motion_mode = 1
+script = ExtResource("1_xsik8")
+
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals"]
+material = SubResource("ShaderMaterial_ovxyt")
+use_parent_material = true
+position = Vector2(0, -3.5527137e-15)
+scale = Vector2(0.2, 0.2)
+sprite_frames = SubResource("SpriteFrames_k0y6n")
+animation = &"Idle"
+autoplay = "Idle"
+offset = Vector2(4.999977, 4.9999995)
+
+[node name="ColorRect" type="ColorRect" parent="Visuals"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = 70.0
+offset_right = 44.0
+offset_bottom = 78.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+color = Color(0, 0, 0, 0.19607843)
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(0, -44, -14, -39, -20, -26, -18, -13, -27, 8, -43, 19, -39, 33, -25, 47, 1, 53, 28, 45, 49, 24, 20, 8, 17, -14, 20, -27, 11, -39)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ympyn")
+}
+
+[node name="HitParticles" type="GPUParticles2D" parent="."]
+amount = 12
+lifetime = 0.4
+one_shot = true
+preprocess = 0.03
+explosiveness = 0.8
+randomness = 0.5
+process_material = SubResource("ParticleProcessMaterial_6m2ku")
+
+[node name="HpBar" type="TextureProgressBar" parent="."]
+offset_left = -30.0
+offset_top = -54.0
+offset_right = 30.0
+offset_bottom = -49.0
+value = 18.0
+texture_under = SubResource("GradientTexture2D_ovxyt")
+texture_progress = SubResource("GradientTexture2D_ympyn")

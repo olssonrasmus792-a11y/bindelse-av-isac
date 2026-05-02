@@ -33,9 +33,12 @@ func handle_boss_timer(delta: float):
 		if GameState.boss_killed:
 			timer.modulate = Color.GREEN
 			timer.text = "yippie!"
-		else:
+		elif GameState.boss_spawned:
 			timer.modulate = Color.RED
 			timer.text = "Kill the boss!"
+		else:
+			timer.modulate = Color.RED
+			timer.text = "Find the Boss!"
 		return
 	
 	if GameState.pause_timer:
