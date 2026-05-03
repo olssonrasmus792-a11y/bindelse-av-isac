@@ -1,6 +1,6 @@
 extends Node2D
 
-var knockback_strength_player = 350
+var knockback_strength_player = 225
 var rotation_speed = -60
 var speed = 450
 var direction

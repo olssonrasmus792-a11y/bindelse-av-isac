@@ -60,9 +60,6 @@ func _physics_process(delta):
 		var normal = collision.get_normal()
 		var collider = collision.get_collider()
 		
-		if collider.is_in_group("player"):
-			collider.take_damage(1, global_position, knockback_strength_player)
-		
 		if knockback_timer > 0.0 and !collider.is_in_group("enemies"):
 			knockback_velocity = knockback_velocity.bounce(normal)
 			current_knockback = current_knockback.bounce(normal)

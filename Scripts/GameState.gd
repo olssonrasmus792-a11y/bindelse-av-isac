@@ -14,7 +14,7 @@ var muddy_base_spawn_rate = 8
 var muddy_spawn_rate = muddy_base_spawn_rate
 var snail_spawn_rate = 24
 var stoney_spawn_rate = 16
-var waterguy_spawn_rate = 20
+var waterguy_spawn_rate = 18
 
 var coin_drop_chance = 0.1
 

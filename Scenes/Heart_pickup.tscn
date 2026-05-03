@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://i070iqw33271"]
+[gd_scene load_steps=5 format=3 uid="uid://i070iqw33271"]
 
 [ext_resource type="Script" uid="uid://cukff1cbdas8p" path="res://Scripts/heart.gd" id="1_lebub"]
 [ext_resource type="Texture2D" uid="uid://8br0jwustric" path="res://Textures/heart.png" id="2_lkrk7"]
+[ext_resource type="AudioStream" uid="uid://c4p6crthvs73j" path="res://SFX/Pop4.wav" id="3_lkrk7"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jc2lb"]
 radius = 32.0
@@ -25,6 +26,9 @@ texture = ExtResource("2_lkrk7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PickUpArea"]
 shape = SubResource("CircleShape2D_jc2lb")
+
+[node name="Pop4" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_lkrk7")
 
 [connection signal="body_entered" from="PickUpArea" to="." method="_on_pick_up_area_body_entered"]
 [connection signal="body_exited" from="PickUpArea" to="." method="_on_pick_up_area_body_exited"]

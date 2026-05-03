@@ -26,7 +26,7 @@ var time := 0.0
 @export var float_speed := 4.0
 @export var float_amount := 8.0
 
-@export var knockback_strength_player = 200
+@export var knockback_strength_player = 175
 @export var knockback_strength_mult = 1.0
 @export var knockback_duration = 0.6
 

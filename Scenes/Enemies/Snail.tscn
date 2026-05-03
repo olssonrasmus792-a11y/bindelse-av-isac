@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://liad3wcg5iqj"]
+[gd_scene load_steps=22 format=3 uid="uid://liad3wcg5iqj"]
 
 [ext_resource type="Script" uid="uid://b225733yfsgfr" path="res://Scripts/snail.gd" id="1_5346s"]
 [ext_resource type="Texture2D" uid="uid://c7cidaon7x34n" path="res://Textures/Enemies/Snail Run.png" id="1_i7c5s"]
@@ -44,10 +44,6 @@ animations = [{
 "name": &"default",
 "speed": 4.0
 }]
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tny20"]
-radius = 22.0
-height = 76.0
 
 [sub_resource type="Animation" id="Animation_ovxyt"]
 length = 0.001
@@ -172,10 +168,8 @@ autoplay = "default"
 frame_progress = 0.4946232
 offset = Vector2(-60.000015, 5)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-rotation = -1.5707964
-shape = SubResource("CapsuleShape2D_tny20")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(54, 18, 37, -13, 28, -25, 1, -33, -23, -24, -42, -12, -50, 14, -47, 28, -24, 27, 10, 28, 45, 28)
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 

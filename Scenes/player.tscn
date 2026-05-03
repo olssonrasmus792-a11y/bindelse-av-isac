@@ -417,9 +417,9 @@ tracks/3/path = NodePath("Sword/SwordPivot/AttackArea:monitoring")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.12480144, 0.27513546, 0.29697546, 1),
+"times": PackedFloat32Array(0, 0.11007654, 0.2914152, 0.3179066, 1),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
+"update": 0,
 "values": [false, true, true, false, false]
 }
 tracks/4/type = "value"
@@ -654,7 +654,6 @@ script = ExtResource("3_fkybt")
 
 [node name="SwordPivot" type="Node2D" parent="Sword"]
 position = Vector2(16, 17)
-skew = 0.22745755
 
 [node name="Trail" type="Polygon2D" parent="Sword/SwordPivot"]
 color = Color(1, 1, 0.43137255, 1)
@@ -674,9 +673,8 @@ rotation = 0.05905618
 collision_mask = 3
 
 [node name="AttackCollision" type="CollisionPolygon2D" parent="Sword/SwordPivot/AttackArea"]
-visible = false
 position = Vector2(-12.95449, -47.805115)
-polygon = PackedVector2Array(62.428604, -47.280704, 77.93365, -39.18172, 78.233864, -17.161053, 70.95608, -4.709797, 71.551414, 22.302156, 57.40387, 37.16308, 50.41607, 37.57623, 43.48218, 21.958254, 42.950985, 12.973945, 47.94227, 12.678835, 47.529114, 5.691038, 28.675165, -8.220419, 5.656239, -7.8611717, 18.977476, -36.69769, 37.93924, -54.84849)
+polygon = PackedVector2Array(62.990303, -53.7555, 77.93365, -39.18172, 78.233864, -17.161053, 70.95608, -4.709797, 71.551414, 22.302156, 58.238846, 39.059597, 48.003258, 43.764076, 28.370977, 39.472355, 29.254461, 21.607807, 24.83083, 9.923618, 13.192492, 7.1067657, -3.1664858, 1.873745, -0.04889679, -12.23064, 14.098593, -40.576317, 35.364082, -59.522102)
 
 [node name="Whoosh" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_x3wgy")

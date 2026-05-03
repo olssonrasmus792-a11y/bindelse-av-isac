@@ -1,5 +1,7 @@
 extends Node2D
 
+var player: Node2D = null
+
 @onready var sprite_2d: Sprite2D = $Sprite2D
 @onready var coin: AudioStreamPlayer = $Coin
 @onready var shadow: ColorRect = $Shadow
@@ -18,7 +20,11 @@ var flying := false
 var has_bounced := false
 
 var pickup_delay_timer = 0.0
-var pickup_delay_duration = 0.5
+var pickup_delay_duration = 0.1
+
+@export var speed: float = 0
+@export var magnet_range: float = 200
+var magnet_enabled := false
 
 var can_pick_up = false
 var player_is_close = false
@@ -26,6 +32,12 @@ var player_is_close = false
 func _ready() -> void:
 	pickup_delay_timer = pickup_delay_duration
 	base_y = sprite_2d.position.y
+	
+	if flying:
+		await get_tree().create_timer(0.75).timeout
+	
+	await get_tree().create_timer(randf_range(0.35, 0.6)).timeout
+	magnet_enabled = true
 
 func _process(delta: float) -> void:
 	if pickup_delay_timer > 0:
@@ -47,6 +59,14 @@ func _process(delta: float) -> void:
 	
 	time += delta
 	sprite_2d.position.y = base_y + sin(time * float_speed) * float_amount
+	
+	player = get_tree().get_first_node_in_group("player")
+	
+	var distance = global_position.distance_to(player.global_position)
+	if magnet_enabled and distance < magnet_range:
+		var direction = (player.global_position - global_position).normalized()
+		speed = lerp(speed, 500.0, 0.1)
+		global_position += direction * speed * delta
 
 func _physics_process(delta):
 	if flying:

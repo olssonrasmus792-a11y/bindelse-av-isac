@@ -332,7 +332,7 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tny20"]
 radius = 24.000002
-height = 80.0
+height = 88.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_isro6"]
 radius = 300.0
@@ -499,7 +499,6 @@ autoplay = "Sleep"
 offset = Vector2(-9.999996, -79.99999)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(0, -20)
 rotation = -3.1415927
 shape = SubResource("CapsuleShape2D_tny20")

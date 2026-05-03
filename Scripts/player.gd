@@ -73,7 +73,7 @@ var chain_falloff := 0.75    # damage multiplier per jump
 
 @export var color_state: ColorState
 
-@export var invulnerability_duration = 0.4
+@export var invulnerability_duration = 1.0
 var invulnerability_timer = 0.0
 
 var slow_timer = 0.0
@@ -84,7 +84,7 @@ var slow_amount = 0.2
 var knockback_velocity := Vector2.ZERO
 
 @export var acceleration := 50.0
-@export var friction := 60.0
+@export var friction := 120.0
 
 @export var health_icon_scene = preload("res://Scenes/heart.tscn")
 @export var stamina_icon_scene = preload("res://Scenes/stamina.tscn")
