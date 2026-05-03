@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ItemRegistry" load_steps=19 format=3 uid="uid://nrcgypmc3qfw"]
+
+[ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_wq147"]
+[ext_resource type="Resource" uid="uid://c8rg76cu46q4t" path="res://Resources/Items/Barrel.tres" id="2_im1qu"]
+[ext_resource type="Script" uid="uid://cfd1qjr4iacya" path="res://Scripts/ItemRegistry.gd" id="2_yg5u8"]
+[ext_resource type="Resource" uid="uid://5rkthr5gwgc8" path="res://Resources/Items/BossKiller.tres" id="3_0i56o"]
+[ext_resource type="Resource" uid="uid://c2wmiytcicxuo" path="res://Resources/Items/CagedMuddy.tres" id="4_dpam4"]
+[ext_resource type="Resource" uid="uid://bgxk738qquldv" path="res://Resources/Items/ChainLightning.tres" id="5_xxhtf"]
+[ext_resource type="Resource" uid="uid://dql3euwcl7a0f" path="res://Resources/Items/Clover.tres" id="6_47snv"]
+[ext_resource type="Resource" uid="uid://d3lml6jgw6tsd" path="res://Resources/Items/CritChance.tres" id="7_o4iis"]
+[ext_resource type="Resource" uid="uid://dk7jdkbha4yvg" path="res://Resources/Items/CritDamage.tres" id="8_u0yds"]
+[ext_resource type="Resource" uid="uid://cqcgp1t2c8ic2" path="res://Resources/Items/GoldDamage.tres" id="9_ikmkv"]
+[ext_resource type="Resource" uid="uid://kisqr7huo3ym" path="res://Resources/Items/Guy.tres" id="10_efwr0"]
+[ext_resource type="Resource" uid="uid://bnlvpjlhxaial" path="res://Resources/Items/Heart.tres" id="11_jfyk1"]
+[ext_resource type="Resource" uid="uid://kaawdx4hh4wx" path="res://Resources/Items/Key.tres" id="12_25dkt"]
+[ext_resource type="Resource" uid="uid://btbxodi47yw7x" path="res://Resources/Items/Knockback.tres" id="13_ueu10"]
+[ext_resource type="Resource" uid="uid://cjwa2lnrhmfwv" path="res://Resources/Items/MovementSpeed.tres" id="14_tvw8s"]
+[ext_resource type="Resource" uid="uid://cuqt71wu4kg4j" path="res://Resources/Items/MuddyDefense.tres" id="15_27wym"]
+[ext_resource type="Resource" uid="uid://bytoufctsc6w3" path="res://Resources/Items/RollAttack.tres" id="16_3vj0p"]
+[ext_resource type="Resource" uid="uid://bttjieyngdwuw" path="res://Resources/Items/Sword.tres" id="17_agsdj"]
+
+[resource]
+script = ExtResource("2_yg5u8")
+items = Array[ExtResource("1_wq147")]([ExtResource("2_im1qu"), ExtResource("3_0i56o"), ExtResource("4_dpam4"), ExtResource("5_xxhtf"), ExtResource("6_47snv"), ExtResource("7_o4iis"), ExtResource("8_u0yds"), ExtResource("9_ikmkv"), ExtResource("10_efwr0"), ExtResource("11_jfyk1"), ExtResource("12_25dkt"), ExtResource("13_ueu10"), ExtResource("14_tvw8s"), ExtResource("15_27wym"), ExtResource("16_3vj0p"), ExtResource("17_agsdj")])
+metadata/_custom_type_script = "uid://cfd1qjr4iacya"

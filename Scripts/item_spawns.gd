@@ -7,45 +7,53 @@ var rarity_weights = {
 	ItemData.Rarity.LEGENDARY: 2
 }
 
-@export var all_items: Array[ItemData] = []
+@export var item_registry: ItemRegistry
+
 @onready var item_scene = preload("res://Scenes/item.tscn")
 @onready var spawn_points = $SpawnPoints.get_children()
 
-# Called when the node enters the scene tree for the first time.
+var local_items: Array[ItemData] = []
+
+
 func _ready() -> void:
-	load_items()
+	if item_registry == null:
+		push_error("ItemRegistry is not assigned!")
+		return
+
+	# Make a COPY so we can safely remove items
+	local_items = item_registry.items.duplicate()
+
 	for spawn in spawn_points:
 		spawn_random_item(spawn.global_position)
 
+
 func spawn_random_item(pos):
-	if all_items.is_empty():
+	if local_items.is_empty():
 		return
 
-	var item_data = get_weighted_random_item()
+	var item_data = get_weighted_random_item(local_items)
 
-	# Remove it so it doesn't spawn again
-	all_items.erase(item_data)
+	# remove so it can’t appear again in this batch
+	local_items.erase(item_data)
 
 	var item = item_scene.instantiate()
 	item.position = pos
 	item.data = item_data
 	add_child(item)
 
-func get_weighted_random_item():
-	var total_weight = 0
-	var adjusted_weights = []
 
-	var luck = GameState.luck  # or wherever you store it
+func get_weighted_random_item(items: Array):
+	var total_weight := 0.0
+	var adjusted_weights := []
 
-	# Build adjusted weights per item
-	for item in all_items:
-		var base_weight = rarity_weights.get(item.rarity, 1)
-		var weight = base_weight
+	var luck = GameState.luck
 
-		# Apply luck scaling here
+	for item in items:
+		var weight = rarity_weights.get(item.rarity, 1)
+
 		match item.rarity:
 			ItemData.Rarity.COMMON:
-				weight *= max(0.1, 1.0 - luck * 0.05) # reduce commons
+				weight *= max(0.1, 1.0 - luck * 0.05)
 			ItemData.Rarity.RARE:
 				weight *= 1.0 + luck * 0.06
 			ItemData.Rarity.EPIC:
@@ -56,32 +64,12 @@ func get_weighted_random_item():
 		adjusted_weights.append(weight)
 		total_weight += weight
 
-	# Roll
-	var rand_value = randf() * total_weight
-	var current_sum = 0
+	var roll = randf() * total_weight
+	var current := 0.0
 
-	for i in range(all_items.size()):
-		current_sum += adjusted_weights[i]
-		if rand_value < current_sum:
-			return all_items[i]
+	for i in range(items.size()):
+		current += adjusted_weights[i]
+		if roll < current:
+			return items[i]
 
-	return all_items[0]
-
-func load_items():
-	all_items.clear()
-
-	var dir = DirAccess.open("res://Resources/Items")
-	if dir == null:
-		return
-
-	dir.list_dir_begin()
-	var file_name = dir.get_next()
-
-	while file_name != "":
-		if file_name.ends_with(".tres"):
-			var item: ItemData = load("res://Resources/Items/" + file_name)
-			if item:
-				all_items.append(item)
-		file_name = dir.get_next()
-
-	dir.list_dir_end()
+	return items[0]

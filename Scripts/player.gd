@@ -315,7 +315,7 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 				item.tracked_stat_values[1] = crit_damage_dealt
 			if item.name == "Critter":
 				item.tracked_stat_values[1] = total_crit_hits
-			if item.name == "Boss Killer":
+			if item.name == "Boss Killer" and body.is_in_group("boss"):
 				item.tracked_stat_values[0] += int((total_damage * (1 + (GameState.get_item_count("Boss Killer") * 0.15))) - total_damage)
 		
 		body.take_damage(total_damage)

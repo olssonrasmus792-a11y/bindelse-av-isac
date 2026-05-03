@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=4 uid="uid://yhwnpjkypqxp"]
+[gd_scene load_steps=53 format=4 uid="uid://yhwnpjkypqxp"]
 
 [ext_resource type="Script" uid="uid://d26n35vkphehu" path="res://Scripts/room_shop.gd" id="1_syqdw"]
 [ext_resource type="Texture2D" uid="uid://cet2td4yrlbk6" path="res://Textures/Tiles/ground.png" id="2_ss7fu"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://d4b5t5w22h0ko" path="res://Scenes/barrel.tscn" id="15_iw6af"]
 [ext_resource type="Script" uid="uid://ml08hgrgs230" path="res://Scripts/item_spawns.gd" id="16_aecjj"]
 [ext_resource type="PackedScene" uid="uid://c2p365w32k1w5" path="res://Scenes/Chest.tscn" id="17_kjo8v"]
+[ext_resource type="Resource" uid="uid://nrcgypmc3qfw" path="res://Resources/item_registry.tres" id="17_ss7fu"]
 [ext_resource type="Texture2D" uid="uid://drpkue2j6vg0j" path="res://Textures/Guy.png" id="18_8h8n0"]
 [ext_resource type="Script" uid="uid://bipbqyvq5pf5b" path="res://Scripts/guy.gd" id="19_8oh2v"]
 [ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="20_3lbjw"]
@@ -473,6 +474,7 @@ texture = SubResource("GradientTexture2D_r6px1")
 
 [node name="ItemSpawns" type="Node2D" parent="."]
 script = ExtResource("16_aecjj")
+item_registry = ExtResource("17_ss7fu")
 
 [node name="SpawnPoints" type="Node2D" parent="ItemSpawns"]
 

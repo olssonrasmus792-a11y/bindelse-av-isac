@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CardRegistry" load_steps=8 format=3 uid="uid://5yahx5dsd6rt"]
+
+[ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="1_fbv1i"]
+[ext_resource type="Resource" uid="uid://c1f6i68mv8wnc" path="res://Resources/Cards/Damage.tres" id="2_eco5x"]
+[ext_resource type="Script" uid="uid://k6fhc8fmr1wx" path="res://Scripts/CardRegistry.gd" id="2_pgoww"]
+[ext_resource type="Resource" uid="uid://d01s1nvexklur" path="res://Resources/Cards/Health.tres" id="3_mthj3"]
+[ext_resource type="Resource" uid="uid://buj5vqyf307df" path="res://Resources/Cards/Speed.tres" id="4_gkl86"]
+[ext_resource type="Resource" uid="uid://dn8amhhhip5h8" path="res://Resources/Cards/Stamina.tres" id="5_3vuyl"]
+[ext_resource type="Resource" uid="uid://cyh8kfxpe7q0n" path="res://Resources/Cards/Stamina_regen.tres" id="6_nwcsf"]
+
+[resource]
+script = ExtResource("2_pgoww")
+cards = Array[ExtResource("1_fbv1i")]([ExtResource("2_eco5x"), ExtResource("3_mthj3"), ExtResource("4_gkl86"), ExtResource("5_3vuyl"), ExtResource("6_nwcsf")])
+metadata/_custom_type_script = "uid://k6fhc8fmr1wx"

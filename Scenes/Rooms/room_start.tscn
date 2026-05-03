@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=4 uid="uid://16vijj12a2o5"]
+[gd_scene load_steps=45 format=4 uid="uid://16vijj12a2o5"]
 
 [ext_resource type="Script" uid="uid://bnbcfmjx5x3xm" path="res://Scripts/room.gd" id="1_jovsh"]
 [ext_resource type="Texture2D" uid="uid://cet2td4yrlbk6" path="res://Textures/Tiles/ground.png" id="2_7g4po"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://nbsolrltr2nk" path="res://Textures/Tiles/Wall 3.png" id="11_opusr"]
 [ext_resource type="Texture2D" uid="uid://h8djb4sx8vhl" path="res://Textures/Tiles/Drop corner.png" id="12_0mlgw"]
 [ext_resource type="Texture2D" uid="uid://b3dgkrexylwy" path="res://Textures/Tiles/Wall 4.png" id="13_pn1ye"]
+[ext_resource type="Resource" uid="uid://nrcgypmc3qfw" path="res://Resources/item_registry.tres" id="16_22wy5"]
 [ext_resource type="Script" uid="uid://drv0pfa24wo2s" path="res://Scripts/room_start_items.gd" id="16_bvvki"]
 [ext_resource type="Shader" uid="uid://ccnwywmpuht17" path="res://Shaders/main_menu.gdshader" id="16_pli05"]
 [ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="17_rua2k"]
@@ -326,6 +327,7 @@ position = Vector2(1080, 776)
 
 [node name="ItemSpawns" type="Node2D" parent="StarterItem"]
 script = ExtResource("16_bvvki")
+item_registry = ExtResource("16_22wy5")
 
 [node name="SpawnPoints" type="Node2D" parent="StarterItem/ItemSpawns"]
 
