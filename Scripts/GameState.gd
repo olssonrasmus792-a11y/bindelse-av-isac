@@ -20,7 +20,7 @@ var coin_drop_chance = 0.1
 
 var luck = 0.0
 
-var start_time = 480.0
+var start_time = 360.0
 var time_left = start_time
 var pause_timer = false
 
@@ -38,6 +38,7 @@ func reset_game():
 	kills = 0
 	rooms_cleared = 0
 	combo = 0
+	muddy_spawn_rate = muddy_base_spawn_rate
 	boss_killed = false
 	boss_spawned = false
 	taken_upgrades.clear()
@@ -71,6 +72,6 @@ func calculate_stats():
 		if item.name == "Greedy ahh":
 			@warning_ignore("integer_division")
 			var coin_groups = floor(GameState.coins / 5)
-			var value : int = 0.1 * GameState.get_item_count("Greedy ahh") * coin_groups * 100
+			var value : int = 0.05 * GameState.get_item_count("Greedy ahh") * coin_groups * 100
 			item.tracked_stat_values[0] = value
 			break

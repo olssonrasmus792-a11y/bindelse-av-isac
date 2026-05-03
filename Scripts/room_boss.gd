@@ -22,6 +22,11 @@ extends Node2D
 @onready var door_down: StaticBody2D = $Doors/Door_Down
 @onready var door_right: StaticBody2D = $Doors/Door_Right
 
+@onready var door_light_up: PointLight2D = $Lamps/DoorLightUp
+@onready var door_light_down: PointLight2D = $Lamps/DoorLightDown
+@onready var door_light_right: PointLight2D = $Lamps/DoorLightRight
+@onready var door_light_left: PointLight2D = $Lamps/DoorLightLeft
+
 @onready var clear_light: PointLight2D = $Lamps/PointLight2D2
 
 @export var room_size := Vector2i(GameState.room_tiles_x, GameState.room_tiles_y)
@@ -64,7 +69,8 @@ func _ready() -> void:
 	
 	room_entered = false
 	room_closed = false
-	clear_light.visible = false
+	clear_light.visible = true
+	clear_light.color = Color.WHITE
 	color_rect.visible = true
 	camera_normal_zoom = camera.zoom.x
 	camera_map_zoom = camera.zoom.x / 3
@@ -88,10 +94,11 @@ func _process(_delta: float) -> void:
 
 		player_is_in_room = false
 	
-	if can_spawn_boss and GameState.time_left <= 0 and !GameState.boss_spawned and GameState.current_room == self:
-		spawn_boss()
-		close_room()
-		GameState.boss_spawned = true
+	if GameState.boss_spawned:
+		clear_light.color = Color.RED
+	
+	if GameState.boss_killed:
+		clear_light.color = Color.PALE_GREEN
 
 func doors_finalized():
 	await get_tree().create_timer(0.2).timeout
@@ -110,18 +117,22 @@ func draw_paths():
 	if !has_door_up:
 		var door_pos = door_up.get_node("Door").global_position
 		draw_path_line(door_pos, Vector2(door_pos.x, center.y))  # lock X to door
+		door_light_up.enabled = true
 
 	if !has_door_down:
 		var door_pos = door_down.get_node("Door").global_position
 		draw_path_line(door_pos, Vector2(door_pos.x, center.y))  # lock X to door
+		door_light_down.enabled = true
 
 	if !has_door_left:
 		var door_pos = door_left.get_node("Door").global_position
 		draw_path_line(door_pos, Vector2(center.x, door_pos.y))  # lock Y to door
+		door_light_left.enabled = true
 
 	if !has_door_right:
 		var door_pos = door_right.get_node("Door").global_position
 		draw_path_line(door_pos, Vector2(center.x, door_pos.y))  # lock Y to door
+		door_light_right.enabled = true
 
 func get_room_center() -> Vector2:
 	return global_position + Vector2(
@@ -288,28 +299,6 @@ func pick_weighted_enemy():
 			return e
 	
 	return enemy_scenes[0]
-
-func spawn_boss():
-	var enemies = get_enemy_container()
-	
-	for e in enemies.get_children():
-		if e.tree_exited.is_connected(_on_enemy_died):
-			e.tree_exited.disconnect(_on_enemy_died)
-		e.queue_free()
-	
-	alive_enemies.clear()
-	on_room_cleared()
-	
-	var enemy_scene = clover_boss_scene
-	var enemy = enemy_scene.instantiate()
-	
-	enemy.global_position.x = global_position.x + room_width/2 - tile_size * 3
-	enemy.global_position.y = global_position.y + room_height/2 - tile_size
-	
-	enemies.add_child(enemy)
-	
-	alive_enemies.append(enemy)
-	enemy.tree_exited.connect(_on_enemy_died.bind(enemy))
 
 func _on_enemy_died(enemy):
 	var last_position = enemy.global_position

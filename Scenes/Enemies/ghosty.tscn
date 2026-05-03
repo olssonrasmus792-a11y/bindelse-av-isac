@@ -154,6 +154,7 @@ script = ExtResource("1_xsik8")
 [node name="Visuals" type="Node2D" parent="."]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals"]
+modulate = Color(1, 1, 1, 0.78431374)
 material = SubResource("ShaderMaterial_ovxyt")
 use_parent_material = true
 position = Vector2(0, -3.5527137e-15)
@@ -180,6 +181,7 @@ size_flags_vertical = 4
 color = Color(0, 0, 0, 0.19607843)
 
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
+visible = false
 polygon = PackedVector2Array(0, -44, -14, -39, -20, -26, -18, -13, -27, 8, -43, 19, -39, 33, -25, 47, 1, 53, 28, 45, 49, 24, 20, 8, 17, -14, 20, -27, 11, -39)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

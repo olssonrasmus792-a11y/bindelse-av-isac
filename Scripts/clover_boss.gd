@@ -17,6 +17,7 @@ var xp_reward_range = 2 # xp rewards +- range
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var pop_up: Control = $PopUp
+@onready var the_only_thing_the_fear_is_you: AudioStreamPlayer = $TheOnlyThingTheFearIsYou
 
 var base_y = 0
 
@@ -54,7 +55,7 @@ func _ready() -> void:
 	animated_sprite_2d.play("Sleep")
 	hit_particles.emitting = false
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	hp_bar.value = lerp(hp_bar.value, health, 0.25)
 	
 	if bullet_hell_active or burst_hell_active:
@@ -67,18 +68,25 @@ func _process(_delta: float) -> void:
 	else:
 		animated_sprite_2d.position.y = base_y
 	
-	if Input.is_action_just_pressed("interact") and player_in_spawn_range and !spawned:
+	if Input.is_action_just_pressed("interact") and player_in_spawn_range and pop_up.visible and !spawned:
 		GameState.time_left = 0
+		pop_up.visible = false
+		the_only_thing_the_fear_is_you.play()
+		var cutscene = get_tree().get_first_node_in_group("cutscene")
+		cutscene.play("cutscene")
+		await cutscene.animation_finished
 		spawned = true
 		GameState.boss_spawned = true
 		hp_bar.visible = true
-		pop_up.visible = false
 		shoot_timer.paused = false
 		animated_sprite_2d.play("Spawn")
 	
 	if animated_sprite_2d.animation == "Spawn":
 		for cam in get_tree().get_nodes_in_group("camera"):
-			cam.shake(1.0)
+			cam.shake(0.5)
+	
+	if player.is_dead:
+		the_only_thing_the_fear_is_you.pitch_scale -= 0.2 * delta
 
 func spawn_projectile(direction: Vector2, speed: int) -> void:
 	var projectile = projectile_scene.instantiate()

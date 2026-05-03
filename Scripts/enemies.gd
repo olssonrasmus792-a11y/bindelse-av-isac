@@ -19,6 +19,7 @@ var ghosty_timer = 0.0
 var ghosty_spawn_interval = 5.0
 var ghost_increase_timer = 0.0
 var ghost_increase_interval = 5.0
+var ghosty_bonus_speed = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -27,16 +28,20 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if GameState.boss_spawned and !GameState.boss_killed:
-		return
+		ghosty_spawn_interval = 4.0
+		ghosty_bonus_speed = 60
 	
-	if GameState.time_left < 0:
+	if GameState.time_left <= 0:
 		ghosty_timer += delta
+		if GameState.boss_killed:
+			ghosty_timer += delta
 		ghost_increase_timer += delta
 	
 	if ghost_increase_timer >= ghost_increase_interval:
 		ghost_increase_timer = 0.0
 		ghosty_spawn_interval -= 0.25
-		ghosty_spawn_interval = clampf(ghosty_spawn_interval, 0.2, 5.0)
+		ghosty_bonus_speed += 15
+		ghosty_spawn_interval = clampf(ghosty_spawn_interval, 0.1, 5.0)
 	
 	if ghosty_timer >= ghosty_spawn_interval:
 		ghosty_timer = 0.0
@@ -70,8 +75,21 @@ func spawn_enemy(pos: Vector2):
 		get_parent().add_child(clover_boss)
 	
 	if spawn_ghosty:
+		var arrow_manager = get_tree().get_first_node_in_group("arrow_manager")
 		var ghosty = ghosty_scene.instantiate()
+		
 		ghosty.global_position = pos
+		ghosty.speed = ghosty.base_speed + ghosty_bonus_speed
+		
+		await get_tree().create_timer(0.1).timeout
+		
+		if GameState.boss_spawned and !GameState.boss_killed:
+			ghosty.max_health = 1
+			ghosty.health = 1
+		
+		if arrow_manager and !GameSettings.dark_mode:
+			arrow_manager.create_arrow(ghosty)
+		
 		get_parent().add_child(ghosty)
 
 func _on_spawn_enemy_pressed() -> void:

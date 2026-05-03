@@ -19,7 +19,7 @@ func _ready() -> void:
 	label_3.visible = false
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("map") and (!get_tree().paused or opening):
+	if event.is_action_pressed("map") and (!get_tree().paused or opening) and !GameState.boss_spawned:
 		opening = !sub_viewport_container.visible
 
 		sub_viewport_container.visible = opening

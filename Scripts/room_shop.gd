@@ -21,6 +21,11 @@ extends Node2D
 @onready var door_down: StaticBody2D = $Doors/Door_Down
 @onready var door_right: StaticBody2D = $Doors/Door_Right
 
+@onready var door_light_up: PointLight2D = $Lamps/DoorLightUp
+@onready var door_light_down: PointLight2D = $Lamps/DoorLightDown
+@onready var door_light_right: PointLight2D = $Lamps/DoorLightRight
+@onready var door_light_left: PointLight2D = $Lamps/DoorLightLeft
+
 @onready var clear_light: PointLight2D = $Lamps/PointLight2D2
 
 @export var room_size := Vector2i(GameState.room_tiles_x, GameState.room_tiles_y)
@@ -87,18 +92,22 @@ func draw_paths():
 	if !has_door_up:
 		var door_pos = door_up.get_node("Door").global_position
 		draw_path_line(door_pos, Vector2(door_pos.x, center.y))  # lock X to door
+		door_light_up.enabled = true
 
 	if !has_door_down:
 		var door_pos = door_down.get_node("Door").global_position
 		draw_path_line(door_pos, Vector2(door_pos.x, center.y))  # lock X to door
+		door_light_down.enabled = true
 
 	if !has_door_left:
 		var door_pos = door_left.get_node("Door").global_position
 		draw_path_line(door_pos, Vector2(center.x, door_pos.y))  # lock Y to door
+		door_light_left.enabled = true
 
 	if !has_door_right:
 		var door_pos = door_right.get_node("Door").global_position
 		draw_path_line(door_pos, Vector2(center.x, door_pos.y))  # lock Y to door
+		door_light_right.enabled = true
 
 func get_room_center() -> Vector2:
 	return global_position + Vector2(

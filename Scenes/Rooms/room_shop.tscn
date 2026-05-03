@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=4 uid="uid://yhwnpjkypqxp"]
+[gd_scene load_steps=52 format=4 uid="uid://yhwnpjkypqxp"]
 
 [ext_resource type="Script" uid="uid://d26n35vkphehu" path="res://Scripts/room_shop.gd" id="1_syqdw"]
 [ext_resource type="Texture2D" uid="uid://cet2td4yrlbk6" path="res://Textures/Tiles/ground.png" id="2_ss7fu"]
@@ -165,8 +165,13 @@ fill = 2
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 1)
 
+[sub_resource type="Gradient" id="Gradient_syqdw"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.88, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.27317092, 0.27317092, 0.27317092, 1, 0, 0, 0, 1)
+
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_mbb8p"]
-gradient = SubResource("Gradient_mbb8p")
+gradient = SubResource("Gradient_syqdw")
 width = 1000
 height = 1000
 fill = 1
@@ -378,21 +383,21 @@ scale = Vector2(0.76800007, 0.288)
 color = Color(1, 1, 0.9411765, 1)
 texture = SubResource("GradientTexture2D_mbb8p")
 
-[node name="PointLight2D4" type="PointLight2D" parent="Lamps"]
+[node name="DoorLightUp" type="PointLight2D" parent="Lamps"]
 position = Vector2(1100.0001, -292.00003)
 scale = Vector2(0.76800007, 0.568)
 color = Color(0.96286184, 0.92935497, 6.160736e-06, 1)
 shadow_enabled = true
 texture = SubResource("GradientTexture2D_mbb8p")
 
-[node name="PointLight2D5" type="PointLight2D" parent="Lamps"]
+[node name="DoorLightDown" type="PointLight2D" parent="Lamps"]
 position = Vector2(1100.0001, 2096)
 scale = Vector2(0.76800007, 0.568)
 color = Color(0.96286184, 0.92935497, 6.160736e-06, 1)
 shadow_enabled = true
 texture = SubResource("GradientTexture2D_mbb8p")
 
-[node name="PointLight2D6" type="PointLight2D" parent="Lamps"]
+[node name="DoorLightRight" type="PointLight2D" parent="Lamps"]
 position = Vector2(2896, 900)
 rotation = -1.5707964
 scale = Vector2(0.76800007, 0.568)
@@ -400,7 +405,7 @@ color = Color(0.96286184, 0.92935497, 6.160736e-06, 1)
 shadow_enabled = true
 texture = SubResource("GradientTexture2D_mbb8p")
 
-[node name="PointLight2D7" type="PointLight2D" parent="Lamps"]
+[node name="DoorLightLeft" type="PointLight2D" parent="Lamps"]
 position = Vector2(-680, 900.00006)
 rotation = -1.5707964
 scale = Vector2(0.76800007, 0.568)

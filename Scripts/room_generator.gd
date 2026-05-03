@@ -31,8 +31,8 @@ var shop_positions: Array = []
 @export var room_size := Vector2i(GameState.room_tiles_x, GameState.room_tiles_y) # tiles
 @onready var camera_2d: Camera2D = $"../Player/Camera2D"
 @export var tile_size := 200.0
-@export var dungeon_width := 5.0
-@export var dungeon_height := 5.0
+@export var dungeon_width := 4.0
+@export var dungeon_height := 4.0
 var room_width  = GameState.room_tiles_x * tile_size
 var room_height = GameState.room_tiles_y * tile_size
 
@@ -84,11 +84,12 @@ func get_final_room_pos() -> Vector2:
 	for x in range(-dungeon_width, dungeon_width):
 		for y in range(-dungeon_height, dungeon_height):
 			var pos = start_pos + Vector2(x, y)
-
 			var dist = pos.distance_to(start_pos)
 
 			if dist > best_dist:
 				best_dist = dist
+				best_pos = pos
+			elif dist == best_dist and randf() < 0.5:
 				best_pos = pos
 
 	return best_pos

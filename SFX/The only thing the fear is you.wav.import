@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c2sf5qd76ethp"
+path="res://.godot/imported/The only thing the fear is you.wav-a0e4b91b7639d3dec7142bc8c3cbce1a.sample"
+
+[deps]
+
+source_file="res://SFX/The only thing the fear is you.wav"
+dest_files=["res://.godot/imported/The only thing the fear is you.wav-a0e4b91b7639d3dec7142bc8c3cbce1a.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

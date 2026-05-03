@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=3 uid="uid://cuoeosnctc6od"]
+[gd_scene load_steps=70 format=3 uid="uid://cuoeosnctc6od"]
 
 [ext_resource type="Script" uid="uid://qvbshe272w2x" path="res://Scripts/clover_boss.gd" id="1_3jepr"]
 [ext_resource type="Texture2D" uid="uid://b3rp4nwetfivt" path="res://Textures/Enemies/Clove.png" id="1_7w1ik"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://b7e1373ttxxxa" path="res://Textures/Enemies/clove 3 (2).png" id="4_isro6"]
 [ext_resource type="Texture2D" uid="uid://iab3k8551e4l" path="res://Textures/Enemies/clove 5.png" id="4_ykxau"]
 [ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="6_e8udj"]
+[ext_resource type="AudioStream" uid="uid://c2sf5qd76ethp" path="res://SFX/The only thing the fear is you.wav" id="7_s4bv2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3jepr"]
 atlas = ExtResource("1_7w1ik")
@@ -516,6 +517,7 @@ autostart = true
 
 [node name="HpBar" type="TextureProgressBar" parent="."]
 visible = false
+z_index = 3
 offset_left = -28.0
 offset_top = -69.0
 offset_right = 32.0
@@ -583,6 +585,11 @@ scale = Vector2(0.16000001, 0.048)
 color = Color(1, 1, 0.9411765, 1)
 energy = 0.75
 texture = SubResource("GradientTexture2D_v847c")
+
+[node name="TheOnlyThingTheFearIsYou" type="AudioStreamPlayer" parent="."]
+process_mode = 3
+stream = ExtResource("7_s4bv2")
+volume_db = -10.0
 
 [connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]

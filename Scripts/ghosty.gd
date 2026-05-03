@@ -7,8 +7,8 @@ extends CharacterBody2D
 @export var xp_reward: int = 2
 var xp_reward_range = 1 # xp rewards +- range
 
-@export var speed := 350
-@export var chase_speed_mult := 1.5
+@export var base_speed := 350
+@export var speed := base_speed
 @onready var visuals: Node2D = $Visuals
 @onready var animated_sprite_2d: AnimatedSprite2D = $Visuals/AnimatedSprite2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -37,6 +37,10 @@ var knockback_timer := 0.0
 signal enemy_died
 
 func _ready() -> void:
+	if GameState.boss_spawned and !GameState.boss_killed:
+		max_health = 1
+		health = 1
+	
 	hp_bar.max_value = max_health
 	hp_bar.value = max_health
 	hit_particles.emitting = false
@@ -107,6 +111,9 @@ func explode(enemy):
 		orb.xp_value = xp_reward + randi_range(-xp_reward_range, xp_reward_range)
 		
 		get_tree().current_scene.call_deferred("add_child", orb)
+	
+	GameState.kills += 1
+	GameState.combo += 1
 	
 	emit_signal("enemy_died")
 	enemy.queue_free()

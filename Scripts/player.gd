@@ -453,8 +453,8 @@ func calculate_base_damage():
 	
 	for item in GameState.taken_items:
 		if item.name == "Greedy ahh":
-			item.tracked_stat_values[1] += int((total_damage * (1 + 0.1 * GameState.get_item_count("Greedy ahh") * coin_groups)) - total_damage)
-	total_damage *= 1 + 0.1 * GameState.get_item_count("Greedy ahh") * coin_groups
+			item.tracked_stat_values[1] += int((total_damage * (1 + 0.05 * GameState.get_item_count("Greedy ahh") * coin_groups)) - total_damage)
+	total_damage *= 1 + 0.05 * GameState.get_item_count("Greedy ahh") * coin_groups
 	
 	return total_damage
 
@@ -625,7 +625,13 @@ func respawn_player():
 	position = spawn_pos
 
 func take_damage(dmg, from_position: Vector2, knockback_strength):
-	if invulnerability_timer > 0 or is_dead or rolling:
+	if rolling:
+		if invulnerability_timer > 0.1:
+			invulnerability_timer -= 0.01
+		spawn_floating_text("Dodge!", Color.HOT_PINK, global_position)
+		return
+	
+	if invulnerability_timer > 0 or is_dead:
 		if invulnerability_timer > 0.1:
 			invulnerability_timer -= 0.01
 		return
