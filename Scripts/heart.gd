@@ -34,12 +34,12 @@ func _process(delta: float) -> void:
 			can_pick_up = true
 	
 	if player_is_close and can_pick_up:
-		for p in player:
-			if p.health < p.max_health:
-				p.health += 1  # or however much you want
-				p.update_health()
+		player = get_tree().get_first_node_in_group("player")
+		if player.health < player.max_health:
+			player.health += 1  # or however much you want
+			player.update_health()
 		
-		pop_4.play()
+		play_pickup_sound()
 		var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
 		var ft = floating_text_scene.instantiate()
 		ft.text = "+1 Hp"
@@ -60,9 +60,17 @@ func _process(delta: float) -> void:
 		global_position += direction * speed * delta
 
 func _on_pick_up_area_body_entered(body: Node2D) -> void:
-	if body.name == "Player" and can_pick_up:
+	if body.name == "Player":
 		player_is_close = true
 
 func _on_pick_up_area_body_exited(body: Node2D) -> void:
 	if body.name == "Player":
 		player_is_close = false
+
+func play_pickup_sound():
+	var sound = pop_4
+	pop_4.pitch_scale = randf_range(0.9, 1.2)
+	
+	sound.get_parent().remove_child(sound)
+	get_tree().current_scene.add_child(sound)
+	sound.play()

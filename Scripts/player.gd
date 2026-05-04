@@ -84,7 +84,7 @@ var slow_amount = 0.2
 var knockback_velocity := Vector2.ZERO
 
 @export var acceleration := 50.0
-@export var friction := 120.0
+@export var friction := 70.0
 
 @export var health_icon_scene = preload("res://Scenes/heart.tscn")
 @export var stamina_icon_scene = preload("res://Scenes/stamina.tscn")

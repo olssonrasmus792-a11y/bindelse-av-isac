@@ -1482,6 +1482,7 @@ grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
 [node name="Buttons" type="Control" parent="UI"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
