@@ -54,6 +54,9 @@ func _process(delta: float) -> void:
 		spawn_enemy(Vector2(player.global_position.x + (randi_range(1200, 2000) * dir), player.global_position.y + (randi_range(800, 1600) * dir)))
 
 func spawn_enemy(pos: Vector2):
+	if player.is_dead:
+		return
+	
 	if spawn_muddy:
 		var muddy = enemy_scene.instantiate()
 		muddy.global_position = pos

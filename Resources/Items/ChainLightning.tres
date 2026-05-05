@@ -14,4 +14,5 @@ tracked_stats = Array[String](["Damage dealt", "Chain Hits"])
 tracked_stat_values = Array[int]([0, 0])
 tracked_stat_value_percentage = Array[bool]([false, false])
 tracked_stat_colors = Array[Color]([Color(0.8901961, 0.36862746, 0.03529412, 1), Color(0.88235295, 0.8156863, 0, 1)])
+unique = true
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

@@ -109,6 +109,9 @@ func spawn_item():
 	# REMOVE so no duplicates in this chest
 	local_items.erase(item_data)
 
+	if item_data.unique:
+		item_registry.items.erase(item_data)
+
 	var runtime_data: ItemData = item_data.duplicate()
 	runtime_data.price = 0
 

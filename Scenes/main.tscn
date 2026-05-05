@@ -1,4 +1,4 @@
-[gd_scene load_steps=147 format=4 uid="uid://bcyvgbkfd8iqg"]
+[gd_scene load_steps=151 format=4 uid="uid://bcyvgbkfd8iqg"]
 
 [ext_resource type="Script" uid="uid://cy82dwcy7mapg" path="res://Scripts/main.gd" id="1_6bp64"]
 [ext_resource type="PackedScene" uid="uid://bv2axkxq2b6bw" path="res://Scenes/Rooms/room_generator.tscn" id="1_21xkr"]
@@ -728,6 +728,54 @@ tracks/42/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/43/type = "value"
+tracks/43/imported = false
+tracks/43/enabled = true
+tracks/43/path = NodePath("AnimationPlayer/EndStats/Bulby:position")
+tracks/43/interp = 1
+tracks/43/loop_wrap = true
+tracks/43/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-304, 320)]
+}
+tracks/44/type = "value"
+tracks/44/imported = false
+tracks/44/enabled = true
+tracks/44/path = NodePath("AnimationPlayer/EndStats/Bulby:animation")
+tracks/44/interp = 1
+tracks/44/loop_wrap = true
+tracks/44/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Run3"]
+}
+tracks/45/type = "value"
+tracks/45/imported = false
+tracks/45/enabled = true
+tracks/45/path = NodePath("AnimationPlayer/EndStats/Bulby/Boss:visible")
+tracks/45/interp = 1
+tracks/45/loop_wrap = true
+tracks/45/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/46/type = "value"
+tracks/46/imported = false
+tracks/46/enabled = true
+tracks/46/path = NodePath("AnimationPlayer/EndStats/Bulby/Boss:visible_ratio")
+tracks/46/interp = 1
+tracks/46/loop_wrap = true
+tracks/46/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_r33sp"]
 resource_name = "cutscene"
@@ -1083,7 +1131,7 @@ tracks/28/keys = {
 
 [sub_resource type="Animation" id="Animation_o1aky"]
 resource_name = "stats"
-length = 5.0
+length = 6.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1251,6 +1299,54 @@ tracks/13/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("AnimationPlayer/EndStats/Bulby:position")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(4.5, 5.5),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(-304, 500), Vector2(110, 500)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("AnimationPlayer/EndStats/Bulby:animation")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(4.5, 5.5666666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [&"Run1", &"Idle1"]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("AnimationPlayer/EndStats/Bulby/Boss:visible")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 5.766667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("AnimationPlayer/EndStats/Bulby/Boss:visible_ratio")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(5.7650003, 6.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jwpg7"]
@@ -1828,6 +1924,39 @@ Button/styles/hover = SubResource("StyleBoxFlat_kwxat")
 Button/styles/normal = SubResource("StyleBoxFlat_aa8k8")
 Button/styles/pressed = SubResource("StyleBoxFlat_kqrg6")
 
+[sub_resource type="Shader" id="Shader_8cuat"]
+code = "shader_type canvas_item;
+
+uniform float height = 3.0;
+uniform float frequency = 20.0;
+uniform float speed = 2.0;
+
+void vertex() {
+	VERTEX.y += height * sin((frequency * UV.x) + (speed * TIME));
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kwxat"]
+shader = SubResource("Shader_8cuat")
+shader_parameter/height = 0.5
+shader_parameter/frequency = 10.0
+shader_parameter/speed = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nwwfm"]
+bg_color = Color(0.28627452, 0.19215687, 0.16078432, 0.78431374)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.851769, 0.8517689, 0.85176885, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 5
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Theme" id="Theme_s8vy0"]
+Label/styles/normal = SubResource("StyleBoxFlat_nwwfm")
+
 [node name="Main" type="Node2D"]
 script = ExtResource("1_6bp64")
 
@@ -1903,6 +2032,24 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
+[node name="health_panel" type="PanelContainer" parent="UI"]
+offset_left = 9.0
+offset_top = 8.0
+offset_right = 9.0
+offset_bottom = 8.0
+
+[node name="health_bar" type="HBoxContainer" parent="UI/health_panel"]
+layout_mode = 2
+
+[node name="stamina_panel" type="PanelContainer" parent="UI"]
+offset_left = 22.0
+offset_top = 64.0
+offset_right = 22.0
+offset_bottom = 64.0
+
+[node name="stamina_bar" type="HBoxContainer" parent="UI/stamina_panel"]
+layout_mode = 2
+
 [node name="Buttons" type="Control" parent="UI"]
 visible = false
 layout_mode = 3
@@ -1934,24 +2081,6 @@ focus_mode = 0
 theme = SubResource("Theme_344ge")
 theme_override_font_sizes/font_size = 18
 text = "Spawn Enemy"
-
-[node name="health_panel" type="PanelContainer" parent="UI"]
-offset_left = 9.0
-offset_top = 8.0
-offset_right = 9.0
-offset_bottom = 8.0
-
-[node name="health_bar" type="HBoxContainer" parent="UI/health_panel"]
-layout_mode = 2
-
-[node name="stamina_panel" type="PanelContainer" parent="UI"]
-offset_left = 22.0
-offset_top = 64.0
-offset_right = 22.0
-offset_bottom = 64.0
-
-[node name="stamina_bar" type="HBoxContainer" parent="UI/stamina_panel"]
-layout_mode = 2
 
 [node name="XpBar" type="TextureProgressBar" parent="UI"]
 z_index = 1
@@ -2132,10 +2261,9 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="Map" parent="UI" instance=ExtResource("12_fdnlq")]
-
 [node name="InventoryUI" type="Control" parent="UI" groups=["inventory"]]
 layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_vertical = 2
@@ -2271,6 +2399,36 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
+[node name="Panel3" type="Panel" parent="UI/InventoryUI/Tooltip"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.32142857
+anchor_top = 1.125
+anchor_right = 0.6785714
+anchor_bottom = 1.232143
+pivot_offset = Vector2(-64, 192)
+metadata/_edit_use_anchors_ = true
+
+[node name="rarity" type="Label" parent="UI/InventoryUI/Tooltip/Panel3"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.03125
+anchor_top = 0.06666614
+anchor_right = 0.96875
+anchor_bottom = 0.9333332
+pivot_offset = Vector2(-128, 192)
+theme_override_colors/font_color = Color(1, 0.34509805, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("8_6iyac")
+theme_override_font_sizes/font_size = 6
+text = "Unique"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Map" parent="UI" instance=ExtResource("12_fdnlq")]
+
 [node name="UpgradeManager" type="Control" parent="UI" groups=["upgrade_screen"]]
 process_mode = 3
 visible = false
@@ -2392,7 +2550,7 @@ material = SubResource("ShaderMaterial_hpc6h")
 layout_mode = 0
 offset_left = 792.0
 offset_top = 160.0
-offset_right = 1117.0076
+offset_right = 1117.0085
 offset_bottom = 281.00018
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 25
@@ -2710,6 +2868,41 @@ theme_override_constants/outline_size = 4
 theme_override_fonts/font = ExtResource("8_6iyac")
 theme_override_font_sizes/font_size = 30
 text = "Main Menu"
+metadata/_edit_use_anchors_ = true
+
+[node name="Bulby" type="AnimatedSprite2D" parent="UI/AnimationPlayer/EndStats"]
+z_index = 3
+material = SubResource("ShaderMaterial_e08e2")
+position = Vector2(-304, 320)
+scale = Vector2(1.9184397, 1.9184397)
+sprite_frames = SubResource("SpriteFrames_536cc")
+animation = &"Run3"
+autoplay = "Run3"
+
+[node name="Boss" type="Label" parent="UI/AnimationPlayer/EndStats/Bulby"]
+material = SubResource("ShaderMaterial_kwxat")
+anchors_preset = -1
+anchor_left = 0.40878007
+anchor_top = -0.20979667
+anchor_right = 1.086988
+anchor_bottom = -0.14823774
+offset_left = -100.0
+offset_top = -70.5
+offset_right = -110.37381
+offset_bottom = -26.435482
+rotation = -0.33461878
+theme = SubResource("Theme_s8vy0")
+theme_override_colors/font_shadow_color = Color(1, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 10
+theme_override_fonts/font = ExtResource("8_6iyac")
+theme_override_font_sizes/font_size = 12
+text = "The boss is still alive..."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+text_overrun_behavior = 1
+visible_characters = 0
+visible_ratio = 0.0
 metadata/_edit_use_anchors_ = true
 
 [node name="TypeSfx" type="AudioStreamPlayer" parent="UI/AnimationPlayer/EndStats"]

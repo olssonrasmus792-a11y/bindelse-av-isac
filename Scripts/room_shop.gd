@@ -10,6 +10,8 @@ extends Node2D
 ]
 @export var key_scene := preload("res://Scenes/Key.tscn")
 
+@onready var item_spawns: Node2D = $ItemSpawns
+
 @onready var camera: Camera2D = $Camera2D
 @onready var color_rect: ColorRect = $ColorRect
 @onready var lamps: Node2D = $Lamps
@@ -39,6 +41,7 @@ var start_room_pos : Vector2
 
 var key_spawn_rate = 0.5
 
+var items_spawned = false
 var room_entered = false
 var room_closed = false
 var room_cleared = false
@@ -145,6 +148,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
 		switch_camera()
 		light_up_room()
+		spawn_items()
 		room_entered = true
 		guy.player_is_in_room = true
 		player_is_in_room = true
@@ -158,6 +162,13 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 
 func switch_camera():
 	emit_signal("swap_cam", target_position)
+
+func spawn_items():
+	if items_spawned:
+		return
+	
+	items_spawned = true
+	item_spawns.spawn_items()
 
 func light_up_room():
 	color_rect.visible = false

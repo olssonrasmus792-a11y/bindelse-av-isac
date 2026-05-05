@@ -8,6 +8,7 @@ extends Control
 @onready var item_amount: Label = $Tooltip/ItemAmount
 @onready var item_tracked_stats: RichTextLabel = $Tooltip/ItemTrackedStats
 @onready var rarity: Label = $Tooltip/Panel2/rarity
+@onready var unique_panel: Panel = $Tooltip/Panel3
 
 var rarity_color
 var rarity_intensity
@@ -95,6 +96,11 @@ func _on_item_hovered(item: ItemData, count: int):
 			item.stats,
 			item.stat_colors
 		)
+	
+	if item.unique:
+		unique_panel.visible = true
+	else:
+		unique_panel.visible = false
 
 	item_icon.texture = item.icon
 	item_amount.text = "x" + str(count)

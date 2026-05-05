@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://c1f6i68mv8wnc"]
 
-[ext_resource type="Texture2D" uid="uid://dgebsljj7cksq" path="res://Textures/Bat_icon.png" id="1_7mtkq"]
+[ext_resource type="Texture2D" uid="uid://dnh61ns4hcoib" path="res://Textures/Sword_icon.tres" id="1_6b4io"]
 [ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="1_yrc72"]
 
 [resource]
 script = ExtResource("1_yrc72")
-icon = ExtResource("1_7mtkq")
+icon = ExtResource("1_6b4io")
 card_name = "Big Biceps"
 max_level = 5
 description = "Increase your melee damage"

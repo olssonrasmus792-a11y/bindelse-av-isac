@@ -38,8 +38,12 @@ func reset_game():
 	keys = 0
 	coins = 0
 	kills = 0
+	total_damage_dealt = 0
+	total_xp_gained = 0
 	rooms_cleared = 0
 	combo = 0
+	coin_drop_chance = 0.1
+	luck = 0.0
 	muddy_spawn_rate = muddy_base_spawn_rate
 	boss_killed = false
 	boss_spawned = false

@@ -20,3 +20,5 @@ enum Rarity {
 @export var tracked_stat_values: Array[int] = []
 @export var tracked_stat_value_percentage: Array[bool] = []
 @export var tracked_stat_colors: Array[Color] = []
+
+@export var unique: bool

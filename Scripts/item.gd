@@ -6,6 +6,8 @@ class_name ShopItem
 @onready var guy := get_tree().get_nodes_in_group("guy")
 @onready var inventory := get_tree().get_first_node_in_group("inventory")
 
+@export var item_registry: ItemRegistry
+
 var base_y
 var time := 0.0
 @export var float_speed := 2.0
@@ -30,6 +32,7 @@ var has_bounced := false
 @onready var pop: AudioStreamPlayer = $Pop
 @onready var light: PointLight2D = $PointLight2D2
 @onready var rarity: Label = $PopUp/Panel2/rarity
+@onready var unique_panel: Panel = $PopUp/Panel3
 @onready var point_light_2d_2: PointLight2D = $PointLight2D2
 
 var rarity_color: Color = Color.WHITE
@@ -69,6 +72,10 @@ func _ready():
 		price.text = "Purchase (E) : " + str(data.price) + " Coins"
 		base_y = sprite.position.y
 		pop_up.visible = false
+		if data.unique:
+			unique_panel.visible = true
+		else:
+			unique_panel.visible = false
 		if data.description == "":
 			description.text = get_stats_text(data.stats, data.stat_colors)
 
@@ -152,6 +159,9 @@ func buy_item():
 	GameState.taken_items.append(data)
 	GameState.calculate_stats()
 	apply_item(data.name)
+	
+	if data.unique:
+		item_registry.items.erase(data)
 	
 	for guys in guy:
 		guys.item_bought()

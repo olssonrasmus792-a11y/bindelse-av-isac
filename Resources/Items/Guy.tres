@@ -10,4 +10,5 @@ icon = ExtResource("1_kypkd")
 price = 100
 rarity = 3
 description = "guy himself"
+unique = true
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

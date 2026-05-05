@@ -1,11 +1,11 @@
-[gd_scene load_steps=21 format=3 uid="uid://jirg8w1p0uyb"]
+[gd_scene load_steps=19 format=3 uid="uid://jirg8w1p0uyb"]
 
 [ext_resource type="Script" uid="uid://cmosnc2vxvti4" path="res://Scripts/card_scene.gd" id="1_hn4tc"]
 [ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="2_1eyib"]
 [ext_resource type="Shader" uid="uid://ccnwywmpuht17" path="res://Shaders/main_menu.gdshader" id="3_b5yic"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hn4tc"]
-bg_color = Color(0.1740711, 0.21042678, 0.2194421, 1)
+bg_color = Color(0.28627452, 0.28627452, 0.28627452, 0.88235295)
 border_width_left = 10
 border_width_top = 10
 border_width_right = 10
@@ -21,7 +21,7 @@ corner_radius_bottom_left = 20
 Panel/styles/panel = SubResource("StyleBoxFlat_hn4tc")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b5yic"]
-bg_color = Color(0.34158427, 0.3415843, 0.34158412, 1)
+bg_color = Color(0.54896253, 0.5489626, 0.5489625, 0.78431374)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
@@ -36,37 +36,11 @@ corner_radius_bottom_left = 10
 [sub_resource type="Theme" id="Theme_c4v6c"]
 Label/styles/normal = SubResource("StyleBoxFlat_b5yic")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0sxir"]
-bg_color = Color(0.34158427, 0.3415843, 0.34158412, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.5958281, 0.5958282, 0.5958279, 1)
-border_blend = true
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
 [sub_resource type="Theme" id="Theme_so5b3"]
-Label/styles/normal = SubResource("StyleBoxFlat_0sxir")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c4v6c"]
-bg_color = Color(0.34158427, 0.3415843, 0.34158412, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.5958281, 0.5958282, 0.5958279, 1)
-border_blend = true
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+Label/styles/normal = SubResource("StyleBoxFlat_b5yic")
 
 [sub_resource type="Theme" id="Theme_0sxir"]
-Label/styles/normal = SubResource("StyleBoxFlat_c4v6c")
+Label/styles/normal = SubResource("StyleBoxFlat_b5yic")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c4v6c"]
 shader = ExtResource("3_b5yic")
@@ -96,7 +70,7 @@ expand_margin_right = 2.0
 expand_margin_bottom = 2.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8uc1c"]
-bg_color = Color(0.49747366, 0.49747372, 0.49747342, 1)
+bg_color = Color(0.42745098, 0.42745098, 0.42745098, 0.78431374)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
@@ -109,7 +83,7 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ms70h"]
-bg_color = Color(0.34158427, 0.3415843, 0.34158412, 1)
+bg_color = Color(0.42745098, 0.42745098, 0.42745098, 0.78431374)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
@@ -122,7 +96,7 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_so5b3"]
-bg_color = Color(0.27752772, 0.27752775, 0.27752766, 1)
+bg_color = Color(0.42745098, 0.42745098, 0.42745098, 1)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
@@ -294,6 +268,6 @@ anchor_top = 0.09090909
 anchor_right = 0.90909094
 anchor_bottom = 0.90909094
 texture = SubResource("ImageTexture_1eyib")
-expand_mode = 2
-stretch_mode = 4
+expand_mode = 4
+stretch_mode = 5
 metadata/_edit_use_anchors_ = true

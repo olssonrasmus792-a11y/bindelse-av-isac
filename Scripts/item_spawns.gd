@@ -14,8 +14,7 @@ var rarity_weights = {
 
 var local_items: Array[ItemData] = []
 
-
-func _ready() -> void:
+func spawn_items():
 	if item_registry == null:
 		push_error("ItemRegistry is not assigned!")
 		return
@@ -26,7 +25,6 @@ func _ready() -> void:
 	for spawn in spawn_points:
 		spawn_random_item(spawn.global_position)
 
-
 func spawn_random_item(pos):
 	if local_items.is_empty():
 		return
@@ -36,10 +34,13 @@ func spawn_random_item(pos):
 	# remove so it can’t appear again in this batch
 	local_items.erase(item_data)
 
+	if item_data.unique:
+		item_registry.items.erase(item_data)
+
 	var item = item_scene.instantiate()
 	item.position = pos
 	item.data = item_data
-	add_child(item)
+	get_tree().current_scene.call_deferred("add_child", item)
 
 
 func get_weighted_random_item(items: Array):
