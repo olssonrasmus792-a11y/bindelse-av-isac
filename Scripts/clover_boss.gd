@@ -85,7 +85,7 @@ func _process(delta: float) -> void:
 		for cam in get_tree().get_nodes_in_group("camera"):
 			cam.shake(0.5)
 	
-	if player.is_dead:
+	if player.is_dead and the_only_thing_the_fear_is_you.playing and the_only_thing_the_fear_is_you.pitch_scale > 0.0:
 		the_only_thing_the_fear_is_you.pitch_scale -= 0.2 * delta
 
 func spawn_projectile(direction: Vector2, speed: int) -> void:

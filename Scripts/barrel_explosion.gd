@@ -28,6 +28,12 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemies"):
 		var total_damage = calculate_base_damage()
 		var text_color = Color.WHITE
+		
+		if body.is_in_group("boss"):
+			if !body.spawned:
+				return
+			total_damage *= (1 + (GameState.get_item_count("Boss Killer") * 0.15))
+		
 		var ft_text = "-" + str(int(total_damage))
 		
 		if randf() < player.crit_chance:
@@ -35,6 +41,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 			text_color = Color.YELLOW
 			ft_text = "-" + str(int(total_damage))
 		
+		GameState.total_damage_dealt += total_damage
 		body.take_damage(total_damage)
 		body.apply_knockback(aim_direction, knockback)
 		

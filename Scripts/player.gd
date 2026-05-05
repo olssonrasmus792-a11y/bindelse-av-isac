@@ -29,6 +29,7 @@ extends CharacterBody2D
 @onready var sparks: AudioStreamPlayer = $Sparks
 @onready var deny: AudioStreamPlayer = $Deny
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var end_stats: Control = $"../UI/AnimationPlayer/EndStats"
 
 enum ColorState { YELLOW, RED, GREEN }
 
@@ -73,7 +74,7 @@ var chain_falloff := 0.75    # damage multiplier per jump
 
 @export var color_state: ColorState
 
-@export var invulnerability_duration = 1.0
+@export var invulnerability_duration = 0.8
 var invulnerability_timer = 0.0
 
 var slow_timer = 0.0
@@ -198,6 +199,7 @@ func handle_movement(delta):
 				play_hit_sound()
 				enemies_hit_roll[collider] = true
 				
+				GameState.total_damage_dealt += (GameState.get_item_count("Rollin'") * 10)
 				collider.take_damage(GameState.get_item_count("Rollin'") * 10)
 				collider.apply_knockback(collider.global_position - global_position, knockback * 2)
 				for item in GameState.taken_items:
@@ -318,6 +320,7 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 			if item.name == "Boss Killer" and body.is_in_group("boss"):
 				item.tracked_stat_values[0] += int((total_damage * (1 + (GameState.get_item_count("Boss Killer") * 0.15))) - total_damage)
 		
+		GameState.total_damage_dealt += total_damage
 		body.take_damage(total_damage)
 		body.apply_knockback(aim_direction, knockback)
 		
@@ -394,6 +397,7 @@ func chain_hit(from_enemy: CharacterBody2D, dmg: float, remaining_chains: int) -
 
 		var new_damage = dmg * chain_falloff
 
+		GameState.total_damage_dealt += int(new_damage)
 		target_enemy.take_damage(new_damage)
 
 		# Track item stats
@@ -519,6 +523,10 @@ func no_stamina():
 	deny.play()
 
 func add_xp(amount: int):
+	if is_dead:
+		return
+	
+	GameState.total_xp_gained += amount
 	xp += amount
 	spawn_floating_text("+" + str(amount) + "xp", Color.DEEP_SKY_BLUE, global_position)
 	
@@ -611,12 +619,15 @@ func _on_death_timer_timeout():
 	for cam in get_tree().get_nodes_in_group("camera"):
 		cam.shake(2.5)
 	
-	Engine.time_scale = 0.1
-	await(get_tree().create_timer(0.2).timeout)
 	Engine.time_scale = 1.0
 	
-	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
-	GameState.reset_game()
+	await get_tree().create_timer(0.1).timeout
+	
+	end_stats.update_values()
+	end_stats.visible = true
+	
+	var cutscene = get_tree().get_first_node_in_group("cutscene")
+	cutscene.play("stats")
 
 func respawn_player():
 	is_dead = false

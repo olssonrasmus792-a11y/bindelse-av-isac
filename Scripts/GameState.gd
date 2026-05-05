@@ -8,6 +8,8 @@ var coins := 0
 var kills := 0
 var combo := 0
 var rooms_cleared := 0
+var total_damage_dealt := 0
+var total_xp_gained := 0
 
 var enemy_start_count = 4
 var muddy_base_spawn_rate = 8
