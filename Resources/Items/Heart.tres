@@ -1,13 +1,17 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://bnlvpjlhxaial"]
+[gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://bnlvpjlhxaial"]
 
 [ext_resource type="Texture2D" uid="uid://8br0jwustric" path="res://Textures/heart.png" id="1_hvypd"]
 [ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="2_6tcug"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_hvypd"]
+atlas = ExtResource("1_hvypd")
+region = Rect2(-16, 0, 216, 208)
+
 [resource]
 script = ExtResource("2_6tcug")
 name = "Heart"
+icon = SubResource("AtlasTexture_hvypd")
+price = 5
 stats = Array[String](["+1 Max HP", "Restore All Health"])
 stat_colors = Array[Color]([Color(0, 0.78431374, 0.39215687, 1), Color(0.9233477, 0.4325546, 0.9010629, 1)])
-price = 5
-icon = ExtResource("1_hvypd")
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

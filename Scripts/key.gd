@@ -57,7 +57,7 @@ func _process(delta: float) -> void:
 		global_position += direction * speed * delta
 
 func _on_pick_up_area_body_entered(body: Node2D) -> void:
-	if body.name == "Player" and can_pick_up:
+	if body.name == "Player":
 		player_is_close = true
 
 func _on_pick_up_area_body_exited(body: Node2D) -> void:

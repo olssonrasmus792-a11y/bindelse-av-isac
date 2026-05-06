@@ -1,12 +1,16 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://dk7jdkbha4yvg"]
+[gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://dk7jdkbha4yvg"]
 
-[ext_resource type="Texture2D" uid="uid://ca82twfvheobr" path="res://Textures/icon.svg" id="1_aruwg"]
+[ext_resource type="Texture2D" uid="uid://dvfbcdwy54puf" path="res://Textures/Items/Knife.png" id="1_aruwg"]
 [ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_i6w7t"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aruwg"]
+atlas = ExtResource("1_aruwg")
+region = Rect2(128, 128, 336, 304)
 
 [resource]
 script = ExtResource("1_i6w7t")
 name = "Big Crit"
-icon = ExtResource("1_aruwg")
+icon = SubResource("AtlasTexture_aruwg")
 price = 8
 rarity = 1
 stats = Array[String](["+15% Crit damage"])

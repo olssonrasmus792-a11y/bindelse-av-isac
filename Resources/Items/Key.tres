@@ -1,12 +1,16 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://kaawdx4hh4wx"]
+[gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://kaawdx4hh4wx"]
 
 [ext_resource type="Texture2D" uid="uid://hptj7iwfcn87" path="res://Textures/Key.png" id="1_g0v2i"]
 [ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="2_hlvcg"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_g0v2i"]
+atlas = ExtResource("1_g0v2i")
+region = Rect2(16, 32, 192, 144)
+
 [resource]
 script = ExtResource("2_hlvcg")
 name = "Key"
-icon = ExtResource("1_g0v2i")
+icon = SubResource("AtlasTexture_g0v2i")
 price = 3
 stats = Array[String](["+1 Key"])
 stat_colors = Array[Color]([Color(0.7287947, 0.6241101, 0.20166373, 1)])

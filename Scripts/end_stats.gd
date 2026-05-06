@@ -1,6 +1,7 @@
 extends Control
 
 @onready var player := get_tree().get_first_node_in_group("player")
+@onready var animation_player: AnimationPlayer = $".."
 
 @onready var rooms: Label = $Rooms
 @onready var kills: Label = $Kills
@@ -8,6 +9,13 @@ extends Control
 @onready var level: Label = $Level
 @onready var xp: Label = $Xp
 @onready var boss: Label = $Bulby/Boss
+@onready var button: Button = $Button
+
+func _process(_delta: float) -> void:
+	if animation_player.is_playing():
+		button.text = "Skip"
+	else:
+		button.text = "Main Menu"
 
 func update_values():
 	rooms.text = "Rooms Cleared: " + str(GameState.rooms_cleared)

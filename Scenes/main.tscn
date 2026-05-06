@@ -75,6 +75,30 @@ shader_parameter/vignette_intensity = 0.3
 shader_parameter/grille_amount = 0.05
 shader_parameter/brightness_boost = 1.2
 
+[sub_resource type="Theme" id="Theme_3pmx8"]
+
+[sub_resource type="Gradient" id="Gradient_u50mg"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_cbgmd"]
+gradient = SubResource("Gradient_u50mg")
+width = 1152
+height = 5
+
+[sub_resource type="Gradient" id="Gradient_3pmx8"]
+colors = PackedColorArray(0, 0.6862745, 1, 1, 0, 0.6862745, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_u50mg"]
+gradient = SubResource("Gradient_3pmx8")
+width = 1152
+height = 5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1w6v2"]
+shader = ExtResource("15_h1bgf")
+shader_parameter/height = 1.0
+shader_parameter/frequency = 5.0
+shader_parameter/speed = 1.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ynf5e"]
 bg_color = Color(0.9511823, 0.23625669, 0, 1)
 border_width_bottom = 10
@@ -122,30 +146,6 @@ corner_radius_bottom_left = 16
 Button/styles/hover = SubResource("StyleBoxFlat_6bp64")
 Button/styles/normal = SubResource("StyleBoxFlat_6bp64")
 Button/styles/pressed = SubResource("StyleBoxFlat_344ge")
-
-[sub_resource type="Theme" id="Theme_3pmx8"]
-
-[sub_resource type="Gradient" id="Gradient_u50mg"]
-colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_cbgmd"]
-gradient = SubResource("Gradient_u50mg")
-width = 1152
-height = 5
-
-[sub_resource type="Gradient" id="Gradient_3pmx8"]
-colors = PackedColorArray(0, 0.6862745, 1, 1, 0, 0.6862745, 1, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_u50mg"]
-gradient = SubResource("Gradient_3pmx8")
-width = 1152
-height = 5
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1w6v2"]
-shader = ExtResource("15_h1bgf")
-shader_parameter/height = 1.0
-shader_parameter/frequency = 5.0
-shader_parameter/speed = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_u50mg"]
 shader = ExtResource("15_h1bgf")
@@ -2050,6 +2050,31 @@ offset_bottom = 64.0
 [node name="stamina_bar" type="HBoxContainer" parent="UI/stamina_panel"]
 layout_mode = 2
 
+[node name="XpBar" type="TextureProgressBar" parent="UI"]
+z_index = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.0077160494
+theme = SubResource("Theme_3pmx8")
+texture_under = SubResource("GradientTexture2D_cbgmd")
+texture_progress = SubResource("GradientTexture2D_u50mg")
+metadata/_edit_use_anchors_ = true
+
+[node name="Level" type="Label" parent="UI/XpBar"]
+material = SubResource("ShaderMaterial_1w6v2")
+layout_mode = 0
+offset_left = 936.0
+offset_top = 6.0
+offset_right = 1136.0
+offset_bottom = 31.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.78431374)
+theme_override_constants/shadow_outline_size = 10
+theme_override_fonts/font = ExtResource("8_6iyac")
+theme_override_font_sizes/font_size = 16
+text = "LVL 1000"
+horizontal_alignment = 2
+vertical_alignment = 1
+
 [node name="Buttons" type="Control" parent="UI"]
 visible = false
 layout_mode = 3
@@ -2081,31 +2106,6 @@ focus_mode = 0
 theme = SubResource("Theme_344ge")
 theme_override_font_sizes/font_size = 18
 text = "Spawn Enemy"
-
-[node name="XpBar" type="TextureProgressBar" parent="UI"]
-z_index = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.0077160494
-theme = SubResource("Theme_3pmx8")
-texture_under = SubResource("GradientTexture2D_cbgmd")
-texture_progress = SubResource("GradientTexture2D_u50mg")
-metadata/_edit_use_anchors_ = true
-
-[node name="Level" type="Label" parent="UI/XpBar"]
-material = SubResource("ShaderMaterial_1w6v2")
-layout_mode = 0
-offset_left = 936.0
-offset_top = 6.0
-offset_right = 1136.0
-offset_bottom = 31.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.78431374)
-theme_override_constants/shadow_outline_size = 10
-theme_override_fonts/font = ExtResource("8_6iyac")
-theme_override_font_sizes/font_size = 16
-text = "LVL 1000"
-horizontal_alignment = 2
-vertical_alignment = 1
 
 [node name="KeyPanel" type="Panel" parent="UI"]
 offset_left = 8.0
@@ -2266,6 +2266,7 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("15_wsu2k")

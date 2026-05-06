@@ -1,6 +1,8 @@
 extends Node2D
 
 @onready var end_stats: Control = $UI/AnimationPlayer/EndStats
+@onready var animation_player: AnimationPlayer = $UI/AnimationPlayer
+@onready var button: Button = $UI/AnimationPlayer/EndStats/Button
 
 func _ready():
 	# Absolute must-haves
@@ -12,6 +14,12 @@ func _ready():
 		timer.stop()
 
 func _on_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
-	GameState.reset_game()
-	end_stats.visible = false
+	if animation_player.is_playing():
+		var anim = animation_player.current_animation
+		var length = animation_player.get_animation(anim).length
+		animation_player.seek(length, true)
+	else:
+		get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
+		GameState.add_meta_stats()
+		GameState.reset_game()
+		end_stats.visible = false

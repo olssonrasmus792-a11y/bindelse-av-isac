@@ -1,12 +1,16 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://d3lml6jgw6tsd"]
+[gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://d3lml6jgw6tsd"]
 
-[ext_resource type="Texture2D" uid="uid://dgebsljj7cksq" path="res://Textures/Bat_icon.png" id="1_0hs5s"]
+[ext_resource type="Texture2D" uid="uid://csxxang6wwucl" path="res://Textures/Items/Crit chance.png" id="1_0hs5s"]
 [ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_chsb7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0hs5s"]
+atlas = ExtResource("1_0hs5s")
+region = Rect2(96, 32, 480, 416)
 
 [resource]
 script = ExtResource("1_chsb7")
 name = "Critter"
-icon = ExtResource("1_0hs5s")
+icon = SubResource("AtlasTexture_0hs5s")
 price = 6
 stats = Array[String](["+10% Crit chance"])
 stat_colors = Array[Color]([Color(0, 0.78431374, 0.28235295, 1)])

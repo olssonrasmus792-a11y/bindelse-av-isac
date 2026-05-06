@@ -588,7 +588,7 @@ texture = SubResource("GradientTexture2D_v847c")
 [node name="TheOnlyThingTheFearIsYou" type="AudioStreamPlayer" parent="."]
 process_mode = 3
 stream = ExtResource("7_s4bv2")
-volume_db = -10.0
+volume_db = -4.0
 
 [connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]

@@ -1,9 +1,11 @@
-[gd_scene load_steps=36 format=4 uid="uid://da4a7evkn23na"]
+[gd_scene load_steps=44 format=4 uid="uid://da4a7evkn23na"]
 
 [ext_resource type="Script" uid="uid://b4df5oej6ftoa" path="res://Scripts/main_menu.gd" id="1_28flt"]
 [ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="2_48xlc"]
 [ext_resource type="Shader" uid="uid://ccnwywmpuht17" path="res://Shaders/main_menu.gdshader" id="3_1ehe0"]
 [ext_resource type="Script" uid="uid://c18r4g0a70ukk" path="res://Scripts/main_menu_camera.gd" id="4_ce3w2"]
+[ext_resource type="Script" uid="uid://b5vu8e2b78nx6" path="res://Scripts/lvl_panel.gd" id="4_n45e2"]
+[ext_resource type="Script" uid="uid://ctk2d6kuu21dr" path="res://Scenes/stats_panel.gd" id="5_opfnp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_48xlc"]
 bg_color = Color(0.246402, 0.33374986, 0.9999452, 1)
@@ -2185,6 +2187,44 @@ shader_parameter/height = 2.0
 shader_parameter/frequency = 10.0
 shader_parameter/speed = 2.0
 
+[sub_resource type="Gradient" id="Gradient_ympyn"]
+offsets = PackedFloat32Array(0.5362319)
+colors = PackedColorArray(0.22670749, 0.22670749, 0.22670746, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ce3w2"]
+gradient = SubResource("Gradient_ympyn")
+width = 250
+height = 25
+repeat = 1
+
+[sub_resource type="Gradient" id="Gradient_6m2ku"]
+offsets = PackedFloat32Array(0.5362319)
+colors = PackedColorArray(8.6635355e-06, 0.7338156, 0.95881325, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_n45e2"]
+gradient = SubResource("Gradient_6m2ku")
+width = 250
+height = 25
+repeat = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n45e2"]
+bg_color = Color(0.46011245, 0.28520012, 0.6051131, 0.78431374)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 1, 1, 0.5882353)
+border_blend = true
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_color = Color(0, 0, 0, 0.6627451)
+shadow_size = 4
+
+[sub_resource type="Theme" id="Theme_opfnp"]
+Panel/styles/panel = SubResource("StyleBoxFlat_n45e2")
+
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ce3w2"]
 
 [node name="MainMenu" type="Control"]
@@ -2206,7 +2246,6 @@ anchor_bottom = 1.1604939
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.3764706, 0.30588236, 0.45882353, 1)
-metadata/_edit_use_anchors_ = true
 
 [node name="StartButton" type="Button" parent="."]
 layout_mode = 1
@@ -2311,6 +2350,186 @@ theme_override_fonts/font = ExtResource("2_48xlc")
 theme_override_font_sizes/font_size = 60
 text = "Bulby: The last light"
 horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="LvlPanel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 616.0
+offset_right = 272.0
+offset_bottom = 656.0
+script = ExtResource("4_n45e2")
+
+[node name="XpBar" type="TextureProgressBar" parent="LvlPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.030303031
+anchor_top = 0.2
+anchor_right = 0.97727275
+anchor_bottom = 0.825
+value = 94.0
+texture_under = SubResource("GradientTexture2D_ce3w2")
+texture_progress = SubResource("GradientTexture2D_n45e2")
+
+[node name="Lvl" type="Label" parent="LvlPanel/XpBar"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -1.6
+anchor_right = 0.992
+anchor_bottom = -0.2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 12
+theme_override_fonts/font = ExtResource("2_48xlc")
+theme_override_font_sizes/font_size = 20
+text = "Lvl 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Xp" type="Label" parent="LvlPanel/XpBar"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.032
+anchor_right = 0.96
+anchor_bottom = 0.9599999
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 12
+theme_override_fonts/font = ExtResource("2_48xlc")
+theme_override_font_sizes/font_size = 12
+text = "xp: 0/100"
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="StatsPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.013888889
+anchor_top = 0.2962963
+anchor_right = 0.25694445
+anchor_bottom = 0.69135803
+theme = SubResource("Theme_opfnp")
+script = ExtResource("5_opfnp")
+metadata/_edit_use_anchors_ = true
+
+[node name="Stats" type="Label" parent="StatsPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.032258064
+anchor_top = 0.025
+anchor_right = 0.9677419
+anchor_bottom = 0.109374985
+offset_left = -1.0322571
+offset_top = 1.6000056
+offset_right = -1.0322571
+offset_bottom = 20.000011
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 12
+theme_override_fonts/font = ExtResource("2_48xlc")
+theme_override_font_sizes/font_size = 26
+text = "Lifetime Stats"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Line2D" type="Line2D" parent="StatsPanel"]
+position = Vector2(0, 32)
+points = PackedVector2Array(24, 16, 256, 16)
+width = 4.0
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Runs" type="Label" parent="StatsPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.08940092
+anchor_top = 0.21875003
+anchor_right = 0.9142857
+anchor_bottom = 0.30468753
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 12
+theme_override_fonts/font = ExtResource("2_48xlc")
+theme_override_font_sizes/font_size = 16
+text = "Runs played: 0"
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Wins" type="Label" parent="StatsPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.08940092
+anchor_top = 0.35000002
+anchor_right = 0.9142857
+anchor_bottom = 0.43593752
+theme_override_colors/font_color = Color(0, 1, 0.3529412, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 12
+theme_override_fonts/font = ExtResource("2_48xlc")
+theme_override_font_sizes/font_size = 16
+text = "Runs Completed: 0"
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Rooms" type="Label" parent="StatsPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.08571429
+anchor_top = 0.475
+anchor_right = 0.9142857
+anchor_bottom = 0.5609375
+theme_override_colors/font_color = Color(0, 0.8156863, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 12
+theme_override_fonts/font = ExtResource("2_48xlc")
+theme_override_font_sizes/font_size = 16
+text = "Rooms Cleared: 0"
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Kills" type="Label" parent="StatsPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.08571429
+anchor_top = 0.6000001
+anchor_right = 0.9142857
+anchor_bottom = 0.6859376
+theme_override_colors/font_color = Color(1, 0.16862746, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 12
+theme_override_fonts/font = ExtResource("2_48xlc")
+theme_override_font_sizes/font_size = 16
+text = "Kills: 0"
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Damage" type="Label" parent="StatsPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.08571429
+anchor_top = 0.72499996
+anchor_right = 0.9142857
+anchor_bottom = 0.81093746
+theme_override_colors/font_color = Color(1, 0.4392157, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 12
+theme_override_fonts/font = ExtResource("2_48xlc")
+theme_override_font_sizes/font_size = 16
+text = "Damage dealt: 0"
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Coins" type="Label" parent="StatsPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.08571429
+anchor_top = 0.85
+anchor_right = 0.9142857
+anchor_bottom = 0.9359375
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 12
+theme_override_fonts/font = ExtResource("2_48xlc")
+theme_override_font_sizes/font_size = 16
+text = "Coins collected: 0"
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 

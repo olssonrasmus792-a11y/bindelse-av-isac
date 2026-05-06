@@ -161,6 +161,7 @@ func buy_item():
 	apply_item(data.name)
 	
 	if data.unique:
+		print(item_registry)
 		item_registry.items.erase(data)
 	
 	for guys in guy:
