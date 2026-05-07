@@ -13,6 +13,10 @@ var meta_xp := 0
 var meta_xp_needed := 100
 var meta_level := 1
 
+var meta_bonus_xp_gain := 0.00
+var meta_bonus_damage := 0.00
+var meta_bonus_time := 0
+
 var keys := 0
 var coins := 0
 var kills := 0
@@ -126,6 +130,10 @@ func set_default_meta():
 	meta_xp = 0
 	meta_xp_needed = 100
 	meta_level = 1
+	
+	meta_bonus_xp_gain = 0.00
+	meta_bonus_damage = 0.00
+	meta_bonus_time = 0
 
 func save_game():
 	var save_data = {
@@ -138,7 +146,11 @@ func save_game():
 		"meta_coins": meta_coins,
 		"meta_xp": meta_xp,
 		"meta_xp_needed": meta_xp_needed,
-		"meta_level": meta_level
+		"meta_level": meta_level,
+		
+		"meta_bonus_xp_gain": meta_bonus_xp_gain,
+		"meta_bonus_damage": meta_bonus_damage,
+		"meta_bonus_time": meta_bonus_time
 	}
 	
 	var file = FileAccess.open("user://save.json", FileAccess.WRITE)
@@ -166,3 +178,7 @@ func load_game():
 	meta_xp = data.get("meta_xp", 0)
 	meta_xp_needed = data.get("meta_xp_needed", 100)
 	meta_level = data.get("meta_level", 1)
+	
+	meta_bonus_xp_gain = data.get("meta_bonus_xp_gain", 0.00)
+	meta_bonus_damage = data.get("meta_bonus_damage", 0.00)
+	meta_bonus_time = data.get("meta_bonus_time", 0)

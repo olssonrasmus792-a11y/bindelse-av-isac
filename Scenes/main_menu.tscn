@@ -5,7 +5,7 @@
 [ext_resource type="Shader" uid="uid://ccnwywmpuht17" path="res://Shaders/main_menu.gdshader" id="3_1ehe0"]
 [ext_resource type="Script" uid="uid://c18r4g0a70ukk" path="res://Scripts/main_menu_camera.gd" id="4_ce3w2"]
 [ext_resource type="Script" uid="uid://b5vu8e2b78nx6" path="res://Scripts/lvl_panel.gd" id="4_n45e2"]
-[ext_resource type="Script" uid="uid://ctk2d6kuu21dr" path="res://Scenes/stats_panel.gd" id="5_opfnp"]
+[ext_resource type="Script" uid="uid://ctk2d6kuu21dr" path="res://Scripts/stats_panel.gd" id="5_opfnp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_48xlc"]
 bg_color = Color(0.246402, 0.33374986, 0.9999452, 1)
@@ -2207,7 +2207,7 @@ width = 250
 height = 25
 repeat = 1
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n45e2"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_opfnp"]
 bg_color = Color(0.46011245, 0.28520012, 0.6051131, 0.78431374)
 border_width_left = 6
 border_width_top = 6
@@ -2223,7 +2223,7 @@ shadow_color = Color(0, 0, 0, 0.6627451)
 shadow_size = 4
 
 [sub_resource type="Theme" id="Theme_opfnp"]
-Panel/styles/panel = SubResource("StyleBoxFlat_n45e2")
+Panel/styles/panel = SubResource("StyleBoxFlat_opfnp")
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ce3w2"]
 
@@ -2251,9 +2251,9 @@ color = Color(0.3764706, 0.30588236, 0.45882353, 1)
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.27781945
-anchor_top = 0.37023458
+anchor_top = 0.2961605
 anchor_right = 0.7224792
-anchor_bottom = 0.5182346
+anchor_bottom = 0.44416055
 offset_left = -0.04800415
 offset_top = 0.08799744
 offset_right = -0.29608154
@@ -2267,13 +2267,33 @@ theme_override_font_sizes/font_size = 26
 text = "play the game"
 metadata/_edit_use_anchors_ = true
 
+[node name="ShopButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.27781945
+anchor_top = 0.46899998
+anchor_right = 0.7224792
+anchor_bottom = 0.61700004
+offset_left = -0.04800415
+offset_top = 0.08799744
+offset_right = -0.29608154
+offset_bottom = 0.18399048
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme = SubResource("Theme_n45e2")
+theme_override_fonts/font = ExtResource("2_48xlc")
+theme_override_font_sizes/font_size = 26
+text = "Shop"
+metadata/_edit_use_anchors_ = true
+
 [node name="OptionsButton" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.27781945
-anchor_top = 0.5677654
+anchor_top = 0.6418395
 anchor_right = 0.72208333
-anchor_bottom = 0.715605
+anchor_bottom = 0.7896792
 offset_left = -0.04800415
 offset_top = 0.08799744
 offset_right = 0.15997314
@@ -2290,10 +2310,10 @@ metadata/_edit_use_anchors_ = true
 [node name="QuitButton" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.27781942
-anchor_top = 0.7652963
+anchor_left = 0.27781945
+anchor_top = 0.81467897
 anchor_right = 0.72208333
-anchor_bottom = 0.9131359
+anchor_bottom = 0.9625186
 offset_left = -0.04800415
 offset_top = 0.08799744
 offset_right = 0.15997314
@@ -2546,6 +2566,7 @@ visible = false
 polygon = PackedVector2Array(-168, 752, 1304, 752, 1304, -96, 1152, 16, 1152, 672, 0, 672, 0, 16, 1152, 16, 1304, -96, -168, -96)
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="ShopButton" to="." method="_on_shop_button_pressed"]
 [connection signal="pressed" from="OptionsButton" to="." method="_on_options_button_pressed"]
 [connection signal="pressed" from="QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="pressed" from="MuddyButton" to="." method="_on_muddy_button_pressed"]
