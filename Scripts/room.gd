@@ -160,6 +160,8 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body.name == "Player":
 		player_is_in_room = false
+		if !GameState.timer_started:
+			GameState.timer_started = true
 
 func switch_camera():
 	emit_signal("swap_cam", target_position)
@@ -281,6 +283,7 @@ func pick_weighted_enemy():
 				for item in GameState.taken_items:
 					if item.name == "Caged Muddy":
 						item.tracked_stat_values[0] += 1
+						break
 			return e
 	
 	return enemy_scenes[0]
@@ -309,7 +312,7 @@ func _on_enemy_died(enemy):
 	GameState.kills += 1
 	GameState.combo += 1
 	
-	if randf() < GameState.coin_drop_chance:
+	if randf() < GameState.coin_drop_chance * (1 + GameState.luck):
 		drop_coin(last_position)
 	
 	if alive_enemies.is_empty():

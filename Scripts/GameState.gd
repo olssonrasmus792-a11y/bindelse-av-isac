@@ -3,6 +3,8 @@ extends Node
 @export var room_tiles_x = 17
 @export var room_tiles_y = 11
 
+var player_name
+
 var meta_runs_played := 0
 var meta_runs_completed := 0
 var meta_rooms_cleared := 0
@@ -16,6 +18,8 @@ var meta_level := 1
 var meta_bonus_xp_gain := 0.00
 var meta_bonus_damage := 0.00
 var meta_bonus_time := 0
+
+var leaderboard_kills := 0
 
 var keys := 0
 var coins := 0
@@ -40,6 +44,7 @@ var luck = 0.0
 
 var start_time = 360.0
 var time_left = start_time
+var timer_started = false
 var pause_timer = false
 
 var current_room
@@ -52,6 +57,16 @@ var taken_items: Array[ItemData] = []
 
 func _ready() -> void:
 	load_game()
+	
+	SilentWolf.configure({
+	"api_key": "77szUE1zCV9jk7ZDlzKyV51lEkDVEVTP2Wo7o2gI",
+	"game_id": "thelastlight1",
+	"log_level": 1
+	})
+	
+	SilentWolf.configure_scores({
+	"open_scene_on_close": "res://scenes/MainPage.tscn"
+	})
 
 func reset_game():
 	keys = 0
@@ -65,8 +80,14 @@ func reset_game():
 	coin_drop_chance = 0.1
 	luck = 0.0
 	muddy_spawn_rate = muddy_base_spawn_rate
+	
+	timer_started = false
 	boss_killed = false
 	boss_spawned = false
+	
+	for item in taken_items:
+		item.reset_stats()
+	
 	taken_upgrades.clear()
 	taken_items.clear()
 
@@ -85,6 +106,7 @@ func get_enemy_amount():
 	for item in GameState.taken_items:
 		if item.name == "Sword":
 			item.tracked_stat_values[1] += (roundi(amount * 0.2 * get_item_count("Sword")))
+			break
 	
 	amount += amount * 0.2 * get_item_count("Sword")
 	amount = roundi(amount)
@@ -104,22 +126,39 @@ func calculate_stats():
 
 func add_meta_stats():
 	meta_runs_played += 1
+
 	if boss_killed:
 		meta_runs_completed += 1
+
 	meta_rooms_cleared += rooms_cleared
 	meta_kills += kills
 	meta_damage += total_damage_dealt
 	meta_coins += total_coins_gained
 	meta_xp += total_xp_gained
-	
+
 	while meta_xp >= meta_xp_needed:
 		meta_xp -= meta_xp_needed
 		meta_xp_needed = int(meta_xp_needed * 1.25)
 		meta_level += 1
-	
+
+	if player_name != "":
+		var result = await SilentWolf.Scores.get_scores().sw_get_scores_complete
+		
+		if result.success:
+			var best_score := 0
+
+			for entry in result.scores:
+				if entry.player_name == player_name:
+					best_score = max(best_score, int(entry.score))
+
+			if leaderboard_kills > best_score:
+				await SilentWolf.Scores.save_score(player_name, leaderboard_kills).sw_save_score_complete
+
 	save_game()
 
 func set_default_meta():
+	player_name = ""
+	
 	meta_runs_played = 0
 	meta_runs_completed = 0
 	meta_rooms_cleared = 0
@@ -137,6 +176,8 @@ func set_default_meta():
 
 func save_game():
 	var save_data = {
+		"player_name": player_name,
+		
 		"meta_runs_played": meta_runs_played,
 		"meta_runs_completed": meta_runs_completed,
 		"meta_rooms_cleared": meta_rooms_cleared,
@@ -167,6 +208,8 @@ func load_game():
 	if data == null:
 		set_default_meta()
 		return
+	
+	player_name = data.get("player_name", "")
 	
 	meta_runs_played = data.get("meta_runs_played", 0)
 	meta_runs_completed = data.get("meta_runs_completed", 0)

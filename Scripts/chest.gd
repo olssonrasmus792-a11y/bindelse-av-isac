@@ -1,10 +1,12 @@
 extends Node2D
 
+@onready var guy := get_tree().get_nodes_in_group("guy")
+
 var rarity_weights = {
 	ItemData.Rarity.COMMON: 50,
 	ItemData.Rarity.RARE: 20,
-	ItemData.Rarity.EPIC: 8,
-	ItemData.Rarity.LEGENDARY: 2
+	ItemData.Rarity.EPIC: 10,
+	ItemData.Rarity.LEGENDARY: 3
 }
 
 @export var item_registry: ItemRegistry
@@ -45,9 +47,6 @@ func _ready() -> void:
 	animated_sprite_2d.play("Closed")
 	pop_up.visible = false
 
-	# IMPORTANT: snapshot for THIS chest only (no duplicates inside chest)
-	local_items = item_registry.items.duplicate()
-
 
 func _process(delta: float) -> void:
 	if label.modulate.a > 0:
@@ -71,6 +70,8 @@ func _input(event: InputEvent) -> void:
 		else:
 			shake_label()
 			deny.play()
+			for guys in guy:
+				guys.not_enough_keys()
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
@@ -101,18 +102,31 @@ func open_chest():
 
 
 func spawn_item():
+	local_items = item_registry.items.duplicate()
+	
 	if local_items.is_empty():
 		return
 
-	var item_data = get_weighted_random_item(local_items)
+	var valid_items: Array = []
 
-	# REMOVE so no duplicates in this chest
+	for item in local_items:
+		# Skip already taken unique items
+		if item.unique and GameState.taken_items.has(item):
+			print("Filtering out unique item...")
+			continue
+
+		valid_items.append(item)
+
+	# No valid items left
+	if valid_items.is_empty():
+		return
+
+	var item_data = get_weighted_random_item(valid_items)
+
+	# Remove from local chest pool
 	local_items.erase(item_data)
 
-	if item_data.unique:
-		item_registry.items.erase(item_data)
-
-	var runtime_data: ItemData = item_data.duplicate()
+	var runtime_data: ItemData = item_data.duplicate(true)
 	runtime_data.price = 0
 
 	var item = item_scene.instantiate()

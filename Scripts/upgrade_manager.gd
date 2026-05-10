@@ -32,7 +32,6 @@ func spawn_random_cards(count: int):
 	)
 
 	if local_cards.is_empty():
-		print("No upgrades available")
 		close_upgrade_screen()
 		return
 

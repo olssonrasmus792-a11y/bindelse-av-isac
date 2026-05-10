@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=4 uid="uid://da4a7evkn23na"]
+[gd_scene load_steps=51 format=4 uid="uid://da4a7evkn23na"]
 
 [ext_resource type="Script" uid="uid://b4df5oej6ftoa" path="res://Scripts/main_menu.gd" id="1_28flt"]
 [ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="2_48xlc"]
@@ -6,6 +6,10 @@
 [ext_resource type="Script" uid="uid://c18r4g0a70ukk" path="res://Scripts/main_menu_camera.gd" id="4_ce3w2"]
 [ext_resource type="Script" uid="uid://b5vu8e2b78nx6" path="res://Scripts/lvl_panel.gd" id="4_n45e2"]
 [ext_resource type="Script" uid="uid://ctk2d6kuu21dr" path="res://Scripts/stats_panel.gd" id="5_opfnp"]
+[ext_resource type="Script" uid="uid://dxtmsbd0ndyk2" path="res://Scripts/leaderboard_panel.gd" id="6_cp0ys"]
+[ext_resource type="Texture2D" uid="uid://bppqtlknvnyu1" path="res://Textures/refresh.png" id="7_trj04"]
+[ext_resource type="Script" uid="uid://bxpajhycmlyr5" path="res://Scripts/player_name.gd" id="7_yhxw7"]
+[ext_resource type="Script" uid="uid://b8cron1iemwl8" path="res://Scripts/notification.gd" id="10_16hvj"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_48xlc"]
 bg_color = Color(0.246402, 0.33374986, 0.9999452, 1)
@@ -2225,7 +2229,31 @@ shadow_size = 4
 [sub_resource type="Theme" id="Theme_opfnp"]
 Panel/styles/panel = SubResource("StyleBoxFlat_opfnp")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yhxw7"]
+shader = ExtResource("3_1ehe0")
+shader_parameter/height = 0.5
+shader_parameter/frequency = 10.0
+shader_parameter/speed = 1.0
+
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ce3w2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_trj04"]
+bg_color = Color(1, 0.84705883, 0, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 1, 1, 0.5882353)
+border_blend = true
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_color = Color(0, 0, 0, 0.6627451)
+shadow_size = 4
+
+[sub_resource type="Theme" id="Theme_16hvj"]
+Panel/styles/panel = SubResource("StyleBoxFlat_trj04")
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -2284,7 +2312,7 @@ focus_mode = 0
 theme = SubResource("Theme_n45e2")
 theme_override_fonts/font = ExtResource("2_48xlc")
 theme_override_font_sizes/font_size = 26
-text = "Shop"
+text = "Guy's Shop"
 metadata/_edit_use_anchors_ = true
 
 [node name="OptionsButton" type="Button" parent="."]
@@ -2354,9 +2382,9 @@ material = SubResource("ShaderMaterial_ce3w2")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.11111111
-anchor_top = 0.09876543
+anchor_top = 0.061728396
 anchor_right = 0.8888889
-anchor_bottom = 0.2958024
+anchor_bottom = 0.25876537
 offset_bottom = 0.3199997
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0.8323229, 0.7058277, 0.009962295, 1)
@@ -2461,9 +2489,9 @@ end_cap_mode = 2
 [node name="Runs" type="Label" parent="StatsPanel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.08940092
+anchor_left = 0.08571429
 anchor_top = 0.21875003
-anchor_right = 0.9142857
+anchor_right = 0.91059905
 anchor_bottom = 0.30468753
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 12
@@ -2476,10 +2504,10 @@ metadata/_edit_use_anchors_ = true
 [node name="Wins" type="Label" parent="StatsPanel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.08940092
-anchor_top = 0.35000002
-anchor_right = 0.9142857
-anchor_bottom = 0.43593752
+anchor_left = 0.08571429
+anchor_top = 0.34375
+anchor_right = 0.91059905
+anchor_bottom = 0.4296875
 theme_override_colors/font_color = Color(0, 1, 0.3529412, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 12
@@ -2493,9 +2521,9 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.08571429
-anchor_top = 0.475
+anchor_top = 0.46874997
 anchor_right = 0.9142857
-anchor_bottom = 0.5609375
+anchor_bottom = 0.5546875
 theme_override_colors/font_color = Color(0, 0.8156863, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 12
@@ -2509,9 +2537,9 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.08571429
-anchor_top = 0.6000001
+anchor_top = 0.59374994
 anchor_right = 0.9142857
-anchor_bottom = 0.6859376
+anchor_bottom = 0.67968744
 theme_override_colors/font_color = Color(1, 0.16862746, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 12
@@ -2525,9 +2553,9 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.08571429
-anchor_top = 0.72499996
+anchor_top = 0.71875006
 anchor_right = 0.9142857
-anchor_bottom = 0.81093746
+anchor_bottom = 0.80468756
 theme_override_colors/font_color = Color(1, 0.4392157, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 12
@@ -2541,17 +2569,113 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.08571429
-anchor_top = 0.85
+anchor_top = 0.84375
 anchor_right = 0.9142857
-anchor_bottom = 0.9359375
+anchor_bottom = 0.9296875
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 12
 theme_override_fonts/font = ExtResource("2_48xlc")
 theme_override_font_sizes/font_size = 16
-text = "Coins collected: 0"
+text = "Coins: 0"
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
+
+[node name="LeaderboardPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7430556
+anchor_top = 0.2962963
+anchor_right = 0.9861111
+anchor_bottom = 0.56790125
+theme = SubResource("Theme_opfnp")
+script = ExtResource("6_cp0ys")
+metadata/_edit_use_anchors_ = true
+
+[node name="Stats" type="Label" parent="LeaderboardPanel"]
+material = SubResource("ShaderMaterial_yhxw7")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.032258064
+anchor_top = 0.025
+anchor_right = 0.9677419
+anchor_bottom = 0.109374985
+offset_left = -1.0322571
+offset_top = 2.8000035
+offset_right = 1.0322571
+offset_bottom = 25.250008
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 20
+theme_override_fonts/font = ExtResource("2_48xlc")
+theme_override_font_sizes/font_size = 20
+text = "Leaderboard"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Loading" type="Label" parent="LeaderboardPanel"]
+material = SubResource("ShaderMaterial_yhxw7")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.032258064
+anchor_top = 0.025
+anchor_right = 0.9677419
+anchor_bottom = 0.109374985
+offset_left = 14.967742
+offset_top = 49.0
+offset_right = -14.967743
+offset_bottom = 145.375
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 20
+theme_override_fonts/font = ExtResource("2_48xlc")
+theme_override_font_sizes/font_size = 16
+text = "Loading..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Line2D" type="Line2D" parent="LeaderboardPanel"]
+position = Vector2(0, 32)
+points = PackedVector2Array(24, 16, 256, 16)
+width = 4.0
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LeaderboardPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.08571429
+anchor_top = 0.31818178
+anchor_right = 0.9142857
+anchor_bottom = 0.95454544
+metadata/_edit_use_anchors_ = true
+
+[node name="Button" type="Button" parent="LeaderboardPanel"]
+layout_mode = 0
+offset_left = 232.0
+offset_top = 16.0
+offset_right = 256.0
+offset_bottom = 40.0
+focus_mode = 0
+icon = ExtResource("7_trj04")
+icon_alignment = 1
+expand_icon = true
+
+[node name="PlayerName" type="Control" parent="."]
+anchors_preset = 0
+offset_top = -72.0
+offset_right = 160.0
+offset_bottom = 8.0
+script = ExtResource("7_yhxw7")
+
+[node name="LineEdit" type="LineEdit" parent="PlayerName"]
+layout_mode = 0
+offset_left = 896.0
+offset_top = 456.0
+offset_right = 1088.0
+offset_bottom = 504.0
+focus_mode = 1
+placeholder_text = "Enter Username:"
+alignment = 1
+max_length = 14
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(576, 344)
@@ -2565,8 +2689,32 @@ physics_material_override = SubResource("PhysicsMaterial_ce3w2")
 visible = false
 polygon = PackedVector2Array(-168, 752, 1304, 752, 1304, -96, 1152, 16, 1152, 672, 0, 672, 0, 16, 1152, 16, 1304, -96, -168, -96)
 
+[node name="Notification" type="Panel" parent="."]
+layout_mode = 0
+anchor_left = 0.6666667
+anchor_top = 0.50617284
+anchor_right = 0.7013889
+anchor_bottom = 0.56790125
+theme = SubResource("Theme_16hvj")
+script = ExtResource("10_16hvj")
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="Notification"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_48xlc")
+theme_override_font_sizes/font_size = 28
+text = "!"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="ShopButton" to="." method="_on_shop_button_pressed"]
 [connection signal="pressed" from="OptionsButton" to="." method="_on_options_button_pressed"]
 [connection signal="pressed" from="QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="pressed" from="MuddyButton" to="." method="_on_muddy_button_pressed"]
+[connection signal="pressed" from="LeaderboardPanel/Button" to="LeaderboardPanel" method="_on_button_pressed"]

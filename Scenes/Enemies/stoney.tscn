@@ -1,7 +1,8 @@
-[gd_scene load_steps=31 format=4 uid="uid://cwo7ty8gxg4fn"]
+[gd_scene load_steps=32 format=4 uid="uid://cwo7ty8gxg4fn"]
 
 [ext_resource type="Script" uid="uid://ikkptpfealcp" path="res://Scripts/stoney.gd" id="1_mwejy"]
 [ext_resource type="Texture2D" uid="uid://i8m1aosksca8" path="res://Textures/Enemies/Rocky jump.png" id="1_nw4po"]
+[ext_resource type="AudioStream" uid="uid://b1x7y731jfsgl" path="res://SFX/Bounce1.wav" id="3_vydjb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mwejy"]
 atlas = ExtResource("1_nw4po")
@@ -303,5 +304,9 @@ offset_bottom = -48.0
 value = 18.0
 texture_under = SubResource("GradientTexture2D_c4kng")
 texture_progress = SubResource("GradientTexture2D_vydjb")
+
+[node name="Bounce1" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_vydjb")
+max_distance = 1000.0
 
 [connection signal="timeout" from="DirectionTimer" to="." method="_on_direction_timer_timeout"]

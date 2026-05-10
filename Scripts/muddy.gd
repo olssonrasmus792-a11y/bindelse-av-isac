@@ -78,7 +78,7 @@ func _physics_process(delta):
 			direction = direction.bounce(normal)
 
 		if collider.is_in_group("enemies") and knockback_timer > 0.0:
-			splat_pitch += 0.2
+			splat_pitch += 0.5
 			splat.pitch_scale = splat_pitch
 			splat.play()
 			collider.explode(collider)

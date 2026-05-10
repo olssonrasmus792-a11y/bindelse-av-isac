@@ -22,3 +22,7 @@ enum Rarity {
 @export var tracked_stat_colors: Array[Color] = []
 
 @export var unique: bool
+
+func reset_stats():
+	for key in tracked_stat_values.size():
+		tracked_stat_values[key] = 0

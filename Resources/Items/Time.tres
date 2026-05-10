@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://lw1pkr086uwd"]
+
+[ext_resource type="Texture2D" uid="uid://ca82twfvheobr" path="res://Textures/icon.svg" id="1_6uns4"]
+[ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_u7ppb"]
+
+[resource]
+script = ExtResource("1_u7ppb")
+name = "Stopwatch"
+icon = ExtResource("1_6uns4")
+price = 5
+stats = Array[String](["+30 Seconds"])
+stat_colors = Array[Color]([Color(0, 0.78431374, 0.28235295, 1)])
+metadata/_custom_type_script = "uid://i88s36u6b2ej"

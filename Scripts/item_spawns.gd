@@ -3,8 +3,8 @@ extends Node2D
 var rarity_weights = {
 	ItemData.Rarity.COMMON: 50,
 	ItemData.Rarity.RARE: 20,
-	ItemData.Rarity.EPIC: 8,
-	ItemData.Rarity.LEGENDARY: 2
+	ItemData.Rarity.EPIC: 10,
+	ItemData.Rarity.LEGENDARY: 3
 }
 
 @export var item_registry: ItemRegistry
@@ -27,19 +27,28 @@ func spawn_items():
 
 func spawn_random_item(pos):
 	if local_items.is_empty():
+		return	
+
+	var valid_items: Array = []
+
+	for item in local_items:
+		if item.unique and item in GameState.taken_items:
+			print("Filtering out unique item...")
+			continue
+		valid_items.append(item)
+
+	if valid_items.is_empty():
 		return
 
-	var item_data = get_weighted_random_item(local_items)
+	var item_data = get_weighted_random_item(valid_items)
 
-	# remove so it can’t appear again in this batch
+	# remove from this spawn batch so it can't repeat here
 	local_items.erase(item_data)
-
-	if item_data.unique:
-		item_registry.items.erase(item_data)
 
 	var item = item_scene.instantiate()
 	item.position = pos
 	item.data = item_data
+
 	get_tree().current_scene.call_deferred("add_child", item)
 
 

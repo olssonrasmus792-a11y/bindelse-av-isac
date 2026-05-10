@@ -16,8 +16,10 @@ extends Node2D
 
 @export var shop_scene = preload("res://Scenes/Rooms/room_shop.tscn")
 var shop_rooms_spawned = 0
-var min_shop_rooms = 3
-var max_shop_rooms = 5
+var min_shop_rooms = 4
+var max_shop_rooms = 6
+
+@export var boss_room_distance := 5.7 # how many rooms away from start
 
 var shop_positions: Array = []
 @export var min_shop_distance_from_start := 1.4
@@ -32,11 +34,11 @@ var shop_positions: Array = []
 @onready var camera_2d: Camera2D = $"../Player/Camera2D"
 @export var tile_size := 200.0
 @export var dungeon_width := 4.0
-@export var dungeon_height := 4.0
+@export var dungeon_height := dungeon_width
 var room_width  = GameState.room_tiles_x * tile_size
 var room_height = GameState.room_tiles_y * tile_size
 
-@export var min_rooms := 5
+@export var min_rooms := 8
 var placed_rooms := {}
 var rooms_spawned = false
 
@@ -78,21 +80,12 @@ func generate_dungeon():
 	rooms_spawned = true
 
 func get_final_room_pos() -> Vector2:
-	var best_pos = start_pos
-	var best_dist = 0.0
-
-	for x in range(-dungeon_width, dungeon_width):
-		for y in range(-dungeon_height, dungeon_height):
-			var pos = start_pos + Vector2(x, y)
-			var dist = pos.distance_to(start_pos)
-
-			if dist > best_dist:
-				best_dist = dist
-				best_pos = pos
-			elif dist == best_dist and randf() < 0.5:
-				best_pos = pos
-
-	return best_pos
+	var angle = randf() * TAU  # random angle in any direction
+	var offset = Vector2(
+		round(cos(angle) * boss_room_distance),
+		round(sin(angle) * boss_room_distance)
+	)
+	return start_pos + offset
 
 func generate_clean_path(start: Vector2, end: Vector2):
 	main_path.clear()
@@ -267,7 +260,7 @@ func add_extra_rooms():
 		
 		var new_pos = base_pos + directions.pick_random()
 		
-		if not placed_rooms.has(new_pos) and not shop_positions.has(new_pos) and not main_path.has(new_pos):
+		if not placed_rooms.has(new_pos) and not shop_positions.has(new_pos) and not main_path.has(new_pos) and new_pos.distance_to(end_room_pos) >= 2.0:
 			place_room(new_pos)
 
 func ensure_shop_exists():
@@ -305,6 +298,10 @@ func ensure_shop_exists():
 		if dist_to_start > max_shop_distance_from_start:
 			continue
 		
+		# ❌ Too close to boss room
+		if new_pos.distance_to(end_room_pos) < 1.4:
+			continue
+		
 		# ❌ Too close to another shop
 		var too_close_to_shop = false
 		for shop_pos in shop_positions:
@@ -316,6 +313,5 @@ func ensure_shop_exists():
 			continue
 		
 		# ✅ Valid → place shop
-		print("Shop Forced!")
 		place_room(new_pos)
 		shop_positions.append(new_pos)

@@ -19,6 +19,7 @@ func _process(_delta: float) -> void:
 
 func update_values():
 	rooms.text = "Rooms Cleared: " + str(GameState.rooms_cleared)
+	GameState.leaderboard_kills = GameState.kills
 	kills.text = "Kills: " + str(GameState.kills)
 	damage.text = "Damage Dealt: " + str(GameState.total_damage_dealt)
 	level.text = "Level Reached: " + str(player.level)

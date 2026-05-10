@@ -13,4 +13,4 @@ func _process(_delta: float) -> void:
 	rooms.text = "Rooms Cleared: " + str(GameState.meta_rooms_cleared)
 	kills.text = "Kills: " + str(GameState.meta_kills)
 	damage.text = "Damage Dealt: " + str(GameState.meta_damage)
-	coins.text = "Coins Collected: " + str(GameState.meta_coins)
+	coins.text = "Coins: " + str(GameState.meta_coins)

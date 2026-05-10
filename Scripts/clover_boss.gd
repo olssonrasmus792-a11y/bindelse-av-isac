@@ -2,9 +2,9 @@ extends CharacterBody2D
 
 @onready var player := get_tree().get_first_node_in_group("player")
 
-@export var xp_orbs: int = 5
-@export var xp_reward: int = 4
-var xp_reward_range = 2 # xp rewards +- range
+@export var xp_orbs: int = 20
+@export var xp_reward: int = 10
+var xp_reward_range = 4 # xp rewards +- range
 
 @onready var projectile_scene = preload("res://Scenes/clover_projectile.tscn")
 @export var explosion_scene = preload("res://Scenes/Enemies/MuddyExplosion.tscn")
@@ -19,10 +19,18 @@ var xp_reward_range = 2 # xp rewards +- range
 @onready var pop_up: Control = $PopUp
 @onready var the_only_thing_the_fear_is_you: AudioStreamPlayer = $TheOnlyThingTheFearIsYou
 
+@onready var splat: AudioStreamPlayer = $Splat
+
 var base_y = 0
+
+var jump_direction
+var jump_length = 500
+var move_towards_player
 
 var player_in_spawn_range = false
 var spawned = false
+var spawning = false
+var evolved = false
 
 var player_is_close = false
 
@@ -40,14 +48,14 @@ var normal_speed = 450
 var bullet_hell_speed = 400
 var burst_hell_speed = 150
 
-var max_health = 1600.0
+var max_health = 2000.0
 var health = max_health
 signal enemy_died
 
 
 func _ready() -> void:
 	hp_bar.max_value = max_health
-	hp_bar.value = max_health
+	hp_bar.value = health
 	hp_bar.visible = false
 	pop_up.visible = false
 	shoot_timer.wait_time = 1.5
@@ -58,7 +66,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	hp_bar.value = lerp(hp_bar.value, health, 0.25)
 	
-	if bullet_hell_active or burst_hell_active:
+	if bullet_hell_active or burst_hell_active or spawning:
 		shoot_timer.paused = true
 	elif spawned:
 		shoot_timer.paused = false
@@ -68,14 +76,21 @@ func _process(delta: float) -> void:
 	else:
 		animated_sprite_2d.position.y = base_y
 	
+	if move_towards_player:
+		jump_direction = (player.global_position - global_position).normalized()
+		velocity = jump_direction * jump_length
+		move_and_slide()
+	
 	if Input.is_action_just_pressed("interact") and player_in_spawn_range and pop_up.visible and !spawned:
 		GameState.time_left = 0
 		pop_up.visible = false
+		spawning = true
 		the_only_thing_the_fear_is_you.play()
 		var cutscene = get_tree().get_first_node_in_group("cutscene")
 		cutscene.play("cutscene")
 		await cutscene.animation_finished
 		spawned = true
+		spawning = false
 		GameState.boss_spawned = true
 		hp_bar.visible = true
 		shoot_timer.paused = false
@@ -83,13 +98,18 @@ func _process(delta: float) -> void:
 	
 	if animated_sprite_2d.animation == "Spawn":
 		for cam in get_tree().get_nodes_in_group("camera"):
-			cam.shake(0.5)
+			cam.shake(0.25)
 	
 	if player.is_dead and the_only_thing_the_fear_is_you.playing and the_only_thing_the_fear_is_you.pitch_scale > 0.0:
 		the_only_thing_the_fear_is_you.pitch_scale -= 0.2 * delta
 	
 	if the_only_thing_the_fear_is_you.pitch_scale <= 0.05:
 		the_only_thing_the_fear_is_you.stop()
+	
+	if evolved:
+		scale = Vector2(3.5, 3.5)
+	else:
+		scale = Vector2(1.0, 1.0)
 
 func spawn_projectile(direction: Vector2, speed: int) -> void:
 	var projectile = projectile_scene.instantiate()
@@ -102,7 +122,15 @@ func bullet_hell():
 	bullet_hell_active = true
 	animated_sprite_2d.play("Spin")
 	
-	for i in range(30):
+	var shots = 30
+	
+	if evolved:
+		shots = 4
+	
+	for i in range(shots):
+		if spawning:
+			break
+		
 		var angle = i * 0.65
 		var direction = Vector2.RIGHT.rotated(angle)
 
@@ -122,6 +150,9 @@ func burst_hell():
 	var total_bursts = 5
 	
 	for x in range(total_bursts):
+		if spawning:
+			break
+		
 		shoot_burst()
 		fade_red()
 		await get_tree().create_timer(0.45).timeout
@@ -137,6 +168,10 @@ func burst_hell():
 func shoot_burst():
 	var bullets := 80
 	var gap_width := 0.4
+	
+	if evolved:
+		bullets = 40
+		gap_width = 2.4
 	
 	var player_angle = (player.global_position - global_position).angle()
 	
@@ -164,8 +199,15 @@ func jump_ability(size: float):
 	
 	var base_scale = 0.2
 	var jump_height = 150
+	
 	var air_time = 0.25
 	var land_time = 0.1
+	var reset_time = 0.1
+
+	if evolved:
+		air_time /= 1.4
+		land_time /= 1.4
+		reset_time /= 1.4
 
 	# --- Phase 1: Jump up immediately (thinner horizontally while moving up) ---
 	var jump_tween = create_tween()
@@ -181,6 +223,9 @@ func jump_ability(size: float):
 		animated_sprite_2d.position.y - jump_height,
 		air_time
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
+	if evolved:
+		move_towards_player = true
 	await jump_tween.finished
 
 	# --- Phase 2: Land (squish on impact) ---
@@ -196,12 +241,20 @@ func jump_ability(size: float):
 		"position:y",
 		0, # back to original local position
 		land_time
-	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	
 	await land_tween.finished
 
 	# --- Phase 3: Return to normal ---
 	play_jump_effects(size)
+	splat.play(0.04)
+	if evolved:
+		move_towards_player = false
+		shoot_burst()
 	for cam in get_tree().get_nodes_in_group("camera"):
+		if evolved:
+			cam.shake(2.0)
+		else:
 			cam.shake(1.0)
 
 	var reset_tween = create_tween()
@@ -209,7 +262,7 @@ func jump_ability(size: float):
 		animated_sprite_2d,
 		"scale",
 		Vector2(base_scale, base_scale),
-		0.1
+		reset_time
 	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	await reset_tween.finished
 
@@ -247,7 +300,10 @@ func play_jump_effects(size: float):
 
 func _on_shoot_timer_timeout() -> void:
 	if bullet_hell_active or burst_hell_active or jump_ability_active:
-		shoot_timer.wait_time = 2
+		if evolved:
+			shoot_timer.wait_time = 0.5
+		else:
+			shoot_timer.wait_time = 2
 		return
 	
 	animated_sprite_2d.play("Shoot")
@@ -255,16 +311,26 @@ func _on_shoot_timer_timeout() -> void:
 	
 	await get_tree().create_timer(0.45).timeout
 	
+	var base_direction = (player.global_position - global_position).normalized()
+	var spread := 0.5
+	var bullets := 5
+	
 	var roll = randf()
 	
+	if evolved:
+		jump_ability(1.7)
+		shoot_timer.wait_time = 0.5
+		ability_chance += ability_chance_increase
+		return
+	
 	if roll < ability_chance:
-		bullet_hell()
+		burst_hell()
 		shoot_timer.wait_time = 1.5
-		ability_chance = base_ability_chance
+		ability_chance /= 2
 		return
 	
 	if roll < ability_chance * 2:
-		burst_hell()
+		bullet_hell()
 		shoot_timer.wait_time = 1.5
 		ability_chance = base_ability_chance
 		return
@@ -277,10 +343,6 @@ func _on_shoot_timer_timeout() -> void:
 	
 	ability_chance += ability_chance_increase
 	
-	var base_direction = (player.global_position - global_position).normalized()
-	var spread := 0.5
-	var bullets := 5
-	
 	for i in range(bullets):
 		var offset = lerp(-spread, spread, float(i) / (bullets - 1))
 		var dir = base_direction.rotated(offset)
@@ -292,13 +354,26 @@ func _on_shoot_timer_timeout() -> void:
 	
 	shoot_timer.wait_time = 1.5
 
+func evolve():
+	spawning = true
+	animation_player.stop()
+	animation_player.play("evolve")
+	await animation_player.animation_finished
+	spawning = false
+	evolved = true
+
 func take_damage(damage):
-	if !spawned:
+	if !spawned or spawning:
 		return
+	
 	health -= damage
 	flash_red()
 	animation_player.stop()
 	animation_player.play("hit")
+	
+	if health < max_health / 2.5 and !evolved and !spawning:
+		evolve()
+	
 	if health <= 0:
 		explode(self)
 
@@ -399,7 +474,7 @@ func _on_detection_area_body_exited(body: Node2D) -> void:
 		player_is_close = false
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.name == "Player" and !spawned:
+	if body.name == "Player" and !spawned and !spawning:
 		player_in_spawn_range = true
 		pop_up.visible = true
 

@@ -12,6 +12,6 @@ script = ExtResource("1_iyy07")
 name = "Clover"
 icon = SubResource("AtlasTexture_yhe4q")
 price = 5
-stats = Array[String](["+10% Luck"])
+stats = Array[String](["+15% Luck"])
 stat_colors = Array[Color]([Color(0, 0.78431374, 0.28235295, 1)])
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

@@ -682,3 +682,6 @@ volume_db = -20.0
 
 [node name="Whoosh2" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_3smsa")
+
+[node name="AudioListener2D" type="AudioListener2D" parent="."]
+current = true

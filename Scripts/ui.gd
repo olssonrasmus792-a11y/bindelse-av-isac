@@ -12,7 +12,7 @@ extends CanvasLayer
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	GameState.time_left = GameState.start_time
+	GameState.time_left = GameState.start_time + GameState.meta_bonus_time
 	vignette.modulate.a = 0
 
 
@@ -41,8 +41,9 @@ func handle_boss_timer(delta: float):
 			timer.text = "Find the Boss!"
 		return
 	
-	if GameState.pause_timer:
+	if GameState.pause_timer or !GameState.timer_started:
 		timer.modulate = Color.YELLOW
+		timer.text = format_time(GameState.time_left)
 		return
 	
 	timer.modulate = Color.WHITE

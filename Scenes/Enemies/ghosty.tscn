@@ -162,6 +162,7 @@ scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_k0y6n")
 animation = &"Idle"
 autoplay = "Idle"
+frame_progress = 0.8377458
 offset = Vector2(4.999977, 4.9999995)
 
 [node name="ColorRect" type="ColorRect" parent="Visuals"]
@@ -182,7 +183,7 @@ color = Color(0, 0, 0, 0.19607843)
 
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
 visible = false
-polygon = PackedVector2Array(0, -44, -14, -39, -20, -26, -18, -13, -27, 8, -43, 19, -39, 33, -25, 47, 1, 53, 28, 45, 49, 24, 20, 8, 17, -14, 20, -27, 11, -39)
+polygon = PackedVector2Array(0, -41, -12, -37, -18, -24, -12, -11, -23, 13, -32, 20, -27, 33, -15, 40, 0, 45, 21, 37, 34, 26, 18, 12, 12, -11, 16, -25, 11, -35)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

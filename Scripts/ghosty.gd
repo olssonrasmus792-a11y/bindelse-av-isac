@@ -4,7 +4,7 @@ extends CharacterBody2D
 @export var xp_orb_scene = preload("res://Scenes/xp_orb.tscn")
 
 @export var xp_orbs: int = 3
-@export var xp_reward: int = 2
+@export var xp_reward: int = 3
 var xp_reward_range = 1 # xp rewards +- range
 
 @export var base_speed := 350

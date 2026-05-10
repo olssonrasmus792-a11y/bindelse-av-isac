@@ -1,45 +1,79 @@
-[gd_scene load_steps=21 format=3 uid="uid://bgvsqn5gnkiea"]
+[gd_scene load_steps=25 format=3 uid="uid://bgvsqn5gnkiea"]
 
-[ext_resource type="Script" uid="uid://c7q332k4ofh5g" path="res://Scenes/meta_shop.gd" id="1_h7e51"]
+[ext_resource type="Script" uid="uid://c7q332k4ofh5g" path="res://Scripts/meta_shop.gd" id="1_h7e51"]
 [ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="2_j2uor"]
 [ext_resource type="Shader" uid="uid://ccnwywmpuht17" path="res://Shaders/main_menu.gdshader" id="3_mrnx2"]
 [ext_resource type="Texture2D" uid="uid://drpkue2j6vg0j" path="res://Textures/Guy.png" id="5_ehf31"]
 [ext_resource type="Script" uid="uid://c18r4g0a70ukk" path="res://Scripts/main_menu_camera.gd" id="6_6o6ds"]
-[ext_resource type="Script" uid="uid://bht3yic2acque" path="res://Scenes/upgrades.gd" id="6_j2uor"]
+[ext_resource type="Script" uid="uid://bht3yic2acque" path="res://Scripts/upgrades.gd" id="6_j2uor"]
+[ext_resource type="AudioStream" uid="uid://y7j1luuklmw7" path="res://SFX/Deny.wav" id="7_mrnx2"]
+[ext_resource type="AudioStream" uid="uid://sqgyorqdkfmr" path="res://SFX/Purchase.wav" id="8_86ut3"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_48xlc"]
-bg_color = Color(0.36910748, 0.36910728, 0.3691074, 1)
-border_width_bottom = 10
-border_color = Color(0, 0, 0, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j2uor"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.75)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mrnx2"]
+bg_color = Color(0.17164552, 0.10857607, 0.08755214, 0.78431374)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.6789437, 0.6789437, 0.6789437, 1)
 border_blend = true
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ehe0"]
-bg_color = Color(0.4403357, 0.44033572, 0.4403357, 1)
-border_width_bottom = 10
-border_color = Color(0, 0, 0, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_86ut3"]
+bg_color = Color(0.28627452, 0.19215687, 0.16078432, 0.78431374)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.5958281, 0.5958282, 0.5958279, 1)
 border_blend = true
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ce3w2"]
-bg_color = Color(0.5423182, 0.5423179, 0.54231805, 1)
-border_width_top = 10
-border_color = Color(0, 0, 0, 0)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a14kq"]
+bg_color = Color(0.28627452, 0.19215687, 0.16078432, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.39688924, 0.39688927, 0.3968891, 1)
+border_blend = true
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
-[sub_resource type="Theme" id="Theme_n45e2"]
-Button/styles/hover = SubResource("StyleBoxFlat_48xlc")
-Button/styles/normal = SubResource("StyleBoxFlat_1ehe0")
-Button/styles/pressed = SubResource("StyleBoxFlat_ce3w2")
+[sub_resource type="Theme" id="Theme_6o6ds"]
+Button/styles/focus = SubResource("StyleBoxFlat_j2uor")
+Button/styles/hover = SubResource("StyleBoxFlat_mrnx2")
+Button/styles/normal = SubResource("StyleBoxFlat_86ut3")
+Button/styles/pressed = SubResource("StyleBoxFlat_a14kq")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ce3w2"]
 shader = ExtResource("3_mrnx2")
@@ -49,66 +83,127 @@ shader_parameter/speed = 2.0
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ce3w2"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n45e2"]
-bg_color = Color(0.46011245, 0.28520012, 0.6051131, 0.78431374)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h7e51"]
+bg_color = Color(0.28627452, 0.19215687, 0.16078432, 0.78431374)
 border_width_left = 6
 border_width_top = 6
 border_width_right = 6
 border_width_bottom = 6
 border_color = Color(1, 1, 1, 0.5882353)
 border_blend = true
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
 shadow_color = Color(0, 0, 0, 0.6627451)
-shadow_size = 4
+shadow_size = 2
 
 [sub_resource type="Theme" id="Theme_h7e51"]
-Panel/styles/panel = SubResource("StyleBoxFlat_n45e2")
+Panel/styles/panel = SubResource("StyleBoxFlat_h7e51")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ehf31"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h7e51"]
-bg_color = Color(0.30259997, 0.60609, 0.89, 1)
-border_width_bottom = 10
-border_color = Color(0, 0, 0, 1)
-border_blend = true
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j2uor"]
-bg_color = Color(0.22735274, 0.45648044, 0.6620757, 1)
-border_width_bottom = 10
-border_color = Color(0, 0, 0, 1)
-border_blend = true
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mrnx2"]
-bg_color = Color(0.36910748, 0.36910728, 0.3691074, 1)
-border_width_bottom = 10
-border_color = Color(0, 0, 0, 1)
-border_blend = true
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-
-[sub_resource type="Theme" id="Theme_86ut3"]
-Button/styles/hover = SubResource("StyleBoxFlat_h7e51")
-Button/styles/normal = SubResource("StyleBoxFlat_j2uor")
-Button/styles/pressed = SubResource("StyleBoxFlat_mrnx2")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a14kq"]
 shader = ExtResource("3_mrnx2")
 shader_parameter/height = 0.5
 shader_parameter/frequency = 15.0
 shader_parameter/speed = 1.0
+
+[sub_resource type="Theme" id="Theme_mw6g1"]
+Button/styles/focus = SubResource("StyleBoxFlat_j2uor")
+Button/styles/hover = SubResource("StyleBoxFlat_mrnx2")
+Button/styles/normal = SubResource("StyleBoxFlat_86ut3")
+Button/styles/pressed = SubResource("StyleBoxFlat_a14kq")
+
+[sub_resource type="Theme" id="Theme_gbetn"]
+Button/styles/focus = SubResource("StyleBoxFlat_j2uor")
+Button/styles/hover = SubResource("StyleBoxFlat_mrnx2")
+Button/styles/normal = SubResource("StyleBoxFlat_86ut3")
+Button/styles/pressed = SubResource("StyleBoxFlat_a14kq")
+
+[sub_resource type="Animation" id="Animation_mrnx2"]
+resource_name = "guy_flip"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Guy:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(-0.033333335, 0.2, 0.8333333),
+"transitions": PackedFloat32Array(0.42044875, 0.35355344, 1),
+"update": 0,
+"values": [Vector2(1000, 520), Vector2(1000, 472), Vector2(1000, 520)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Guy:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.03333333, 0.8),
+"transitions": PackedFloat32Array(1, 0.29730174, 1),
+"update": 0,
+"values": [0.0, 0.0, 6.2831855]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Guy:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.12666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.48200002, 0.48200002), Vector2(0.5, 0.5)]
+}
+
+[sub_resource type="Animation" id="Animation_86ut3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Guy:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1000, 520)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Guy:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Guy:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.48200002, 0.48200002)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_a14kq"]
+_data = {
+&"RESET": SubResource("Animation_86ut3"),
+&"guy_flip": SubResource("Animation_mrnx2")
+}
 
 [node name="Meta_Shop" type="Control"]
 layout_mode = 3
@@ -128,7 +223,7 @@ anchor_right = 1.1319444
 anchor_bottom = 1.1604939
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.3719036, 0.26215464, 0.19402787, 1)
+color = Color(0.45882353, 0.28627452, 0.6039216, 0.78431374)
 
 [node name="QuitButton" type="Button" parent="."]
 layout_mode = 1
@@ -144,7 +239,7 @@ offset_bottom = 0.28796387
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
-theme = SubResource("Theme_n45e2")
+theme = SubResource("Theme_6o6ds")
 theme_override_fonts/font = ExtResource("2_j2uor")
 theme_override_font_sizes/font_size = 26
 text = "Main menu"
@@ -205,7 +300,7 @@ anchors_preset = -1
 anchor_left = -1.5223215
 anchor_top = -1.0833335
 anchor_right = -1.2366072
-anchor_bottom = -0.7443505
+anchor_bottom = -0.7782488
 offset_left = 1428.0
 offset_top = 511.33337
 offset_right = 1428.0
@@ -220,10 +315,10 @@ anchor_left = 0.032258064
 anchor_top = 0.025
 anchor_right = 0.9677419
 anchor_bottom = 0.109374985
-offset_left = -1.0322571
-offset_top = 1.6000056
-offset_right = -1.0322571
-offset_bottom = 20.000011
+offset_left = -0.25806427
+offset_top = 4.400024
+offset_right = -0.2580719
+offset_bottom = 32.250023
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 12
@@ -243,10 +338,10 @@ end_cap_mode = 2
 [node name="BonusXp" type="Label" parent="Upgrades/StatsPanel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.08571429
-anchor_top = 0.36842117
-anchor_right = 0.91059905
-anchor_bottom = 0.51315796
+anchor_left = 0.09375001
+anchor_top = 0.38888896
+anchor_right = 0.9186348
+anchor_bottom = 0.5506536
 theme_override_colors/font_color = Color(0, 0.8156863, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 12
@@ -259,10 +354,10 @@ metadata/_edit_use_anchors_ = true
 [node name="BonusDamage" type="Label" parent="Upgrades/StatsPanel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.08571429
-anchor_top = 0.5789474
-anchor_right = 0.91059905
-anchor_bottom = 0.72368425
+anchor_left = 0.09375001
+anchor_top = 0.5555556
+anchor_right = 0.9186348
+anchor_bottom = 0.71732026
 theme_override_colors/font_color = Color(1, 0.4392157, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 12
@@ -275,10 +370,10 @@ metadata/_edit_use_anchors_ = true
 [node name="BonusTime" type="Label" parent="Upgrades/StatsPanel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.08571429
-anchor_top = 0.7894737
-anchor_right = 0.9142857
-anchor_bottom = 0.93421054
+anchor_left = 0.09375001
+anchor_top = 0.7222223
+anchor_right = 0.92232144
+anchor_bottom = 0.88398695
 theme_override_colors/font_color = Color(0.2784314, 1, 0.31764707, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 12
@@ -298,7 +393,7 @@ anchor_bottom = 0.20338982
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
-theme = SubResource("Theme_86ut3")
+theme = SubResource("Theme_6o6ds")
 theme_override_colors/font_color = Color(0, 0.8156863, 1, 1)
 theme_override_colors/font_pressed_color = Color(0, 0.8156863, 1, 1)
 theme_override_colors/font_hover_color = Color(0, 0.8156863, 1, 1)
@@ -336,7 +431,7 @@ anchor_bottom = 0.44067797
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
-theme = SubResource("Theme_86ut3")
+theme = SubResource("Theme_mw6g1")
 theme_override_colors/font_color = Color(1, 0.4392157, 0, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.4392157, 0, 1)
 theme_override_colors/font_hover_color = Color(1, 0.4392157, 0, 1)
@@ -374,7 +469,7 @@ anchor_bottom = 0.6779661
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
-theme = SubResource("Theme_86ut3")
+theme = SubResource("Theme_gbetn")
 theme_override_colors/font_color = Color(0.27999997, 1, 0.31599993, 1)
 theme_override_colors/font_pressed_color = Color(0.2784314, 1, 0.31764707, 1)
 theme_override_colors/font_hover_color = Color(0.2784314, 1, 0.31764707, 1)
@@ -400,6 +495,17 @@ text = "Cost: 1 coin"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
+
+[node name="Deny" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_mrnx2")
+
+[node name="Purchase" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_86ut3")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_a14kq")
+}
 
 [connection signal="pressed" from="QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="pressed" from="Upgrades/XpGain" to="Upgrades" method="_on_xp_gain_pressed"]

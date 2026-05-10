@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ItemRegistry" load_steps=19 format=3 uid="uid://nrcgypmc3qfw"]
+[gd_resource type="Resource" script_class="ItemRegistry" load_steps=20 format=3 uid="uid://nrcgypmc3qfw"]
 
 [ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_wq147"]
 [ext_resource type="Resource" uid="uid://c8rg76cu46q4t" path="res://Resources/Items/Barrel.tres" id="2_im1qu"]
@@ -18,8 +18,9 @@
 [ext_resource type="Resource" uid="uid://cuqt71wu4kg4j" path="res://Resources/Items/MuddyDefense.tres" id="15_27wym"]
 [ext_resource type="Resource" uid="uid://bytoufctsc6w3" path="res://Resources/Items/RollAttack.tres" id="16_3vj0p"]
 [ext_resource type="Resource" uid="uid://bttjieyngdwuw" path="res://Resources/Items/Sword.tres" id="17_agsdj"]
+[ext_resource type="Resource" uid="uid://lw1pkr086uwd" path="res://Resources/Items/Time.tres" id="18_0i56o"]
 
 [resource]
 script = ExtResource("2_yg5u8")
-items = Array[ExtResource("1_wq147")]([ExtResource("2_im1qu"), ExtResource("3_0i56o"), ExtResource("4_dpam4"), ExtResource("5_xxhtf"), ExtResource("6_47snv"), ExtResource("7_o4iis"), ExtResource("8_u0yds"), ExtResource("9_ikmkv"), ExtResource("10_efwr0"), ExtResource("11_jfyk1"), ExtResource("12_25dkt"), ExtResource("13_ueu10"), ExtResource("14_tvw8s"), ExtResource("15_27wym"), ExtResource("16_3vj0p"), ExtResource("17_agsdj")])
+items = Array[ExtResource("1_wq147")]([ExtResource("2_im1qu"), ExtResource("3_0i56o"), ExtResource("4_dpam4"), ExtResource("5_xxhtf"), ExtResource("6_47snv"), ExtResource("7_o4iis"), ExtResource("8_u0yds"), ExtResource("9_ikmkv"), ExtResource("10_efwr0"), ExtResource("11_jfyk1"), ExtResource("12_25dkt"), ExtResource("13_ueu10"), ExtResource("14_tvw8s"), ExtResource("15_27wym"), ExtResource("16_3vj0p"), ExtResource("17_agsdj"), ExtResource("18_0i56o")])
 metadata/_custom_type_script = "uid://cfd1qjr4iacya"

@@ -1,7 +1,7 @@
 extends Node2D
 @onready var room: Node2D = $"."
 
-@onready var guy := get_tree().get_first_node_in_group("guy")
+@onready var guy: Sprite2D = $Guy
 
 @export var enemy_scenes = [
 	preload("res://Scenes/Enemies/Muddy.tscn"),
@@ -96,21 +96,29 @@ func draw_paths():
 		var door_pos = door_up.get_node("Door").global_position
 		draw_path_line(door_pos, Vector2(door_pos.x, center.y))  # lock X to door
 		door_light_up.enabled = true
+	else:
+		door_light_up.enabled = false
 
 	if !has_door_down:
 		var door_pos = door_down.get_node("Door").global_position
 		draw_path_line(door_pos, Vector2(door_pos.x, center.y))  # lock X to door
 		door_light_down.enabled = true
+	else:
+		door_light_down.enabled = false
 
 	if !has_door_left:
 		var door_pos = door_left.get_node("Door").global_position
 		draw_path_line(door_pos, Vector2(center.x, door_pos.y))  # lock Y to door
 		door_light_left.enabled = true
+	else:
+		door_light_left.enabled = false
 
 	if !has_door_right:
 		var door_pos = door_right.get_node("Door").global_position
 		draw_path_line(door_pos, Vector2(center.x, door_pos.y))  # lock Y to door
 		door_light_right.enabled = true
+	else:
+		door_light_right.enabled = false
 
 func get_room_center() -> Vector2:
 	return global_position + Vector2(
@@ -152,6 +160,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		room_entered = true
 		guy.player_is_in_room = true
 		player_is_in_room = true
+		guy.entered_room()
 		GameState.pause_timer = true
 
 func _on_area_2d_body_exited(body: Node2D) -> void:

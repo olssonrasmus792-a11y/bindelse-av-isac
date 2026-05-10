@@ -4,7 +4,7 @@ extends CharacterBody2D
 @export var jump_effect_scene = preload("res://Scenes/Enemies/jump_effects.tscn")
 @export var xp_orb_scene = preload("res://Scenes/xp_orb.tscn")
 
-@export var xp_orbs: int = 5
+@export var xp_orbs: int = 8
 @export var xp_reward: int = 4
 var xp_reward_range = 2 # xp rewards +- range
 
@@ -17,6 +17,7 @@ var xp_reward_range = 2 # xp rewards +- range
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var hp_bar: TextureProgressBar = $HpBar
+@onready var bounce_1: AudioStreamPlayer2D = $Bounce1
 
 @onready var player := get_tree().get_first_node_in_group("player")
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
@@ -42,6 +43,7 @@ var knockback_timer := 0.0
 signal enemy_died
 
 func _ready() -> void:
+	animated_sprite_2d.speed_scale = randf_range(0.9, 1.1)
 	hp_bar.max_value = max_health
 	hp_bar.value = max_health
 	direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
@@ -83,6 +85,10 @@ func _physics_process(delta):
 	
 	if animated_sprite_2d.frame == 10 and chasing:
 		play_jump_effects()
+		if !bounce_1.playing:
+			animated_sprite_2d.speed_scale = randf_range(0.9, 1.1)
+			bounce_1.pitch_scale = randf_range(0.9, 1.1)
+			bounce_1.play(0.22)
 		for cam in get_tree().get_nodes_in_group("camera"):
 			cam.shake(0.25)
 	

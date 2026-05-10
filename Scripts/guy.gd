@@ -10,6 +10,15 @@ extends Sprite2D
 
 @export var player_is_in_room = false
 
+var hello_lines = [
+	"Wassup Broski",
+	"Yo dude",
+	"Welcome!",
+	"You found me twin!",
+	"How's it going bro?",
+	"Glad to have you here!"
+]
+
 var lines = [
 	"Buy something broski",
 	"Mi bombo",
@@ -29,6 +38,14 @@ var no_money_lines = [
 	"No coins, no items"
 ]
 
+var no_keys_lines = [
+	"You need a key bro",
+	"No keys?",
+	"Come back with a key",
+	"Bro doesn't have a key",
+	"That's my chest twin"
+]
+
 var purchase_lines = [
 	"Let's go gng",
 	"Thank you bro",
@@ -38,6 +55,15 @@ var purchase_lines = [
 	"Good choice.",
 	"Please buy more stuff",
 	"I knew you'd buy that one"
+]
+
+var free_item_lines = [
+	"Let's go broski",
+	"That's a banger",
+	"That item is goated bro",
+	"That's good for being free",
+	"You got that for 0 coins?!",
+	"That's a steal!"
 ]
 
 func _ready() -> void:
@@ -75,6 +101,22 @@ func _on_chat_timer() -> void:
 func _on_hide_timeout():
 	bubble.visible = false
 
+func entered_room():
+	timer.paused = true
+	
+	show_dialogue(hello_lines.pick_random())
+	
+	await hide_timer.timeout
+	timer.paused = false
+
+func not_enough_keys():
+	timer.paused = true
+	
+	show_dialogue(no_keys_lines.pick_random())
+	
+	await hide_timer.timeout
+	timer.paused = false
+
 func not_enough_money():
 	timer.paused = true
 	
@@ -87,6 +129,14 @@ func item_bought():
 	timer.paused = true
 	
 	show_dialogue(purchase_lines.pick_random())
+	
+	await hide_timer.timeout
+	timer.paused = false
+
+func free_item_taken():
+	timer.paused = true
+	
+	show_dialogue(free_item_lines.pick_random())
 	
 	await hide_timer.timeout
 	timer.paused = false

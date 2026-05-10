@@ -13,17 +13,22 @@ config_version=5
 config/name="The Last Light"
 run/main_scene="uid://da4a7evkn23na"
 config/features=PackedStringArray("4.5", "Forward Plus")
-config/icon="res://Textures/icon.svg"
+config/icon="uid://bl75ynxq1cirf"
 
 [autoload]
 
 GameState="*res://Scripts/GameState.gd"
 GameSettings="*res://Scripts/GameSettings.gd"
+SilentWolf="*res://addons/silent_wolf/SilentWolf.gd"
 
 [display]
 
 window/size/mode=3
 window/stretch/mode="canvas_items"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/silent_wolf/plugin.cfg")
 
 [global_group]
 
@@ -44,6 +49,7 @@ projectiles=""
 rooms=""
 ghosty=""
 cutscene=""
+room_generator=""
 
 [input]
 

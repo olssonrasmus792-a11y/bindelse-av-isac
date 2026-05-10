@@ -21,5 +21,4 @@ func _on_button_pressed() -> void:
 	else:
 		get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
 		GameState.add_meta_stats()
-		GameState.reset_game()
 		end_stats.visible = false

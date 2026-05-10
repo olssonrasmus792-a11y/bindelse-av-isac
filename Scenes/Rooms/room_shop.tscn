@@ -148,7 +148,7 @@ size = Vector2(200, 200)
 size = Vector2(3304, 2088)
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_fr46g"]
-polygon = PackedVector2Array(1344, -807.9999, 1344, -591.9999, -191.99995, -592, -192.00002, 303.99994, -408.00006, 303.99994, -407.99994, -808)
+polygon = PackedVector2Array(1400, -800, 1400, -600, -200, -600, -200, 400, -400, 400, -400, -800)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ilpkg"]
 size = Vector2(2752, 1560)
@@ -574,6 +574,7 @@ script = ExtResource("19_8oh2v")
 [node name="ChatTimer" type="Timer" parent="Guy"]
 
 [node name="ChatBubble" type="Label" parent="Guy"]
+visible = false
 z_index = 2
 anchors_preset = -1
 anchor_left = 0.75677

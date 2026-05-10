@@ -161,11 +161,13 @@ func buy_item():
 	apply_item(data.name)
 	
 	if data.unique:
-		print(item_registry)
 		item_registry.items.erase(data)
 	
 	for guys in guy:
-		guys.item_bought()
+		if data.price == 0:
+			guys.free_item_taken()
+		else:
+			guys.item_bought()
 	
 	inventory.display_inventory()
 	
@@ -194,13 +196,12 @@ func apply_item(item_name):
 		"Caged Muddy":
 			GameState.muddy_spawn_rate *= 1.2
 		"Clover":
-			GameState.luck += 0.1
+			GameState.luck += 0.15
 			GameState.calculate_stats()
 		"Critty":
 			player.crit_chance += 0.1
 		"Knock knock":
 			player.knockback = 650 * (1 + (GameState.get_item_count("Knock knock") * 0.25))
-			print("Knockback: " + str(player.knockback))
 		"Old boot":
 			player.max_speed *= 1.10
 			player.speed = player.max_speed
@@ -216,6 +217,8 @@ func apply_item(item_name):
 				if item.name == "Critter":
 					item.tracked_stat_values[0] = int(player.crit_chance * 100)
 					item.tracked_stat_values[1] = player.total_crit_hits
+		"Stopwatch":
+			GameState.time_left += 30
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):

@@ -99,6 +99,30 @@ shader_parameter/height = 1.0
 shader_parameter/frequency = 5.0
 shader_parameter/speed = 1.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k12tt"]
+bg_color = Color(0.4, 0.26666668, 0.20784314, 0.39215687)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0, 0, 0, 0.39215687)
+shadow_size = 2
+shadow_offset = Vector2(1, 1)
+
+[sub_resource type="Theme" id="Theme_h1bgf"]
+Panel/styles/panel = SubResource("StyleBoxFlat_k12tt")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b3802"]
+shader = ExtResource("15_h1bgf")
+shader_parameter/height = 0.5
+shader_parameter/frequency = 10.0
+shader_parameter/speed = 1.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ynf5e"]
 bg_color = Color(0.9511823, 0.23625669, 0, 1)
 border_width_bottom = 10
@@ -174,30 +198,6 @@ shader_parameter/speed = 1.5
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gt3je"]
 shader = ExtResource("15_h1bgf")
 shader_parameter/height = 0.75
-shader_parameter/frequency = 10.0
-shader_parameter/speed = 1.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k12tt"]
-bg_color = Color(0.4, 0.26666668, 0.20784314, 0.39215687)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-shadow_color = Color(0, 0, 0, 0.39215687)
-shadow_size = 2
-shadow_offset = Vector2(1, 1)
-
-[sub_resource type="Theme" id="Theme_h1bgf"]
-Panel/styles/panel = SubResource("StyleBoxFlat_k12tt")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_b3802"]
-shader = ExtResource("15_h1bgf")
-shader_parameter/height = 0.5
 shader_parameter/frequency = 10.0
 shader_parameter/speed = 1.0
 
@@ -1966,7 +1966,7 @@ script = ExtResource("2_jkdf5")
 
 [node name="Map" type="Node2D" parent="."]
 
-[node name="RoomGenerator" parent="." instance=ExtResource("1_21xkr")]
+[node name="RoomGenerator" parent="." groups=["room_generator"] instance=ExtResource("1_21xkr")]
 
 [node name="Player" parent="." instance=ExtResource("1_jjgbg")]
 position = Vector2(576, 320)
@@ -1997,6 +1997,7 @@ script = ExtResource("5_fdnlq")
 
 [node name="GlassBreak" type="AudioStreamPlayer" parent="Player"]
 stream = SubResource("AudioStreamWAV_pdsj5")
+volume_db = -1.0
 pitch_scale = 1.74
 
 [node name="Punch1" type="AudioStreamPlayer" parent="Player"]
@@ -2074,192 +2075,6 @@ theme_override_font_sizes/font_size = 16
 text = "LVL 1000"
 horizontal_alignment = 2
 vertical_alignment = 1
-
-[node name="Buttons" type="Control" parent="UI"]
-visible = false
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-metadata/_edit_use_anchors_ = true
-
-[node name="RemoveEnemies" type="Button" parent="UI/Buttons"]
-layout_mode = 0
-offset_left = 1008.0
-offset_top = 544.0
-offset_right = 1144.0
-offset_bottom = 584.0
-focus_mode = 0
-theme = SubResource("Theme_hptm8")
-theme_override_font_sizes/font_size = 18
-text = "Kill Enemies"
-
-[node name="SpawnEnemy" type="Button" parent="UI/Buttons"]
-layout_mode = 0
-offset_left = 1008.0
-offset_top = 592.0
-offset_right = 1146.0
-offset_bottom = 636.0
-focus_mode = 0
-theme = SubResource("Theme_344ge")
-theme_override_font_sizes/font_size = 18
-text = "Spawn Enemy"
-
-[node name="KeyPanel" type="Panel" parent="UI"]
-offset_left = 8.0
-offset_top = 568.0
-offset_right = 152.0
-offset_bottom = 600.0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/KeyPanel"]
-layout_mode = 0
-offset_right = 152.0
-offset_bottom = 33.0
-alignment = 1
-
-[node name="Keys" type="Label" parent="UI/KeyPanel/HBoxContainer"]
-material = SubResource("ShaderMaterial_u50mg")
-layout_mode = 2
-size_flags_vertical = 0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 10
-theme_override_fonts/font = ExtResource("8_6iyac")
-theme_override_font_sizes/font_size = 24
-text = "Keys: 0"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="TextureRect" type="TextureRect" parent="UI/KeyPanel/HBoxContainer"]
-layout_mode = 2
-texture = ExtResource("8_ynf5e")
-expand_mode = 2
-flip_h = true
-flip_v = true
-
-[node name="CoinPanel" type="Panel" parent="UI"]
-offset_left = 8.0
-offset_top = 608.0
-offset_right = 168.0
-offset_bottom = 640.0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/CoinPanel"]
-layout_mode = 0
-offset_right = 160.0
-offset_bottom = 33.0
-alignment = 1
-
-[node name="Coins" type="Label" parent="UI/CoinPanel/HBoxContainer"]
-material = SubResource("ShaderMaterial_cbgmd")
-layout_mode = 2
-size_flags_vertical = 0
-theme_override_colors/font_color = Color(0.97982806, 0.8728079, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 10
-theme_override_fonts/font = ExtResource("8_6iyac")
-theme_override_font_sizes/font_size = 24
-text = "Coins: 0"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="TextureRect" type="TextureRect" parent="UI/CoinPanel/HBoxContainer"]
-layout_mode = 2
-texture = ExtResource("9_d1ilt")
-expand_mode = 2
-
-[node name="Label" type="Label" parent="UI"]
-offset_left = 936.0
-offset_top = 232.0
-offset_right = 1136.0
-offset_bottom = 260.0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("8_6iyac")
-theme_override_font_sizes/font_size = 20
-text = "Kills: 0"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Timer" type="Label" parent="UI"]
-material = SubResource("ShaderMaterial_3pmx8")
-anchors_preset = -1
-anchor_left = 0.3888889
-anchor_right = 0.6111111
-anchor_bottom = 0.09876543
-grow_horizontal = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.80784315)
-theme_override_constants/shadow_outline_size = 12
-theme_override_fonts/font = ExtResource("8_6iyac")
-theme_override_font_sizes/font_size = 32
-text = "00:00"
-horizontal_alignment = 1
-vertical_alignment = 1
-metadata/_edit_use_anchors_ = true
-
-[node name="ComboUI" type="Control" parent="UI"]
-layout_mode = 3
-anchor_left = 0.41666666
-anchor_top = 0.12345679
-anchor_right = 0.5833333
-anchor_bottom = 0.20987654
-script = ExtResource("16_pdsj5")
-metadata/_edit_use_anchors_ = true
-
-[node name="ComboText" type="Label" parent="UI/ComboUI"]
-material = SubResource("ShaderMaterial_pdsj5")
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0000001
-anchor_bottom = 0.515625
-grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
-theme_override_constants/shadow_outline_size = 20
-theme_override_fonts/font = ExtResource("8_6iyac")
-theme_override_font_sizes/font_size = 24
-text = "Combo x1"
-horizontal_alignment = 1
-vertical_alignment = 1
-metadata/_edit_use_anchors_ = true
-
-[node name="TimerBarBackground" type="ColorRect" parent="UI/ComboUI"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.20833325
-anchor_top = 0.6250001
-anchor_right = 0.79166657
-anchor_bottom = 0.7500001
-color = Color(0.16862746, 0.16862746, 0.16862746, 0.78431374)
-metadata/_edit_use_anchors_ = true
-
-[node name="TimerBar" type="ColorRect" parent="UI/ComboUI/TimerBarBackground"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.0234375
-anchor_top = 0.25
-anchor_right = 0.984375
-anchor_bottom = 0.75
-metadata/_edit_use_anchors_ = true
-
-[node name="BonusText" type="Label" parent="UI/ComboUI"]
-material = SubResource("ShaderMaterial_gt3je")
-layout_mode = 0
-anchor_left = 0.041666668
-anchor_top = 0.71428573
-anchor_right = 0.9479167
-anchor_bottom = 1.1428572
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("8_6iyac")
-theme_override_font_sizes/font_size = 10
-text = "x1.2 Drop Chance!"
-horizontal_alignment = 1
-vertical_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="InventoryUI" type="Control" parent="UI" groups=["inventory"]]
 layout_mode = 3
@@ -2424,6 +2239,206 @@ theme_override_constants/shadow_outline_size = 2
 theme_override_fonts/font = ExtResource("8_6iyac")
 theme_override_font_sizes/font_size = 6
 text = "Unique"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Buttons" type="Control" parent="UI"]
+visible = false
+layout_mode = 3
+anchor_left = 0.8828125
+anchor_top = 0.8796296
+anchor_right = 1.0147569
+anchor_bottom = 1.0154321
+offset_left = -25.0
+offset_top = -18.0
+offset_right = -25.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="RemoveEnemies" type="Button" parent="UI/Buttons"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -68.0
+offset_right = 68.0
+offset_bottom = 40.0
+grow_horizontal = 2
+focus_mode = 0
+theme = SubResource("Theme_hptm8")
+theme_override_font_sizes/font_size = 18
+text = "Kill Enemies"
+
+[node name="SpawnEnemy" type="Button" parent="UI/Buttons"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -69.0
+offset_top = -44.0
+offset_right = 69.0
+grow_horizontal = 2
+grow_vertical = 0
+focus_mode = 0
+theme = SubResource("Theme_344ge")
+theme_override_font_sizes/font_size = 18
+text = "Spawn Enemy"
+
+[node name="KeyPanel" type="Panel" parent="UI"]
+offset_left = 8.0
+offset_top = 568.0
+offset_right = 152.0
+offset_bottom = 600.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/KeyPanel"]
+layout_mode = 0
+offset_right = 152.0
+offset_bottom = 33.0
+alignment = 1
+
+[node name="Keys" type="Label" parent="UI/KeyPanel/HBoxContainer"]
+material = SubResource("ShaderMaterial_u50mg")
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 10
+theme_override_fonts/font = ExtResource("8_6iyac")
+theme_override_font_sizes/font_size = 24
+text = "Keys: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="UI/KeyPanel/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("8_ynf5e")
+expand_mode = 2
+flip_h = true
+flip_v = true
+
+[node name="CoinPanel" type="Panel" parent="UI"]
+offset_left = 8.0
+offset_top = 608.0
+offset_right = 168.0
+offset_bottom = 640.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/CoinPanel"]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 33.0
+alignment = 1
+
+[node name="Coins" type="Label" parent="UI/CoinPanel/HBoxContainer"]
+material = SubResource("ShaderMaterial_cbgmd")
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.97982806, 0.8728079, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 10
+theme_override_fonts/font = ExtResource("8_6iyac")
+theme_override_font_sizes/font_size = 24
+text = "Coins: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="UI/CoinPanel/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("9_d1ilt")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="UI"]
+offset_left = 936.0
+offset_top = 232.0
+offset_right = 1136.0
+offset_bottom = 260.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("8_6iyac")
+theme_override_font_sizes/font_size = 20
+text = "Kills: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Timer" type="Label" parent="UI"]
+material = SubResource("ShaderMaterial_3pmx8")
+anchors_preset = -1
+anchor_left = 0.3888889
+anchor_right = 0.6111111
+anchor_bottom = 0.09876543
+grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.80784315)
+theme_override_constants/shadow_outline_size = 12
+theme_override_fonts/font = ExtResource("8_6iyac")
+theme_override_font_sizes/font_size = 32
+text = "00:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="ComboUI" type="Control" parent="UI"]
+layout_mode = 3
+anchor_left = 0.41666666
+anchor_top = 0.12345679
+anchor_right = 0.5833333
+anchor_bottom = 0.20987654
+script = ExtResource("16_pdsj5")
+metadata/_edit_use_anchors_ = true
+
+[node name="ComboText" type="Label" parent="UI/ComboUI"]
+material = SubResource("ShaderMaterial_pdsj5")
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0000001
+anchor_bottom = 0.515625
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_outline_size = 20
+theme_override_fonts/font = ExtResource("8_6iyac")
+theme_override_font_sizes/font_size = 24
+text = "Combo x1"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="TimerBarBackground" type="ColorRect" parent="UI/ComboUI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.20833325
+anchor_top = 0.6250001
+anchor_right = 0.79166657
+anchor_bottom = 0.7500001
+color = Color(0.16862746, 0.16862746, 0.16862746, 0.78431374)
+metadata/_edit_use_anchors_ = true
+
+[node name="TimerBar" type="ColorRect" parent="UI/ComboUI/TimerBarBackground"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0234375
+anchor_top = 0.25
+anchor_right = 0.984375
+anchor_bottom = 0.75
+metadata/_edit_use_anchors_ = true
+
+[node name="BonusText" type="Label" parent="UI/ComboUI"]
+material = SubResource("ShaderMaterial_gt3je")
+layout_mode = 0
+anchor_left = 0.041666668
+anchor_top = 0.71428573
+anchor_right = 0.9479167
+anchor_bottom = 1.1428572
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("8_6iyac")
+theme_override_font_sizes/font_size = 10
+text = "x1.2 Drop Chance!"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true

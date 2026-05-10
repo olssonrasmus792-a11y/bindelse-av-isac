@@ -5,7 +5,7 @@ extends CharacterBody2D
 @export var projectile_scene = preload("res://Scenes/Enemies/water_projectile.tscn")
 @export var xp_orb_scene = preload("res://Scenes/xp_orb.tscn")
 
-@export var xp_orbs: int = 5
+@export var xp_orbs: int = 4
 @export var xp_reward: int = 4
 var xp_reward_range = 2 # xp rewards +- range
 
@@ -36,6 +36,7 @@ var knockback_timer := 0.0
 signal enemy_died
 
 func _ready() -> void:
+	animated_sprite_2d.speed_scale = randf_range(0.9, 1.1)
 	hp_bar.max_value = max_health
 	hp_bar.value = max_health
 	direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
@@ -122,6 +123,7 @@ func spawn_projectile(p_speed: int) -> void:
 	
 	await animated_sprite_2d.animation_finished
 	
+	animated_sprite_2d.speed_scale = randf_range(0.9, 1.1)
 	animated_sprite_2d.play("Idle")
 	
 	var projectile = projectile_scene.instantiate()

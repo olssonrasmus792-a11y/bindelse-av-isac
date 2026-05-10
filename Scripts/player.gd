@@ -42,6 +42,7 @@ var spawn_pos
 @export var level: int = 1
 @export var xp: int = 0
 @export var xp_to_next_level: int = 100
+@export var xp_gain: float = 1.00
 
 @export var damage = 20
 @export var crit_chance = 0.05
@@ -301,6 +302,12 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 		if body.is_in_group("boss"):
 			if !body.spawned:
 				return
+			
+			for item in GameState.taken_items:
+				if item.name == "Boss Killer" and body.is_in_group("boss"):
+					item.tracked_stat_values[0] += int((total_damage * (1 + (GameState.get_item_count("Boss Killer") * 0.15))) - total_damage)
+					break
+			
 			total_damage *= (1 + (GameState.get_item_count("Boss Killer") * 0.15))
 		
 		var ft_text = "-" + str(int(total_damage))
@@ -317,8 +324,6 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 				item.tracked_stat_values[1] = crit_damage_dealt
 			if item.name == "Critter":
 				item.tracked_stat_values[1] = total_crit_hits
-			if item.name == "Boss Killer" and body.is_in_group("boss"):
-				item.tracked_stat_values[0] += int((total_damage * (1 + (GameState.get_item_count("Boss Killer") * 0.15))) - total_damage)
 		
 		GameState.total_damage_dealt += total_damage
 		body.take_damage(total_damage)
@@ -458,7 +463,10 @@ func calculate_base_damage():
 	for item in GameState.taken_items:
 		if item.name == "Greedy ahh":
 			item.tracked_stat_values[1] += int((total_damage * (1 + 0.05 * GameState.get_item_count("Greedy ahh") * coin_groups)) - total_damage)
+			break
 	total_damage *= 1 + 0.05 * GameState.get_item_count("Greedy ahh") * coin_groups
+	
+	total_damage *= 1.00 + GameState.meta_bonus_damage
 	
 	return total_damage
 
@@ -526,6 +534,10 @@ func add_xp(amount: int):
 	if is_dead:
 		return
 	
+	xp_gain = 1.00 + GameState.meta_bonus_xp_gain
+	
+	amount = int(amount * xp_gain)
+	
 	GameState.total_xp_gained += amount
 	xp += amount
 	spawn_floating_text("+" + str(amount) + "xp", Color.DEEP_SKY_BLUE, global_position)
@@ -539,8 +551,6 @@ func level_up():
 	
 	# Scale XP requirement (important!)
 	xp_to_next_level = int(xp_to_next_level * 1.25)
-	
-	print("Level Up! Now level ", level)
 	
 	# Trigger upgrade selection here
 	upgrade_cards()
@@ -571,8 +581,9 @@ func handle_animations(delta):
 		visuals.scale.x = -1 if input_direction.x > 0 else 1
 		animated_sprite_2d.animation = "Roll"
 		
-		collision_shape_2d.disabled = true
 		roll_collision.disabled = false
+		await get_tree().physics_frame
+		collision_shape_2d.disabled = true
 		
 		roll_light.visible = true
 		point_light_2d.visible = false

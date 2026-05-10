@@ -13,6 +13,7 @@ func _ready() -> void:
 
 func _on_start_button_pressed() -> void:
 	clear_all_muddies()
+	GameState.reset_game()
 	get_tree().change_scene_to_file("res://Scenes/LoadingScreen.tscn")
 
 func _on_shop_button_pressed() -> void:
@@ -22,6 +23,7 @@ func _on_options_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/settings.tscn")
 
 func _on_quit_button_pressed() -> void:
+	GameState.save_game()
 	get_tree().quit()
 
 func _on_muddy_button_pressed() -> void:
