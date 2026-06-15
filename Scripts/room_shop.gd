@@ -154,6 +154,7 @@ func draw_path_cells(start: Vector2i, end: Vector2i):
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
+		MusicManager.play_music(MusicManager.SONGS["SHOP_MUSIC"])
 		switch_camera()
 		light_up_room()
 		spawn_items()

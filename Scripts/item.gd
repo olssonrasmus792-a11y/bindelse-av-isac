@@ -39,16 +39,25 @@ var rarity_color: Color = Color.WHITE
 var fade_time := 0.0
 @export var fade_speed := 2.0
 var shimmer_time := 0.0
-var rarity_intensity := 0.0
+var rarity_intensity := 1.0
 var rainbow_time := 0.0
+
+var final_price: int
+
 
 func _ready():
 	if data:
 		sprite.texture = data.icon
 		label.text = data.name
 		description.text = data.description
+
+		# ❗ ONLY CHANGE: do NOT modify data.price
+		final_price = data.price - GameState.get_upgrade_count("Negotiator")
+		final_price = clamp(final_price, 0, INF)
+
 		if sprite.material:
 			sprite.material = sprite.material.duplicate()
+
 		match data.rarity:
 			ItemData.Rarity.COMMON:
 				rarity_color = Color(0.873, 0.873, 0.873, 1.0)
@@ -69,13 +78,15 @@ func _ready():
 
 		rarity.modulate = rarity_color
 		label.modulate = rarity_color
-		price.text = "Purchase (E) : " + str(data.price) + " Coins"
+
 		base_y = sprite.position.y
 		pop_up.visible = false
+
 		if data.unique:
 			unique_panel.visible = true
 		else:
 			unique_panel.visible = false
+
 		if data.description == "":
 			description.text = get_stats_text(data.stats, data.stat_colors)
 
@@ -89,15 +100,13 @@ func _physics_process(delta):
 		position += velocity * delta
 		sprite.rotation += velocity.x * 0.002
 
-		# Hit ground
 		if global_position.y >= floor_y:
 			global_position.y = floor_y
 			has_bounced = true
 
-			# Bounce
 			if abs(velocity.y) > 50:
 				velocity.y *= -bounce
-				velocity.x *= randf_range(0.4, 0.8) # lose some sideways speed
+				velocity.x *= randf_range(0.4, 0.8)
 				area_2d.monitoring = true
 				shadow.visible = true
 			else:
@@ -107,6 +116,7 @@ func _physics_process(delta):
 				shadow.visible = true
 	else:
 		sprite.rotation = lerp_angle(sprite.rotation, 0.0, 5 * delta)
+
 
 func _process(delta: float) -> void:
 	time += delta
@@ -121,10 +131,7 @@ func _process(delta: float) -> void:
 	if mat:
 		if data.rarity == ItemData.Rarity.LEGENDARY:
 			rainbow_time += delta * 0.3
-			
 			var rainbow = get_rainbow_color(rainbow_time)
-			
-			# 🔥 rainbow shimmer
 			mat.set_shader_parameter("shine_color", rainbow)
 			mat.set_shader_parameter("intensity", rarity_intensity)
 		else:
@@ -132,21 +139,24 @@ func _process(delta: float) -> void:
 			mat.set_shader_parameter("intensity", rarity_intensity)
 
 	mat.set_shader_parameter("sweep_pos", fmod(shimmer_time, 1.5) - 0.25)
-	
-	if GameState.coins >= data.price:
+
+	# ❗ ONLY CHANGE HERE TOO
+	if GameState.coins >= final_price:
 		price.modulate = Color.LIME_GREEN
 	else:
 		price.modulate = Color.RED
-	
-	if data.price == 0:
+
+	if final_price == 0:
 		price.text = "Take Item (E) : Free"
+	else:
+		price.text = "Purchase (E) : " + str(final_price) + " Coins"
 
 func get_rainbow_color(t: float) -> Color:
 	return Color.from_hsv(fmod(t, 1.0), 1.0, 1.0)
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and pop_up.visible == true:
-		if GameState.coins >= data.price:
+		if GameState.coins >= final_price:
 			buy_item()
 		else:
 			deny.play()
@@ -155,29 +165,31 @@ func _input(event: InputEvent) -> void:
 				guys.not_enough_money()
 
 func buy_item():
-	GameState.coins -= data.price
+	# ❗ ONLY CHANGE HERE
+	GameState.coins -= final_price
 	GameState.taken_items.append(data)
 	GameState.calculate_stats()
 	apply_item(data.name)
-	
+
 	if data.unique:
 		item_registry.items.erase(data)
-	
+
 	for guys in guy:
-		if data.price == 0:
+		if final_price == 0:
 			guys.free_item_taken()
 		else:
 			guys.item_bought()
-	
+
 	inventory.display_inventory()
-	
+
 	var sound = purchase
-	if data.price == 0:
+	if final_price == 0:
 		sound = pop
+
 	sound.get_parent().remove_child(sound)
 	get_tree().current_scene.add_child(sound)
 	sound.play()
-	
+
 	queue_free()
 
 func apply_item(item_name):
@@ -197,16 +209,17 @@ func apply_item(item_name):
 			GameState.muddy_spawn_rate *= 1.2
 		"Clover":
 			GameState.luck += 0.15
+			for item in GameState.taken_items:
+				if item.name == "Clover":
+					item.tracked_stat_values[0] = int(GameState.luck * 100)
 			GameState.calculate_stats()
-		"Critty":
-			player.crit_chance += 0.1
 		"Knock knock":
-			player.knockback = 650 * (1 + (GameState.get_item_count("Knock knock") * 0.25))
+			player.knockback *= 1.25
 		"Old boot":
 			player.max_speed *= 1.10
 			player.speed = player.max_speed
 		"Big Crit":
-			player.crit_damage = 1.5 + GameState.get_item_count("Big Crit") * 0.15
+			player.crit_damage += 0.15
 			for item in GameState.taken_items:
 				if item.name == "Big Crit":
 					item.tracked_stat_values[0] = int(player.crit_damage * 100)
@@ -219,6 +232,10 @@ func apply_item(item_name):
 					item.tracked_stat_values[1] = player.total_crit_hits
 		"Stopwatch":
 			GameState.time_left += 30
+		"Credit Card":
+			for item in GameState.taken_items:
+				if item.name == "Credit Card":
+					item.tracked_stat_values[0] = int(player.chest_bonus_damage * 100)
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):

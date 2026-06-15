@@ -56,7 +56,7 @@ func _process(delta: float) -> void:
 	var distance = global_position.distance_to(player.global_position)
 	if magnet_enabled and distance < magnet_range:
 		var direction = (player.global_position - global_position).normalized()
-		speed = lerp(speed, 500.0, 0.1)
+		speed = lerp(speed, 650.0, 0.1)
 		global_position += direction * speed * delta
 
 func _on_pick_up_area_body_entered(body: Node2D) -> void:

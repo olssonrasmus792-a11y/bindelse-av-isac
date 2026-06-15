@@ -19,7 +19,27 @@ var meta_bonus_xp_gain := 0.00
 var meta_bonus_damage := 0.00
 var meta_bonus_time := 0
 
+var lightning_sword_level := 1
+var lightning_sword_xp := 0
+var lightning_sword_xp_needed := 200
+
+var lightning_sword_damage := 20
+var lightning_sword_knockback := 500
+var lightning_sword_crit_chance := 0.05
+var lightning_sword_crit_damage := 1.4
+
+var baseball_bat_level := 1
+var baseball_bat_xp := 0
+var baseball_bat_xp_needed := 200
+
+var baseball_bat_damage := 15
+var baseball_bat_knockback := 1000
+var baseball_bat_crit_chance := 0.15
+var baseball_bat_crit_damage := 1.6
+
 var leaderboard_kills := 0
+
+var weapon = ""
 
 var keys := 0
 var coins := 0
@@ -52,7 +72,7 @@ var is_fighting = false
 var boss_spawned = false
 var boss_killed = false
 
-var taken_upgrades := {}
+var taken_upgrades: Array[CardData] = []
 var taken_items: Array[ItemData] = []
 
 func _ready() -> void:
@@ -76,7 +96,6 @@ func reset_game():
 	total_xp_gained = 0
 	total_coins_gained = 0
 	rooms_cleared = 0
-	combo = 0
 	coin_drop_chance = 0.1
 	luck = 0.0
 	muddy_spawn_rate = muddy_base_spawn_rate
@@ -90,11 +109,20 @@ func reset_game():
 	
 	taken_upgrades.clear()
 	taken_items.clear()
+	
+	combo = 0
 
 func get_item_count(item_name: String) -> int:
 	var count = 0
 	for item in taken_items:
 		if item.name == item_name:
+			count += 1
+	return count
+
+func get_upgrade_count(upgrade_name: String) -> int:
+	var count = 0
+	for upgrade in taken_upgrades:
+		if upgrade.card_name == upgrade_name:
 			count += 1
 	return count
 
@@ -126,38 +154,102 @@ func calculate_stats():
 
 func add_meta_stats():
 	meta_runs_played += 1
-
+	
 	if boss_killed:
 		meta_runs_completed += 1
-
+	
 	meta_rooms_cleared += rooms_cleared
 	meta_kills += kills
 	meta_damage += total_damage_dealt
-	meta_coins += total_coins_gained
 	meta_xp += total_xp_gained
-
+	
+	if weapon == "Baseball Bat":
+		baseball_bat_xp += total_xp_gained
+	
+	if weapon == "Lightning Sword":
+		lightning_sword_xp += total_xp_gained
+	
 	while meta_xp >= meta_xp_needed:
 		meta_xp -= meta_xp_needed
 		meta_xp_needed = int(meta_xp_needed * 1.25)
 		meta_level += 1
-
+	
+	while baseball_bat_xp >= baseball_bat_xp_needed:
+		baseball_bat_xp -= baseball_bat_xp_needed
+		baseball_bat_xp_needed = int(baseball_bat_xp_needed * 1.2)
+		baseball_bat_level += 1
+		
+		if baseball_bat_level == 10:
+			baseball_bat_knockback += 250
+		if baseball_bat_level == 15:
+			baseball_bat_damage += 5
+		if baseball_bat_level == 25:
+			baseball_bat_crit_chance += 0.15
+		if baseball_bat_level == 50:
+			baseball_bat_crit_damage += 0.4
+	
+	while lightning_sword_xp >= lightning_sword_xp_needed:
+		lightning_sword_xp -= lightning_sword_xp_needed
+		lightning_sword_xp_needed = int(lightning_sword_xp_needed * 1.2)
+		lightning_sword_level += 1
+		
+		if lightning_sword_level == 5:
+			lightning_sword_knockback += 200
+		if lightning_sword_level == 10:
+			lightning_sword_crit_chance += 0.1
+		if lightning_sword_level == 15:
+			lightning_sword_crit_damage += 0.2
+		if lightning_sword_level == 25:
+			lightning_sword_damage += 10
+	
 	if player_name != "":
 		var result = await SilentWolf.Scores.get_scores().sw_get_scores_complete
 		
 		if result.success:
 			var best_score := 0
-
+			
 			for entry in result.scores:
 				if entry.player_name == player_name:
 					best_score = max(best_score, int(entry.score))
-
+			
 			if leaderboard_kills > best_score:
 				await SilentWolf.Scores.save_score(player_name, leaderboard_kills).sw_save_score_complete
-
+	
 	save_game()
+
+func set_master_volume():
+	var bus_index = AudioServer.get_bus_index("Master")
+	
+	var linear = GameSettings.master_volume / 100.0
+	var db = linear_to_db(linear)
+	
+	AudioServer.set_bus_volume_db(bus_index, db)
+
+func set_music_volume():
+	var bus_index = AudioServer.get_bus_index("Music")
+	
+	var linear = GameSettings.music_volume / 100.0
+	var db = linear_to_db(linear)
+	
+	AudioServer.set_bus_volume_db(bus_index, db)
+
+func set_sfx_volume():
+	var bus_index = AudioServer.get_bus_index("Sfx")
+	
+	var linear = GameSettings.sfx_volume / 100.0
+	var db = linear_to_db(linear)
+	
+	AudioServer.set_bus_volume_db(bus_index, db)
 
 func set_default_meta():
 	player_name = ""
+	
+	GameSettings.master_volume = 25
+	GameSettings.music_volume = 25
+	GameSettings.sfx_volume = 25
+	set_music_volume()
+	GameSettings.screen_shake_strength = 1.0
+	GameSettings.dark_mode = false
 	
 	meta_runs_played = 0
 	meta_runs_completed = 0
@@ -173,10 +265,34 @@ func set_default_meta():
 	meta_bonus_xp_gain = 0.00
 	meta_bonus_damage = 0.00
 	meta_bonus_time = 0
+	
+	lightning_sword_level = 1
+	lightning_sword_xp = 0
+	lightning_sword_xp_needed = 200
+	
+	lightning_sword_damage = 20
+	lightning_sword_knockback = 500
+	lightning_sword_crit_chance = 0.05
+	lightning_sword_crit_damage = 1.4
+	
+	baseball_bat_level = 1
+	baseball_bat_xp = 0
+	baseball_bat_xp_needed = 200
+	
+	baseball_bat_damage = 15
+	baseball_bat_knockback = 1000
+	baseball_bat_crit_chance = 0.15
+	baseball_bat_crit_damage = 1.6
 
 func save_game():
 	var save_data = {
 		"player_name": player_name,
+		
+		"master_volume": GameSettings.master_volume,
+		"music_volume": GameSettings.music_volume,
+		"sfx_volume": GameSettings.sfx_volume,
+		"screen_shake": GameSettings.screen_shake_strength,
+		"dark_mode": GameSettings.dark_mode,
 		
 		"meta_runs_played": meta_runs_played,
 		"meta_runs_completed": meta_runs_completed,
@@ -191,7 +307,25 @@ func save_game():
 		
 		"meta_bonus_xp_gain": meta_bonus_xp_gain,
 		"meta_bonus_damage": meta_bonus_damage,
-		"meta_bonus_time": meta_bonus_time
+		"meta_bonus_time": meta_bonus_time,
+		
+		"lightning_sword_level": lightning_sword_level,
+		"lightning_sword_xp": lightning_sword_xp,
+		"lightning_sword_xp_needed": lightning_sword_xp_needed,
+		
+		"lightning_sword_damage": lightning_sword_damage,
+		"lightning_sword_knockback": lightning_sword_knockback,
+		"lightning_sword_crit_chance": lightning_sword_crit_chance,
+		"lightning_sword_crit_damage": lightning_sword_crit_damage,
+		
+		"baseball_bat_level": baseball_bat_level,
+		"baseball_bat_xp": baseball_bat_xp,
+		"baseball_bat_xp_needed": baseball_bat_xp_needed,
+		
+		"baseball_bat_damage": baseball_bat_damage,
+		"baseball_bat_knockback": baseball_bat_knockback,
+		"baseball_bat_crit_chance": baseball_bat_crit_chance,
+		"baseball_bat_crit_damage": baseball_bat_crit_damage,
 	}
 	
 	var file = FileAccess.open("user://save.json", FileAccess.WRITE)
@@ -211,6 +345,16 @@ func load_game():
 	
 	player_name = data.get("player_name", "")
 	
+	GameSettings.master_volume = data.get("master_volume", 25)
+	GameSettings.music_volume = data.get("music_volume", 25)
+	GameSettings.sfx_volume = data.get("sfx_volume", 25)
+	GameSettings.screen_shake_strength = data.get("screen_shake", 1.0)
+	GameSettings.dark_mode = data.get("dark_mode", false)
+	
+	set_master_volume()
+	set_music_volume()
+	set_sfx_volume()
+	
 	meta_runs_played = data.get("meta_runs_played", 0)
 	meta_runs_completed = data.get("meta_runs_completed", 0)
 	meta_rooms_cleared = data.get("meta_rooms_cleared", 0)
@@ -225,3 +369,28 @@ func load_game():
 	meta_bonus_xp_gain = data.get("meta_bonus_xp_gain", 0.00)
 	meta_bonus_damage = data.get("meta_bonus_damage", 0.00)
 	meta_bonus_time = data.get("meta_bonus_time", 0)
+	
+	lightning_sword_level = data.get("lightning_sword_level", 1)
+	lightning_sword_xp = data.get("lightning_sword_xp", 0)
+	lightning_sword_xp_needed = data.get("lightning_sword_xp_needed", 200)
+	
+	lightning_sword_damage = data.get("lightning_sword_damage", 20)
+	lightning_sword_knockback = data.get("lightning_sword_knockback", 500)
+	lightning_sword_crit_chance = data.get("lightning_sword_crit_chance", 0.05)
+	lightning_sword_crit_damage = data.get("lightning_sword_crit_damage", 1.4)
+	
+	baseball_bat_level = data.get("baseball_bat_level", 1)
+	baseball_bat_xp = data.get("baseball_bat_xp", 0)
+	baseball_bat_xp_needed = data.get("baseball_bat_xp_needed", 200)
+	
+	baseball_bat_damage = data.get("baseball_bat_damage", 15)
+	baseball_bat_knockback = data.get("baseball_bat_knockback", 1000)
+	baseball_bat_crit_chance = data.get("baseball_bat_crit_chance", 0.15)
+	baseball_bat_crit_damage = data.get("baseball_bat_crit_damage", 1.6)
+
+func reset_progress():
+	if FileAccess.file_exists("user://save.json"):
+		DirAccess.remove_absolute("user://save.json")
+	
+	set_default_meta()
+	save_game()

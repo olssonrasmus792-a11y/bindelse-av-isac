@@ -15,12 +15,12 @@
 [ext_resource type="Resource" uid="uid://kaawdx4hh4wx" path="res://Resources/Items/Key.tres" id="12_25dkt"]
 [ext_resource type="Resource" uid="uid://btbxodi47yw7x" path="res://Resources/Items/Knockback.tres" id="13_ueu10"]
 [ext_resource type="Resource" uid="uid://cjwa2lnrhmfwv" path="res://Resources/Items/MovementSpeed.tres" id="14_tvw8s"]
-[ext_resource type="Resource" uid="uid://cuqt71wu4kg4j" path="res://Resources/Items/MuddyDefense.tres" id="15_27wym"]
 [ext_resource type="Resource" uid="uid://bytoufctsc6w3" path="res://Resources/Items/RollAttack.tres" id="16_3vj0p"]
 [ext_resource type="Resource" uid="uid://bttjieyngdwuw" path="res://Resources/Items/Sword.tres" id="17_agsdj"]
 [ext_resource type="Resource" uid="uid://lw1pkr086uwd" path="res://Resources/Items/Time.tres" id="18_0i56o"]
+[ext_resource type="Resource" uid="uid://61p4t35yatc8" path="res://Resources/Items/ChestDamage.tres" id="18_dpam4"]
 
 [resource]
 script = ExtResource("2_yg5u8")
-items = Array[ExtResource("1_wq147")]([ExtResource("2_im1qu"), ExtResource("3_0i56o"), ExtResource("4_dpam4"), ExtResource("5_xxhtf"), ExtResource("6_47snv"), ExtResource("7_o4iis"), ExtResource("8_u0yds"), ExtResource("9_ikmkv"), ExtResource("10_efwr0"), ExtResource("11_jfyk1"), ExtResource("12_25dkt"), ExtResource("13_ueu10"), ExtResource("14_tvw8s"), ExtResource("15_27wym"), ExtResource("16_3vj0p"), ExtResource("17_agsdj"), ExtResource("18_0i56o")])
+items = Array[ExtResource("1_wq147")]([ExtResource("2_im1qu"), ExtResource("3_0i56o"), ExtResource("4_dpam4"), ExtResource("5_xxhtf"), ExtResource("6_47snv"), ExtResource("7_o4iis"), ExtResource("8_u0yds"), ExtResource("9_ikmkv"), ExtResource("10_efwr0"), ExtResource("11_jfyk1"), ExtResource("12_25dkt"), ExtResource("13_ueu10"), ExtResource("14_tvw8s"), ExtResource("16_3vj0p"), ExtResource("17_agsdj"), ExtResource("18_0i56o"), ExtResource("18_dpam4")])
 metadata/_custom_type_script = "uid://cfd1qjr4iacya"

@@ -1,14 +1,18 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://d01s1nvexklur"]
+[gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://d01s1nvexklur"]
 
 [ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="1_5ksdi"]
 [ext_resource type="Texture2D" uid="uid://8br0jwustric" path="res://Textures/heart.png" id="1_vtkyv"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_58n43"]
+atlas = ExtResource("1_vtkyv")
+region = Rect2(14, 31, 156, 153)
+
 [resource]
 script = ExtResource("1_5ksdi")
-icon = ExtResource("1_vtkyv")
+icon = SubResource("AtlasTexture_58n43")
 card_name = "Healthy Boy"
-max_level = 3
-description = "Increase your maximum health by 1"
+max_level = 5
+description = "Increase your maximum health"
 rarity = "Rare"
 increase = "+1 HP"
 metadata/_custom_type_script = "uid://c01qet416k22c"

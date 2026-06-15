@@ -90,7 +90,7 @@ shader_parameter/height = 0.5
 shader_parameter/frequency = 10.0
 shader_parameter/speed = 1.0
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Node2D" groups=["item"]]
 z_index = 2
 script = ExtResource("1_76mu4")
 item_registry = ExtResource("2_jmixh")
@@ -282,12 +282,15 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Purchase" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_btogu")
+bus = &"Sfx"
 
 [node name="Deny" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_tnst4")
+bus = &"Sfx"
 
 [node name="Pop" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_renmp")
+bus = &"Sfx"
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

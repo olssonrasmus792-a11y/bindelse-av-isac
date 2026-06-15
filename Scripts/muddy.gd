@@ -4,7 +4,7 @@ extends CharacterBody2D
 @export var xp_orb_scene = preload("res://Scenes/xp_orb.tscn")
 
 @export var xp_orbs: int = 5
-@export var xp_reward: int = 4
+@export var xp_reward: float = 4.0
 var xp_reward_range = 2 # xp rewards +- range
 
 @export var speed := 275
@@ -41,6 +41,7 @@ func _ready() -> void:
 	hit_particles.emitting = false
 
 func _physics_process(delta):
+	hp_bar.visible = health < max_health
 	hp_bar.value = lerp(hp_bar.value, float(health), 0.25)
 	scale = Vector2(scale_factor, scale_factor)
 	
@@ -90,14 +91,10 @@ func _physics_process(delta):
 			get_tree().current_scene.add_child(ft)  # Or a dedicated UI node
 		
 		if collider.is_in_group("player") and knockback_timer > 0.0:
-			if GameState.get_item_count("Friend") > 0:
+			if GameState.get_upgrade_count("Friend") > 0:
 				play_bounce_sound()
 				knockback_velocity = knockback_velocity.bounce(normal)
 				direction = knockback_velocity.normalized()
-				for item in GameState.taken_items:
-					if item.name == "Friend":
-						item.tracked_stat_values[0] += 1
-						continue
 			else:
 				collider.take_damage(1, global_position, knockback_strength_player)
 	

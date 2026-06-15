@@ -1,5 +1,7 @@
 extends SubViewport
 
+@onready var player := get_tree().get_first_node_in_group("player")
+
 @onready var full_size_cam: Camera2D = $FullSizeCam
 @onready var camera_2d: Camera2D = $"../../../../Player/Camera2D"
 @onready var sub_viewport_container: SubViewportContainer = $".."
@@ -19,9 +21,13 @@ func _ready() -> void:
 	label_3.visible = false
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("map") and (!get_tree().paused or opening) and !GameState.boss_spawned:
+	if event.is_action_pressed("map") and (!get_tree().paused or opening):
+		if GameState.is_fighting:
+			spawn_floating_text("Can't open map in combat!", Color.RED, player.global_position)
+			return
+		
 		opening = !sub_viewport_container.visible
-
+		
 		sub_viewport_container.visible = opening
 		label.visible = opening
 		label_2.visible = !opening
@@ -31,3 +37,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		
 		if opening:
 			full_size_cam.global_position = camera_2d.global_position
+
+func spawn_floating_text(text: String, color: Color, pos: Vector2):
+	var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
+	var ft = floating_text_scene.instantiate()
+	
+	ft.text = text
+	ft.modulate = color
+	ft.global_position = pos
+	
+	get_tree().current_scene.call_deferred("add_child", ft)

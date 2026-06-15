@@ -26,6 +26,11 @@ var player_is_close = false
 var chest_opened = false
 var coin_amount
 
+var can_open = true
+var free_chest = false
+var item_amount = 1
+var item_fly_length_mult = 1.0
+
 var local_items: Array[ItemData] = []
 
 var lines = [
@@ -56,12 +61,15 @@ func _process(delta: float) -> void:
 	if GameState.boss_spawned:
 		queue_free()
 
-	label_2.modulate = Color.LIME_GREEN if GameState.keys >= 1 else Color.RED
+	label_2.modulate = Color.LIME_GREEN if (GameState.keys >= 1 or free_chest) else Color.RED
+	
+	if !can_open:
+		label_2.modulate = Color.RED
 
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("interact") and player_is_close and !chest_opened:
-		if GameState.keys > 0:
+	if event.is_action_pressed("interact") and player_is_close and !chest_opened and can_open:
+		if GameState.keys > 0 or free_chest:
 			label.modulate.a = 1
 			label.position.y = -88
 			label.text = lines.pick_random()
@@ -92,16 +100,32 @@ func open_chest():
 	chest_opened = true
 	pop_up.visible = false
 	gpu_particles_2d.emitting = true
-
-	GameState.keys -= 1
-
+	
+	if !free_chest:
+		GameState.keys -= 1
+	
 	for i in range(coin_amount):
 		drop_coin(global_position)
+	
+	for i in range(item_amount):
+		var dir = 0
+		
+		if item_amount == 1:
+			dir = [-1, 1].pick_random()
+		else:
+			dir = -1 if i % 2 == 0 else 1
+		
+		spawn_item(dir)
+	
+	var player = get_tree().get_first_node_in_group("player")
+	
+	player.chest_bonus_damage += 0.04 * GameState.get_item_count("Credit Card")
+	for item in GameState.taken_items:
+		if item.name == "Credit Card":
+			item.tracked_stat_values[0] = int(player.chest_bonus_damage * 100)
 
-	spawn_item()
 
-
-func spawn_item():
+func spawn_item(dir):
 	local_items = item_registry.items.duplicate()
 	
 	if local_items.is_empty():
@@ -133,10 +157,9 @@ func spawn_item():
 	item.global_position = global_position + Vector2(0, -16)
 	item.data = runtime_data
 
-	var dir = [-1, 1].pick_random()
 	item.flying = true
-	item.velocity = Vector2(randf_range(80, 140) * dir, -300)
-	item.floor_y = global_position.y + 10
+	item.velocity = Vector2(randf_range(80 * item_fly_length_mult, 140 * item_fly_length_mult) * dir, -300 * item_fly_length_mult)
+	item.floor_y = global_position.y + (10 * item_fly_length_mult)
 
 	get_tree().current_scene.add_child(item)
 
@@ -146,19 +169,23 @@ func get_weighted_random_item(items: Array):
 	var adjusted_weights := []
 
 	var luck = GameState.luck
+	var luck_multiplier = 1.0 + (luck / 100.0)
 
 	for item in items:
 		var weight = rarity_weights.get(item.rarity, 1)
 
 		match item.rarity:
 			ItemData.Rarity.COMMON:
-				weight *= max(0.1, 1.0 - luck * 0.05)
+				weight *= pow(luck_multiplier, -0.6)
+
 			ItemData.Rarity.RARE:
-				weight *= 1.0 + luck * 0.06
+				weight *= pow(luck_multiplier, 0.3)
+
 			ItemData.Rarity.EPIC:
-				weight *= 1.0 + luck * 0.10
+				weight *= pow(luck_multiplier, 0.7)
+
 			ItemData.Rarity.LEGENDARY:
-				weight *= 1.0 + luck * 0.15
+				weight *= pow(luck_multiplier, 1.0)
 
 		adjusted_weights.append(weight)
 		total_weight += weight

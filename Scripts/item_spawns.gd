@@ -57,19 +57,23 @@ func get_weighted_random_item(items: Array):
 	var adjusted_weights := []
 
 	var luck = GameState.luck
+	var luck_multiplier = 1.0 + (luck / 100.0)
 
 	for item in items:
 		var weight = rarity_weights.get(item.rarity, 1)
 
 		match item.rarity:
 			ItemData.Rarity.COMMON:
-				weight *= max(0.1, 1.0 - luck * 0.05)
+				weight *= pow(luck_multiplier, -0.6)
+
 			ItemData.Rarity.RARE:
-				weight *= 1.0 + luck * 0.06
+				weight *= pow(luck_multiplier, 0.3)
+
 			ItemData.Rarity.EPIC:
-				weight *= 1.0 + luck * 0.10
+				weight *= pow(luck_multiplier, 0.7)
+
 			ItemData.Rarity.LEGENDARY:
-				weight *= 1.0 + luck * 0.15
+				weight *= pow(luck_multiplier, 1.0)
 
 		adjusted_weights.append(weight)
 		total_weight += weight

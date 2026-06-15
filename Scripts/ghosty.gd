@@ -3,8 +3,8 @@ extends CharacterBody2D
 @export var explosion_scene = preload("res://Scenes/Enemies/MuddyExplosion.tscn")
 @export var xp_orb_scene = preload("res://Scenes/xp_orb.tscn")
 
-@export var xp_orbs: int = 3
-@export var xp_reward: int = 3
+@export var xp_orbs: int = 2
+@export var xp_reward: float = 4.0
 var xp_reward_range = 1 # xp rewards +- range
 
 @export var base_speed := 350
@@ -47,6 +47,7 @@ func _ready() -> void:
 	base_y = animated_sprite_2d.position.y
 
 func _physics_process(delta):
+	hp_bar.visible = health < max_health
 	hp_bar.value = lerp(hp_bar.value, float(health), 0.25)
 	if knockback_timer > 0.0:
 		current_knockback = current_knockback.lerp(Vector2.ZERO, 5 * delta)
@@ -64,8 +65,9 @@ func _physics_process(delta):
 		var collider = collision.get_collider()
 		
 		if collider.is_in_group("player"):
-			collider.take_damage(1, global_position, knockback_strength_player)
-			apply_knockback(direction * -1, knockback_strength_player)
+			if !player.is_dead:
+				collider.take_damage(1, global_position, knockback_strength_player)
+				apply_knockback(direction * -1, knockback_strength_player)
 	
 	visuals.scale.x = 1 if direction.x > 0 else -1
 	

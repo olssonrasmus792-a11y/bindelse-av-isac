@@ -5,6 +5,7 @@ extends Control
 var scene_path := "res://Scenes/main.tscn"
 
 func _ready():
+	GameState.reset_game()
 	ResourceLoader.load_threaded_request(scene_path)
 
 func _process(_delta):

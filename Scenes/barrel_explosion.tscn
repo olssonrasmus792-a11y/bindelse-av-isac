@@ -68,6 +68,7 @@ shape = SubResource("CircleShape2D_3wmwm")
 [node name="Explosion" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_3wmwm")
 pitch_scale = 0.48
+bus = &"Sfx"
 
 [connection signal="finished" from="." to="." method="_on_finished"]
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

@@ -1,10 +1,11 @@
 extends CharacterBody2D
 
 @onready var player := get_tree().get_first_node_in_group("player")
+@onready var boss_hp_bar := get_tree().get_first_node_in_group("boss_hp_bar")
 
-@export var xp_orbs: int = 20
-@export var xp_reward: int = 10
-var xp_reward_range = 4 # xp rewards +- range
+@export var xp_orbs: int = 25
+@export var xp_reward: float = 15.0
+var xp_reward_range = 5 # xp rewards +- range
 
 @onready var projectile_scene = preload("res://Scenes/clover_projectile.tscn")
 @export var explosion_scene = preload("res://Scenes/Enemies/MuddyExplosion.tscn")
@@ -17,7 +18,6 @@ var xp_reward_range = 4 # xp rewards +- range
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var pop_up: Control = $PopUp
-@onready var the_only_thing_the_fear_is_you: AudioStreamPlayer = $TheOnlyThingTheFearIsYou
 
 @onready var splat: AudioStreamPlayer = $Splat
 
@@ -48,14 +48,20 @@ var normal_speed = 450
 var bullet_hell_speed = 400
 var burst_hell_speed = 150
 
-var max_health = 2000.0
+var max_health = 2500.0
 var health = max_health
+var evolve_health_trigger = 500
+var evolve_heal_amount := 750
+var evolve_heal_duration := 4.0
+
 signal enemy_died
 
 
 func _ready() -> void:
 	hp_bar.max_value = max_health
 	hp_bar.value = health
+	boss_hp_bar.max_value = max_health
+	boss_hp_bar.value = health
 	hp_bar.visible = false
 	pop_up.visible = false
 	shoot_timer.wait_time = 1.5
@@ -63,8 +69,11 @@ func _ready() -> void:
 	animated_sprite_2d.play("Sleep")
 	hit_particles.emitting = false
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	hp_bar.value = lerp(hp_bar.value, health, 0.25)
+	
+	boss_hp_bar.value = lerp(hp_bar.value, health, 0.25)
+	boss_hp_bar.get_child(0).text = "BOSS HP: " + str(int(health)) + "/" + str(int(max_health))
 	
 	if bullet_hell_active or burst_hell_active or spawning:
 		shoot_timer.paused = true
@@ -82,10 +91,15 @@ func _process(delta: float) -> void:
 		move_and_slide()
 	
 	if Input.is_action_just_pressed("interact") and player_in_spawn_range and pop_up.visible and !spawned:
+		get_parent().check_doors()
+		get_parent().close_room()
+		MusicManager.play_music(MusicManager.SONGS["BOSS_MUSIC"])
+		var active_ghosts = get_tree().get_nodes_in_group("ghosty")
+		for ghost in active_ghosts:
+			ghost.queue_free()
 		GameState.time_left = 0
 		pop_up.visible = false
 		spawning = true
-		the_only_thing_the_fear_is_you.play()
 		var cutscene = get_tree().get_first_node_in_group("cutscene")
 		cutscene.play("cutscene")
 		await cutscene.animation_finished
@@ -99,12 +113,6 @@ func _process(delta: float) -> void:
 	if animated_sprite_2d.animation == "Spawn":
 		for cam in get_tree().get_nodes_in_group("camera"):
 			cam.shake(0.25)
-	
-	if player.is_dead and the_only_thing_the_fear_is_you.playing and the_only_thing_the_fear_is_you.pitch_scale > 0.0:
-		the_only_thing_the_fear_is_you.pitch_scale -= 0.2 * delta
-	
-	if the_only_thing_the_fear_is_you.pitch_scale <= 0.05:
-		the_only_thing_the_fear_is_you.stop()
 	
 	if evolved:
 		scale = Vector2(3.5, 3.5)
@@ -356,9 +364,21 @@ func _on_shoot_timer_timeout() -> void:
 
 func evolve():
 	spawning = true
+	
 	animation_player.stop()
 	animation_player.play("evolve")
+	
+	var heal_per_tick = evolve_heal_amount / 40.0
+	
+	for i in range(40):
+		for cam in get_tree().get_nodes_in_group("camera"):
+			cam.shake(1.0)
+		health += heal_per_tick
+		health = clamp(health, 0, max_health)
+		await get_tree().create_timer(evolve_heal_duration / 40.0).timeout
+	
 	await animation_player.animation_finished
+	
 	spawning = false
 	evolved = true
 
@@ -371,8 +391,9 @@ func take_damage(damage):
 	animation_player.stop()
 	animation_player.play("hit")
 	
-	if health < max_health / 2.5 and !evolved and !spawning:
+	if health <= evolve_health_trigger and !evolved and !spawning:
 		evolve()
+		MusicManager.set_music_pitch(1.1, 6.0)
 	
 	if health <= 0:
 		explode(self)
@@ -462,6 +483,7 @@ func explode(enemy):
 		get_tree().current_scene.call_deferred("add_child", orb)
 	
 	emit_signal("enemy_died")
+	MusicManager.play_music(MusicManager.SONGS["GHOST_MUSIC"], 6.0)
 	GameState.boss_killed = true
 	enemy.queue_free()
 

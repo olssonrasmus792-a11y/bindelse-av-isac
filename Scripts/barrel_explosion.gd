@@ -66,9 +66,9 @@ func calculate_base_damage():
 	@warning_ignore("integer_division")
 	var coin_groups = floor(GameState.coins / 5)
 	
-	total_damage = explosion_damage
+	total_damage = explosion_damage * (1.00 + GameState.meta_bonus_damage)
 	
-	total_damage *= 1 + (GameState.get_item_count("Barrel") * 0.5)
+	total_damage *= 1 + (GameState.get_item_count("Barrel") * 0.4)
 	
 	for item in GameState.taken_items:
 		if item.name == "Barrel":

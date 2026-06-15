@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://61p4t35yatc8"]
+
+[ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_g8uo7"]
+[ext_resource type="Texture2D" uid="uid://ekwtd2j7ltcu" path="res://Textures/Chest sheet.png" id="1_goswr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e0dso"]
+atlas = ExtResource("1_goswr")
+region = Rect2(43, 28, 112, 126)
+
+[resource]
+script = ExtResource("1_g8uo7")
+name = "Credit Card"
+icon = SubResource("AtlasTexture_e0dso")
+price = 8
+rarity = 2
+description = "+4% Damage when you open a chest"
+stats = Array[String](["+4% Dmg per chest"])
+stat_colors = Array[Color]([Color(1, 0.56666666, 0, 1)])
+tracked_stats = Array[String](["Bonus Damage"])
+tracked_stat_values = Array[int]([0])
+tracked_stat_value_percentage = Array[bool]([true])
+tracked_stat_colors = Array[Color]([Color(1, 0.65, 0, 1)])
+metadata/_custom_type_script = "uid://i88s36u6b2ej"

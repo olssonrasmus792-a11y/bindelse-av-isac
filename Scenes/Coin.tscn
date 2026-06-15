@@ -31,6 +31,7 @@ shape = SubResource("CircleShape2D_jc2lb")
 [node name="Coin" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_wjfxq")
 pitch_scale = 1.38
+bus = &"Sfx"
 
 [connection signal="body_entered" from="PickUpArea" to="." method="_on_pick_up_area_body_entered"]
 [connection signal="body_exited" from="PickUpArea" to="." method="_on_pick_up_area_body_exited"]

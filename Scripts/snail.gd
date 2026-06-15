@@ -5,7 +5,7 @@ extends CharacterBody2D
 @export var xp_orb_scene = preload("res://Scenes/xp_orb.tscn")
 
 @export var xp_orbs: int = 5
-@export var xp_reward: int = 4
+@export var xp_reward: float = 4.0
 var xp_reward_range = 2 # xp rewards +- range
 
 @export var speed := 300
@@ -45,6 +45,7 @@ func _ready() -> void:
 	hit_particles.emitting = false
 
 func _physics_process(delta):
+	hp_bar.visible = health < max_health
 	hp_bar.value = lerp(hp_bar.value, float(health), 0.25)
 	direction = direction.normalized()
 	if knockback_timer > 0.0:

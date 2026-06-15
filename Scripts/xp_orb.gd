@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var xp_value: int = 10
+@export var xp_value: float = 0.0
 @export var speed: float = 0
 @export var magnet_range: float = 200
 var magnet_enabled := false
@@ -40,19 +40,10 @@ func _physics_process(delta):
 	# Magnet effect
 	if magnet_enabled and distance < magnet_range:
 		var direction = (player.global_position - global_position).normalized()
-		speed = lerp(speed, 500.0, 0.1)
+		speed = lerp(speed, 650.0, 0.1)
 		global_position += direction * speed * delta
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		body.add_xp(xp_value)
-		
-		var sound = pop
-		var pitch = randf_range(0.8, 1.8)
-		
-		sound.get_parent().remove_child(sound)
-		get_tree().current_scene.add_child(sound)
-		sound.pitch_scale = pitch
-		sound.play()
-		
 		queue_free()

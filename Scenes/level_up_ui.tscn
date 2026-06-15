@@ -1,0 +1,74 @@
+[gd_scene load_steps=7 format=3 uid="uid://uy5cyjgyjvp6"]
+
+[ext_resource type="Script" uid="uid://c6sacaqxdd5hw" path="res://Scripts/level_up_ui.gd" id="1_cq6r2"]
+[ext_resource type="PackedScene" uid="uid://cs1ddn6co6l0u" path="res://Scenes/upgrade_card.tscn" id="1_qmifi"]
+[ext_resource type="Resource" uid="uid://5yahx5dsd6rt" path="res://Resources/card_registry.tres" id="2_cy7y2"]
+[ext_resource type="AudioStream" uid="uid://c4p6crthvs73j" path="res://SFX/Pop4.wav" id="4_5fr50"]
+[ext_resource type="AudioStream" uid="uid://b0bl3n36b3g5f" path="res://SFX/Coin.wav" id="5_rnqn3"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="6_rnqn3"]
+
+[node name="LevelUpUI" type="CanvasLayer" groups=["level_up_ui"]]
+process_mode = 3
+script = ExtResource("1_cq6r2")
+card_registry = ExtResource("2_cy7y2")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.78431374)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="CardSlot1" type="Control" parent="HBoxContainer"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+
+[node name="UpgradeCard" parent="HBoxContainer/CardSlot1" instance=ExtResource("1_qmifi")]
+layout_mode = 1
+
+[node name="CardSlot2" type="Control" parent="HBoxContainer"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+
+[node name="UpgradeCard" parent="HBoxContainer/CardSlot2" instance=ExtResource("1_qmifi")]
+layout_mode = 1
+
+[node name="CardSlot3" type="Control" parent="HBoxContainer"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+
+[node name="UpgradeCard" parent="HBoxContainer/CardSlot3" instance=ExtResource("1_qmifi")]
+layout_mode = 1
+
+[node name="Pop4" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_5fr50")
+bus = &"Sfx"
+
+[node name="Coin" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_rnqn3")
+bus = &"Sfx"
+
+[node name="Discard" type="Button" parent="."]
+self_modulate = Color(1, 0, 0, 1)
+offset_left = 480.0
+offset_top = 596.0
+offset_right = 672.0
+offset_bottom = 639.0
+focus_mode = 0
+theme_override_colors/font_outline_color = Color(1, 1, 1, 0.19607843)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("6_rnqn3")
+theme_override_font_sizes/font_size = 26
+text = "DISCARD"
+
+[connection signal="pressed" from="Discard" to="." method="_on_discard_pressed"]

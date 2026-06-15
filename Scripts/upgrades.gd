@@ -43,9 +43,9 @@ func _process(_delta: float) -> void:
 	time_price = int(GameState.meta_bonus_time * 1 + 5)
 	
 	coins.text = "Coins: " + str(GameState.meta_coins)
-	bonus_xp.text = "Xp Gain: " + str(int(GameState.meta_bonus_xp_gain * 100)) + "%"
-	bonus_damage.text = "Bonus Damage: " + str(int(GameState.meta_bonus_damage * 100)) + "%"
-	bonus_time.text = "Extra Time: " + str(GameState.meta_bonus_time) + " Sec"
+	bonus_xp.text = "Xp Gain: +" + str(int(GameState.meta_bonus_xp_gain * 100)) + "%"
+	bonus_damage.text = "Base Damage: +" + str(int(GameState.meta_bonus_damage * 100)) + "%"
+	bonus_time.text = "Extra Time: +" + str(GameState.meta_bonus_time) + " Sec"
 	
 	xp_cost.text = "Cost: " + str(xp_price) + " Coins"
 	damage_cost.text = "Cost: " + str(damage_price) + " Coins"

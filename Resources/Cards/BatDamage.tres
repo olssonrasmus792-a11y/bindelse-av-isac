@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://dryt2ordt5h14"]
+
+[ext_resource type="Texture2D" uid="uid://dgebsljj7cksq" path="res://Textures/Bat_icon.png" id="1_00gu0"]
+[ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="1_057gx"]
+
+[resource]
+script = ExtResource("1_057gx")
+icon = ExtResource("1_00gu0")
+card_name = "Bigger Bonk"
+max_level = 5
+description = "Increase the damage of your ability"
+rarity = "Epic"
+increase = "+25% Bonk Damage"
+required_weapon = "Baseball Bat"
+metadata/_custom_type_script = "uid://c01qet416k22c"

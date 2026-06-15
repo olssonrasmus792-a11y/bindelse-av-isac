@@ -121,45 +121,6 @@ Button/styles/hover = SubResource("StyleBoxFlat_mrnx2")
 Button/styles/normal = SubResource("StyleBoxFlat_86ut3")
 Button/styles/pressed = SubResource("StyleBoxFlat_a14kq")
 
-[sub_resource type="Animation" id="Animation_mrnx2"]
-resource_name = "guy_flip"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Guy:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(-0.033333335, 0.2, 0.8333333),
-"transitions": PackedFloat32Array(0.42044875, 0.35355344, 1),
-"update": 0,
-"values": [Vector2(1000, 520), Vector2(1000, 472), Vector2(1000, 520)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Guy:rotation")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.03333333, 0.8),
-"transitions": PackedFloat32Array(1, 0.29730174, 1),
-"update": 0,
-"values": [0.0, 0.0, 6.2831855]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Guy:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.12666667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0.48200002, 0.48200002), Vector2(0.5, 0.5)]
-}
-
 [sub_resource type="Animation" id="Animation_86ut3"]
 length = 0.001
 tracks/0/type = "value"
@@ -197,6 +158,45 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(0.48200002, 0.48200002)]
+}
+
+[sub_resource type="Animation" id="Animation_mrnx2"]
+resource_name = "guy_flip"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Guy:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(-0.033333335, 0.2, 0.8333333),
+"transitions": PackedFloat32Array(0.42044875, 0.35355344, 1),
+"update": 0,
+"values": [Vector2(1000, 520), Vector2(1000, 472), Vector2(1000, 520)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Guy:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.03333333, 0.8),
+"transitions": PackedFloat32Array(1, 0.29730174, 1),
+"update": 0,
+"values": [0.0, 0.0, 6.2831855]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Guy:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.12666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.48200002, 0.48200002), Vector2(0.5, 0.5)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_a14kq"]
@@ -347,7 +347,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 12
 theme_override_fonts/font = ExtResource("2_j2uor")
 theme_override_font_sizes/font_size = 16
-text = "Xp gain: 0%"
+text = "Xp gain: +0%"
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
@@ -363,7 +363,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 12
 theme_override_fonts/font = ExtResource("2_j2uor")
 theme_override_font_sizes/font_size = 16
-text = "Bonus damage: 0%"
+text = "Base damage: +0%"
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
@@ -379,7 +379,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 12
 theme_override_fonts/font = ExtResource("2_j2uor")
 theme_override_font_sizes/font_size = 16
-text = "Extra Time: 0 sec"
+text = "Extra Time: +0 sec"
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
@@ -498,9 +498,11 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Deny" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_mrnx2")
+bus = &"Sfx"
 
 [node name="Purchase" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_86ut3")
+bus = &"Sfx"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

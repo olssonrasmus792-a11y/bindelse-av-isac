@@ -7,9 +7,12 @@ extends Node2D
 	preload("res://Scenes/Rooms/room2.tscn"),
 	preload("res://Scenes/Rooms/room3.tscn"),
 	preload("res://Scenes/Rooms/room4.tscn"),
-	preload("res://Scenes/Rooms/room_shop.tscn")
+	preload("res://Scenes/Rooms/storage_room.tscn"),
+	preload("res://Scenes/Rooms/room_shop.tscn"),
+	preload("res://Scenes/Rooms/challenge_room.tscn"),
+	preload("res://Scenes/Rooms/challenge_room_2.tscn")
 ]
-@export var room_weights = [5, 5, 5, 5, 0] # Hur stor chans att ett rum spawnar jämfört med andra
+@export var room_weights = [5, 5, 5, 5, 1, 0, 4, 4] # Hur stor chans att ett rum spawnar jämfört med andra
 
 @export var start_room_scene = preload("res://Scenes/Rooms/room_start.tscn")
 @export var boss_room_scene = preload("res://Scenes/Rooms/room_boss.tscn")
@@ -17,13 +20,13 @@ extends Node2D
 @export var shop_scene = preload("res://Scenes/Rooms/room_shop.tscn")
 var shop_rooms_spawned = 0
 var min_shop_rooms = 4
-var max_shop_rooms = 6
+var max_shop_rooms = 5
 
 @export var boss_room_distance := 5.7 # how many rooms away from start
 
 var shop_positions: Array = []
 @export var min_shop_distance_from_start := 1.4
-@export var max_shop_distance_from_start := 5
+@export var max_shop_distance_from_start := 5.1
 @export var min_shop_distance_between := 1.4
 
 
@@ -184,7 +187,7 @@ func place_room(grid_pos: Vector2):
 	placed_rooms[grid_pos] = room
 	room.doors_finalized()
 	
-	if randf() < chest_spawn_chance and grid_pos != start_pos and room_scene != room_scenes[4] and room_scene != boss_room_scene:
+	if randf() < chest_spawn_chance and grid_pos != start_pos and room_scene != room_scenes[4] and room_scene != boss_room_scene and room_scene != room_scenes[5] and room_scene != room_scenes[6] and room_scene != room_scenes[7]:
 		spawnChest(room)
 	
 	if grid_pos == start_pos:
@@ -269,7 +272,7 @@ func ensure_shop_exists():
 	
 	var attempts := 0
 	
-	while shop_rooms_spawned < min_shop_rooms and attempts < 200:
+	while shop_rooms_spawned < min_shop_rooms and attempts < 500:
 		attempts += 1
 		
 		var existing_positions = placed_rooms.keys()

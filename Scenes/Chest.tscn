@@ -259,9 +259,11 @@ vertical_alignment = 1
 
 [node name="Pop3" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_kd4jj")
+bus = &"Sfx"
 
 [node name="Deny" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_out8u")
+bus = &"Sfx"
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

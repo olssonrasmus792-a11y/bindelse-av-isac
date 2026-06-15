@@ -6,8 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://b7e1373ttxxxa" path="res://Textures/Enemies/clove 3 (2).png" id="4_isro6"]
 [ext_resource type="Texture2D" uid="uid://iab3k8551e4l" path="res://Textures/Enemies/clove 5.png" id="4_ykxau"]
 [ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="6_e8udj"]
-[ext_resource type="AudioStream" uid="uid://c2sf5qd76ethp" path="res://SFX/The only thing the fear is you.wav" id="7_s4bv2"]
 [ext_resource type="AudioStream" uid="uid://bvp100ykmdgiv" path="res://SFX/Whoosh.wav" id="8_ox02u"]
+[ext_resource type="AudioStream" uid="uid://btw6y3j0b5bsq" path="res://SFX/Grow.wav" id="9_0mfj1"]
 [ext_resource type="AudioStream" uid="uid://dicus887lpaph" path="res://SFX/Splat.wav" id="9_xngtj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3jepr"]
@@ -339,22 +339,22 @@ height = 78.85713
 [sub_resource type="CircleShape2D" id="CircleShape2D_isro6"]
 radius = 300.0
 
-[sub_resource type="Gradient" id="Gradient_e8udj"]
+[sub_resource type="Gradient" id="Gradient_xngtj"]
 offsets = PackedFloat32Array(0.5362319)
 colors = PackedColorArray(0.33, 0.016500005, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_ykxau"]
-gradient = SubResource("Gradient_e8udj")
+gradient = SubResource("Gradient_xngtj")
 width = 60
 height = 5
 repeat = 1
 
-[sub_resource type="Gradient" id="Gradient_s4bv2"]
+[sub_resource type="Gradient" id="Gradient_0mfj1"]
 offsets = PackedFloat32Array(0.5362319)
 colors = PackedColorArray(1.973361e-06, 0.7039606, 0.039600056, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_s4bv2"]
-gradient = SubResource("Gradient_s4bv2")
+gradient = SubResource("Gradient_0mfj1")
 width = 60
 height = 5
 repeat = 1
@@ -481,6 +481,18 @@ tracks/9/keys = {
 "update": 0,
 "values": [Vector2(0, -20)]
 }
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Grow:playing")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_s4bv2"]
 resource_name = "evolve"
@@ -593,6 +605,18 @@ tracks/8/keys = {
 "update": 0,
 "values": [Vector2(0, -20), Vector2(0, -1020), Vector2(0, -1020), Vector2(0, -20)]
 }
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Grow:playing")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.9),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_nw2lc"]
 resource_name = "hit"
@@ -700,7 +724,7 @@ turbulence_noise_scale = 3.077
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ykxau"]
 size = Vector2(352, 304)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u06aw"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xngtj"]
 bg_color = Color(0.28627452, 0.19215687, 0.16078432, 0.78431374)
 border_width_left = 6
 border_width_top = 6
@@ -716,14 +740,14 @@ shadow_color = Color(0, 0, 0, 0.6627451)
 shadow_size = 2
 
 [sub_resource type="Theme" id="Theme_s4bv2"]
-Panel/styles/panel = SubResource("StyleBoxFlat_u06aw")
+Panel/styles/panel = SubResource("StyleBoxFlat_xngtj")
 
-[sub_resource type="Gradient" id="Gradient_76mu4"]
+[sub_resource type="Gradient" id="Gradient_03pqu"]
 offsets = PackedFloat32Array(0, 0.75333333, 1)
 colors = PackedColorArray(1, 1, 1, 1, 0.56666666, 0.56666666, 0.56666666, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_v847c"]
-gradient = SubResource("Gradient_76mu4")
+gradient = SubResource("Gradient_03pqu")
 width = 1000
 height = 1000
 fill = 2
@@ -851,16 +875,17 @@ color = Color(1, 1, 0.9411765, 1)
 energy = 0.75
 texture = SubResource("GradientTexture2D_v847c")
 
-[node name="TheOnlyThingTheFearIsYou" type="AudioStreamPlayer" parent="."]
-process_mode = 3
-stream = ExtResource("7_s4bv2")
-volume_db = -4.0
-
 [node name="Whoosh" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_ox02u")
+bus = &"Sfx"
+
+[node name="Grow" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_0mfj1")
+bus = &"Sfx"
 
 [node name="Splat" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("9_xngtj")
+bus = &"Sfx"
 
 [connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]

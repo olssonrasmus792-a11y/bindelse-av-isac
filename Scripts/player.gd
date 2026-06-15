@@ -1,6 +1,9 @@
 extends CharacterBody2D
 
+@export var CHEATS = false
+
 @onready var visuals: Node2D = $Visuals
+@onready var sword: Node2D = $Sword
 @onready var animated_sprite_2d: AnimatedSprite2D = $Visuals/AnimatedSprite2D
 @onready var point_light_2d: PointLight2D = $Node2D/PointLight2D
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
@@ -11,11 +14,11 @@ extends CharacterBody2D
 @onready var stamina_recharge: Timer = $StaminaRecharge
 @onready var attack_cooldown: Timer = $AttackCooldown
 @onready var health_bar: HBoxContainer = $"../UI/health_panel/health_bar"
-@onready var stamina_bar: HBoxContainer = $"../UI/stamina_panel/stamina_bar"
+@onready var stamina_bar: Control = $"../UI/stamina_panel/stamina_bar"
 @onready var cooldown_bar: ProgressBar = $CooldownBar
 @onready var health_panel: PanelContainer = $"../UI/health_panel"
 @onready var stamina_panel: PanelContainer = $"../UI/stamina_panel"
-@onready var attack_area: Area2D = $Sword/SwordPivot/AttackArea
+@onready var attack_area: Area2D = $Sword/SwordPivot/SwordSprite/AttackArea
 @onready var sword_sprite: AnimatedSprite2D = $Sword/SwordPivot/SwordSprite
 @onready var color_timer: Timer = $ColorTimer
 @onready var ambient_light: CanvasModulate = $"../Ambient Light"
@@ -23,9 +26,12 @@ extends CharacterBody2D
 @onready var damage_vignette: TextureRect = $"../UI/DamageVignette"
 @onready var low_battery: Panel = $LowBattery
 @onready var glass_break: AudioStreamPlayer = $GlassBreak
+@onready var pop_3: AudioStreamPlayer = $Pop3
 @onready var punch_1: AudioStreamPlayer = $Punch1
 @onready var punch_2: AudioStreamPlayer = $Punch2
 @onready var punch_3: AudioStreamPlayer = $Punch3
+@onready var pop_4: AudioStreamPlayer = $Pop4
+@onready var bonk: AudioStreamPlayer = $Bonk
 @onready var sparks: AudioStreamPlayer = $Sparks
 @onready var deny: AudioStreamPlayer = $Deny
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -40,9 +46,13 @@ enum ColorState { YELLOW, RED, GREEN }
 var spawn_pos
 
 @export var level: int = 1
-@export var xp: int = 0
-@export var xp_to_next_level: int = 100
+@export var xp: float = 0.0
+@export var xp_to_next_level: int = 80
 @export var xp_gain: float = 1.00
+var xp_combo := 0
+var combo_timer := 0.0
+
+const COMBO_RESET_TIME := 1.0
 
 @export var damage = 20
 @export var crit_chance = 0.05
@@ -51,6 +61,12 @@ var spawn_pos
 @export var knockback = 650
 @export var total_crit_hits = 0
 @export var crit_damage_dealt = 0
+@export var chest_bonus_damage = 0.0
+
+@export var ability_name = ""
+@export var ability_cooldown = 5.0
+@export var ability_timer = 0.0
+@export var ability_damage_mult = 1.0
 
 @export var explosion_size = 1.0
 @export var explosion_damage = 20
@@ -69,6 +85,7 @@ var chain_falloff := 0.75    # damage multiplier per jump
 @export var max_health = 6
 @export var health = max_health
 
+const STAMINA_BAR_WIDTH := 220.0
 @export var max_stamina = 6
 @export var stamina = max_stamina
 @export var stamina_regen = 1.0 # Sekunder per stamina
@@ -99,6 +116,8 @@ var death_light_base = 0.4      # min energy
 var death_light_time = 0.0       # internal timer
 @export var death_duration = 4.25  # seconds before full death
 
+var hitstop_used := false
+var bonking = false
 var rolling = false
 var roll_speed_mult = 1.5
 var roll_direction : Vector2
@@ -119,21 +138,59 @@ func _ready() -> void:
 	sword_sprite.visible = true
 	low_battery.visible = false
 	attack_area.monitoring = false
+	stamina_bar.custom_minimum_size = Vector2(STAMINA_BAR_WIDTH, 32)
+	stamina_bar.size = Vector2(STAMINA_BAR_WIDTH, 32)
 	update_health()
 	update_stamina_ui()
+	
+	
+	if GameState.weapon == "Lightning Sword":
+		sword_sprite.animation = "Idle_Sword"
+		ability_name = "Boomerang"
+		ability_cooldown = 10.0
+		ability_damage_mult = 1.0
+		damage = GameState.lightning_sword_damage
+		knockback = GameState.lightning_sword_knockback
+		crit_chance = GameState.lightning_sword_crit_chance
+		crit_damage = GameState.lightning_sword_crit_damage
+		if GameState.lightning_sword_level >= 50:
+			xp_gain *= 1.5
+	
+	if GameState.weapon == "Baseball Bat":
+		sword_sprite.animation = "Idle_Bat"
+		ability_name = "Bonk"
+		ability_cooldown = 5.0
+		ability_damage_mult = 1.0
+		damage = GameState.baseball_bat_damage
+		knockback = GameState.baseball_bat_knockback
+		crit_chance = GameState.baseball_bat_crit_chance
+		crit_damage = GameState.baseball_bat_crit_damage
+	
+	CardRegistry.new()
+	
+	damage *= 1.00 + GameState.meta_bonus_damage
 
 func _physics_process(delta):
 	if !is_dead:
 		get_input()
 		move_and_slide()
 	handle_attacking(delta)
+	handle_abilities(delta)
 	handle_animations(delta)
 	handle_movement(delta)
 	handle_color()
 	handle_slows(delta)
 	
+	if combo_timer > 0:
+		combo_timer -= delta
+		if combo_timer <= 0:
+			xp_combo = 0
+	
 	if stamina < max_stamina and stamina_recharge.is_stopped():
-		stamina_recharge.start(stamina_regen)
+		if GameState.is_fighting or GameState.boss_spawned or GameState.boss_killed:
+			stamina_recharge.start(stamina_regen)
+		else:
+			stamina_recharge.start(stamina_regen / 4)
 	
 	if invulnerability_timer > 0:
 		var alpha = remap(invulnerability_timer, 0, invulnerability_duration, 0.75, 0.5)
@@ -156,19 +213,21 @@ func _input(event: InputEvent) -> void:
 		enemies_hit_roll.clear()
 		update_stamina_ui()
 	
-	if event.is_action_pressed("swap_color") and !attacking and !switching_color:
-		next_color()
-		apply_color()
-		switching_color = true
-		color_timer.start(0.2)
+	if event.is_action_pressed("Ability") and ability_name != "":
+		use_ability()
 	
-	if event.is_action_pressed("level_up"):
-		var upgrade_scene = get_tree().get_first_node_in_group("upgrade_screen")
+	if event.is_action_pressed("level_up") and CHEATS:
+		pop_3.play()
 		get_tree().paused = true
-		upgrade_scene.spawn_random_cards(3)
+		var ui = get_tree().get_first_node_in_group("level_up_ui")
+		ui.show_level_up()
 	
-	if event.is_action_pressed("c"):
+	if event.is_action_pressed("c") and CHEATS:
 		GameState.coins += 10
+		max_stamina += 1
+		max_health += 1
+		update_stamina_ui()
+		update_health()
 
 func handle_movement(delta):
 	if is_dead:
@@ -213,8 +272,9 @@ func _on_roll_timer_timeout() -> void:
 	rolling = false
 
 func handle_attacking(_delta):
-
 	if Input.is_action_pressed("attack") and !attacking and !recharging and stamina > 0 and !rolling and !is_dead:
+		if sword.thrown:
+			return
 		attacking = true
 		cooldown_bar.value = 0.0
 		cooldown_bar.visible = true
@@ -223,6 +283,7 @@ func handle_attacking(_delta):
 		stamina -= 1
 		update_stamina_ui()
 		enemies_hit.clear()
+		hitstop_used = false
 
 	# Detect attacking from animation
 	attacking = animation_player.is_playing()
@@ -289,6 +350,12 @@ func handle_color():
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	var aim_direction = (get_global_mouse_position() - global_position).normalized()
 	
+	if sword.thrown:
+		if sword.returning:
+			aim_direction = (global_position - sword.sword_sprite.global_position).normalized()
+		else:
+			aim_direction = sword.throw_direction
+	
 	if body.is_in_group("enemies"):
 		if enemies_hit.has(body):
 			return  # already hit this attack
@@ -330,9 +397,11 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 		body.apply_knockback(aim_direction, knockback)
 		
 		for cam in get_tree().get_nodes_in_group("camera"):
-			cam.shake(0.75)
+			cam.shake(0.5)
 		
-		hit_stop(0.05, 0.25)
+		if !hitstop_used:
+			hit_stop(0.05, 0.25)
+			hitstop_used = true
 		
 		spawn_floating_text(ft_text, text_color, body.global_position)
 		
@@ -438,6 +507,9 @@ func spawn_lightning(start: Vector2, end: Vector2):
 func play_hit_sound():
 	var roll = randf()
 	
+	if bonking:
+		bonk.play(0.27)
+	
 	if roll < 0.33:
 		punch_1.pitch_scale = randf_range(1.2, 1.6)
 		punch_1.play(0.1)
@@ -460,15 +532,76 @@ func calculate_base_damage():
 			item.tracked_stat_values[0] += 5
 	total_damage += GameState.get_item_count("Sword") * 5
 	
+	total_damage *= 1 + chest_bonus_damage
+	
 	for item in GameState.taken_items:
 		if item.name == "Greedy ahh":
 			item.tracked_stat_values[1] += int((total_damage * (1 + 0.05 * GameState.get_item_count("Greedy ahh") * coin_groups)) - total_damage)
 			break
 	total_damage *= 1 + 0.05 * GameState.get_item_count("Greedy ahh") * coin_groups
 	
-	total_damage *= 1.00 + GameState.meta_bonus_damage
+	if bonking:
+		total_damage *= ability_damage_mult
 	
 	return total_damage
+
+func handle_abilities(delta):
+	if ability_timer > 0:
+		ability_timer -= delta
+		if ability_timer <= 0:
+			ability_timer = 0
+			spawn_floating_text("Ability Ready!", Color(0.288, 0.93, 0.299, 1.0), global_position)
+
+func use_ability():
+	if is_dead:
+		return
+	
+	if ability_timer > 0:
+		deny.play()
+		spawn_floating_text("%.1f" % ability_timer + " Sec", Color(2.184, 0.0, 0.168, 1.0), global_position)
+		return
+	
+	ability_timer = ability_cooldown
+	
+	animation_player.stop()
+	
+	if ability_name == "Boomerang":
+		boomerang_ability()
+	
+	if ability_name == "Bonk":
+		bonk_ability()
+
+func boomerang_ability():
+	enemies_hit.clear()
+	hitstop_used = false
+	sword.throw_sword()
+
+func bonk_ability():
+	var base_knockback = knockback
+	knockback = base_knockback * 2
+	
+	bonking = true
+	attacking = true
+	cooldown_bar.value = 0.0
+	cooldown_bar.visible = true
+	attack_timer.start(attack_speed)
+	play_sword_swing()
+	enemies_hit.clear()
+	hitstop_used = false
+	
+	# Tween: normal -> big -> small
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_BACK)
+	tween.set_ease(Tween.EASE_OUT)
+	tween.tween_property(sword_sprite, "scale", Vector2(0.5, 0.5), 0.2)
+	tween.set_ease(Tween.EASE_IN)
+	tween.tween_property(sword_sprite, "scale", Vector2(0.25, 0.25), 0.25)
+	
+	await attack_timer.timeout
+	
+	sword_sprite.scale = Vector2(0.25, 0.25)
+	knockback = base_knockback
+	bonking = false
 
 func _on_stamina_recharge_timeout() -> void:
 	stamina += 1
@@ -496,13 +629,29 @@ func update_health():
 	if health < 1:
 		die()
 	
+	if health > max_health:
+		health = max_health
+	
 	for child in health_bar.get_children():
 		child.queue_free()
+	
+	# Read the available width BEFORE adding any icons
+	var available_width = health_bar.size.x
 	
 	for i in range(max_health):
 		var icon = health_icon_scene.instantiate()
 		health_bar.add_child(icon)
 		icon.modulate.a = 1.0 if i < health else 0.1
+	
+	await get_tree().process_frame
+	
+	if max_health > 1:
+		var icon_width = health_bar.get_child(0).size.x
+		var total_icon_width = icon_width * max_health
+		var separation = int((available_width - total_icon_width) / (max_health - 1))
+		health_bar.add_theme_constant_override("separation", separation)
+	else:
+		health_bar.add_theme_constant_override("separation", 0)
 	
 	health_bar.queue_sort()
 	health_panel.queue_sort()
@@ -512,19 +661,26 @@ func update_stamina_ui():
 	for child in stamina_bar.get_children():
 		child.queue_free()
 
-	# Add current health icons
-	for i in range(max_stamina):
+	var count = max_stamina
+	if count <= 0:
+		return
+
+	var spacing := (STAMINA_BAR_WIDTH - 10) / float(count)
+
+	for i in range(count):
 		var icon = stamina_icon_scene.instantiate()
 		stamina_bar.add_child(icon)
+
+		# position each icon inside fixed width
+		icon.position = Vector2(i * spacing + 10, 0)
+
+		# center inside slot
+		icon.position.x += spacing * 0.5 - icon.size.x * 0.5
+
+		# visual state
 		icon.modulate.a = 1.0 if i < stamina else 0.1
-	
-	if stamina < 2 or (stamina == 1 and stamina_recharge.time_left > stamina_regen / 2):
-		low_battery.visible = true
-	else:
-		low_battery.visible = false
-	
-	stamina_bar.queue_sort()
-	stamina_panel.queue_sort()
+
+	low_battery.visible = stamina < 2 or (stamina == 1 and stamina_recharge.time_left > stamina_regen / 2)
 
 func no_stamina():
 	spawn_floating_text("No Stamina!", Color.RED, global_position)
@@ -542,6 +698,14 @@ func add_xp(amount: int):
 	xp += amount
 	spawn_floating_text("+" + str(amount) + "xp", Color.DEEP_SKY_BLUE, global_position)
 	
+	xp_combo += 1
+	combo_timer = COMBO_RESET_TIME
+	
+	var pitch = lerp(0.8, 1.6, clamp(xp_combo / 100.0, 0.0, 1.0))
+	pop_4.pitch_scale += randf_range(-0.1, 0.2)
+	pop_4.pitch_scale = pitch
+	pop_4.play()
+	
 	while xp >= xp_to_next_level:
 		xp -= xp_to_next_level
 		level_up()
@@ -550,18 +714,20 @@ func level_up():
 	level += 1
 	
 	# Scale XP requirement (important!)
-	xp_to_next_level = int(xp_to_next_level * 1.25)
+	xp_to_next_level = int(xp_to_next_level * 1.24)
 	
 	# Trigger upgrade selection here
 	upgrade_cards()
 
 func upgrade_cards(): #Använd för xp system sen
-	var upgrade_scene = get_tree().get_first_node_in_group("upgrade_screen")
+	pop_3.play()
 	get_tree().paused = true
-	upgrade_scene.spawn_random_cards(3)
+	var ui = get_tree().get_first_node_in_group("level_up_ui")
+	ui.show_level_up()
 
 func handle_animations(delta):
-	var health_state : int = round(remap(health, 1, max_health, 1, 3))
+	@warning_ignore("narrowing_conversion")
+	var health_state : int = remap(health, 0, max_health, 1, 3)
 	collision_shape_2d.disabled = false
 	roll_collision.disabled = true
 	roll_light.visible = false
@@ -605,6 +771,9 @@ func die():
 	health = 0
 	death_light_time = 0
 	
+	MusicManager.set_music_muffle(0.5, 2.5)
+	MusicManager.set_music_pitch(0.5, 2.5)
+	
 	for cam in get_tree().get_nodes_in_group("camera"):
 		cam.shake(1.5)
 	
@@ -639,6 +808,10 @@ func _on_death_timer_timeout():
 	
 	var cutscene = get_tree().get_first_node_in_group("cutscene")
 	cutscene.play("stats")
+	
+	var active_ghosts = get_tree().get_nodes_in_group("ghosty")
+	for ghost in active_ghosts:
+		ghost.queue_free()
 
 func respawn_player():
 	is_dead = false

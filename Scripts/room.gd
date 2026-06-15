@@ -33,7 +33,7 @@ var room_height = GameState.room_tiles_y * tile_size
 var start_pos : Vector2
 var start_room_pos : Vector2
 
-var key_spawn_rate = 0.75
+var key_spawn_rate = 0.85
 var item_pos_offset = 50
 
 var room_entered = false
@@ -156,6 +156,10 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		light_up_room()
 		room_entered = true
 		player_is_in_room = true
+		if GameState.timer_started:
+			MusicManager.set_music_muffle(0.0)
+			MusicManager.set_music_pitch(1.0)
+			MusicManager.play_music(MusicManager.SONGS["COMBAT_MUSIC_1"])
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body.name == "Player":
@@ -233,9 +237,19 @@ func open_room():
 		open_door(door_right)
 
 func on_room_cleared():
+	if not is_inside_tree():
+		return
+	
 	open_room()
 	GameState.is_fighting = false
 	GameState.rooms_cleared += 1
+	
+	if get_tree().get_nodes_in_group("player") == null:
+		return
+	
+	for player in get_tree().get_nodes_in_group("player"):
+		player.health += GameState.get_upgrade_count("Room Service") * 2
+		player.update_health()
 
 func close_door(door):
 	door.get_node("Door").visible = true
@@ -306,6 +320,9 @@ func spawn_enemies():
 			arrow_manager.create_arrow(enemy)
 
 func _on_enemy_died(enemy):
+	if not is_inside_tree():
+		return
+	
 	var last_position = enemy.global_position
 	alive_enemies.erase(enemy)
 	

@@ -41,5 +41,6 @@ metadata/_edit_use_anchors_ = true
 [node name="Pop" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_25c7d")
 pitch_scale = 1.94
+bus = &"Sfx"
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

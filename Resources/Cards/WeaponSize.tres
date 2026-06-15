@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://cqdpp2brs0jfq"]
+
+[ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="1_0miav"]
+[ext_resource type="Texture2D" uid="uid://dgebsljj7cksq" path="res://Textures/Bat_icon.png" id="1_hcb17"]
+
+[resource]
+script = ExtResource("1_0miav")
+icon = ExtResource("1_hcb17")
+card_name = "Sweeping Edge"
+max_level = 3
+description = "Increase the size of your weapon"
+rarity = "Legendary"
+increase = "+25% Size"
+metadata/_custom_type_script = "uid://c01qet416k22c"

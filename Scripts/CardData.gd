@@ -8,3 +8,5 @@ class_name CardData
 @export var description: String
 @export var rarity: String
 @export var increase: String
+
+@export var required_weapon: String = ""

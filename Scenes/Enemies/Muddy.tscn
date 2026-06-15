@@ -91,12 +91,15 @@ texture_scale = 0.5
 [node name="Bounce1" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_j1std")
 pitch_scale = 1.27
+bus = &"Sfx"
 
 [node name="Bounce2" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_ltj6o")
+bus = &"Sfx"
 
 [node name="Splat" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_ltj6o")
+bus = &"Sfx"
 
 [node name="HitParticles" type="GPUParticles2D" parent="."]
 emitting = false
@@ -109,6 +112,7 @@ randomness = 0.5
 process_material = SubResource("ParticleProcessMaterial_3eg22")
 
 [node name="HpBar" type="TextureProgressBar" parent="."]
+visible = false
 offset_left = -29.0
 offset_top = -46.0
 offset_right = 31.0

@@ -375,6 +375,48 @@ vertices = PackedVector2Array(1016, 840, 1088, 808, 1168, 840, 1200, 912, 1168, 
 affect_navigation_mesh = true
 carve_navigation_mesh = true
 
+[node name="Info" type="Label" parent="."]
+material = SubResource("ShaderMaterial_qc2pr")
+offset_left = 896.0
+offset_top = 678.0
+offset_right = 1304.0
+offset_bottom = 840.0
+pivot_offset = Vector2(372, 106)
+theme_override_colors/font_color = Color(0.64, 0.448, 0.17919998, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.19607843)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 20
+theme_override_fonts/font = ExtResource("17_rua2k")
+theme_override_font_sizes/font_size = 33
+text = "Find the boss room before the timer hits 00:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Keybinds" type="Label" parent="."]
+material = SubResource("ShaderMaterial_qc2pr")
+offset_left = 729.0
+offset_top = 872.0
+offset_right = 1472.0
+offset_bottom = 1120.0
+pivot_offset = Vector2(372, 106)
+theme_override_colors/font_color = Color(0.64, 0.448, 0.17919998, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.19607843)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 16
+theme_override_fonts/font = ExtResource("17_rua2k")
+theme_override_font_sizes/font_size = 24
+text = "Wasd to walk
+LMB to attack
+Q to use ability
+E to interact
+Space to roll
+Tab/m to open map"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
 [connection signal="body_entered" from="EnemySpawnArea" to="." method="_on_enemy_spawn_area_body_entered"]

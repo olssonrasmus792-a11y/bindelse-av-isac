@@ -75,3 +75,4 @@ texture_scale = 0.5
 
 [node name="StoneFall" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_1mut1")
+bus = &"Sfx"

@@ -298,6 +298,7 @@ randomness = 0.5
 process_material = SubResource("ParticleProcessMaterial_q8vby")
 
 [node name="HpBar" type="TextureProgressBar" parent="."]
+visible = false
 offset_left = -30.0
 offset_top = -32.0
 offset_right = 30.0

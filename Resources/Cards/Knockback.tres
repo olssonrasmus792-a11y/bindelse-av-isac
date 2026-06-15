@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://ctjne6pv6020r"]
+
+[ext_resource type="Texture2D" uid="uid://dgebsljj7cksq" path="res://Textures/Bat_icon.png" id="1_mgojm"]
+[ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="2_mgojm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4xi1h"]
+atlas = ExtResource("1_mgojm")
+region = Rect2(20, 10, 59, 76)
+
+[resource]
+script = ExtResource("2_mgojm")
+icon = SubResource("AtlasTexture_4xi1h")
+card_name = "Walter White"
+max_level = 5
+description = "I am the one who knocks"
+rarity = "Uncommon"
+increase = "+10% Knockback"
+metadata/_custom_type_script = "uid://c01qet416k22c"

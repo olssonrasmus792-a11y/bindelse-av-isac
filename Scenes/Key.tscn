@@ -14,12 +14,15 @@ script = ExtResource("1_i3td7")
 
 [node name="Pop1" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_a0md6")
+bus = &"Sfx"
 
 [node name="Pop2" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_kqgj8")
+bus = &"Sfx"
 
 [node name="Pop4" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_11gjn")
+bus = &"Sfx"
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = -35.0

@@ -37,5 +37,6 @@ shape = SubResource("CapsuleShape2D_m5w3l")
 stream = ExtResource("3_rp70x")
 volume_db = -5.778
 pitch_scale = 0.5
+bus = &"Sfx"
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

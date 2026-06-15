@@ -176,6 +176,7 @@ func draw_path_cells(start: Vector2i, end: Vector2i):
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
+		MusicManager.fade_out_music()
 		switch_camera()
 		light_up_room()
 		room_entered = true
@@ -201,10 +202,6 @@ func _input(event: InputEvent) -> void:
 			zoomed_out = true
 
 func _on_enemy_spawn_area_body_entered(body: Node2D) -> void:
-	if body.name == "Player" and room.position != start_room_pos and !room_closed and !room_cleared:
-		check_doors()
-		close_room()
-	
 	if body.is_in_group("player"):
 		GameState.current_room = self
 		can_spawn_boss = true
@@ -257,6 +254,13 @@ func on_room_cleared():
 	open_room()
 	GameState.is_fighting = false
 	GameState.rooms_cleared += 1
+	
+	if get_tree().get_nodes_in_group("player") == null:
+		return
+	
+	for player in get_tree().get_nodes_in_group("player"):
+		player.health += GameState.get_upgrade_count("Room Service") * 2
+		player.update_health()
 
 func close_door(door):
 	door.get_node("Door").visible = true
