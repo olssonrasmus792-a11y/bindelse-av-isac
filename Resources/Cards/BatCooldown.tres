@@ -15,4 +15,5 @@ max_level = 3
 description = "Decrease the cooldown of your ability"
 rarity = "Epic"
 increase = "-1.5 Seconds"
+required_weapon = "baseball_bat"
 metadata/_custom_type_script = "uid://c01qet416k22c"

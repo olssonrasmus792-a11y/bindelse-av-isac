@@ -2,21 +2,10 @@ extends Control
 @onready var player := get_tree().get_first_node_in_group("player")
 @onready var camera_2d: Camera2D = $Camera2D
 @onready var color_rect: ColorRect = $ColorRect
+@onready var weapon_container: HBoxContainer = $ScrollContainer/WeaponContainer
+@onready var sort_button: Button = $SortButton
 
-@onready var lightning_sword: Panel = $LightningSword
-@onready var lightning_sword_level: Panel = $LightningSwordLevel
-@onready var sword_progress: ProgressBar = $SwordProgress
-@onready var sword_level: Button = $SwordLevel
-@onready var lightning_sword_lock: Panel = $LightningSwordLock
-
-@onready var baseball_bat: Panel = $BaseballBat
-@onready var baseball_bat_level: Panel = $BaseballBatLevel
-@onready var bat_progress: ProgressBar = $BatProgress
-@onready var bat_level: Button = $BatLevel
-
-var rarity_color: Color = Color.WHITE
-var shimmer_time := 0.0
-var rarity_intensity := 0.5
+var sort_modes = ["New", "Level", "Name"]
 
 func _ready() -> void:
 	camera_2d.make_current()
@@ -26,70 +15,94 @@ func _ready() -> void:
 	else:
 		color_rect.color = Color(0.376, 0.306, 0.459)
 	
-	if lightning_sword.material:
-		lightning_sword.material = lightning_sword.material.duplicate()
-	if baseball_bat.material:
-		baseball_bat.material = baseball_bat.material.duplicate()
-	
-	if GameState.baseball_bat_level >= 5:
-		lightning_sword_lock.visible = false
-	
-	bat_progress.max_value = GameState.baseball_bat_xp_needed
-	bat_progress.value = GameState.baseball_bat_xp
-	
-	sword_progress.max_value = GameState.lightning_sword_xp_needed
-	sword_progress.value = GameState.lightning_sword_xp
-	
-	sword_level.text = "Level " + str(GameState.lightning_sword_level) + "  :  " + str(GameState.lightning_sword_xp) + "/" + str(GameState.lightning_sword_xp_needed) + "xp"
-	bat_level.text = "Level " + str(GameState.baseball_bat_level) + "  :  " + str(GameState.baseball_bat_xp) + "/" + str(GameState.baseball_bat_xp_needed) + "xp"
-
-func _process(delta):
-	shimmer_time += delta * 1.4
-	
-	update_shine()
-
-func update_shine():
-	var sword_mat := lightning_sword.material as ShaderMaterial
-	if sword_mat:
-		sword_mat.set_shader_parameter("shine_color", Color.WHITE)
-		sword_mat.set_shader_parameter("intensity", rarity_intensity)
-		sword_mat.set_shader_parameter("sweep_pos", fmod(shimmer_time, 3.0) - 0.5)
-
-	var bat_mat := baseball_bat.material as ShaderMaterial
-	if bat_mat:
-		bat_mat.set_shader_parameter("shine_color", Color.WHITE)
-		bat_mat.set_shader_parameter("intensity", rarity_intensity)
-		bat_mat.set_shader_parameter("sweep_pos", fmod(shimmer_time, 3.0) - 0.5)
-
-func _on_bat_level_pressed() -> void:
-	baseball_bat.visible = !baseball_bat.visible
-	baseball_bat_level.visible = !baseball_bat_level.visible
-	
-	if baseball_bat.visible:
-		bat_level.text = "Weapon level " + str(GameState.baseball_bat_level) + "  :  " + str(GameState.baseball_bat_xp) + "/" + str(GameState.baseball_bat_xp_needed) + "xp"
-	else:
-		bat_level.text = "return"
-
-func _on_sword_level_pressed() -> void:
-	lightning_sword.visible = !lightning_sword.visible
-	lightning_sword_level.visible = !lightning_sword_level.visible
-	
-	if lightning_sword.visible:
-		sword_level.text = "Weapon level " + str(GameState.lightning_sword_level) + "  :  " + str(GameState.lightning_sword_xp) + "/" + str(GameState.lightning_sword_xp_needed) + "xp"
-	else:
-		sword_level.text = "return"
-
-func _on_sword_button_pressed() -> void:
-	GameState.weapon = "Lightning Sword"
-	start_game()
-
-func _on_bat_button_pressed() -> void:
-	GameState.weapon = "Baseball Bat"
-	start_game()
-
-func start_game():
-	MusicManager.fade_out_music(4.0)
-	get_tree().change_scene_to_file("res://Scenes/LoadingScreen.tscn")
+	sort_button.text = "Sort: " + sort_modes[GameState.current_weapon_sort]
+	sort_weapon_cards()
 
 func _on_quit_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
+
+func sort_weapon_cards():
+	var cards = []
+
+	for child in weapon_container.get_children():
+		if child.has_method("update_card") and child.data != null:
+			cards.append(child)
+
+	cards.sort_custom(sort_cards)
+
+	# move only cards, keep spacers
+	for i in range(cards.size()):
+		weapon_container.move_child(cards[i], i + 1)
+
+
+func sort_cards(a, b):
+	match sort_modes[GameState.current_weapon_sort]:
+
+		"Level":
+			var a_level = GameState.weapon_progress[a.data.id]["level"]
+			var b_level = GameState.weapon_progress[b.data.id]["level"]
+
+			var a_xp = GameState.weapon_progress[a.data.id]["xp"]
+			var b_xp = GameState.weapon_progress[b.data.id]["xp"]
+
+			# Higher level first
+			if a_level != b_level:
+				return a_level > b_level
+
+			# Same level -> higher XP first
+			if a_xp != b_xp:
+				return a_xp > b_xp
+
+			var a_new = (
+				GameState.unlocked_weapons.get(a.data.id, false)
+				and GameState.weapon_progress[a.data.id]["runs_played"] <= 0
+			)
+
+			var b_new = (
+				GameState.unlocked_weapons.get(b.data.id, false)
+				and GameState.weapon_progress[b.data.id]["runs_played"] <= 0
+			)
+
+			# Same level/xp -> new first
+			if a_new != b_new:
+				return a_new
+
+			# Same everything -> alphabetical
+			return a.data.name < b.data.name
+
+
+		"Name":
+			return a.data.name < b.data.name
+
+
+		"New":
+			var a_new = (
+				GameState.unlocked_weapons.get(a.data.id, false)
+				and GameState.weapon_progress[a.data.id]["runs_played"] <= 0
+			)
+
+			var b_new = (
+				GameState.unlocked_weapons.get(b.data.id, false)
+				and GameState.weapon_progress[b.data.id]["runs_played"] <= 0
+			)
+
+			if a_new != b_new:
+				return a_new
+
+			var a_unlocked = GameState.unlocked_weapons.get(a.data.id, false)
+			var b_unlocked = GameState.unlocked_weapons.get(b.data.id, false)
+
+			if a_unlocked != b_unlocked:
+				return a_unlocked
+
+
+	return a.data.name < b.data.name
+
+func _on_sort_button_pressed() -> void:
+	GameState.current_weapon_sort += 1
+	
+	if GameState.current_weapon_sort >= sort_modes.size():
+		GameState.current_weapon_sort = 0
+	
+	sort_button.text = "Sort: " + sort_modes[GameState.current_weapon_sort]
+	sort_weapon_cards()

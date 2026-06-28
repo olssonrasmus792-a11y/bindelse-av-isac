@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CardRegistry" load_steps=9 format=3 uid="uid://dorfjkt4swvyi"]
+
+[ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="1_iqyq5"]
+[ext_resource type="Resource" uid="uid://bw7w2irnwasba" path="res://Resources/Weapon_Upgrades/BatSquash.tres" id="2_85psj"]
+[ext_resource type="Resource" uid="uid://bs8m3vfpy41sv" path="res://Resources/Weapon_Upgrades/BarrelAttackSpeed.tres" id="2_e1c8s"]
+[ext_resource type="Resource" uid="uid://wa720orw4uw8" path="res://Resources/Weapon_Upgrades/BarrelItemDrop.tres" id="2_k0dlh"]
+[ext_resource type="Script" uid="uid://k6fhc8fmr1wx" path="res://Scripts/CardRegistry.gd" id="2_u1y71"]
+[ext_resource type="Resource" uid="uid://ubhf7ym4tgv6" path="res://Resources/Weapon_Upgrades/BarrelKillExplosion.tres" id="3_k0dlh"]
+[ext_resource type="Resource" uid="uid://itic2cwgu6uv" path="res://Resources/Weapon_Upgrades/BatBonkStun.tres" id="4_qewbu"]
+[ext_resource type="Resource" uid="uid://b5iqdb7dtybay" path="res://Resources/Weapon_Upgrades/BatKnockBoss.tres" id="5_vb34w"]
+
+[resource]
+script = ExtResource("2_u1y71")
+cards = Array[ExtResource("1_iqyq5")]([ExtResource("2_k0dlh"), ExtResource("2_e1c8s"), ExtResource("3_k0dlh"), ExtResource("4_qewbu"), ExtResource("5_vb34w"), ExtResource("2_85psj")])
+metadata/_custom_type_script = "uid://k6fhc8fmr1wx"

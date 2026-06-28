@@ -11,5 +11,5 @@ max_level = 4
 description = "Decrease the cooldown of your ability"
 rarity = "Epic"
 increase = "-2 Seconds"
-required_weapon = "Lightning Sword"
+required_weapon = "lightning_sword"
 metadata/_custom_type_script = "uid://c01qet416k22c"

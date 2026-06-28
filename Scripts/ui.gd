@@ -23,13 +23,33 @@ func _ready() -> void:
 	GameState.time_left = GameState.start_time + GameState.meta_bonus_time
 	vignette.modulate.a = 0
 	
-	if GameState.weapon == "Baseball Bat":
+	if GameState.weapon == "baseball_bat":
 		ability_sprite.texture = preload("res://Textures/Bat_icon.png")
 		ability_name.text = "Bonk (Q)"
 	
-	if GameState.weapon == "Lightning Sword":
+	if GameState.weapon == "lightning_sword":
 		ability_sprite.texture = preload("res://Textures/Sword_icon.tres")
 		ability_name.text = "Throw (Q)"
+	
+	if GameState.weapon == "clover":
+		ability_sprite.texture = preload("res://Textures/Enemies/clove throw.png")
+		ability_name.text = "Nothin (Q)"
+	
+	if GameState.weapon == "knife":
+		ability_sprite.texture = preload("res://Textures/knife_icon.png")
+		ability_name.text = "Nothin (Q)"
+	
+	if GameState.weapon == "nothing":
+		ability_sprite.texture = preload("res://Textures/heart.png")
+		ability_name.text = "Nothin (Q)"
+	
+	if GameState.weapon == "muddy":
+		ability_sprite.texture = preload("res://Textures/muddy_icon.png")
+		ability_name.text = "Nothin (Q)"
+	
+	if GameState.weapon == "barrel":
+		ability_sprite.texture = preload("res://Textures/Barrel.png")
+		ability_name.text = "Nothin (Q)"
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -11,6 +11,7 @@ var time_left
 @export var knockback = 450
 
 func _ready() -> void:
+	ExplosionManager.add_explosion(self)
 	amount = explosion_particles
 	time_left = monitoring_time
 	explosion.pitch_scale = randf_range(0.5, 0.75)
@@ -19,7 +20,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	time_left -= delta
 	
-	if time_left <= 0:
+	if time_left <= 0 and has_node("Area2D"):
 		area_2d.monitoring = false
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
@@ -41,6 +42,9 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 			text_color = Color.YELLOW
 			ft_text = "-" + str(int(total_damage))
 		
+		if total_damage >= body.health:
+			GameState.barrel_kills += 1
+		
 		GameState.total_damage_dealt += total_damage
 		body.take_damage(total_damage)
 		body.apply_knockback(aim_direction, knockback)
@@ -60,6 +64,9 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("barrel"):
 		body.hit()
 		body.apply_knockback(aim_direction)
+	
+	area_2d.set_deferred("monitoring", false)
+	area_2d.queue_free()
 
 func calculate_base_damage():
 	var total_damage
@@ -84,3 +91,6 @@ func calculate_base_damage():
 
 func _on_finished() -> void:
 	queue_free()
+
+func _exit_tree():
+	ExplosionManager.remove_explosion(self)

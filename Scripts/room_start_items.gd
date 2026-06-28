@@ -42,6 +42,7 @@ func spawn_random_item(pos):
 	local_items.erase(item_data)
 
 	var runtime_data: ItemData = item_data.duplicate()
+	runtime_data.original_price = runtime_data.price
 	runtime_data.price = 0
 
 	var item = item_scene.instantiate()

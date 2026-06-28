@@ -10,6 +10,7 @@ var card_scene = preload("res://Scenes/upgrade_card.tscn")
 @onready var coin: AudioStreamPlayer = $Coin
 
 @export var card_registry: CardRegistry
+@export var weapon_upgrades: CardRegistry
 
 var local_cards: Array[CardData] = []
 var upgrade_selected = false
@@ -103,6 +104,94 @@ func show_level_up():
 			0.3
 		)
 
+func show_weapon_cards():
+	clear_cards()
+	
+	MusicManager.set_music_muffle(0.96)
+
+	upgrade_selected = false
+	visible = true
+	get_tree().paused = true
+
+	clear_cards()
+
+	if weapon_upgrades == null:
+		push_error("weapon_upgrades not assigned!")
+		return
+
+	# Copy registry cards
+	local_cards = weapon_upgrades.cards.duplicate()
+
+	# Remove maxed cards
+	local_cards = local_cards.filter(func(card):
+		var weapon_ok = card.required_weapon == "" or card.required_weapon == GameState.weapon
+		return card.current_level < card.max_level and weapon_ok
+	)
+
+	if local_cards.is_empty():
+		close_upgrade_screen()
+		return
+
+	var selected_cards: Array[CardData] = []
+
+	# Pick 3 unique cards
+	while selected_cards.size() < 3 and !local_cards.is_empty():
+		var chosen = roll_card(local_cards)
+
+		if chosen == null:
+			break
+
+		selected_cards.append(chosen)
+
+		# Prevent duplicates
+		local_cards.erase(chosen)
+
+
+
+	var spawned_cards = []
+	var delay := 0.2
+
+# Spawn all cards first
+	for card_data in selected_cards:
+		var card = card_scene.instantiate()
+
+		card.card_data = card_data
+
+		card.selected.connect(_on_card_selected)
+
+		cards_container.add_child(card)
+
+		spawned_cards.append(card)
+
+	# Wait for HBoxContainer layout
+	await get_tree().process_frame
+
+	# Animate cards
+	for i in range(spawned_cards.size()):
+		var card = spawned_cards[i]
+
+		# EXACT old animation setup
+		card.position.y = 800
+		card.scale = Vector2.ZERO
+		card.modulate.a = 1.0
+
+		var tween = create_tween()
+
+		tween.tween_interval(i * delay)
+
+		tween.tween_property(
+			card,
+			"position:y",
+			60,
+			0.5
+		).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+		tween.parallel().tween_property(
+			card,
+			"scale",
+			Vector2.ONE,
+			0.3
+		)
 
 func roll_card(cards: Array):
 	var total_weight := 0.0
@@ -251,6 +340,15 @@ func apply_upgrade(card_data: CardData):
 		
 		"Bigger Bonk":
 			player.ability_damage_mult += 0.25
+		
+		"I'm the boss":
+			player.knockback *= 1.2
+		
+		"Death Boom":
+			player.explosion_size += 0.2
+		
+		"Mi Bombo":
+			player.attack_speed -= 0.1
 
 
 func close_upgrade_screen():

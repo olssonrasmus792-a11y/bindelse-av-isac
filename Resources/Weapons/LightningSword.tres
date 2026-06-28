@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=4 format=3 uid="uid://c5m2pldwuyaca"]
+
+[ext_resource type="Script" uid="uid://cemr67gab560v" path="res://Scripts/weapon_data.gd" id="1_4a0ng"]
+[ext_resource type="Texture2D" uid="uid://dnh61ns4hcoib" path="res://Textures/Sword_icon.tres" id="1_o667a"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o667a"]
+atlas = ExtResource("1_o667a")
+region = Rect2(0, 1, 179, 327)
+
+[resource]
+script = ExtResource("1_4a0ng")
+id = "lightning_sword"
+card_color = Color(0.95, 0.9249833, 0.19949998, 1)
+name = "Lightning Sword"
+weapon_description = "The most generic sword ever, great at everything"
+icon = SubResource("AtlasTexture_o667a")
+range_type = "Melee"
+damage = 20
+knockback = 500
+crit_chance = 0.05
+crit_damage = 1.4
+attack_speed = 0.35
+ability = "Boomerang"
+ability_tooltip = "Throw your sword like a boomerang, dealing damage twice (10 sec cd)"
+unlock_condition = "kills"
+unlock_amount_needed = 100
+metadata/_custom_type_script = "uid://cemr67gab560v"

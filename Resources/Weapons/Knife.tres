@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=4 format=3 uid="uid://d1njn6rs1qwhq"]
+
+[ext_resource type="Texture2D" uid="uid://cfgqwq4hvee4b" path="res://Textures/knife_icon.png" id="1_qg4wg"]
+[ext_resource type="Script" uid="uid://cemr67gab560v" path="res://Scripts/weapon_data.gd" id="1_uyatn"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5gjmi"]
+atlas = ExtResource("1_qg4wg")
+region = Rect2(162, 147, 236, 286)
+
+[resource]
+script = ExtResource("1_uyatn")
+id = "knife"
+card_color = Color(0.3, 0.3, 0.3, 1)
+name = "Knife"
+weapon_description = "Melee weapon dealing tons of crit damage"
+icon = SubResource("AtlasTexture_5gjmi")
+range_type = "Melee"
+damage = 15
+knockback = 300
+crit_chance = 0.1
+crit_damage = 2.0
+attack_speed = 0.4
+ability = "Coming Soon"
+unlock_condition = "kills"
+unlock_amount_needed = 500
+metadata/_custom_type_script = "uid://cemr67gab560v"

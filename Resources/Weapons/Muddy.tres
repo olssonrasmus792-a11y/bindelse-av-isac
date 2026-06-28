@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=4 format=3 uid="uid://bblo3ufc84810"]
+
+[ext_resource type="Script" uid="uid://cemr67gab560v" path="res://Scripts/weapon_data.gd" id="1_653d4"]
+[ext_resource type="Texture2D" uid="uid://ckmqrfvxuv5a3" path="res://Textures/muddy_icon.png" id="1_eq3fo"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_688jn"]
+atlas = ExtResource("1_eq3fo")
+region = Rect2(115, 200, 169, 168)
+
+[resource]
+script = ExtResource("1_653d4")
+id = "muddy"
+card_color = Color(0.93333334, 0.6901961, 0.2627451, 1)
+name = "Muddy"
+weapon_description = "Throw muddies executing everything that isn't named Clove, very low attack speed"
+icon = SubResource("AtlasTexture_688jn")
+range_type = "Ranged"
+damage = 80
+knockback = 2000
+crit_damage = 1.0
+attack_speed = 1.0
+ability = "Coming Soon"
+unlock_condition = "muddy executes"
+unlock_amount_needed = 50
+metadata/_custom_type_script = "uid://cemr67gab560v"

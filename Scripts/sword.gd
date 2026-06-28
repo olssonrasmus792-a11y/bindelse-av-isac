@@ -76,7 +76,8 @@ func throw_sword() -> void:
 	sword_sprite.global_transform = world_transform
 
 func handle_throw(delta):
-	trail.visible = true
+	if GameState.weapon != "clover":
+		trail.visible = true
 	sword_sprite.rotation += spin_speed * delta
 	if !returning:
 		sword_sprite.global_position += throw_direction * throw_speed * delta

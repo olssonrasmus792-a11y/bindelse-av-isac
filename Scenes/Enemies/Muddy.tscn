@@ -67,6 +67,7 @@ height = 5
 repeat = 1
 
 [node name="CharacterBody2D" type="CharacterBody2D" groups=["enemies"]]
+collision_mask = 3
 motion_mode = 1
 script = ExtResource("1_10ykd")
 

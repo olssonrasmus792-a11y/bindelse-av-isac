@@ -152,23 +152,43 @@ func draw_path_cells(start: Vector2i, end: Vector2i):
 		if tile_map.get_cell_source_id(coords) == 0:
 			tile_map.set_cell(Vector2i(x, y), 4, Vector2i(0, 0))
 
+var player_colliders_inside := 0
+
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
-		MusicManager.play_music(MusicManager.SONGS["SHOP_MUSIC"])
-		switch_camera()
-		light_up_room()
-		spawn_items()
-		room_entered = true
+		player_colliders_inside += 1
+		
+		if player_colliders_inside == 1:
+			MusicManager.play_music(
+				MusicManager.SONGS["SHOP_MUSIC"],
+				MusicManager.MusicGroup.SHOP
+			)
+			switch_camera()
+			light_up_room()
+			spawn_items()
+
+			if !room_entered:
+				GameState.rooms_explored += 1
+
+			room_entered = true
+			guy.entered_room()
+			GameState.pause_timer = true
+
 		guy.player_is_in_room = true
 		player_is_in_room = true
-		guy.entered_room()
-		GameState.pause_timer = true
+
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body.name == "Player":
-		guy.player_is_in_room = false
-		player_is_in_room = false
-		GameState.pause_timer = false
+		await get_tree().physics_frame
+
+		player_colliders_inside -= 1
+		player_colliders_inside = max(player_colliders_inside, 0)
+
+		if player_colliders_inside == 0:
+			guy.player_is_in_room = false
+			player_is_in_room = false
+			GameState.pause_timer = false
 
 func switch_camera():
 	emit_signal("swap_cam", target_position)

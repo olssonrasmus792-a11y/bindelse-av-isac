@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://wa720orw4uw8"]
+
+[ext_resource type="Texture2D" uid="uid://lyun75p0rj50" path="res://Textures/Barrel.png" id="1_bk4yi"]
+[ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="1_kufvf"]
+
+[resource]
+script = ExtResource("1_kufvf")
+icon = ExtResource("1_bk4yi")
+card_name = "Lucky Barrels"
+current_level = 0
+max_level = 1
+description = "Give barrels a chance to drop items (excluding your thrown barrels)"
+rarity = "Unique"
+increase = "+0.2% Item Chance"
+required_weapon = "barrel"
+metadata/_custom_type_script = "uid://c01qet416k22c"

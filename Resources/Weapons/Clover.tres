@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=4 format=3 uid="uid://s22u6vrjd1wg"]
+
+[ext_resource type="Texture2D" uid="uid://db2shrm8wye7b" path="res://Textures/Enemies/clove throw.png" id="1_qgjxt"]
+[ext_resource type="Script" uid="uid://cemr67gab560v" path="res://Scripts/weapon_data.gd" id="1_vi1cm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qgjxt"]
+atlas = ExtResource("1_qgjxt")
+region = Rect2(1, 1, 184, 186)
+
+[resource]
+script = ExtResource("1_vi1cm")
+id = "clover"
+card_color = Color(0.3542, 0.92, 0.16560002, 1)
+name = "Clooverang"
+weapon_description = "Throw clovers like boomerangs, dealing damage twice"
+icon = SubResource("AtlasTexture_qgjxt")
+range_type = "Ranged"
+damage = 15
+knockback = 250
+crit_chance = 0.05
+crit_damage = 1.25
+ability = "Coming Soon"
+unlock_condition = "runs completed"
+unlock_amount_needed = 1
+metadata/_custom_type_script = "uid://cemr67gab560v"

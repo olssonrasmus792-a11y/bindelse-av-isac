@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://bs8m3vfpy41sv"]
+
+[ext_resource type="Texture2D" uid="uid://lyun75p0rj50" path="res://Textures/Barrel.png" id="1_s2njx"]
+[ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="2_xvuep"]
+
+[resource]
+script = ExtResource("2_xvuep")
+icon = ExtResource("1_s2njx")
+card_name = "Mi Bombo"
+max_level = 4
+description = "Increase your attack speed"
+rarity = "Unique"
+increase = "-0.1 Seconds"
+required_weapon = "barrel"
+metadata/_custom_type_script = "uid://c01qet416k22c"

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=4 format=3 uid="uid://coc520ixqkd"]
+
+[ext_resource type="Script" uid="uid://cemr67gab560v" path="res://Scripts/weapon_data.gd" id="1_k0vfr"]
+[ext_resource type="Texture2D" uid="uid://lyun75p0rj50" path="res://Textures/Barrel.png" id="1_wvks0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hhhks"]
+atlas = ExtResource("1_wvks0")
+region = Rect2(45, 28, 115, 145)
+
+[resource]
+script = ExtResource("1_k0vfr")
+id = "barrel"
+card_color = Color(0.69, 0.41675997, 0.0828, 1)
+name = "Barrel"
+weapon_description = "Throw barrels that explode upon impact dealing damage in a small area"
+icon = SubResource("AtlasTexture_hhhks")
+range_type = "Ranged"
+damage = 20
+knockback = 600
+crit_chance = 0.25
+crit_damage = 1.6
+attack_speed = 0.5
+ability = "Coming Soon"
+unlock_condition = "barrel kills"
+unlock_amount_needed = 25
+metadata/_custom_type_script = "uid://cemr67gab560v"

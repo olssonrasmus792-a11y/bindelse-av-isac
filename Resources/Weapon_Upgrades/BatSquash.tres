@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://bw7w2irnwasba"]
+
+[ext_resource type="Texture2D" uid="uid://dgebsljj7cksq" path="res://Textures/Bat_icon.png" id="1_8ifgq"]
+[ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="2_vvb8l"]
+
+[resource]
+script = ExtResource("2_vvb8l")
+icon = ExtResource("1_8ifgq")
+card_name = "Squashed!"
+current_level = 0
+max_level = 1
+description = "Deal damage when knocking an enemy into a wall, scaling with velocity"
+rarity = "Unique"
+increase = "+100% Squash"
+required_weapon = "baseball_bat"
+metadata/_custom_type_script = "uid://c01qet416k22c"

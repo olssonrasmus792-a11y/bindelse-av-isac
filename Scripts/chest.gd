@@ -151,6 +151,7 @@ func spawn_item(dir):
 	local_items.erase(item_data)
 
 	var runtime_data: ItemData = item_data.duplicate(true)
+	runtime_data.original_price = runtime_data.price
 	runtime_data.price = 0
 
 	var item = item_scene.instantiate()

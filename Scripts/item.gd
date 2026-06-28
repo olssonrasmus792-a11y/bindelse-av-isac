@@ -34,6 +34,8 @@ var has_bounced := false
 @onready var rarity: Label = $PopUp/Panel2/rarity
 @onready var unique_panel: Panel = $PopUp/Panel3
 @onready var point_light_2d_2: PointLight2D = $PointLight2D2
+@onready var discard_panel: Panel = $PopUp/discardPanel
+@onready var discard: Label = $PopUp/discardPanel/discard
 
 var rarity_color: Color = Color.WHITE
 var fade_time := 0.0
@@ -42,6 +44,7 @@ var shimmer_time := 0.0
 var rarity_intensity := 1.0
 var rainbow_time := 0.0
 
+var original_price: int
 var final_price: int
 
 
@@ -52,6 +55,8 @@ func _ready():
 		description.text = data.description
 
 		# ❗ ONLY CHANGE: do NOT modify data.price
+		if data.price == 0:
+			original_price = data.original_price
 		final_price = data.price - GameState.get_upgrade_count("Negotiator")
 		final_price = clamp(final_price, 0, INF)
 
@@ -81,6 +86,11 @@ func _ready():
 
 		base_y = sprite.position.y
 		pop_up.visible = false
+		
+		if final_price == 0:
+			discard_panel.visible = true
+		else:
+			discard_panel.visible = false
 
 		if data.unique:
 			unique_panel.visible = true
@@ -148,6 +158,8 @@ func _process(delta: float) -> void:
 
 	if final_price == 0:
 		price.text = "Take Item (E) : Free"
+		@warning_ignore("integer_division")
+		discard.text = "Discard (X)  :  +" + str(int(original_price * 0.4)) + " Coins"
 	else:
 		price.text = "Purchase (E) : " + str(final_price) + " Coins"
 
@@ -163,6 +175,24 @@ func _input(event: InputEvent) -> void:
 			shake_label()
 			for guys in guy:
 				guys.not_enough_money()
+	
+	if event.is_action_pressed("discard") and pop_up.visible == true and discard_panel.visible == true:
+		discard_item()
+
+func discard_item():
+	@warning_ignore("integer_division")
+	GameState.coins += int(original_price * 0.4)
+	
+	@warning_ignore("integer_division")
+	print("item discared, +" + str(int(original_price * 0.4)))
+	
+	var sound = purchase
+	
+	sound.get_parent().remove_child(sound)
+	get_tree().current_scene.add_child(sound)
+	sound.play()
+	
+	queue_free()
 
 func buy_item():
 	# ❗ ONLY CHANGE HERE
@@ -236,6 +266,10 @@ func apply_item(item_name):
 			for item in GameState.taken_items:
 				if item.name == "Credit Card":
 					item.tracked_stat_values[0] = int(player.chest_bonus_damage * 100)
+		"Treasure Map":
+			get_tree().get_first_node_in_group("treasure_map").draw_map()
+			for map in get_tree().get_nodes_in_group("treasure_map_item"):
+				map.queue_free()
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):

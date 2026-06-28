@@ -7,7 +7,8 @@
 script = ExtResource("1_ldeti")
 name = "Caged Muddy"
 icon = ExtResource("1_lh3i0")
-price = 5
+price = 4
+original_price = null
 stats = Array[String](["+20% Muddy Spawn Rate"])
 stat_colors = Array[Color]([Color(0, 0.78431374, 0.28235295, 1)])
 tracked_stats = Array[String](["Extra muddies spawned"])

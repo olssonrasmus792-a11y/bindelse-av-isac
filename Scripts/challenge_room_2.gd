@@ -107,7 +107,7 @@ func _process(_delta: float) -> void:
 		poof.play(0.44)
 		MusicManager.set_music_muffle(0.0)
 		MusicManager.set_music_pitch(1.0)
-		MusicManager.play_music(MusicManager.SONGS["GHOST_MUSIC"])
+		MusicManager.play_music(MusicManager.GHOST_SONGS.values().pick_random(), MusicManager.MusicGroup.GHOST)
 		chest.visible = true
 		barrel_explosion.restart()
 		check_doors()
@@ -176,22 +176,44 @@ func draw_path_cells(start: Vector2i, end: Vector2i):
 		if tile_map.get_cell_source_id(coords) == 0:
 			tile_map.set_cell(Vector2i(x, y), 4, Vector2i(0, 0))
 
+var player_colliders_inside := 0
+var music_started := false
+
+
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
-		switch_camera()
-		light_up_room()
-		room_entered = true
+		player_colliders_inside += 1
 		player_is_in_room = true
-		if GameState.timer_started:
-			MusicManager.set_music_muffle(0.0)
-			MusicManager.set_music_pitch(1.0)
-			MusicManager.play_music(MusicManager.SONGS["COMBAT_MUSIC_1"])
+
+		if player_colliders_inside == 1:
+			switch_camera()
+			light_up_room()
+
+			if !room_entered:
+				GameState.rooms_explored += 1
+				room_entered = true
+
+			if GameState.timer_started and !music_started:
+				music_started = true
+
+				MusicManager.set_music_muffle(0.0)
+				MusicManager.set_music_pitch(1.0)
+				MusicManager.play_music(
+					MusicManager.COMBAT_SONGS.values().pick_random(),
+					MusicManager.MusicGroup.COMBAT
+				)
+
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body.name == "Player":
-		player_is_in_room = false
-		if !GameState.timer_started:
-			GameState.timer_started = true
+		await get_tree().physics_frame
+
+		player_colliders_inside -= 1
+		player_colliders_inside = max(player_colliders_inside, 0)
+
+		if player_colliders_inside == 0:
+			player_is_in_room = false
+			music_started = false
 
 func switch_camera():
 	emit_signal("swap_cam", target_position)
@@ -267,7 +289,7 @@ func on_room_cleared():
 		return
 	
 	open_room()
-	MusicManager.play_music(MusicManager.SONGS["COMBAT_MUSIC_1"])
+	MusicManager.play_music(MusicManager.COMBAT_SONGS.values().pick_random(), MusicManager.MusicGroup.COMBAT)
 	GameState.is_fighting = false
 	GameState.rooms_cleared += 1
 	chest.can_open = true

@@ -23,6 +23,7 @@ func _on_button_pressed() -> void:
 			end_stats.finish_coins_instantly()
 	else:
 		GameState.add_meta_stats()
+		MusicManager.reset_music_groups()
 		end_stats.visible = false
 		get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
 
@@ -36,5 +37,6 @@ func _on_play_again_pressed() -> void:
 	GameState.add_meta_stats()
 	end_stats.visible = false
 	
-	MusicManager.fade_out_music()
+	MusicManager.reset_music_groups()
+	MusicManager.fade_out_music(1.5)
 	get_tree().change_scene_to_file("res://Scenes/LoadingScreen.tscn")

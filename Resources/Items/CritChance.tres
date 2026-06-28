@@ -12,6 +12,7 @@ script = ExtResource("1_chsb7")
 name = "Critter"
 icon = SubResource("AtlasTexture_0hs5s")
 price = 6
+original_price = null
 stats = Array[String](["+10% Crit chance"])
 stat_colors = Array[Color]([Color(0, 0.78431374, 0.28235295, 1)])
 tracked_stats = Array[String](["Crit Chance", "Total Crits"])

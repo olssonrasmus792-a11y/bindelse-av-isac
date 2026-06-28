@@ -2,12 +2,33 @@ extends Node
 
 const SONGS = {
 	"MENU_MUSIC": preload("res://Music/MainMenu.wav"),
-	"COMBAT_MUSIC_1": preload("res://Music/Combat.wav"),
-	"COMBAT_MUSIC_2": preload("res://Music/Combat2.wav"),
 	"SHOP_MUSIC": preload("res://Music/Shop.wav"),
 	"BOSS_MUSIC": preload("res://Music/BossFight.wav"),
-	"GHOST_MUSIC": preload("res://Music/Ghosts.wav")
 }
+
+const COMBAT_SONGS = {
+	"COMBAT_MUSIC_1": preload("res://Music/Combat.wav"),
+	"COMBAT_MUSIC_2": preload("res://Music/Combat2.wav"),
+	"COMBAT_MUSIC_3": preload("res://Music/Combat3.wav"),
+	"COMBAT_MUSIC_4": preload("res://Music/Combat4.wav"),
+}
+
+const GHOST_SONGS = {
+	"GHOST_MUSIC": preload("res://Music/Ghosts.wav"),
+	"GHOST_MUSIC_2": preload("res://Music/Ghosts2.wav"),
+	"GHOST_MUSIC_3": preload("res://Music/Ghosts3.wav"),
+}
+
+enum MusicGroup {
+	NONE,
+	MENU,
+	COMBAT,
+	GHOST,
+	SHOP,
+	BOSS
+}
+
+var current_group = MusicGroup.NONE
 
 @onready var current_player: AudioStreamPlayer = $MusicA
 @onready var other_player: AudioStreamPlayer = $MusicB
@@ -50,11 +71,16 @@ func _ready():
 	set_music_muffle(0.0)
 
 
+func reset_music_groups():
+	current_group = MusicGroup.NONE
+	current_song = null
+
 # 🎵 CROSSFADE MUSIC (FIXED STABLE VERSION)
-func play_music(song: AudioStream, fade_time := 1.0):
-	if current_song == song:
+func play_music(song: AudioStream, group: MusicGroup, fade_time := 1.0, start_time := 0.0):
+	if current_group == group or current_song == song:
 		return
 
+	current_group = group
 	current_song = song
 
 	if music_tween and music_tween.is_running():
@@ -64,7 +90,7 @@ func play_music(song: AudioStream, fade_time := 1.0):
 	other_player.stream = song
 	other_player.volume_db = -40
 	other_player.pitch_scale = target_pitch
-	other_player.play()
+	other_player.play(start_time)
 
 	music_tween = create_tween()
 
@@ -86,17 +112,20 @@ func play_music(song: AudioStream, fade_time := 1.0):
 	other_player.pitch_scale = target_pitch
 
 
-# 🔇 FADE OUT MUSIC (SAFE)
 func fade_out_music(fade_time := 2.5):
 	if music_tween and music_tween.is_running():
 		music_tween.kill()
 
-	music_tween = create_tween()
+	var tween = create_tween()
+	music_tween = tween
 
-	music_tween.parallel().tween_property(current_player, "volume_db", -40, fade_time)
-	music_tween.parallel().tween_property(other_player, "volume_db", -40, fade_time)
+	tween.parallel().tween_property(current_player, "volume_db", -40, fade_time)
+	tween.parallel().tween_property(other_player, "volume_db", -40, fade_time)
 
-	await music_tween.finished
+	await tween.finished
+
+	if music_tween != tween:
+		return
 
 	current_player.stop()
 	other_player.stop()

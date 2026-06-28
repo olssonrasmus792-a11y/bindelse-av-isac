@@ -19,7 +19,7 @@ func _process(delta: float) -> void:
 
 func _on_detection_area_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
-		body.take_damage(1, global_position, -knockback_strength_player)
+		body.take_damage(1, global_position, -knockback_strength_player, self)
 		queue_free()
 
 func _on_detection_area_area_entered(area: Area2D) -> void:

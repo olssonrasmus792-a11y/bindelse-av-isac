@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://itic2cwgu6uv"]
+
+[ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="1_i1f8e"]
+[ext_resource type="Texture2D" uid="uid://dgebsljj7cksq" path="res://Textures/Bat_icon.png" id="1_t2oph"]
+
+[resource]
+script = ExtResource("1_i1f8e")
+icon = ExtResource("1_t2oph")
+card_name = "Concussion"
+max_level = 4
+description = "Stun enemies when you BONK them"
+rarity = "Unique"
+increase = "+0.5 Second stun"
+required_weapon = "baseball_bat"
+metadata/_custom_type_script = "uid://c01qet416k22c"

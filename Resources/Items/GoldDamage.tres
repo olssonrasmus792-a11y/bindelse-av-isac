@@ -12,6 +12,7 @@ script = ExtResource("1_iwrr5")
 name = "Greedy ahh"
 icon = SubResource("AtlasTexture_j77eo")
 price = 5
+original_price = null
 rarity = 2
 description = "Deal 5% extra damage per 5 coins held"
 tracked_stats = Array[String](["Current Bonus", "Damage dealt"])

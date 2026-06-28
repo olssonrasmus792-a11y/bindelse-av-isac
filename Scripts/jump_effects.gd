@@ -37,12 +37,12 @@ func _process(_delta: float) -> void:
 
 func _on_collision_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		body.take_damage(1, global_position, knockback_strength_player)
+		body.take_damage(1, global_position, knockback_strength_player, self)
 
 func _on_collision_2_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		body.take_damage(1, global_position, knockback_strength_player)
+		body.take_damage(1, global_position, knockback_strength_player, self)
 
 func _on_collision_3_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		body.take_damage(1, global_position, knockback_strength_player)
+		body.take_damage(1, global_position, knockback_strength_player, self)

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=4 format=3 uid="uid://c70s0f6sbmykb"]
+
+[ext_resource type="Texture2D" uid="uid://dgebsljj7cksq" path="res://Textures/Bat_icon.png" id="1_kra5o"]
+[ext_resource type="Script" uid="uid://cemr67gab560v" path="res://Scripts/weapon_data.gd" id="1_xe5tv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kra5o"]
+atlas = ExtResource("1_kra5o")
+region = Rect2(21, 11, 58, 74)
+
+[resource]
+script = ExtResource("1_xe5tv")
+id = "baseball_bat"
+card_color = Color(0.52, 0.27733335, 0, 1)
+name = "Baseball Bat"
+weapon_description = "Melee weapon with a lot of knockback and decent crit chance"
+icon = SubResource("AtlasTexture_kra5o")
+range_type = "Melee"
+damage = 15
+knockback = 1000
+crit_chance = 0.15
+crit_damage = 1.6
+attack_speed = 0.3
+ability = "bonk"
+ability_tooltip = "Larger attack with more knockback (5 sec cd)"
+level = 1
+xp = 100
+metadata/_custom_type_script = "uid://cemr67gab560v"

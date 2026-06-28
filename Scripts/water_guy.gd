@@ -1,5 +1,6 @@
 extends CharacterBody2D
 
+@export var boom_scene = preload("res://Scenes/barrel_explosion.tscn")
 @export var explosion_scene = preload("res://Scenes/Enemies/MuddyExplosion.tscn")
 @export var trail_scene = preload("res://Scenes/Enemies/snail_trail.tscn")
 @export var projectile_scene = preload("res://Scenes/Enemies/water_projectile.tscn")
@@ -29,10 +30,16 @@ var projectile_speed = 400
 @export var knockback_strength_mult = 1
 @export var knockback_duration = 0.6
 
+var stun_timer := 0.0
+
 var current_knockback := Vector2.ZERO
 var knockback_velocity := Vector2.ZERO
 var knockback_timer := 0.0
 
+var wall_hit_cooldown := 0.0
+const WALL_HIT_INTERVAL := 0.15
+
+var is_dead
 signal enemy_died
 
 func _ready() -> void:
@@ -46,14 +53,28 @@ func _physics_process(delta):
 	hp_bar.visible = health < max_health
 	hp_bar.value = lerp(hp_bar.value, float(health), 0.25)
 	direction = direction.normalized()
+	
+	if wall_hit_cooldown > 0.0:
+		wall_hit_cooldown -= delta
+	
+	if stun_timer > 0.0:
+		stun_timer -= delta
+		animated_sprite_2d.speed_scale = 0.0
+		visuals.modulate = Color.YELLOW
+	
 	if knockback_timer > 0.0:
 		# Smoothly interpolate knockback velocity to zero
 		current_knockback = current_knockback.lerp(Vector2.ZERO, 5 * delta)
 		velocity = current_knockback
 		knockback_timer -= delta
+	
+	elif stun_timer > 0.0:
+		velocity = Vector2.ZERO
+	
 	else:
 		velocity = direction * speed
 		animated_sprite_2d.speed_scale = 1.0
+		visuals.modulate = Color.WHITE
 	
 	move_and_slide()
 	
@@ -63,9 +84,16 @@ func _physics_process(delta):
 		var collider = collision.get_collider()
 		
 		if knockback_timer > 0.0 and !collider.is_in_group("enemies"):
-			knockback_velocity = knockback_velocity.bounce(normal)
 			current_knockback = current_knockback.bounce(normal)
 			direction = current_knockback.normalized()
+
+			if GameState.get_upgrade_count("Squashed!") > 0 and wall_hit_cooldown <= 0.0:
+				var impact_speed = current_knockback.length()
+				var damage = remap(impact_speed, 0.0, 5000.0, 1.0, max_health * 3.0)
+				damage = clampf(damage, 1.0, max_health * 3.0)
+				take_damage(damage)
+				spawn_floating_text("-" + str(damage), Color.WHITE, global_position)
+				wall_hit_cooldown = WALL_HIT_INTERVAL
 		else:
 			direction = direction.bounce(normal)
 	
@@ -86,6 +114,9 @@ func apply_knockback(aim_direction: Vector2, knockback_strength: int):
 	knockback_timer = knockback_duration
 	direction = knockback_direction
 
+func stun(duration: float):
+	stun_timer = maxf(stun_timer, duration)
+
 func flash_red():
 	animated_sprite_2d.modulate = Color.WHITE
 	animated_sprite_2d.modulate = Color(1, 0, 0)
@@ -98,6 +129,9 @@ func flash_red():
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func explode(enemy):
+	if is_dead:
+		return
+	
 	var explosion = explosion_scene.instantiate()
 	
 	explosion.global_position = global_position
@@ -111,8 +145,27 @@ func explode(enemy):
 		
 		get_tree().current_scene.call_deferred("add_child", orb)
 	
+	if GameState.get_upgrade_count("Death Boom") > 0:
+		var boom = boom_scene.instantiate()
+		boom.scale = Vector2(player.explosion_size, player.explosion_size)
+		boom.global_position = position
+		boom.explosion_damage = player.explosion_damage
+		boom.explosion_particles = player.explosion_particles
+		get_tree().current_scene.call_deferred("add_child", boom)  # defer adding
+		boom.emitting = true
+	
 	emit_signal("enemy_died")
 	enemy.queue_free()
+
+func spawn_floating_text(text: String, color: Color, pos: Vector2):
+	var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
+	var ft = floating_text_scene.instantiate()
+	
+	ft.text = text
+	ft.modulate = color
+	ft.global_position = pos
+	
+	get_tree().current_scene.call_deferred("add_child", ft)
 
 func _on_shoot_timer_timeout() -> void:
 	var new_timer = randf_range(2, 4)

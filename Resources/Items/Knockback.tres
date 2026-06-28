@@ -7,7 +7,8 @@
 script = ExtResource("1_mko3n")
 name = "Knock knock"
 icon = ExtResource("1_bnyq0")
-price = 6
+price = 5
+original_price = null
 stats = Array[String](["+25% Knockback"])
 stat_colors = Array[Color]([Color(0, 0.78431374, 0.28235295, 1)])
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

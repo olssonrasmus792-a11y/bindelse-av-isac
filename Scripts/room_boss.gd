@@ -174,17 +174,33 @@ func draw_path_cells(start: Vector2i, end: Vector2i):
 		if tile_map.get_cell_source_id(coords) == 0:
 			tile_map.set_cell(Vector2i(x, y), 4, Vector2i(0, 0))
 
+var player_colliders_inside := 0
+
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
-		MusicManager.fade_out_music()
-		switch_camera()
-		light_up_room()
-		room_entered = true
+		player_colliders_inside += 1
 		player_is_in_room = true
+
+		# Only first collider entering
+		if player_colliders_inside == 1:
+			MusicManager.fade_out_music()
+			switch_camera()
+			light_up_room()
+
+			if !room_entered:
+				GameState.rooms_explored += 1
+				room_entered = true
+
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body.name == "Player":
-		player_is_in_room = false
+		await get_tree().physics_frame
+
+		player_colliders_inside -= 1
+		player_colliders_inside = max(player_colliders_inside, 0)
+
+		if player_colliders_inside == 0:
+			player_is_in_room = false
 
 func switch_camera():
 	emit_signal("swap_cam", target_position)

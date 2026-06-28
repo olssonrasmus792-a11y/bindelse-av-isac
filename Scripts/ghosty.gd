@@ -1,5 +1,6 @@
 extends CharacterBody2D
 
+@export var boom_scene = preload("res://Scenes/barrel_explosion.tscn")
 @export var explosion_scene = preload("res://Scenes/Enemies/MuddyExplosion.tscn")
 @export var xp_orb_scene = preload("res://Scenes/xp_orb.tscn")
 
@@ -30,10 +31,13 @@ var time := 0.0
 @export var knockback_strength_mult = 1.0
 @export var knockback_duration = 0.6
 
+var stun_timer := 0.0
+
 var current_knockback := Vector2.ZERO
 var knockback_velocity := Vector2.ZERO
 var knockback_timer := 0.0
 
+var is_dead
 signal enemy_died
 
 func _ready() -> void:
@@ -49,14 +53,25 @@ func _ready() -> void:
 func _physics_process(delta):
 	hp_bar.visible = health < max_health
 	hp_bar.value = lerp(hp_bar.value, float(health), 0.25)
+	
+	if stun_timer > 0.0:
+		stun_timer -= delta
+		animated_sprite_2d.speed_scale = 0.0
+		visuals.modulate = Color.YELLOW
+	
 	if knockback_timer > 0.0:
 		current_knockback = current_knockback.lerp(Vector2.ZERO, 5 * delta)
 		velocity = current_knockback
 		knockback_timer -= delta
+	
+	elif stun_timer > 0.0:
+		velocity = Vector2.ZERO
+	
 	else:
 		direction = (player.global_position - global_position).normalized()
 		velocity = direction * speed
 		animated_sprite_2d.speed_scale = 1.0
+		visuals.modulate = Color.WHITE
 	
 	move_and_slide()
 	
@@ -66,7 +81,7 @@ func _physics_process(delta):
 		
 		if collider.is_in_group("player"):
 			if !player.is_dead:
-				collider.take_damage(1, global_position, knockback_strength_player)
+				collider.take_damage(1, global_position, knockback_strength_player, self)
 				apply_knockback(direction * -1, knockback_strength_player)
 	
 	visuals.scale.x = 1 if direction.x > 0 else -1
@@ -81,6 +96,7 @@ func take_damage(damage):
 	animation_player.play("hit")
 	if health <= 0:
 		explode(self)
+		is_dead = true
 
 func apply_knockback(aim_direction: Vector2, knockback_strength: int):
 	var knockback_direction = aim_direction.normalized()
@@ -88,6 +104,9 @@ func apply_knockback(aim_direction: Vector2, knockback_strength: int):
 	current_knockback = knockback_direction * knockback_strength * knockback_strength_mult
 	knockback_timer = knockback_duration
 	direction = knockback_direction
+
+func stun(duration: float):
+	stun_timer = maxf(stun_timer, duration)
 
 func flash_red():
 	animated_sprite_2d.modulate = Color.WHITE
@@ -101,6 +120,9 @@ func flash_red():
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func explode(enemy):
+	if is_dead:
+		return
+	
 	var explosion = explosion_scene.instantiate()
 	
 	explosion.global_position = global_position
@@ -113,6 +135,15 @@ func explode(enemy):
 		orb.xp_value = xp_reward + randi_range(-xp_reward_range, xp_reward_range)
 		
 		get_tree().current_scene.call_deferred("add_child", orb)
+	
+	if GameState.get_upgrade_count("Death Boom") > 0:
+		var boom = boom_scene.instantiate()
+		boom.scale = Vector2(player.explosion_size, player.explosion_size)
+		boom.global_position = position
+		boom.explosion_damage = player.explosion_damage
+		boom.explosion_particles = player.explosion_particles
+		get_tree().current_scene.call_deferred("add_child", boom)  # defer adding
+		boom.emitting = true
 	
 	GameState.kills += 1
 	GameState.combo += 1

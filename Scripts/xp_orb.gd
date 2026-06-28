@@ -40,7 +40,7 @@ func _physics_process(delta):
 	# Magnet effect
 	if magnet_enabled and distance < magnet_range:
 		var direction = (player.global_position - global_position).normalized()
-		speed = lerp(speed, 650.0, 0.1)
+		speed = lerp(speed, player.max_speed + 100.0, 0.1)
 		global_position += direction * speed * delta
 
 func _on_body_entered(body: Node2D) -> void:

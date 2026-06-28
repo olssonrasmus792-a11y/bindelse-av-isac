@@ -12,6 +12,7 @@ script = ExtResource("1_g8uo7")
 name = "Credit Card"
 icon = SubResource("AtlasTexture_e0dso")
 price = 8
+original_price = null
 rarity = 2
 description = "+4% Damage when you open a chest"
 stats = Array[String](["+4% Dmg per chest"])

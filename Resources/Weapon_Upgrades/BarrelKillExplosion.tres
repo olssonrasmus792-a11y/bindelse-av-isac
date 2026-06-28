@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://ubhf7ym4tgv6"]
+
+[ext_resource type="Script" uid="uid://c01qet416k22c" path="res://Scripts/CardData.gd" id="1_kvolk"]
+[ext_resource type="Texture2D" uid="uid://lyun75p0rj50" path="res://Textures/Barrel.png" id="1_rv0x2"]
+
+[resource]
+script = ExtResource("1_kvolk")
+icon = ExtResource("1_rv0x2")
+card_name = "Death Boom"
+current_level = 0
+max_level = 1
+description = "Enemies will explode when they die, dealing damage to other nearby enemies"
+rarity = "Unique"
+increase = "+20% Explosion Size"
+required_weapon = "barrel"
+metadata/_custom_type_script = "uid://c01qet416k22c"

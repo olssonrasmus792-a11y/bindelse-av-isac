@@ -131,8 +131,8 @@ shape = SubResource("CircleShape2D_76mu4")
 z_index = 2
 layout_mode = 3
 anchors_preset = 0
+offset_top = -40.0
 offset_right = 40.0
-offset_bottom = 40.0
 
 [node name="Panel" type="Panel" parent="PopUp"]
 layout_mode = 1
@@ -211,7 +211,7 @@ default_color = Color(1, 1, 1, 0.39215687)
 
 [node name="PointLight2D2" type="PointLight2D" parent="PopUp"]
 position = Vector2(-1.7166138e-05, -136.00002)
-scale = Vector2(0.36799997, 0.192)
+scale = Vector2(0.36799997, 0.19199999)
 color = Color(1, 1, 0.9411765, 1)
 energy = 0.75
 texture = SubResource("GradientTexture2D_u06aw")
@@ -219,6 +219,13 @@ texture = SubResource("GradientTexture2D_u06aw")
 [node name="PointLight2D3" type="PointLight2D" parent="PopUp"]
 position = Vector2(1.66893e-06, -244.00002)
 scale = Vector2(0.12800002, 0.02399998)
+color = Color(1, 1, 0.9411765, 1)
+energy = 0.75
+texture = SubResource("GradientTexture2D_u06aw")
+
+[node name="PointLight2D4" type="PointLight2D" parent="PopUp"]
+position = Vector2(1.1920929e-06, -24)
+scale = Vector2(0.24, 0.032)
 color = Color(1, 1, 0.9411765, 1)
 energy = 0.75
 texture = SubResource("GradientTexture2D_u06aw")
@@ -247,6 +254,35 @@ theme_override_constants/shadow_outline_size = 10
 theme_override_fonts/font = ExtResource("3_u06aw")
 theme_override_font_sizes/font_size = 12
 text = "Legendary"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="discardPanel" type="Panel" parent="PopUp"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -3.0
+anchor_top = -1.0
+anchor_right = 3.0
+anchor_bottom = -0.2
+pivot_offset = Vector2(-64, 192)
+theme = SubResource("Theme_66iod")
+metadata/_edit_use_anchors_ = true
+
+[node name="discard" type="Label" parent="PopUp/discardPanel"]
+material = SubResource("ShaderMaterial_jmixh")
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.997159
+offset_bottom = 0.090911865
+pivot_offset = Vector2(-128, 192)
+theme_override_colors/font_color = Color(0.8833333, 1, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_outline_size = 10
+theme_override_fonts/font = ExtResource("3_u06aw")
+theme_override_font_sizes/font_size = 15
+text = "Discard (x)  :  +2 coins"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true

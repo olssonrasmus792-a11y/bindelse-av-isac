@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://n2wy66xhigie"]
+
+[ext_resource type="Script" uid="uid://i88s36u6b2ej" path="res://Scripts/item_data.gd" id="1_h3pss"]
+[ext_resource type="Texture2D" uid="uid://un6o7ljrj2cj" path="res://Textures/Items/TreasureMap.png" id="1_ks3uo"]
+
+[resource]
+script = ExtResource("1_h3pss")
+name = "Treasure Map"
+icon = ExtResource("1_ks3uo")
+price = 3
+original_price = null
+description = "A map that displays all rooms (Tab/M to show)"
+unique = true
+metadata/_custom_type_script = "uid://i88s36u6b2ej"

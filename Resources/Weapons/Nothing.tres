@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=4 format=3 uid="uid://bigtgtubhnkgd"]
+
+[ext_resource type="Texture2D" uid="uid://dr443p3wlxcw0" path="res://Textures/Bulb Roll Icon.png" id="1_gmjxo"]
+[ext_resource type="Script" uid="uid://cemr67gab560v" path="res://Scripts/weapon_data.gd" id="1_yr3s6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n8gjo"]
+atlas = ExtResource("1_gmjxo")
+region = Rect2(9, 10, 63, 61)
+
+[resource]
+script = ExtResource("1_yr3s6")
+id = "nothing"
+card_color = Color(0.9999997, 0.24524122, 0.18784547, 1)
+name = "T-Rolling"
+weapon_description = "No weapons here, only rolling with high damage"
+icon = SubResource("AtlasTexture_n8gjo")
+range_type = "Melee"
+damage = 40
+knockback = 800
+crit_chance = 0.25
+crit_damage = 1.5
+ability = "Coming Soon"
+unlock_condition = "roll kills"
+unlock_amount_needed = 20
+metadata/_custom_type_script = "uid://cemr67gab560v"

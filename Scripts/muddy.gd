@@ -1,11 +1,17 @@
 extends CharacterBody2D
 
+@onready var player := get_tree().get_first_node_in_group("player")
+
+@export var boom_scene = preload("res://Scenes/barrel_explosion.tscn")
 @export var explosion_scene = preload("res://Scenes/Enemies/MuddyExplosion.tscn")
 @export var xp_orb_scene = preload("res://Scenes/xp_orb.tscn")
 
 @export var xp_orbs: int = 5
 @export var xp_reward: float = 4.0
 var xp_reward_range = 2 # xp rewards +- range
+
+var spawned_by_player = false
+var queue_death = false
 
 @export var speed := 275
 @onready var sprite_2d: Sprite2D = $Sprite2D
@@ -18,7 +24,7 @@ var xp_reward_range = 2 # xp rewards +- range
 @onready var splat: AudioStreamPlayer = $Splat
 var splat_pitch = 1.0
 
-var direction := Vector2(1, 1).normalized()
+var direction = null
 var max_health = 60.0
 var health = max_health
 
@@ -28,15 +34,20 @@ var health = max_health
 @export var knockback_fly_speed = 2000
 @export var knockback_duration = 1.0
 
+var stun_timer := 0.0
+var stunned := false
+
 var knockback_velocity := Vector2.ZERO
 var knockback_timer := 0.0
 
+var is_dead
 signal enemy_died
 
 func _ready() -> void:
 	hp_bar.max_value = max_health
 	hp_bar.value = max_health
-	direction = Vector2(randf_range(-1, 1), randf_range(-1, 1))
+	if direction == null:
+		direction = Vector2(randf_range(-1, 1), randf_range(-1, 1))
 	point_light_2d.visible = false
 	hit_particles.emitting = false
 
@@ -53,6 +64,8 @@ func _physics_process(delta):
 			splat_pitch = 1.0
 			var tween := create_tween()
 			tween.tween_property(sprite_2d, "modulate", Color(1, 1, 1), 0.5)
+			if spawned_by_player or queue_death:
+				explode(self)
 	else:
 		velocity = direction * speed
 		point_light_2d.visible = false
@@ -79,24 +92,37 @@ func _physics_process(delta):
 			direction = direction.bounce(normal)
 
 		if collider.is_in_group("enemies") and knockback_timer > 0.0:
-			splat_pitch += 0.5
-			splat.pitch_scale = splat_pitch
-			splat.play()
-			collider.explode(collider)
 			var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
 			var ft = floating_text_scene.instantiate()
 			ft.text = "Execute!"
 			ft.modulate = Color.RED
 			ft.global_position = collider.global_position
+			
+			if collider.is_in_group("boss"):
+				play_bounce_sound()
+				knockback_velocity = knockback_velocity.bounce(normal)
+				direction = knockback_velocity.normalized()
+				collider.take_damage(player.damage)
+				if collider.health <= player.damage:
+					GameState.muddy_kills += 1
+				ft.text = "-" + str(int(player.damage))
+				ft.modulate = Color.WHITE
+			else:
+				splat_pitch += 0.5
+				splat.pitch_scale = splat_pitch
+				splat.play()
+				collider.explode(collider)
+				GameState.muddy_kills += 1
+			
 			get_tree().current_scene.add_child(ft)  # Or a dedicated UI node
 		
 		if collider.is_in_group("player") and knockback_timer > 0.0:
-			if GameState.get_upgrade_count("Friend") > 0:
+			if GameState.get_upgrade_count("Friend") > 0 or knockback_timer > 2.5:
 				play_bounce_sound()
 				knockback_velocity = knockback_velocity.bounce(normal)
 				direction = knockback_velocity.normalized()
 			else:
-				collider.take_damage(1, global_position, knockback_strength_player)
+				collider.take_damage(1, global_position, knockback_strength_player, self)
 	
 	sprite_2d.flip_h = direction[0] < 0
 	if direction[0] < 0:
@@ -106,8 +132,12 @@ func _physics_process(delta):
 
 func take_damage(damage):
 	health -= damage
+	await get_tree().process_frame
 	if health <= 0:
-		explode(self)  
+		if knockback_timer <= 0.0:
+			explode(self)
+		else:
+			queue_death = true
 
 func apply_knockback(aim_direction: Vector2, knockback_strength: int):
 	if knockback_strength == 0:
@@ -119,19 +149,39 @@ func apply_knockback(aim_direction: Vector2, knockback_strength: int):
 	direction = knockback_direction
 	sprite_2d.modulate = Color(1, 0, 0)
 
+func stun(duration: float):
+	if duration <= 0.0:
+		return
+	
+	stun_timer = maxf(stun_timer, duration)
+	stunned = true
+
 func explode(enemy):
+	if is_dead:
+		return
+	
 	var explosion = explosion_scene.instantiate()
 	
 	explosion.global_position = global_position
 	get_parent().add_child(explosion)
 	explosion.emitting = true
 	
-	for x in range(xp_orbs):
-		var orb = xp_orb_scene.instantiate()
-		orb.global_position = global_position + Vector2(randf_range(-10, 10), randf_range(-10, 10))
-		orb.xp_value = xp_reward + randi_range(-xp_reward_range, xp_reward_range)
-		
-		get_tree().current_scene.call_deferred("add_child", orb)
+	if !spawned_by_player:
+		for x in range(xp_orbs):
+			var orb = xp_orb_scene.instantiate()
+			orb.global_position = global_position + Vector2(randf_range(-10, 10), randf_range(-10, 10))
+			orb.xp_value = xp_reward + randi_range(-xp_reward_range, xp_reward_range)
+			
+			get_tree().current_scene.call_deferred("add_child", orb)
+	
+	if GameState.get_upgrade_count("Death Boom") > 0:
+		var boom = boom_scene.instantiate()
+		boom.scale = Vector2(player.explosion_size, player.explosion_size)
+		boom.global_position = position
+		boom.explosion_damage = player.explosion_damage
+		boom.explosion_particles = player.explosion_particles
+		get_tree().current_scene.call_deferred("add_child", boom)  # defer adding
+		boom.emitting = true
 	
 	emit_signal("enemy_died")
 	enemy.queue_free()

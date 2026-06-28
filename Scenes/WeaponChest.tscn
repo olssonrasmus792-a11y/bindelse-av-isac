@@ -1,0 +1,270 @@
+[gd_scene load_steps=31 format=3 uid="uid://bspmfhv2li1mx"]
+
+[ext_resource type="Script" uid="uid://i5xym7h451oj" path="res://Scripts/weapon_chest.gd" id="1_e3y4h"]
+[ext_resource type="Texture2D" uid="uid://ekwtd2j7ltcu" path="res://Textures/Chest sheet.png" id="3_hrvr6"]
+[ext_resource type="Shader" uid="uid://d066glvj82psy" path="res://Shaders/Chest.gdshader" id="4_0rybq"]
+[ext_resource type="FontFile" uid="uid://sklhjblg150t" path="res://Fonts/Bungee-Regular.ttf" id="5_aedqb"]
+[ext_resource type="Shader" uid="uid://ccnwywmpuht17" path="res://Shaders/main_menu.gdshader" id="6_ecjbw"]
+[ext_resource type="AudioStream" uid="uid://iog4uyf4kqxk" path="res://SFX/Pop3.wav" id="7_tx6ly"]
+[ext_resource type="AudioStream" uid="uid://y7j1luuklmw7" path="res://SFX/Deny.wav" id="8_nik7m"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v1rbb"]
+atlas = ExtResource("3_hrvr6")
+region = Rect2(400, 600, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mr3w3"]
+atlas = ExtResource("3_hrvr6")
+region = Rect2(400, 600, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2bf1p"]
+atlas = ExtResource("3_hrvr6")
+region = Rect2(0, 600, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_out8u"]
+atlas = ExtResource("3_hrvr6")
+region = Rect2(600, 400, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l4t8t"]
+atlas = ExtResource("3_hrvr6")
+region = Rect2(200, 400, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gpr52"]
+atlas = ExtResource("3_hrvr6")
+region = Rect2(800, 200, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_64rpu"]
+atlas = ExtResource("3_hrvr6")
+region = Rect2(400, 200, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8q2uw"]
+atlas = ExtResource("3_hrvr6")
+region = Rect2(0, 200, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i07m1"]
+atlas = ExtResource("3_hrvr6")
+region = Rect2(600, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fj2jo"]
+atlas = ExtResource("3_hrvr6")
+region = Rect2(200, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yy6ft"]
+atlas = ExtResource("3_hrvr6")
+region = Rect2(0, 0, 200, 200)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_v1rbb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v1rbb")
+}],
+"loop": true,
+"name": &"Closed",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mr3w3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2bf1p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_out8u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l4t8t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gpr52")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_64rpu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8q2uw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i07m1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fj2jo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yy6ft")
+}],
+"loop": false,
+"name": &"Open",
+"speed": 60.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fqgxf"]
+size = Vector2(96, 72)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mr3w3"]
+size = Vector2(208, 208)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2bf1p"]
+shader = ExtResource("4_0rybq")
+shader_parameter/ground_y = 0.0
+shader_parameter/bounce = 0.225
+
+[sub_resource type="Gradient" id="Gradient_out8u"]
+offsets = PackedFloat32Array(0.006289308, 0.6226415, 1)
+colors = PackedColorArray(0.83, 0.83, 0.83, 1, 1, 1, 1, 0.627451, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_hl2rv"]
+gradient = SubResource("Gradient_out8u")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_l4t8t"]
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+flatness = 1.0
+initial_velocity_min = 30.689999
+initial_velocity_max = 51.52
+gravity = Vector3(0, 50, 0)
+linear_accel_min = 23.399998
+linear_accel_max = 71.579994
+damping_min = 3.1910002
+damping_max = 23.158
+scale_min = 4.0
+scale_max = 8.0
+color = Color(0.95984524, 0.8670839, 0.40638828, 1)
+color_ramp = SubResource("GradientTexture1D_hl2rv")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hl2rv"]
+bg_color = Color(0.28627452, 0.19215687, 0.16078432, 0.78431374)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 1, 1, 0.5882353)
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_color = Color(0, 0, 0, 0.6627451)
+shadow_size = 2
+
+[sub_resource type="Theme" id="Theme_hl2rv"]
+Panel/styles/panel = SubResource("StyleBoxFlat_hl2rv")
+
+[sub_resource type="Gradient" id="Gradient_l4t8t"]
+offsets = PackedFloat32Array(0, 0.75333333, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.56666666, 0.56666666, 0.56666666, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_l4t8t"]
+gradient = SubResource("Gradient_l4t8t")
+width = 1000
+height = 1000
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l4t8t"]
+shader = ExtResource("6_ecjbw")
+shader_parameter/height = 1.0
+shader_parameter/frequency = 15.0
+shader_parameter/speed = 2.0
+
+[node name="Chest" type="StaticBody2D"]
+scale = Vector2(1.25, 1.25)
+script = ExtResource("1_e3y4h")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+self_modulate = Color(1.125755, 0.43666717, 1.1374342, 1)
+z_index = 1
+sprite_frames = SubResource("SpriteFrames_v1rbb")
+animation = &"Open"
+
+[node name="CollisionClosed" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(0, 12)
+shape = SubResource("RectangleShape2D_fqgxf")
+
+[node name="Area2D" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_mr3w3")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+z_index = 1
+material = SubResource("ShaderMaterial_2bf1p")
+emitting = false
+amount = 100
+lifetime = 3.0
+one_shot = true
+speed_scale = 5.5
+explosiveness = 1.0
+randomness = 1.0
+trail_enabled = true
+trail_lifetime = 0.2
+process_material = SubResource("ParticleProcessMaterial_l4t8t")
+
+[node name="PopUp" type="Control" parent="."]
+z_index = 2
+layout_mode = 3
+anchors_preset = 0
+offset_left = -56.0
+offset_top = -40.0
+offset_right = -16.0
+
+[node name="Panel" type="Panel" parent="PopUp"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.0
+anchor_top = -1.0
+anchor_right = 4.8
+anchor_bottom = -0.2
+pivot_offset = Vector2(-64, 192)
+theme = SubResource("Theme_hl2rv")
+metadata/_edit_use_anchors_ = true
+
+[node name="Label2" type="Label" parent="PopUp/Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0000002
+pivot_offset = Vector2(-128, -128)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_aedqb")
+text = "Open Giga-chest (E): 3 keys"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="PointLight2D2" type="PointLight2D" parent="PopUp"]
+position = Vector2(56, -24.000004)
+scale = Vector2(0.288, 0.047999997)
+color = Color(1, 1, 0.9411765, 1)
+energy = 0.75
+texture = SubResource("GradientTexture2D_l4t8t")
+
+[node name="NoKeys" type="Label" parent="."]
+z_index = 2
+material = SubResource("ShaderMaterial_l4t8t")
+offset_left = -168.0
+offset_top = -64.0
+offset_right = 168.0
+offset_bottom = -30.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 6
+theme_override_fonts/font = ExtResource("5_aedqb")
+theme_override_font_sizes/font_size = 24
+text = "No Keys!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Pop3" type="AudioStreamPlayer" parent="."]
+process_mode = 3
+stream = ExtResource("7_tx6ly")
+bus = &"Sfx"
+
+[node name="Deny" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_nik7m")
+bus = &"Sfx"
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

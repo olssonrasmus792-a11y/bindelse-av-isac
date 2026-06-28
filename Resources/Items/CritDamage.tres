@@ -12,6 +12,7 @@ script = ExtResource("1_i6w7t")
 name = "Big Crit"
 icon = SubResource("AtlasTexture_aruwg")
 price = 8
+original_price = null
 rarity = 1
 stats = Array[String](["+15% Crit damage"])
 stat_colors = Array[Color]([Color(0, 0.78431374, 0.28235295, 1)])

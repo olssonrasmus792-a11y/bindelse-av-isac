@@ -377,7 +377,7 @@ layout_mode = 0
 offset_left = 40.0
 offset_top = 244.0
 offset_right = 280.0
-offset_bottom = 384.0
+offset_bottom = 380.0
 theme_override_colors/font_outline_color = Color(1, 1, 1, 0.19607843)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("2_8u55g")
@@ -388,23 +388,25 @@ vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="FrontLine2" type="Line2D" parent="CardHolder/Front"]
-points = PackedVector2Array(32, 400, 288, 400)
+points = PackedVector2Array(32, 392, 288, 392)
 width = 5.0
 
 [node name="GainLabel" type="Label" parent="CardHolder/Front"]
 modulate = Color(0, 1, 0.3166666, 1)
 layout_mode = 0
-offset_left = 32.0
-offset_top = 416.0
-offset_right = 288.0
-offset_bottom = 448.0
+offset_left = 24.0
+offset_top = 396.0
+offset_right = 296.0
+offset_bottom = 456.0
 theme_override_colors/font_outline_color = Color(1, 1, 1, 0.19607843)
+theme_override_constants/line_spacing = -8
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("2_8u55g")
 theme_override_font_sizes/font_size = 24
 text = "+100% sigma aura"
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 3
 
 [node name="LevelPanel" type="Panel" parent="CardHolder/Front"]
 layout_mode = 0

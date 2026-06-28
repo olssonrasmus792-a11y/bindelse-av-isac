@@ -4,10 +4,12 @@ extends SubViewport
 
 @onready var full_size_cam: Camera2D = $FullSizeCam
 @onready var camera_2d: Camera2D = $"../../../../Player/Camera2D"
+@onready var minimap: SubViewportContainer = $"../../Minimap"
 @onready var sub_viewport_container: SubViewportContainer = $".."
 @onready var label: Label = $"../../Label"
 @onready var label_2: Label = $"../../Label2"
 @onready var label_3: Label = $"../../Label3"
+@onready var treasure_map: Control = $"../../TreasureMap"
 
 var opening
 
@@ -19,10 +21,11 @@ func _ready() -> void:
 	label.visible = false
 	label_2.visible = true
 	label_3.visible = false
+	treasure_map.visible = false
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("map") and (!get_tree().paused or opening):
-		if GameState.is_fighting:
+		if GameState.is_fighting or (GameState.boss_spawned and !GameState.boss_killed):
 			spawn_floating_text("Can't open map in combat!", Color.RED, player.global_position)
 			return
 		
@@ -32,7 +35,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		label.visible = opening
 		label_2.visible = !opening
 		label_3.visible = opening
-		label_3.text = ("Rooms Cleared: " + str(GameState.rooms_cleared))
+		treasure_map.visible = opening
+		var percent = float(GameState.rooms_explored) / max(GameState.total_rooms, 1)
+
+		label_3.self_modulate = Color.RED.lerp(Color.GREEN, percent)
+		@warning_ignore("integer_division")
+		label_3.text = ("Rooms Explored: " + str(( (GameState.rooms_explored * 100) / GameState.total_rooms) ) + "%")
 		get_tree().paused = opening
 		
 		if opening:

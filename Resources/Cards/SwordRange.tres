@@ -11,5 +11,5 @@ max_level = 4
 description = "Throw your sword further when using your ability"
 rarity = "Epic"
 increase = "+15% Range"
-required_weapon = "Lightning Sword"
+required_weapon = "lightning_sword"
 metadata/_custom_type_script = "uid://c01qet416k22c"

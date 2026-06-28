@@ -1,9 +1,13 @@
 extends CharacterBody2D
 
-@export var CHEATS = false
+@export var CHEATS =true
+
+@export var muddy_scene := preload("res://Scenes/Enemies/Muddy.tscn")
+@export var barrel_scene := preload("res://Scenes/barrel.tscn")
 
 @onready var visuals: Node2D = $Visuals
 @onready var sword: Node2D = $Sword
+@onready var trail: Polygon2D = $Sword/SwordPivot/SwordSprite/Trail
 @onready var animated_sprite_2d: AnimatedSprite2D = $Visuals/AnimatedSprite2D
 @onready var point_light_2d: PointLight2D = $Node2D/PointLight2D
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
@@ -62,6 +66,7 @@ const COMBO_RESET_TIME := 1.0
 @export var total_crit_hits = 0
 @export var crit_damage_dealt = 0
 @export var chest_bonus_damage = 0.0
+@export var stun_duration = 0.5
 
 @export var ability_name = ""
 @export var ability_cooldown = 5.0
@@ -116,6 +121,7 @@ var death_light_base = 0.4      # min energy
 var death_light_time = 0.0       # internal timer
 @export var death_duration = 4.25  # seconds before full death
 
+var dodged_enemies = []
 var hitstop_used := false
 var bonking = false
 var rolling = false
@@ -143,28 +149,43 @@ func _ready() -> void:
 	update_health()
 	update_stamina_ui()
 	
+	damage = GameState.start_damage
+	knockback = GameState.start_knockback
+	crit_chance = GameState.start_crit_chance
+	crit_damage = GameState.start_crit_damage
+	attack_speed = GameState.start_attack_speed
 	
-	if GameState.weapon == "Lightning Sword":
+	if GameState.weapon == "lightning_sword":
 		sword_sprite.animation = "Idle_Sword"
 		ability_name = "Boomerang"
 		ability_cooldown = 10.0
 		ability_damage_mult = 1.0
-		damage = GameState.lightning_sword_damage
-		knockback = GameState.lightning_sword_knockback
-		crit_chance = GameState.lightning_sword_crit_chance
-		crit_damage = GameState.lightning_sword_crit_damage
-		if GameState.lightning_sword_level >= 50:
-			xp_gain *= 1.5
 	
-	if GameState.weapon == "Baseball Bat":
+	if GameState.weapon == "baseball_bat":
 		sword_sprite.animation = "Idle_Bat"
 		ability_name = "Bonk"
 		ability_cooldown = 5.0
 		ability_damage_mult = 1.0
-		damage = GameState.baseball_bat_damage
-		knockback = GameState.baseball_bat_knockback
-		crit_chance = GameState.baseball_bat_crit_chance
-		crit_damage = GameState.baseball_bat_crit_damage
+	
+	if GameState.weapon == "clover":
+		sword_sprite.animation = "Idle_Clover"
+		trail.color = Color(0.0, 0.0, 0.0, 0.0)
+	
+	if GameState.weapon == "knife":
+		sword_sprite.animation = "Idle_Knife"
+	
+	if GameState.weapon == "nothing":
+		sword.hide()
+	
+	if GameState.weapon == "muddy":
+		sword_sprite.animation = "Idle_Muddy"
+		attack_speed = 1.0
+		trail.color = Color(0.0, 0.0, 0.0, 0.0)
+	
+	if GameState.weapon == "barrel":
+		sword_sprite.animation = "Idle_Barrel"
+		attack_speed = 0.5
+		trail.color = Color(0.0, 0.0, 0.0, 0.0)
 	
 	CardRegistry.new()
 	
@@ -173,13 +194,16 @@ func _ready() -> void:
 func _physics_process(delta):
 	if !is_dead:
 		get_input()
-		move_and_slide()
+	
 	handle_attacking(delta)
 	handle_abilities(delta)
 	handle_animations(delta)
 	handle_movement(delta)
 	handle_color()
 	handle_slows(delta)
+	
+	if !is_dead:
+		move_and_slide()
 	
 	if combo_timer > 0:
 		combo_timer -= delta
@@ -201,16 +225,24 @@ func get_input():
 	input_direction = Input.get_vector("left", "right", "up", "down")
 
 func _input(event: InputEvent) -> void:
+	if is_dead:
+		return
+	
 	if (event.is_action_pressed("attack") or event.is_action_pressed("roll")) and stamina <= 0:
 		no_stamina()
 	
 	if event.is_action_pressed("roll") and input_direction and !rolling and stamina > 0:
 		roll_direction = Input.get_vector("left", "right", "up", "down")
+		roll_collision.disabled = false
+		await get_tree().physics_frame
+		collision_shape_2d.disabled = true
 		roll_timer.start(0.3)
 		rolling = true
 		invulnerability_timer = 0.45
 		stamina -= 1
 		enemies_hit_roll.clear()
+		dodged_enemies.clear()
+		$RollHitbox.monitoring = true
 		update_stamina_ui()
 	
 	if event.is_action_pressed("Ability") and ability_name != "":
@@ -241,49 +273,87 @@ func handle_movement(delta):
 		target_velocity = input_direction * speed
 
 	if input_direction != Vector2.ZERO or rolling:
-		velocity = velocity.move_toward(target_velocity, acceleration)
+		@warning_ignore("integer_division")
+		velocity = velocity.move_toward(target_velocity, acceleration + speed/6)
 	else:
-		velocity = velocity.move_toward(Vector2.ZERO, friction)
+		@warning_ignore("integer_division")
+		velocity = velocity.move_toward(Vector2.ZERO, friction + speed/8)
 	
 	velocity += knockback_velocity
 	knockback_velocity = knockback_velocity.lerp(Vector2.ZERO, knockback_decay * delta)
+
+func _on_roll_hitbox_body_entered(body: Node2D) -> void:
+	if not rolling:
+		return
 	
-	var collision = get_last_slide_collision()
-	if collision:
-		var collider = collision.get_collider()
-		if rolling and GameState.get_item_count("Rollin'") > 0:
-			if collider.is_in_group("enemies"):
-				if enemies_hit_roll.has(collider):
-					return  # already hit this attack
-				
-				play_hit_sound()
-				enemies_hit_roll[collider] = true
-				
-				GameState.total_damage_dealt += (GameState.get_item_count("Rollin'") * 10)
-				collider.take_damage(GameState.get_item_count("Rollin'") * 10)
-				collider.apply_knockback(collider.global_position - global_position, knockback * 2)
-				for item in GameState.taken_items:
-					if item.name == "Rollin'":
-						item.tracked_stat_values[0] += 10
-				
-				spawn_floating_text("-" + str(int(GameState.get_item_count("Rollin'") * 10)), Color.WHITE, collider.global_position)
+	if not body.is_in_group("enemies"):
+		return
+	
+	if GameState.get_item_count("Rollin'") <= 0 and GameState.weapon != "nothing":
+		return
+	
+	if enemies_hit_roll.has(body):
+		return
+	
+	var roll_dmg = GameState.get_item_count("Rollin'") * 15
+	
+	if GameState.weapon == "nothing":
+		roll_dmg += damage
+	
+	GameState.total_damage_dealt += roll_dmg
+	
+	if roll_dmg >= body.health:
+		GameState.roll_kills += 1
+	
+	body.take_damage(roll_dmg)
+	body.apply_knockback(
+		body.global_position - global_position,
+		knockback * 2
+	)
+	
+	spawn_floating_text(
+		"-" + str(int(roll_dmg)),
+		Color.WHITE,
+		body.global_position
+	)
+	
+	play_hit_sound()
+	
+	enemies_hit_roll[body] = true
 
 func _on_roll_timer_timeout() -> void:
 	rolling = false
+	$RollHitbox.monitoring = false
+	
+	collision_shape_2d.disabled = false
+	await get_tree().physics_frame
+	roll_collision.disabled = true
 
 func handle_attacking(_delta):
-	if Input.is_action_pressed("attack") and !attacking and !recharging and stamina > 0 and !rolling and !is_dead:
+	if Input.is_action_pressed("attack") and !sword.thrown and !recharging and stamina > 0 and !rolling and !is_dead and GameState.weapon != "nothing":
 		if sword.thrown:
 			return
-		attacking = true
-		cooldown_bar.value = 0.0
-		cooldown_bar.visible = true
-		attack_timer.start(attack_speed)
+		if GameState.weapon == "clover":
+			boomerang_ability()
+			stamina -= 1
+			update_stamina_ui()
+			enemies_hit.clear()
+			return
+		if GameState.weapon == "muddy":
+			throw_muddy()
+		if GameState.weapon == "barrel":
+			throw_barrel()
 		play_sword_swing()
+		attacking = true
 		stamina -= 1
 		update_stamina_ui()
 		enemies_hit.clear()
 		hitstop_used = false
+		cooldown_bar.value = 0.0
+		cooldown_bar.visible = true
+		attack_timer.start(attack_speed)
+		attack_cooldown.start(attack_speed)
+		recharging = true
 
 	# Detect attacking from animation
 	attacking = animation_player.is_playing()
@@ -334,8 +404,9 @@ func _on_attack_cooldown_timeout() -> void:
 	recharging = false
 
 func play_sword_swing():
-	var speed_mult = 1 / (attack_speed * 2.5)
+	var speed_mult = 1 / 0.65
 
+	animation_player.stop()
 	animation_player.speed_scale = speed_mult
 	animation_player.play("sword_swing")
 
@@ -348,6 +419,9 @@ func handle_color():
 		lerp_speed = 0.2
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
+	if GameState.weapon == "muddy" or GameState.weapon == "barrel":
+		return
+	
 	var aim_direction = (get_global_mouse_position() - global_position).normalized()
 	
 	if sword.thrown:
@@ -360,7 +434,6 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 		if enemies_hit.has(body):
 			return  # already hit this attack
 		
-		play_hit_sound()
 		enemies_hit[body] = true
 		
 		var total_damage = calculate_base_damage()
@@ -380,11 +453,14 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 		var ft_text = "-" + str(int(total_damage))
 		
 		if randf() < crit_chance:
+			play_hit_sound(0.6)
 			total_crit_hits += 1
 			crit_damage_dealt += int((total_damage * crit_damage) - total_damage)
 			total_damage *= crit_damage
 			text_color = Color.YELLOW
 			ft_text = "-" + str(int(total_damage))
+		else:
+			play_hit_sound()
 		
 		for item in GameState.taken_items:
 			if item.name == "Big Crit":
@@ -393,8 +469,11 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 				item.tracked_stat_values[1] = total_crit_hits
 		
 		GameState.total_damage_dealt += total_damage
+		
 		body.take_damage(total_damage)
 		body.apply_knockback(aim_direction, knockback)
+		if bonking:
+			body.stun(stun_duration)
 		
 		for cam in get_tree().get_nodes_in_group("camera"):
 			cam.shake(0.5)
@@ -504,20 +583,20 @@ func spawn_lightning(start: Vector2, end: Vector2):
 
 	lightning.setup(start, end)
 
-func play_hit_sound():
+func play_hit_sound(bonus_pitch := 0.0):
 	var roll = randf()
 	
 	if bonking:
 		bonk.play(0.27)
 	
 	if roll < 0.33:
-		punch_1.pitch_scale = randf_range(1.2, 1.6)
+		punch_1.pitch_scale = randf_range(1.2, 1.6) + bonus_pitch
 		punch_1.play(0.1)
 	elif roll < 0.66:
-		punch_2.pitch_scale = randf_range(0.9, 1.3)
+		punch_2.pitch_scale = randf_range(0.9, 1.3) + bonus_pitch
 		punch_2.play()
 	else:
-		punch_3.pitch_scale = randf_range(0.9, 1.3)
+		punch_3.pitch_scale = randf_range(0.9, 1.3) + bonus_pitch
 		punch_3.play()
 
 func calculate_base_damage():
@@ -602,6 +681,31 @@ func bonk_ability():
 	sword_sprite.scale = Vector2(0.25, 0.25)
 	knockback = base_knockback
 	bonking = false
+
+func throw_muddy():
+	var muddy = muddy_scene.instantiate()
+	
+	var direction = (get_global_mouse_position() - global_position).normalized()
+	
+	muddy.global_position = global_position + direction * 100
+	
+	get_tree().current_scene.add_child(muddy)
+	
+	muddy.spawned_by_player = true
+	muddy.apply_knockback(direction, knockback)
+
+func throw_barrel():
+	var barrel = barrel_scene.instantiate()
+	
+	var direction = (get_global_mouse_position() - global_position).normalized()
+	
+	barrel.global_position = global_position + direction * 110
+	barrel.health = 1
+	barrel.spawned_by_player = true
+	
+	get_tree().current_scene.add_child(barrel)
+	
+	barrel.apply_knockback(direction)
 
 func _on_stamina_recharge_timeout() -> void:
 	stamina += 1
@@ -707,8 +811,8 @@ func add_xp(amount: int):
 	pop_4.play()
 	
 	while xp >= xp_to_next_level:
-		xp -= xp_to_next_level
 		level_up()
+		xp -= xp_to_next_level
 
 func level_up():
 	level += 1
@@ -728,8 +832,6 @@ func upgrade_cards(): #Använd för xp system sen
 func handle_animations(delta):
 	@warning_ignore("narrowing_conversion")
 	var health_state : int = remap(health, 0, max_health, 1, 3)
-	collision_shape_2d.disabled = false
-	roll_collision.disabled = true
 	roll_light.visible = false
 	point_light_2d.visible = true
 	sword_sprite.visible = true
@@ -747,14 +849,11 @@ func handle_animations(delta):
 		visuals.scale.x = -1 if input_direction.x > 0 else 1
 		animated_sprite_2d.animation = "Roll"
 		
-		roll_collision.disabled = false
-		await get_tree().physics_frame
-		collision_shape_2d.disabled = true
-		
 		roll_light.visible = true
 		point_light_2d.visible = false
 		
-		sword_sprite.visible = false
+		if GameState.weapon != "clover":
+			sword_sprite.visible = false
 	elif input_direction:
 		animated_sprite_2d.play("Run" + str(health_state))
 	else:
@@ -819,11 +918,11 @@ func respawn_player():
 	point_light_2d.energy = 0.4 + health * 0.15
 	position = spawn_pos
 
-func take_damage(dmg, from_position: Vector2, knockback_strength):
+func take_damage(dmg, from_position: Vector2, knockback_strength, attacker = null):
 	if rolling:
-		if invulnerability_timer > 0.1:
-			invulnerability_timer -= 0.01
-		spawn_floating_text("Dodge!", Color.HOT_PINK, global_position)
+		if attacker != null and not dodged_enemies.has(attacker):
+			dodged_enemies.append(attacker)
+			spawn_floating_text("Dodge!", Color.HOT_PINK, global_position)
 		return
 	
 	if invulnerability_timer > 0 or is_dead:

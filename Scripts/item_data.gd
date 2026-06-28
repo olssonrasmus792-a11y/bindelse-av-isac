@@ -11,6 +11,7 @@ enum Rarity {
 @export var name: String
 @export var icon: Texture2D
 @export var price: int
+@export var original_price = price
 @export var rarity: Rarity
 @export var description: String
 @export var stats: Array[String] = []

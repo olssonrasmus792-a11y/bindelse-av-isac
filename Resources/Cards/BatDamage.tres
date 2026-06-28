@@ -11,5 +11,5 @@ max_level = 5
 description = "Increase the damage of your ability"
 rarity = "Epic"
 increase = "+25% Bonk Damage"
-required_weapon = "Baseball Bat"
+required_weapon = "baseball_bat"
 metadata/_custom_type_script = "uid://c01qet416k22c"

@@ -12,6 +12,7 @@ script = ExtResource("2_hlvcg")
 name = "Key"
 icon = SubResource("AtlasTexture_g0v2i")
 price = 3
+original_price = null
 stats = Array[String](["+1 Key"])
 stat_colors = Array[Color]([Color(0.7287947, 0.6241101, 0.20166373, 1)])
 metadata/_custom_type_script = "uid://i88s36u6b2ej"

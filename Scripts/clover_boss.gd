@@ -7,11 +7,13 @@ extends CharacterBody2D
 @export var xp_reward: float = 15.0
 var xp_reward_range = 5 # xp rewards +- range
 
+@export var boom_scene = preload("res://Scenes/barrel_explosion.tscn")
 @onready var projectile_scene = preload("res://Scenes/clover_projectile.tscn")
 @export var explosion_scene = preload("res://Scenes/Enemies/MuddyExplosion.tscn")
 @export var jump_effect_scene = preload("res://Scenes/Enemies/jump_effects.tscn")
 @export var xp_orb_scene = preload("res://Scenes/xp_orb.tscn")
 
+@onready var visuals: Node2D = $Visuals
 @onready var animated_sprite_2d: AnimatedSprite2D = $Visuals/AnimatedSprite2D
 @onready var shoot_timer: Timer = $ShootTimer
 @onready var hp_bar: TextureProgressBar = $HpBar
@@ -54,6 +56,20 @@ var evolve_health_trigger = 500
 var evolve_heal_amount := 750
 var evolve_heal_duration := 4.0
 
+@export var knockback_strength_player = 200
+@export var knockback_strength_mult = 0.75
+@export var knockback_duration = 0.5
+
+var stun_timer := 0.0
+
+var current_knockback := Vector2.ZERO
+var knockback_velocity := Vector2.ZERO
+var knockback_timer := 0.0
+
+var wall_hit_cooldown := 0.0
+const WALL_HIT_INTERVAL := 0.15
+
+var is_dead
 signal enemy_died
 
 
@@ -69,11 +85,34 @@ func _ready() -> void:
 	animated_sprite_2d.play("Sleep")
 	hit_particles.emitting = false
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	hp_bar.value = lerp(hp_bar.value, health, 0.25)
 	
 	boss_hp_bar.value = lerp(hp_bar.value, health, 0.25)
 	boss_hp_bar.get_child(0).text = "BOSS HP: " + str(int(health)) + "/" + str(int(max_health))
+	
+	if wall_hit_cooldown > 0.0:
+		wall_hit_cooldown -= delta
+	
+	if stun_timer > 0.0:
+		stun_timer -= delta
+		animated_sprite_2d.speed_scale = 0.0
+		visuals.modulate = Color.YELLOW
+	
+	if knockback_timer > 0.0:
+		current_knockback = current_knockback.lerp(Vector2.ZERO, 5 * delta)
+		velocity = current_knockback
+		knockback_timer -= delta
+		move_and_slide()
+	elif stun_timer > 0.0:
+		velocity = Vector2.ZERO
+	elif move_towards_player:
+		jump_direction = (player.global_position - global_position).normalized()
+		velocity = jump_direction * jump_length
+		move_and_slide()
+	else:
+		animated_sprite_2d.speed_scale = 1.0
+		visuals.modulate = Color.WHITE
 	
 	if bullet_hell_active or burst_hell_active or spawning:
 		shoot_timer.paused = true
@@ -85,15 +124,27 @@ func _process(_delta: float) -> void:
 	else:
 		animated_sprite_2d.position.y = base_y
 	
-	if move_towards_player:
-		jump_direction = (player.global_position - global_position).normalized()
-		velocity = jump_direction * jump_length
-		move_and_slide()
+	var collision = get_last_slide_collision()
+	if collision:
+		var collider = collision.get_collider()
+		
+		if collider.is_in_group("player"):
+			collider.take_damage(1, global_position, knockback_strength_player, self)
+		
+		if knockback_timer > 0.0 and !collider.is_in_group("enemies"):
+			if GameState.get_upgrade_count("Squashed!") > 0 and wall_hit_cooldown <= 0.0:
+				var impact_speed = current_knockback.length()
+				var damage = remap(impact_speed, 0.0, 5000.0, 1.0, max_health * 3.0)
+				damage = clampf(damage, 1.0, max_health * 3.0)
+				take_damage(damage)
+				spawn_floating_text("-" + str(damage), Color.WHITE, global_position)
+				wall_hit_cooldown = WALL_HIT_INTERVAL
 	
 	if Input.is_action_just_pressed("interact") and player_in_spawn_range and pop_up.visible and !spawned:
 		get_parent().check_doors()
 		get_parent().close_room()
-		MusicManager.play_music(MusicManager.SONGS["BOSS_MUSIC"])
+		MusicManager.reset_music_groups()
+		MusicManager.play_music(MusicManager.SONGS["BOSS_MUSIC"], MusicManager.MusicGroup.BOSS)
 		var active_ghosts = get_tree().get_nodes_in_group("ghosty")
 		for ghost in active_ghosts:
 			ghost.queue_free()
@@ -393,7 +444,7 @@ func take_damage(damage):
 	
 	if health <= evolve_health_trigger and !evolved and !spawning:
 		evolve()
-		MusicManager.set_music_pitch(1.1, 6.0)
+		MusicManager.set_music_pitch(1.2, 6.5)
 	
 	if health <= 0:
 		explode(self)
@@ -464,11 +515,20 @@ func flash_red():
 		0.5
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
-func apply_knockback(aim_direction: Vector2, _knockback_strength: int):
-	var knockback_direction = aim_direction.normalized()
-	hit_particles.rotation = knockback_direction.angle()
+func apply_knockback(aim_direction: Vector2, knockback_strength: int):
+	if GameState.get_upgrade_count("I'm the boss") > 0:
+		var knockback_direction = aim_direction.normalized()
+		hit_particles.rotation = knockback_direction.angle()
+		current_knockback = knockback_direction * knockback_strength * knockback_strength_mult
+		knockback_timer = knockback_duration
+
+func stun(duration: float):
+	stun_timer = maxf(stun_timer, duration)
 
 func explode(enemy):
+	if is_dead:
+		return
+	
 	var explosion = explosion_scene.instantiate()
 	
 	explosion.global_position = global_position
@@ -482,8 +542,17 @@ func explode(enemy):
 		
 		get_tree().current_scene.call_deferred("add_child", orb)
 	
+	if GameState.get_upgrade_count("Death Boom") > 0:
+		var boom = boom_scene.instantiate()
+		boom.scale = Vector2(player.explosion_size, player.explosion_size)
+		boom.global_position = position
+		boom.explosion_damage = player.explosion_damage
+		boom.explosion_particles = player.explosion_particles
+		get_tree().current_scene.call_deferred("add_child", boom)  # defer adding
+		boom.emitting = true
+	
 	emit_signal("enemy_died")
-	MusicManager.play_music(MusicManager.SONGS["GHOST_MUSIC"], 6.0)
+	MusicManager.play_music(MusicManager.GHOST_SONGS.values().pick_random(), MusicManager.MusicGroup.GHOST, 6.0)
 	GameState.boss_killed = true
 	enemy.queue_free()
 
@@ -504,3 +573,13 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body.name == "Player":
 		player_in_spawn_range = false
 		pop_up.visible = false
+
+func spawn_floating_text(text: String, color: Color, pos: Vector2):
+	var floating_text_scene = preload("res://Scenes/FloatingText.tscn")
+	var ft = floating_text_scene.instantiate()
+	
+	ft.text = text
+	ft.modulate = color
+	ft.global_position = pos
+	
+	get_tree().current_scene.call_deferred("add_child", ft)

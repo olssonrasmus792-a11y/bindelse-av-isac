@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://d4b5t5w22h0ko"]
+[gd_scene load_steps=7 format=3 uid="uid://d4b5t5w22h0ko"]
 
 [ext_resource type="Script" uid="uid://4r5ayjffwgh3" path="res://Scripts/barrel.gd" id="1_m5w3l"]
+[ext_resource type="Resource" uid="uid://nrcgypmc3qfw" path="res://Resources/item_registry.tres" id="2_1tdys"]
 [ext_resource type="Texture2D" uid="uid://lyun75p0rj50" path="res://Textures/Barrel.png" id="2_rp70x"]
 [ext_resource type="AudioStream" uid="uid://bqp8ud64y528d" path="res://SFX/Flying.wav" id="3_rp70x"]
 
@@ -11,11 +12,13 @@ radius = 38.090908
 height = 96.18182
 
 [node name="Barrel" type="RigidBody2D" groups=["barrel"]]
+collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_m5w3l")
 gravity_scale = 0.0
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_m5w3l")
+item_registry = ExtResource("2_1tdys")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = -36.363636

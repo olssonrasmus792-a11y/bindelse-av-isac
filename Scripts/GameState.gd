@@ -8,7 +8,12 @@ var player_name
 var meta_runs_played := 0
 var meta_runs_completed := 0
 var meta_rooms_cleared := 0
+
 var meta_kills := 0
+var meta_roll_kills := 0
+var meta_muddy_kills := 0
+var meta_barrel_kills := 0
+
 var meta_damage := 0
 var meta_coins := 0
 var meta_xp := 0
@@ -19,33 +24,106 @@ var meta_bonus_xp_gain := 0.00
 var meta_bonus_damage := 0.00
 var meta_bonus_time := 0
 
-var lightning_sword_level := 1
-var lightning_sword_xp := 0
-var lightning_sword_xp_needed := 200
+var unlocked_weapons = {
+	"baseball_bat": true,
+	"lightning_sword": false,
+	"clover": false,
+	"knife": false,
+	"nothing": false,
+	"muddy": false,
+	"barrel": false
+}
 
-var lightning_sword_damage := 20
-var lightning_sword_knockback := 500
-var lightning_sword_crit_chance := 0.05
-var lightning_sword_crit_damage := 1.4
+var start_damage = 0
+var start_knockback = 0
+var start_crit_chance = 0.0
+var start_crit_damage = 0.0
+var start_attack_speed = 0.0
 
-var baseball_bat_level := 1
-var baseball_bat_xp := 0
-var baseball_bat_xp_needed := 200
-
-var baseball_bat_damage := 15
-var baseball_bat_knockback := 1000
-var baseball_bat_crit_chance := 0.15
-var baseball_bat_crit_damage := 1.6
+var weapon_progress = {
+	"lightning_sword": {
+		"level": 1,
+		"xp": 0,
+		"xp_needed": 200,
+		"runs_played": 0,
+		"runs_completed": 0,
+		"kills": 0,
+		"damage": 0
+	},
+	"baseball_bat": {
+		"level": 1,
+		"xp": 0,
+		"xp_needed": 200,
+		"runs_played": 0,
+		"runs_completed": 0,
+		"kills": 0,
+		"damage": 0
+	},
+	"clover": {
+		"level": 1,
+		"xp": 0,
+		"xp_needed": 200,
+		"runs_played": 0,
+		"runs_completed": 0,
+		"kills": 0,
+		"damage": 0
+	},
+	"knife": {
+		"level": 1,
+		"xp": 0,
+		"xp_needed": 200,
+		"runs_played": 0,
+		"runs_completed": 0,
+		"kills": 0,
+		"damage": 0
+	},
+	"nothing": {
+		"level": 1,
+		"xp": 0,
+		"xp_needed": 200,
+		"runs_played": 0,
+		"runs_completed": 0,
+		"kills": 0,
+		"damage": 0
+	},
+	"muddy": {
+		"level": 1,
+		"xp": 0,
+		"xp_needed": 200,
+		"runs_played": 0,
+		"runs_completed": 0,
+		"kills": 0,
+		"damage": 0
+	},
+	"barrel": {
+		"level": 1,
+		"xp": 0,
+		"xp_needed": 200,
+		"runs_played": 0,
+		"runs_completed": 0,
+		"kills": 0,
+		"damage": 0
+	},
+}
 
 var leaderboard_kills := 0
 
 var weapon = ""
+var current_weapon_sort := 0
 
 var keys := 0
 var coins := 0
+
 var kills := 0
+var roll_kills := 0
+var muddy_kills := 0
+var barrel_kills := 0
+
 var combo := 0
+
 var rooms_cleared := 0
+var rooms_explored := 0
+var total_rooms := 0
 
 var total_coins_gained := 0
 var total_damage_dealt := 0
@@ -75,6 +153,14 @@ var boss_killed = false
 var taken_upgrades: Array[CardData] = []
 var taken_items: Array[ItemData] = []
 
+var dungeon_map = {}
+var explored_rooms = []
+var treasure_room_pos = Vector2.ZERO
+var start_room_pos = Vector2.ZERO
+var shop_positions = []
+var workshop_positions = []
+signal room_explored(pos)
+
 func _ready() -> void:
 	load_game()
 	
@@ -91,11 +177,18 @@ func _ready() -> void:
 func reset_game():
 	keys = 0
 	coins = 0
+	
 	kills = 0
+	roll_kills = 0
+	muddy_kills = 0
+	barrel_kills = 0
+	
 	total_damage_dealt = 0
 	total_xp_gained = 0
 	total_coins_gained = 0
 	rooms_cleared = 0
+	rooms_explored = 0
+	total_rooms = 0
 	coin_drop_chance = 0.1
 	luck = 0.0
 	muddy_spawn_rate = muddy_base_spawn_rate
@@ -141,6 +234,11 @@ func get_enemy_amount():
 	
 	return amount
 
+func explore_room(pos):
+	if not explored_rooms.has(pos):
+		explored_rooms.append(pos)
+		room_explored.emit(pos)
+
 func calculate_stats():
 	coin_drop_chance = 0.1 * (1 + luck)
 	
@@ -152,55 +250,60 @@ func calculate_stats():
 			item.tracked_stat_values[0] = value
 			break
 
+func calculate_total_coins_earned() -> int:
+	var total := 0
+
+	# XP upgrades
+	var xp_upgrades = int(meta_bonus_xp_gain * 100)
+	for i in range(xp_upgrades):
+		total += (i * 1) + 5
+
+
+	# Damage upgrades
+	var damage_upgrades = int(meta_bonus_damage * 100)
+	for i in range(damage_upgrades):
+		total += (i * 1) + 5
+
+
+	# Time upgrades
+	var time_upgrades = int(meta_bonus_time)
+	for i in range(time_upgrades):
+		total += i + 5
+
+
+	return total + meta_coins
+
 func add_meta_stats():
 	meta_runs_played += 1
+	weapon_progress[weapon]["runs_played"] += 1
 	
 	if boss_killed:
 		meta_runs_completed += 1
+		weapon_progress[weapon]["runs_completed"] += 1
 	
 	meta_rooms_cleared += rooms_cleared
+	
 	meta_kills += kills
+	meta_roll_kills += roll_kills
+	meta_muddy_kills += muddy_kills
+	meta_barrel_kills += barrel_kills
+	
 	meta_damage += total_damage_dealt
 	meta_xp += total_xp_gained
 	
-	if weapon == "Baseball Bat":
-		baseball_bat_xp += total_xp_gained
-	
-	if weapon == "Lightning Sword":
-		lightning_sword_xp += total_xp_gained
+	weapon_progress[weapon]["xp"] += total_xp_gained
+	weapon_progress[weapon]["kills"] += kills
+	weapon_progress[weapon]["damage"] += total_damage_dealt
 	
 	while meta_xp >= meta_xp_needed:
 		meta_xp -= meta_xp_needed
 		meta_xp_needed = int(meta_xp_needed * 1.25)
 		meta_level += 1
 	
-	while baseball_bat_xp >= baseball_bat_xp_needed:
-		baseball_bat_xp -= baseball_bat_xp_needed
-		baseball_bat_xp_needed = int(baseball_bat_xp_needed * 1.2)
-		baseball_bat_level += 1
-		
-		if baseball_bat_level == 10:
-			baseball_bat_knockback += 250
-		if baseball_bat_level == 15:
-			baseball_bat_damage += 5
-		if baseball_bat_level == 25:
-			baseball_bat_crit_chance += 0.15
-		if baseball_bat_level == 50:
-			baseball_bat_crit_damage += 0.4
-	
-	while lightning_sword_xp >= lightning_sword_xp_needed:
-		lightning_sword_xp -= lightning_sword_xp_needed
-		lightning_sword_xp_needed = int(lightning_sword_xp_needed * 1.2)
-		lightning_sword_level += 1
-		
-		if lightning_sword_level == 5:
-			lightning_sword_knockback += 200
-		if lightning_sword_level == 10:
-			lightning_sword_crit_chance += 0.1
-		if lightning_sword_level == 15:
-			lightning_sword_crit_damage += 0.2
-		if lightning_sword_level == 25:
-			lightning_sword_damage += 10
+	while weapon_progress[weapon]["xp"] >= weapon_progress[weapon]["xp_needed"]:
+		weapon_progress[weapon]["xp"] -= weapon_progress[weapon]["xp_needed"]
+		weapon_progress[weapon]["xp_needed"] = int(weapon_progress[weapon]["xp_needed"] * 1.2)
+		weapon_progress[weapon]["level"] += 1
 	
 	if player_name != "":
 		var result = await SilentWolf.Scores.get_scores().sw_get_scores_complete
@@ -216,6 +319,45 @@ func add_meta_stats():
 				await SilentWolf.Scores.save_score(player_name, leaderboard_kills).sw_save_score_complete
 	
 	save_game()
+
+@warning_ignore("shadowed_variable")
+func check_weapon_unlock(weapon: WeaponData):
+	match weapon.unlock_condition:
+		"kills":
+			if meta_kills >= weapon.unlock_amount_needed:
+				unlocked_weapons[weapon.id] = true
+			else:
+				weapon.unlock_amount = meta_kills
+		
+		"roll kills":
+			if meta_roll_kills >= weapon.unlock_amount_needed:
+				unlocked_weapons[weapon.id] = true
+			else:
+				weapon.unlock_amount = meta_roll_kills
+		
+		"barrel kills":
+			if meta_barrel_kills >= weapon.unlock_amount_needed:
+				unlocked_weapons[weapon.id] = true
+			else:
+				weapon.unlock_amount = meta_barrel_kills
+		
+		"muddy executes":
+			if meta_muddy_kills >= weapon.unlock_amount_needed:
+				unlocked_weapons[weapon.id] = true
+			else:
+				weapon.unlock_amount = meta_muddy_kills
+		
+		"runs completed":
+			if meta_runs_completed >= weapon.unlock_amount_needed:
+				unlocked_weapons[weapon.id] = true
+			else:
+				weapon.unlock_amount = meta_runs_completed
+		
+		"coins":
+			if meta_coins >= weapon.unlock_amount_needed:
+				unlocked_weapons[weapon.id] = true
+			else:
+				weapon.unlock_amount = meta_coins
 
 func set_master_volume():
 	var bus_index = AudioServer.get_bus_index("Master")
@@ -254,7 +396,12 @@ func set_default_meta():
 	meta_runs_played = 0
 	meta_runs_completed = 0
 	meta_rooms_cleared = 0
+	
 	meta_kills = 0
+	meta_roll_kills = 0
+	meta_muddy_kills = 0
+	meta_barrel_kills = 0
+	
 	meta_damage = 0
 	
 	meta_coins = 0
@@ -266,23 +413,154 @@ func set_default_meta():
 	meta_bonus_damage = 0.00
 	meta_bonus_time = 0
 	
-	lightning_sword_level = 1
-	lightning_sword_xp = 0
-	lightning_sword_xp_needed = 200
+	unlocked_weapons = {
+		"baseball_bat": true,
+		"lightning_sword": false,
+		"clover": false,
+		"knife": false,
+		"nothing": false,
+		"muddy": false,
+		"barrel": false,
+	}
 	
-	lightning_sword_damage = 20
-	lightning_sword_knockback = 500
-	lightning_sword_crit_chance = 0.05
-	lightning_sword_crit_damage = 1.4
+	weapon_progress = {
+		"lightning_sword": {
+			"level": 1,
+			"xp": 0,
+			"xp_needed": 200,
+			"runs_played": 0,
+			"runs_completed": 0,
+			"kills": 0,
+			"damage": 0
+		},
+		"baseball_bat": {
+			"level": 1,
+			"xp": 0,
+			"xp_needed": 200,
+			"runs_played": 0,
+			"runs_completed": 0,
+			"kills": 0,
+			"damage": 0
+		},
+		"clover": {
+			"level": 1,
+			"xp": 0,
+			"xp_needed": 200,
+			"runs_played": 0,
+			"runs_completed": 0,
+			"kills": 0,
+			"damage": 0
+		},
+		"knife": {
+			"level": 1,
+			"xp": 0,
+			"xp_needed": 200,
+			"runs_played": 0,
+			"runs_completed": 0,
+			"kills": 0,
+			"damage": 0
+		},
+		"nothing": {
+			"level": 1,
+			"xp": 0,
+			"xp_needed": 200,
+			"runs_played": 0,
+			"runs_completed": 0,
+			"kills": 0,
+			"damage": 0
+		},
+		"muddy": {
+			"level": 1,
+			"xp": 0,
+			"xp_needed": 200,
+			"runs_played": 0,
+			"runs_completed": 0,
+			"kills": 0,
+			"damage": 0
+		},
+		"barrel": {
+			"level": 1,
+			"xp": 0,
+			"xp_needed": 200,
+			"runs_played": 0,
+			"runs_completed": 0,
+			"kills": 0,
+			"damage": 0
+		},
+	}
+	current_weapon_sort = 0
+
+func setup_weapon_progress():
+	var default_weapons = {
+		"lightning_sword": {
+			"level": 1,
+			"xp": 0,
+			"xp_needed": 200,
+			"runs_played": 0,
+			"runs_completed": 0,
+			"kills": 0,
+			"damage": 0
+		},
+		"baseball_bat": {
+			"level": 1,
+			"xp": 0,
+			"xp_needed": 200,
+			"runs_played": 0,
+			"runs_completed": 0,
+			"kills": 0,
+			"damage": 0
+		},
+		"clover": {
+			"level": 1,
+			"xp": 0,
+			"xp_needed": 200,
+			"runs_played": 0,
+			"runs_completed": 0,
+			"kills": 0,
+			"damage": 0
+		},
+		"knife": {
+			"level": 1,
+			"xp": 0,
+			"xp_needed": 200,
+			"runs_played": 0,
+			"runs_completed": 0,
+			"kills": 0,
+			"damage": 0
+		},
+		"nothing": {
+			"level": 1,
+			"xp": 0,
+			"xp_needed": 200,
+			"runs_played": 0,
+			"runs_completed": 0,
+			"kills": 0,
+			"damage": 0
+		},
+		"muddy": {
+			"level": 1,
+			"xp": 0,
+			"xp_needed": 200,
+			"runs_played": 0,
+			"runs_completed": 0,
+			"kills": 0,
+			"damage": 0
+		},
+		"barrel": {
+			"level": 1,
+			"xp": 0,
+			"xp_needed": 200,
+			"runs_played": 0,
+			"runs_completed": 0,
+			"kills": 0,
+			"damage": 0
+		},
+	}
 	
-	baseball_bat_level = 1
-	baseball_bat_xp = 0
-	baseball_bat_xp_needed = 200
-	
-	baseball_bat_damage = 15
-	baseball_bat_knockback = 1000
-	baseball_bat_crit_chance = 0.15
-	baseball_bat_crit_damage = 1.6
+	@warning_ignore("shadowed_variable")
+	for weapon in default_weapons:
+		if not weapon_progress.has(weapon):
+			weapon_progress[weapon] = default_weapons[weapon]
 
 func save_game():
 	var save_data = {
@@ -298,6 +576,9 @@ func save_game():
 		"meta_runs_completed": meta_runs_completed,
 		"meta_rooms_cleared": meta_rooms_cleared,
 		"meta_kills": meta_kills,
+		"meta_roll_kills": meta_roll_kills,
+		"meta_muddy_kills": meta_muddy_kills,
+		"meta_barrel_kills": meta_barrel_kills,
 		"meta_damage": meta_damage,
 		
 		"meta_coins": meta_coins,
@@ -309,23 +590,8 @@ func save_game():
 		"meta_bonus_damage": meta_bonus_damage,
 		"meta_bonus_time": meta_bonus_time,
 		
-		"lightning_sword_level": lightning_sword_level,
-		"lightning_sword_xp": lightning_sword_xp,
-		"lightning_sword_xp_needed": lightning_sword_xp_needed,
-		
-		"lightning_sword_damage": lightning_sword_damage,
-		"lightning_sword_knockback": lightning_sword_knockback,
-		"lightning_sword_crit_chance": lightning_sword_crit_chance,
-		"lightning_sword_crit_damage": lightning_sword_crit_damage,
-		
-		"baseball_bat_level": baseball_bat_level,
-		"baseball_bat_xp": baseball_bat_xp,
-		"baseball_bat_xp_needed": baseball_bat_xp_needed,
-		
-		"baseball_bat_damage": baseball_bat_damage,
-		"baseball_bat_knockback": baseball_bat_knockback,
-		"baseball_bat_crit_chance": baseball_bat_crit_chance,
-		"baseball_bat_crit_damage": baseball_bat_crit_damage,
+		"weapon_progress": weapon_progress,
+		"current_weapon_sort": current_weapon_sort
 	}
 	
 	var file = FileAccess.open("user://save.json", FileAccess.WRITE)
@@ -359,6 +625,9 @@ func load_game():
 	meta_runs_completed = data.get("meta_runs_completed", 0)
 	meta_rooms_cleared = data.get("meta_rooms_cleared", 0)
 	meta_kills = data.get("meta_kills", 0)
+	meta_roll_kills = data.get("meta_roll_kills", 0)
+	meta_muddy_kills = data.get("meta_muddy_kills", 0)
+	meta_barrel_kills = data.get("meta_barrel_kills", 0)
 	meta_damage = data.get("meta_damage", 0)
 	
 	meta_coins = data.get("meta_coins", 0)
@@ -370,23 +639,9 @@ func load_game():
 	meta_bonus_damage = data.get("meta_bonus_damage", 0.00)
 	meta_bonus_time = data.get("meta_bonus_time", 0)
 	
-	lightning_sword_level = data.get("lightning_sword_level", 1)
-	lightning_sword_xp = data.get("lightning_sword_xp", 0)
-	lightning_sword_xp_needed = data.get("lightning_sword_xp_needed", 200)
-	
-	lightning_sword_damage = data.get("lightning_sword_damage", 20)
-	lightning_sword_knockback = data.get("lightning_sword_knockback", 500)
-	lightning_sword_crit_chance = data.get("lightning_sword_crit_chance", 0.05)
-	lightning_sword_crit_damage = data.get("lightning_sword_crit_damage", 1.4)
-	
-	baseball_bat_level = data.get("baseball_bat_level", 1)
-	baseball_bat_xp = data.get("baseball_bat_xp", 0)
-	baseball_bat_xp_needed = data.get("baseball_bat_xp_needed", 200)
-	
-	baseball_bat_damage = data.get("baseball_bat_damage", 15)
-	baseball_bat_knockback = data.get("baseball_bat_knockback", 1000)
-	baseball_bat_crit_chance = data.get("baseball_bat_crit_chance", 0.15)
-	baseball_bat_crit_damage = data.get("baseball_bat_crit_damage", 1.6)
+	weapon_progress = data.get("weapon_progress", {})
+	current_weapon_sort = data.get("current_weapon_sort", 0)
+	setup_weapon_progress()
 
 func reset_progress():
 	if FileAccess.file_exists("user://save.json"):

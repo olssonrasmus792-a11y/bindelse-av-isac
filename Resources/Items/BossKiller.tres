@@ -12,6 +12,7 @@ script = ExtResource("1_b7rmu")
 name = "Boss Killer"
 icon = SubResource("AtlasTexture_2grw7")
 price = 10
+original_price = null
 rarity = 1
 stats = Array[String](["+15% Damage against bosses"])
 stat_colors = Array[Color]([Color(0, 0.78431374, 0.28235295, 1)])
